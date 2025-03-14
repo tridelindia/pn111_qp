@@ -1,0 +1,22 @@
+<div class="data_score_main">
+    <div class="title_data">
+        <h3>Data Quality Score <br><span>for the past 10 days</span></h3>
+        <div class="score">
+            {{overallScore}} avg
+            <!-- <p>+0% since yesterday</p> -->
+        </div>
+        <!-- <h3>{{overallScore}} avg</h3> -->
+    </div>
+
+    <div class="score_tab">
+
+        <div class="score_bars">
+            <div class="bar_item" *ngFor="let dayData of last7Days">
+                <div class="bar">
+                    <div class="bar_fill" [style.height.%]="dayData.percentage"></div>
+                </div>
+                <h5 style="margin: 0;">{{ dayData.day }}</h5>
+            </div>
+        </div>
+    </div>
+</div>

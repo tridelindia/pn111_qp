@@ -1,0 +1,108 @@
+
+.wat_image{
+    height: 97%;
+    width: 28%;
+    background-color: azure;
+    border-radius: 5px;
+    background-image: url(../../assets/image/Screenshot\ 2025-03-07\ at\ 4.10.35\ PM.png);
+    background-size: 100% 100%;
+  }
+  .wat_params1{
+    height: 100%;
+    width: 35%;
+    /* background-color: bisque; */
+    display: flex;
+    flex-direction: column;
+
+
+  }
+  .wat_param_itembase{
+    height: 100%;
+    width: 100%;
+    /* background-color: blanchedalmond; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .wat_param_items1{
+    height: 48%;
+    width: 99%;
+    background-color: var(--mainbg);  
+  border-radius: 10px;
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px);
+  /* border: 1px solid rgba(255, 255, 255, 0.2); Subtle border */
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+    
+  }
+  .image_params{
+    height: 60%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .wat_params2{
+    height: 40%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+  }
+  .wat_param_items{
+    height: 99%;
+    width: 24.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--mainbg);  
+  border-radius: 10px;
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px);
+  /* border: 1px solid rgba(255, 255, 255, 0.2); Subtle border */
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  }
+
+  .wat_param_items svg{
+    height: 60%;
+    width: 60%;
+    color: whitesmoke;
+    position: relative;
+  }
+
+  .wat_param_title{
+    height: 5%;
+    width: 100%;
+    margin-left: 5px;margin-top: 5px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+  }
+  .wat_param_title p{
+    margin: 0;
+  }
+  .wat_param_horizontal_item{
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* background-color: aqua; */
+  }
+  .wat_param_horizontal_item svg{
+    height: 70%;
+    width: 70%;
+    color: whitesmoke;
+    position: relative;
+  }
