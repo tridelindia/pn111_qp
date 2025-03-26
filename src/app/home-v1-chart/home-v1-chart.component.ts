@@ -1,82 +1,91 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { NgChartsModule } from 'ng2-charts';
+import { Component, ElementRef, AfterViewInit } from '@angular/core';
+import * as echarts from 'echarts';
 
 @Component({
   selector: 'app-home-v1-chart',
   standalone: true,
-  imports: [CommonModule, NgChartsModule],
   templateUrl: './home-v1-chart.component.html',
   styleUrls: ['./home-v1-chart.component.css'],
 })
-export class HomeV1ChartComponent {
-  public lineChartOptions: ChartConfiguration['options'] = {
-    plugins: {
+export class HomeV1ChartComponent implements AfterViewInit {
+  constructor(private elementRef: ElementRef) {}
+
+  ngAfterViewInit(): void {
+    this.initChart();
+  }
+
+  private initChart(): void {
+    const chartElement = this.elementRef.nativeElement.querySelector('#chart');
+    const myChart = echarts.init(chartElement);
+
+    let dataAxis = [];
+    let data = [];
+    let today = new Date();
+    for (let i = 0; i < 30; i++) {
+      let date = new Date();
+      date.setDate(today.getDate() - i);
+      let formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+      dataAxis.unshift(formattedDate);
+      data.unshift(Math.floor(Math.random() * 81));
+    }
+
+    let yMax = 80;
+    let dataShadow = Array(data.length).fill(yMax);
+
+    const option = {
       title: {
-        display: false, // Disable title
+        text: 'Data Recieved Time Chart',
+        // subtext: 'Demonstrating ECharts Features',
       },
-      legend: {
-        display: false, // Disable legend
+      xAxis: {
+        data: dataAxis,
+        axisLabel: { inside: false, color: '#000' },
+        axisTick: { show: false },
+        axisLine: { show: true },
+        z: 10,
       },
-    },
-    scales: {
-      x: {
-        display: false, // Hide x-axis
+      yAxis: {
+        axisLine: { show: true },
+        axisTick: { show: false },
+        axisLabel: { color: '#999' },
+        max: yMax,
       },
-      y: {
-        display: false, // Hide y-axis
-      },
-    },
-    elements: {
-      line: {
-        tension: 0.4, // Enables smooth lines
-      },
-      point: {
-        radius: 0, // Hide points
-      },
-    },
-    interaction: {
-      intersect: false,
-    },
-  };
-
-  public lineChartData?: ChartData<'line'>;
-  public lineChartType: ChartType = 'line';
-
-  inputs = {
-    min: 0,
-    max: 100,
-    count: 8,
-    decimals: 2,
-    continuity: 1,
-  };
-
-  ngOnInit(): void {
-    this.lineChartData = {
-      labels: this.generateLabels(),
-      datasets: [
-    
+      dataZoom: [{ type: 'inside' }],
+      series: [
         {
-          data: this.generateData(),
-          borderColor: 'white',
-          backgroundColor: 'rgba(167, 167, 219, 0.72)',
-          fill: true,
-          borderWidth:0.5
+          type: 'bar',
+          showBackground: true,
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: '#83bff6' },
+              { offset: 0.5, color: '#188df0' },
+              { offset: 1, color: '#188df0' },
+            ]),
+          },
+          emphasis: {
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#2378f7' },
+                { offset: 0.7, color: '#2378f7' },
+                { offset: 1, color: '#83bff6' },
+              ]),
+            },
+          },
+          data: data,
         },
       ],
     };
-  }
 
-  private generateLabels(): string[] {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'];
-    return months.slice(0, this.inputs.count);
-  }
+    myChart.setOption(option);
 
-  private generateData(): number[] {
-    const { min, max, count } = this.inputs;
-    return Array.from({ length: count }, () =>
-      parseFloat((Math.random() * (max - min) + min).toFixed(this.inputs.decimals))
-    );
+    // Enable data zoom on click
+    const zoomSize = 7;
+    myChart.on('click', function (params) {
+      myChart.dispatchAction({
+        type: 'dataZoom',
+        startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+        endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)],
+      });
+    });
   }
 }

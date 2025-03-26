@@ -12,14 +12,29 @@ body{
 
 
 }
+p{
+  font-size: 14px;
+}
+*{
+  font-family: "Jost", sans-serif;
+}
 :root{
-    --mainbg: black;
-    --basebg: #171a1f;
-    --icons:#90909a;
+    --mainbg: rgba(255, 255, 255, 0.894);
+    --basebg: #FFFFFF;
+    --icons:#000000;
     --highlighttext: green;
 
 }
+[data-theme='blue-dark']{
 
+}
+[data-theme='light']{
+
+}
+[data-theme='blue-light']{
+
+}
+[data-theme='dark']
 * {
     font-family: "Parkinsans", serif;
     font-optical-sizing: auto;
@@ -31,7 +46,7 @@ body{
     height: 6%;
     width: 100%;
     background-color:var(--basebg);
-    border-radius: 5px;
+    /* border-radius: 5px; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;

@@ -1,7 +1,8 @@
 #chartdiv {
-  width: 200px;
-  height: 200px;
-  padding-left: 10px;
+  width: 150px;
+  height: 150px;
+  /* padding-left: 10px; */
+  /* margin-bottom: 25px; */
 }
 .direction1_main{
   height: 100%;

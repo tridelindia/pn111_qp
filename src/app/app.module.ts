@@ -11,7 +11,7 @@ import { AgChartsModule, AgGauge } from 'ag-charts-angular';
 import { Direction1Component } from './widgets/direction1/direction1.component';
 // import { CompassChartComponent } from './compass-chart/compass-chart.component';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -21,6 +21,7 @@ import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
     BrowserModule,
     BrowserAnimationsModule,
     NoopAnimationsModule,
+    FontAwesomeModule,
     ToastrModule.forRoot({}),
     HttpClientModule,
     // AgChartsModule,

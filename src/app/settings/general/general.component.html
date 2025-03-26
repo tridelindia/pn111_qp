@@ -1,97 +1,109 @@
-<div class="Genral_main">
-    <div class="theme">
-        <div class="lefter">
-            <h4>Themes</h4>
-            <p>Choose theme for your application</p>
+<div class="general_main">
+    <div class="profile">
+        <div class="upload_pic">
+            <input type="file" name="" id="" accept=".png .jpg .jpeg">
         </div>
-        <div class="righter">
-            <div class="white"></div>
-            <div class="black"></div>
-            <div class="blue"></div>
+        <div class=" profile_img">
+            <i class="fa fa-edit"></i>
+            <!-- <img src="../../../assets/profile.png" alt=""> -->
         </div>
+        <div class="fields">
+            <h3>Name</h3>
+            <input type="text" [value]="user?.name" readonly>
 
+            <h3>E-mail</h3>
+            <input type="text" [value]="user?.email" readonly>
+
+            <h3>Designation</h3>
+            <input type="text" [value]="user?.designation" readonly>
+
+            <h3>Role</h3>
+            <input type="text" [value]="user?.role" readonly>
+
+            <h3>Permissions</h3>
+            <input type="text" [value]="user?.permissions" readonly>
+
+            <button>
+                <i class="fa-solid fa-right-from-bracket" style="margin-right: 20px;"></i>
+                Log out</button>
+        </div>
     </div>
-    <div class="divider"></div>
-    <div class="theme">
-        <div class="lefter">
-            <h4>Current Widget</h4>
-            <p>Choose widget for your Current Sensor</p>
-        </div>
-        <div class="current1" [ngClass]="{'current1_active': selectedCurrent === 'guage1'}"
-            (click)="changeCurrent('guage1')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedCurrent === 'guage1'"></i>
-            <!-- <img src="../../../assets/image/speedndir.png" alt=""> -->
-            <!-- <app-radial-gauge></app-radial-gauge> -->
+    <div class="settings">
+        <h2>Permissions</h2>
+        <!-- <select name="role" id="">
+            <option value="admin">Admin</option>
+            <option value="moderator">Moderator</option>
+            <option value="user">User</option>
 
-        </div>
-
-        <div class="current2" [ngClass]="{'current1_active': selectedCurrent === 'guage2'}"
-            (click)="changeCurrent('guage2')">
-
-            <i class="fa-regular fa-circle-check" *ngIf="selectedCurrent === 'guage2'"></i>
-            <!-- <img src="../../../assets/image/snd2.png" alt="">
-              -->
-            <div class="left_c_2">
-                <app-direction1></app-direction1>
+        </select> -->
+        <h3>Admin</h3>
+        <div class="multi-select-container" (clickOutside)="closeDropdown()">
+            <div class="multi-select-box" (click)="toggleDropdown()">
+                <div class="selected-options">
+                    <span *ngFor="let option of selectedOptions; let i = index" class="selected-option">
+                        {{ option.text }}
+                        <span class="remove-btn" (click)="removeOption(i, option)"
+                            style="font-weight: 100; font-size: 12px;">✖</span>
+                    </span>
+                    <input *ngIf="false" type="text" placeholder="Select an option" readonly>
+                </div>
+                <div class="arrow">&#9662;</div>
             </div>
-            <div class="right_c_2">
-                <!-- <h3>iwdbf</h3> -->
-                <app-gauge2></app-gauge2>
+
+            <div class="dropdown-options" *ngIf="dropdownOpen">
+                <div *ngFor="let option of options; let i = index" class="option" [class.selected]="option.selected"
+                    (click)="toggleOption(i)">
+                    {{ option.text }}
+                    <span *ngIf="option.selected" class="checkmark">✔</span>
+                </div>
+            </div>
+        </div>
+        <h3>User</h3>
+        <div class="multi-select-container" (clickOutside)="closeDropdown2()">
+            <div class="multi-select-box" (click)="toggleDropdown2()">
+                <div class="selected-options">
+                    <span *ngFor="let option of selectedOptions2; let i = index" class="selected-option">
+                        {{ option.text }}
+                        <span class="remove-btn" (click)="removeOption2(i, option)"
+                            style="font-weight: 100; font-size: 12px;">✖</span>
+                    </span>
+                    <input *ngIf="false" type="text" placeholder="Select an option" readonly>
+                </div>
+                <div class="arrow">&#9662;</div>
             </div>
 
+            <div class="dropdown-options" *ngIf="dropdownOpen2">
+                <div *ngFor="let option of options2; let i = index" class="option" [class.selected]="option.selected"
+                    (click)="toggleOption2(i)">
+                    {{ option.text }}
+                    <span *ngIf="option.selected" class="checkmark">✔</span>
+                </div>
+            </div>
+        </div>
+        <h3>Moderator</h3>
+        <div class="multi-select-container" (clickOutside)="closeDropdown3()">
+            <div class="multi-select-box" (click)="toggleDropdown3()">
+                <div class="selected-options">
+                    <span *ngFor="let option of selectedOptions3; let i = index" class="selected-option">
+                        {{ option.text }}
+                        <span class="remove-btn" (click)="removeOption3(i, option)"
+                            style="font-weight: 100; font-size: 12px;">✖</span>
+                    </span>
+                    <input *ngIf="false" type="text" placeholder="Select an option" readonly>
+                </div>
+                <div class="arrow">&#9662;</div>
+            </div>
 
+            <div class="dropdown-options" *ngIf="dropdownOpen3">
+                <div *ngFor="let option of options3; let i = index" class="option" [class.selected]="option.selected"
+                    (click)="toggleOption3(i)">
+                    {{ option.text }}
+                    <span *ngIf="option.selected" class="checkmark">✔</span>
+                </div>
+            </div>
         </div>
 
-        <div class="current3" [ngClass]="{'current1_active': selectedCurrent === 'guage3'}"
-            (click)="changeCurrent('guage3')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedCurrent === 'guage3'"></i>
-            <img src="../../../assets/image/snd3.png" alt="">
-        </div>
-
+        <!-- <div class="permissions_tab"></div> -->
 
     </div>
-    <!-- <div class="divider"></div>
-    <div class="theme">
-        <div class="lefter">
-            <h4>Tide Widget</h4>
-            <p>Choose widget for your tide Sensor</p>
-        </div>
-        <div class="tide1" [ngClass]="{'tide1_active': selectedtide === 'tide1'}" (click)="changetide('tide1')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedtide === 'tide1'"></i>
-            <img src="../../../assets/image/tide1.png" alt="">
-        </div>
-
-        <div class="tide2" [ngClass]="{'tide1_active': selectedtide === 'tide2'}" (click)="changetide('tide2')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedtide === 'tide2'"></i>
-        </div>
-
-        <div class="tide3" [ngClass]="{'tide1_active': selectedtide === 'tide3'}" (click)="changetide('tide3')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedtide === 'tide3'"></i>
-        </div>
-
-
-    </div>
-    <div class="divider"></div>
-    <div class="theme">
-        <div class="lefter">
-            <h4>battery Widget</h4>
-            <p>Choose widget for your battery Sensor</p>
-        </div>
-        <div class="battery1" [ngClass]="{'battery1_active': selectedbattery === 'battery1'}"
-            (click)="changebattery('battery1')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedbattery === 'battery1'"></i>
-        </div>
-
-        <div class="battery2" [ngClass]="{'battery1_active': selectedbattery === 'battery2'}"
-            (click)="changebattery('battery2')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedbattery === 'battery2'"></i>
-        </div>
-
-        <div class="battery3" [ngClass]="{'battery1_active': selectedbattery === 'battery3'}"
-            (click)="changebattery('battery3')">
-            <i class="fa-regular fa-circle-check" *ngIf="selectedbattery === 'battery3'"></i>
-        </div>
-
-
-    </div> -->
 </div>

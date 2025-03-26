@@ -2,14 +2,25 @@
     margin: 0px;
     height: 100vh;
     width: 3%;
-    background-color: var(--basebg);
+    margin-top: 50px;
+    /* background-color: var(--basebg); */
+    background: rgb(10,97,184);
+    background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+     
     color: var(--icons);
     position: fixed;
     border-radius: 5px;
+    background-color: var(--mainbg);  border-radius: 10px;
+  backdrop-filter: blur(10px); /* Glass effect */
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
 }
 .navigators{
     height: 60%;
     width: 100%;
+    margin-top: 30px;
     /* padding-top: 10px; */
     display: flex;
     flex-direction: column;
@@ -31,8 +42,9 @@
     flex-direction: column;
     font-size: 15px;
     cursor: pointer;
+    color: white;
 }
 .navigators i.selected {
     background-color: rgba(155, 155, 155, 0.5); /* Background color for selected option */
-    color: black; /* Change text color for visibility */
+    color: rgb(255, 255, 255); /* Change text color for visibility */
   }
