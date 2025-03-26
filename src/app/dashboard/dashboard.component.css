@@ -9,21 +9,129 @@
 h1, h2, h3, h4, h5, h6, p, span{
   color: black;
 }
+
+
+/* dropdown */
+
+.custom-dropdown {
+  position: relative;
+  width: 200px;
+  cursor: pointer;
+}
+
+.selected-option {
+  padding: 10px;
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.dropdown-options {
+  display: none;
+  position: absolute;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+.dropdown-options li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.dropdown-options li:hover {
+  background: #e0e0e0;
+}
+
+.dropdown-options img {
+  width: 20px;
+  height: 20px;
+}
+/* end dorpdown */
 .mainBar{
     height: 6%;
-    width: 100%;
-    background-color:var(--basebg);
-    border-radius: 5px;
+    min-height: 6%;
+    margin-left: -50px;
+    width: 103.5%;
+    background-color: #1050cd;
+    /* background-color:var(--basebg); */
+    background: rgb(10,97,184);
+background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+    /* border-radius: 5px; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--mainbg);  border-radius: 10px;
+    background-color: var(--mainbg); 
   backdrop-filter: blur(10px); /* Glass effect */
   /* -webkit-backdrop-filter: blur(10px); */
   border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   backdrop-filter: blur(8px);
+}
+
+.user_session{
+  width: 120px;
+  display: flex;
+  z-index: 1;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  position: relative;
+
+}
+.profile-dropdown{
+  display:flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 1;
+  height: 100px;
+  width: 200px;
+  top: 20px;
+  left: 0;
+  background-color: #fff;
+  border-radius: 10px;
+}
+.user_session img{
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+
+}
+.user_data{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  border-radius: 8px;
+  width: 50px;
+  color: white;
+  /* background-color: white; */
+  /* padding-left: 5px; */
+  margin-right: 5px;
+
+
+}
+.user_data h5{
+  /* margin-left: 10px; */
+  margin: 0;
+  color: white;
+  
+  /* color: bl; */
+}
+.user_data p{
+  margin: 0;
+  /* margin-left: 5px; */
+  /* color  : wheat; */
+  font-weight: 600;
 }
 .bar_station_select{
   margin-left: 5px;
@@ -239,7 +347,7 @@ flex-direction: column;
 }
 
 .adcp_params{
-  height: 34%;
+  height: 32%;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -249,6 +357,7 @@ flex-direction: column;
   flex-shrink: 0;
   margin-bottom: 5px;
   margin-left: 2px;
+  /* border-right: 2px solid blue; */
 }
 .adcp_param_container{
   height:58%;  /* Fixed height */
@@ -280,6 +389,7 @@ flex-direction: column;
 backdrop-filter: blur(8px);
 position: relative;
 margin-top: 5px;
+/* border-right: 2px solid green; */
 
 }
 .speed{
@@ -390,7 +500,7 @@ right: 0;
   }
 
   .parameters_oceanography_item{
-    height: 35%;
+    height: 33.3%;
     width: 100%;
     /* background-color: #20B5EF; */
     display: flex;
@@ -403,6 +513,7 @@ right: 0;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    /* border-right: 2px solid blue; */
   }
   .parameters_oceanography_left, .parameters_oceanography_right{
     height: 97%;
@@ -413,12 +524,14 @@ right: 0;
     justify-content: space-evenly;
     align-items: center;
     background-color: var(--mainbg);  
+    
     border-radius: 10px;
     backdrop-filter: blur(10px); /* Glass effect */
     -webkit-backdrop-filter: blur(10px);
     /* border: 1px solid rgba(255, 255, 255, 0.2); Subtle border */
-    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(8px);
+    /* border-right: 2px solid blue; */
   }
   
   .parameters_oceanography_left svg{
@@ -533,7 +646,8 @@ right: 0;
   .watch_circle{
     height: 97%;
     width: 19%;
-    background-color: rgb(110, 185, 247);  
+    /* background-color: rgb(110, 185, 247); */
+    background-color: white;  
     border-radius: 10px;
     backdrop-filter: blur(10px); /* Glass effect */
     -webkit-backdrop-filter: blur(10px);
@@ -568,7 +682,7 @@ border: 2px red solid;
   display: flex;
 justify-content: center;
 align-items: center;
-  border: 2px yellow solid;
+  border: 2px rgb(255, 213, 0) solid;
 }
 .warning_circle img{
   height: 60%;
@@ -627,12 +741,13 @@ align-items: center;
   /* border: 1px solid rgba(255, 255, 255, 0.2); Subtle border */
   box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(8px);
+  /* border-right: 2px solid brown; */
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   position: relative;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 
     
   }
@@ -641,14 +756,15 @@ align-items: center;
     width: 50% !important;
   }
   .met_param_items1 h3{
-    font-size: 14px;
-    font-weight: normal;
+    font-size: 17px;
+    font-weight: 500;
   }
   .met_param_items1 svg{
-    height: 80%;
-    width: 80%;
+    height: 70%;
+    width: 70%;
     color: whitesmoke;
-    margin-top: 25%;
+    margin-top: 17%;
+    margin-bottom: 5px;
     /* top: 10px; */
   }
 
@@ -678,8 +794,8 @@ align-items: center;
   }
 
   .met_param_items svg{
-    height: 60%;
-    width: 60%;
+    height: 70%;
+    width: 70%;
     color: whitesmoke;
     position: relative;
   }
@@ -687,15 +803,19 @@ align-items: center;
   .met_param_title{
     height: 5%;
     width: 100%;
-    margin-left: 10px;
     margin-top: 5px;
+    margin-left: 10px;
+    /* margin-bottom: 2px; */
     display: flex;
     justify-content: start;
     align-items: start;
   }
   .met_param_title p{
-    margin: 0;
-    font-size: 14px;
+margin: 0;    
+margin-left: 5px;
+/* margin-bottom: 5px; */
+font-size: 15px;
+color: rgb(86, 84, 84);
   }
   .met_param_horizontal_item{
     height: 60%;
@@ -845,7 +965,7 @@ backdrop-filter: blur(8px);
 /* water_quality 2nd test */
 .water_q {
   width: 99%;
-  height: 30%;
+  height: 28.5%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -868,10 +988,11 @@ backdrop-filter: blur(8px);
 }
 
 .water_items_main {
-  /* background-color: white; */
-  /* background: #ffffff95; */
-  background: linear-gradient(to right, #7dd4ef, #b0e5f5);
+  background-color: white;
+  /* background: #eef4fb; */
+  /* background: linear-gradient(to right, #7dd4ef, #b0e5f5); */
   border-radius: 10px;
+  box-shadow: 2px 2px 3px  rgb(192, 191, 191) solid;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -914,18 +1035,18 @@ backdrop-filter: blur(8px);
 .water_param_icon {
   justify-content: center;
   margin: 5px;
-  height: 70%;
-  width: 30%;
+  height: 100%;
+  width: 40%;
   background-color: rgba(255, 255, 255, 0.848);
-  background: #4747f895;
-  background: linear-gradient(to right, #1CB5E0, #4747f895);
+  /* background: #4747f895;
+  background: linear-gradient(to right, #1CB5E0, #4747f895); */
   
   border-radius: 50% 50% 50% 50%;
 }
 
 .water_title svg {
-  height: 50%;
-  width: 100%;
+  height: 40px;
+  width: 40px;
   /* padding-left: 5px; */
 }
 
@@ -1030,7 +1151,7 @@ backdrop-filter: blur(8px);
 
 
 .graph{
-  height: 31%;
+  height: 34%;
   width: 99%;
   margin: 5px;
   /* background-color: white; */
@@ -1042,13 +1163,79 @@ backdrop-filter: blur(8px);
 }
 .data_score_main_cont{
   height: 100%;
-  width: 73.5%;
+  width: 55%;
+}
+.battery_level{
+  height: 100%;
+  width: 18%;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.battery_level h3{
+  font-size: 14px;
+  font-weight: normal;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+
+}
+.battery_level h4{
+  font-size: 12px;
+  font-weight: bold;
+  position: absolute;
+  bottom: 5px;
+  left: 45%;
+}
+.battery_box{
+  height: 100%;
+  width: 94%;
+  border-radius: 5px;
+  /* background-color: #2ecc71; */
+}
+.battery{
+  height: 20%;
+  width: 80%;
+  /* background-color: #3498db; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+}
+.battery_fill{
+  height: 100%;
+  width: 100%;
+  background-color: #2ecc71;
+  border-radius: 5px;
+  animation: width 2s forwards;
+
+}
+@keyframes width {
+  0% { width: 0%; }
+  100% { width: 100%; }
+
+  
+}
+.nob{
+  height: 40%;
+  width: 6%;
+  border-radius: 0px 2px 2px 0px;
+  background-color: rgb(78, 76, 76);
 }
 
 
+
+
+
+
 .micro_flu{
-  height: 100%;
-  width: 25%;
+  height: 99%;
+  width: 24.5%;
   /* background-color: #1CB5E0; */
   display: flex;
   flex-direction: column;
@@ -1057,7 +1244,7 @@ backdrop-filter: blur(8px);
 
 }
 .micro_flu_item{
-  height: 30%;
+  height: 31%;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -1069,15 +1256,20 @@ backdrop-filter: blur(8px);
 .micro_flu_item svg{
   height: 40px;
   width: 40px;
-  margin-left: 20px;
+  margin-left: 30px;
 }
 .micro_flu_item h3{
   font-size: 12px;
   font-weight: 600;
-  margin-left: 10px;
+  margin-left: 23px;
+  /* margin-left: 10px; */
 
 }
 .micro_flu_item span{
   font-size: 11px;
   font-weight: normal;
 }
+
+
+
+

@@ -10,7 +10,7 @@ import { LayoutComponent } from '../layout/layout.component';
     styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit{
-  selectedIndex:number = 5;
+  selectedIndex:number = 1;
    // No option selected by default
 constructor(private lay:LayoutComponent){}
   // Method to set the selected index

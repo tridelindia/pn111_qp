@@ -1,6 +1,32 @@
 <div class="home">
     <div class="mainBar">
+        <div class="title" style="color: white; flex-grow: 1;">
+            <h3 style="color: white; margin-left: 10px;">Terra</h3>
+        </div>
         <div class="bar_station_select">
+            <h5 class="field_title">Select Station</h5>
+            <select name="select" id="" class="station_select">
+                <option value="all">Please Select Station</option>
+                <option value="1">Station 1</option>
+                <option value="2">Station 2</option>
+                <option value="3">Station 3</option>
+            </select>
+        </div>
+        <p style="margin-right: 20px;">Last Updated : 2025-03-25 10:07:13</p>
+        <div class="user_session">
+
+            <img src="../../assets/image/profile_default.png" alt="">
+            <!-- <ul class="profile-dropdown" *ngIf="!dropdownOpen">
+                <li>Admin</li>
+                <li>Logout</li>
+            </ul> -->
+            <div class="user_data">
+                <!-- <h5>Kavi</h5> -->
+                <p>Admin</p>
+            </div>
+        </div>
+
+        <!-- <div class="bar_station_select">
             <h4 class="field_title">Select Station</h4>
             <select name="select" id="" class="station_select">
                 <option value="all">Please Select Station</option>
@@ -17,7 +43,7 @@
                 <option value="2">Station 2</option>
                 <option value="3">Station 3</option>
             </select>
-        </div>
+        </div> -->
     </div>
     <div class="sections">
         <div class="left">
@@ -120,8 +146,9 @@
                             <div class="param_title">
                                 <p>Wave Heading</p>
                             </div>
-                            <div class="heading_dir" style="height: 80%; width: 80%; margin-bottom: 30px;">
-                                <app-direction1></app-direction1>
+                            <div class="heading_dir" style="height: 60%; width: 60%; ">
+                                <!-- <app-direction1></app-direction1> -->
+                                <app-direction2></app-direction2>
                             </div>
                             <!-- <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
                                 text-rendering="geometricPrecision" image-rendering="optimizeQuality"
@@ -133,12 +160,13 @@
                         </div>
                         <div class="parameters_oceanography_right">
                             <div class="param_title">
-                                <p>Hs</p>
+                                <p>Wave Height</p>
                             </div>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
-                                text-rendering="geometricPrecision" image-rendering="optimizeQuality"
-                                fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 442.755">
+                            <svg style="height: 45%; width: 45%;" xmlns="http://www.w3.org/2000/svg"
+                                shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
+                                image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"
+                                viewBox="0 0 512 442.755">
                                 <path fill="#5092D9" fill-rule="nonzero"
                                     d="M172.141 167.463l-1.334.829c-19.942 12.239-39.955 16.308-58.894 11.379-16.471-4.285-31.884-15.333-45.443-33.675-3.291 5.625-8.519 12.174-14.325 18.148-6.891 7.096-14.765 13.553-21.347 16.879-4.791 2.419-9.294 3.337-13.033 2.111a12.85 12.85 0 01-7.886-3.74 12.8 12.8 0 01-3.74-9.111v-.034c.063-15.854 1.766-31.036 5.254-45.463 3.515-14.539 8.831-28.298 16.091-41.192 7.274-12.916 16.493-24.987 27.81-36.123 19.81-19.507 43.705-35.192 70.544-42.877 18.016-5.166 37.792-6.551 55.928-1.149 8.619 2.569 16.19 6.471 22.535 11.316 13.36 10.203 22.139 25.37 22.811 42.318a52.8 52.8 0 01-1.903 16.239c-1.806 6.499-4.883 12.888-9.314 18.882-4.143 5.608-9.448 10.865-15.979 15.544a55.11 55.11 0 01-12.508 6.697 52.738 52.738 0 01-13.642 3.203 48.419 48.419 0 01-11.719-.26 45.05 45.05 0 01-11.117-3.129 44.727 44.727 0 01-10.744-6.497 48.104 48.104 0 01-8.737-9.331c-3.14-4.382-5.823-9.604-7.882-15.716-1.88-5.576-3.232-11.91-3.923-19.038a12.854 12.854 0 012.894-9.44 12.87 12.87 0 018.725-4.608 12.87 12.87 0 019.437 2.894 12.87 12.87 0 014.602 8.728c.475 4.843 1.358 9.099 2.569 12.791 1.228 3.742 2.791 6.851 4.588 9.362l.077.112c7.988 10.982 21.779 10.776 32.324 3.216 4.205-3.011 7.557-6.268 10.102-9.642 2.62-3.468 4.397-7.062 5.391-10.636a27.238 27.238 0 00.983-8.357 27.304 27.304 0 00-1.643-8.271c-.988-2.705-2.434-5.34-4.297-7.808-1.78-2.357-3.942-4.551-6.451-6.508-26.764-14.374-49.585-10.431-65.404 2.463-10.394 8.47-17.899 20.784-21.645 34.332-3.745 13.568-3.696 28.318 1.015 41.643 7.808 22.07 28.718 40.34 66.855 42.926 3.117.205 5.477 2.908 5.272 6.025a5.652 5.652 0 01-2.897 4.568z" />
                                 <!-- <path fill="#ED762E"
@@ -167,7 +195,7 @@
                         </div>
                         <div class="parameters_oceanography_right">
                             <div class="param_title">
-                                <p>Pmax</p>
+                                <p>Max Wave Period</p>
                             </div>
 
                             <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
@@ -238,7 +266,7 @@
                     <div class="parameters_oceanography_item">
                         <div class="parameters_oceanography_left">
                             <div class="param_title">
-                                <p>Hmax</p>
+                                <p>Max Wave Height</p>
                             </div>
 
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -402,12 +430,13 @@
 
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <!-- <app-direction1></app-direction1> -->
-                            <app-direction2></app-direction2>
-                            <p>234 N</p>
+                            <!-- <app-direction1></app-direction1> -->
+                            <app-direction3></app-direction3>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
-                            <app-gauge2></app-gauge2>
+                            <app-gauge3></app-gauge3>
                             <!-- <app-gauge3></app-gauge3> -->
                             <p>1.6 m/s</p>
                         </div>
@@ -416,7 +445,21 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
+                        </div>
+                        <div class="direction">
+                            <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
+                            <!-- <app-gauge3></app-gauge3> -->
+                            <app-gauge3></app-gauge3>
+                            <p>1.6 m/s</p>
+                        </div>
+                    </div>
+
+                    <div class="adcp_params">
+                        <div class="speed">
+                            <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
+                            <app-direction1></app-direction1>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -429,20 +472,7 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
-                        </div>
-                        <div class="direction">
-                            <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
-                            <app-gauge3></app-gauge3>
-                            <p>1.6 m/s</p>
-                        </div>
-                    </div>
-
-                    <div class="adcp_params">
-                        <div class="speed">
-                            <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -454,7 +484,7 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -466,7 +496,7 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -478,7 +508,7 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -490,7 +520,7 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -502,7 +532,7 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -514,7 +544,7 @@
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal; ">Current Direction</h3>
                             <app-direction1></app-direction1>
-                            <p>234 N</p>
+                            <p>234 WSW</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -535,41 +565,62 @@
                         <div class="met_params1">
                             <div class="met_param_itembase">
                                 <div class="met_param_items1">
+
                                     <div class="met_param_title">
                                         <p>Wind Speed</p>
                                     </div>
 
                                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                        viewBox="0 0 122.88 74.78" style="enable-background:new 0 0 122.88 74.78"
+                                        viewBox="0 0 122.88 74.78" style="enable-background:new 0 0 122.88 74.78;"
                                         xml:space="preserve">
                                         <g>
-                                            <path
+                                            <path fill="#007fff"
                                                 d="M28.69,53.38c-1.61,0-2.91-1.3-2.91-2.91c0-1.61,1.3-2.91,2.91-2.91h51.37c0.21,0,0.42,0.02,0.62,0.07 c1.84,0.28,3.56,0.8,5.1,1.63c1.7,0.92,3.15,2.19,4.27,3.89c3.85,5.83,3.28,11.24,0.56,15.24c-1.77,2.61-4.47,4.55-7.45,5.57 c-3,1.03-6.32,1.13-9.32,0.03c-4.54-1.66-8.22-5.89-8.76-13.55c-0.11-1.6,1.1-2.98,2.7-3.09c1.6-0.11,2.98,1.1,3.09,2.7 c0.35,4.94,2.41,7.56,4.94,8.48c1.71,0.62,3.67,0.54,5.48-0.08c1.84-0.63,3.48-1.79,4.52-3.32c1.49-2.19,1.71-5.28-0.61-8.79 c-0.57-0.86-1.31-1.51-2.18-1.98c-0.91-0.49-1.97-0.81-3.13-0.99H28.69L28.69,53.38z M15.41,27.21c-1.61,0-2.91-1.3-2.91-2.91 c0-1.61,1.3-2.91,2.91-2.91h51.21c1.17-0.18,2.23-0.5,3.14-0.99c0.87-0.47,1.61-1.12,2.18-1.98c2.32-3.51,2.09-6.6,0.61-8.79 c-1.04-1.53-2.68-2.69-4.52-3.32c-1.81-0.62-3.78-0.7-5.48-0.08c-2.52,0.92-4.59,3.54-4.94,8.48c-0.11,1.6-1.49,2.81-3.09,2.7 c-1.6-0.11-2.81-1.49-2.7-3.09c0.54-7.66,4.22-11.89,8.76-13.55c3-1.09,6.32-0.99,9.32,0.03c2.98,1.02,5.68,2.97,7.45,5.57 c2.72,4,3.29,9.41-0.56,15.24c-1.12,1.7-2.57,2.97-4.27,3.89c-1.54,0.83-3.26,1.35-5.1,1.63c-0.2,0.04-0.41,0.07-0.62,0.07H15.41 L15.41,27.21z M2.91,40.3C1.3,40.3,0,38.99,0,37.39c0-1.61,1.3-2.91,2.91-2.91h107.07c1.17-0.18,2.23-0.5,3.13-0.99 c0.87-0.47,1.61-1.12,2.18-1.98c2.32-3.51,2.09-6.6,0.61-8.79c-1.04-1.53-2.68-2.69-4.52-3.32c-1.81-0.62-3.78-0.7-5.48-0.08 c-2.52,0.92-4.59,3.54-4.94,8.48c-0.11,1.6-1.49,2.81-3.09,2.7c-1.6-0.11-2.81-1.49-2.7-3.09c0.54-7.66,4.22-11.89,8.76-13.55 c3-1.09,6.32-0.99,9.32,0.03c2.98,1.02,5.68,2.97,7.45,5.57c2.72,4,3.29,9.41-0.56,15.24c-1.12,1.7-2.57,2.97-4.27,3.89 c-1.54,0.83-3.26,1.35-5.1,1.63c-0.2,0.04-0.41,0.07-0.62,0.07H2.91L2.91,40.3z" />
                                         </g>
                                     </svg>
-                                    <h3>2.3 N</h3>
+                                    <h3>2.3 kts</h3>
                                     <!-- </div> -->
                                 </div>
                                 <div class="met_param_items1">
+
+                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="#007fff" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-arrow-up h-5 w-5 text-primary"
+                                        data-lov-id="src/components/sensors/MeteorologicalSensor.tsx:24:12"
+                                        data-lov-name="ArrowUp"
+                                        data-component-path="src/components/sensors/MeteorologicalSensor.tsx"
+                                        data-component-line="24" data-component-file="MeteorologicalSensor.tsx"
+                                        data-component-name="ArrowUp"
+                                        data-component-content="%7B%22className%22%3A%22h-5%20w-5%20text-primary%22%7D"
+                                        style="transform: rotate(245deg);">
+                                        <path d="m5 12 7-7 7 7"></path>
+                                        <path fill="#007fff" d="M12 19V5"></path>
+                                    </svg> -->
                                     <div class="met_param_title">
                                         <p>Wind Direction</p>
                                     </div>
+                                    <svg fill="#007fff" width="800px" height="800px" viewBox="0 0 15 15"
+                                        xmlns="http://www.w3.org/2000/svg" id="arrow"
+                                        style="transform: rotate(245deg);">
+                                        <path
+                                            d="M8.29289 2.29289C8.68342 1.90237 9.31658 1.90237 9.70711 2.29289L14.2071 6.79289C14.5976 7.18342 14.5976 7.81658 14.2071 8.20711L9.70711 12.7071C9.31658 13.0976 8.68342 13.0976 8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L11 8.5H1.5C0.947715 8.5 0.5 8.05228 0.5 7.5C0.5 6.94772 0.947715 6.5 1.5 6.5H11L8.29289 3.70711C7.90237 3.31658 7.90237 2.68342 8.29289 2.29289Z" />
+                                    </svg>
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
+                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
                                         text-rendering="geometricPrecision" image-rendering="optimizeQuality"
                                         fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 497.35">
                                         <path
                                             d="M265.27 59.18c49.11 0 93.84 18.81 127.36 49.61l24.57-13.96-13.84 24.64c31.17 33.6 50.22 78.59 50.22 128.02 0 48.77-18.54 93.22-48.96 126.66l13.8 24.27-24.25-13.65c-33.69 31.64-79.04 51.03-128.9 51.03-49.35 0-94.26-18.98-127.84-50.05l-25.32 14.41 14.28-25.49c-30.7-33.51-49.43-78.16-49.43-127.18 0-49.92 19.43-95.3 51.14-129l-13.4-23.55 23.74 13.36c33.46-30.51 77.98-49.12 126.83-49.12zM258.1 0l21.88 27.53V8.45c0-2.7-.38-4.5-1.15-5.45-1.05-1.29-2.81-1.9-5.28-1.86V0h14.68v1.14c-1.88.25-3.14.56-3.79.94-.63.39-1.14 1.01-1.51 1.89-.36.87-.53 2.37-.53 4.48v37h-1.11l-30-37.05v28.34c0 2.57.58 4.31 1.75 5.22 1.18.9 2.53 1.35 4.04 1.35h1.05v1.14h-15.82v-1.14c2.46-.02 4.16-.53 5.12-1.52.97-1 1.45-2.67 1.45-5.05V5.31l-.93-1.15c-.94-1.21-1.77-2-2.49-2.38-.72-.38-1.76-.6-3.11-.64V0h15.75zm19.64 450.89.33 14.82h-1.34c-.63-3.71-2.18-6.69-4.67-8.95-2.49-2.26-5.17-3.39-8.05-3.39-2.24 0-4 .59-5.3 1.79-1.3 1.18-1.95 2.56-1.95 4.1 0 .98.23 1.85.69 2.62.63 1.02 1.64 2.04 3.05 3.04 1.03.72 3.4 2 7.11 3.84 5.2 2.54 8.71 4.96 10.52 7.22 1.8 2.27 2.69 4.87 2.69 7.79 0 3.71-1.45 6.9-4.34 9.57-2.9 2.67-6.57 4.01-11.03 4.01-1.4 0-2.73-.15-3.97-.43-1.25-.28-2.81-.81-4.69-1.61-1.05-.43-1.91-.64-2.59-.64-.57 0-1.17.22-1.8.66-.64.44-1.15 1.11-1.54 2.02h-1.14v-16.76h1.14c.96 4.7 2.81 8.3 5.55 10.77 2.75 2.47 5.7 3.71 8.87 3.71 2.45 0 4.4-.67 5.86-2 1.45-1.33 2.17-2.87 2.17-4.65 0-1.04-.27-2.05-.83-3.04-.56-.98-1.4-1.91-2.54-2.8-1.14-.88-3.15-2.03-6.03-3.45-4.05-1.98-6.95-3.68-8.72-5.08-1.75-1.39-3.1-2.96-4.05-4.68-.95-1.73-1.42-3.63-1.42-5.7 0-3.54 1.29-6.55 3.9-9.05 2.59-2.49 5.86-3.73 9.82-3.73 1.44 0 2.84.17 4.19.51 1.02.27 2.28.75 3.75 1.46 1.48.7 2.5 1.05 3.1 1.05.57 0 1.01-.17 1.34-.52.32-.34.64-1.18.91-2.5h1.01zm210.79-223.07v18.1h.89c2.83 0 4.87-.89 6.14-2.65 1.27-1.77 2.08-4.37 2.43-7.81h1.27v23.26h-1.27c-.26-2.53-.82-4.61-1.65-6.22-.85-1.62-1.83-2.71-2.94-3.27-1.12-.55-2.74-.83-4.87-.83v12.49c0 2.45.11 3.93.32 4.48.2.55.59 1 1.16 1.34.57.35 1.49.53 2.75.53h2.66c4.14 0 7.47-.97 9.98-2.88 2.5-1.91 4.3-4.82 5.38-8.76H512l-2 14.12h-38.36v-1.14h1.46c1.29 0 2.33-.24 3.11-.7.57-.31 1.01-.83 1.31-1.58.23-.53.36-1.91.36-4.16v-29.3c0-2.02-.06-3.26-.17-3.73-.21-.77-.61-1.36-1.21-1.77-.82-.62-1.95-.93-3.4-.93h-1.46v-1.14h37.14v13.14h-1.27c-.63-3.22-1.52-5.52-2.66-6.92-1.14-1.4-2.75-2.42-4.84-3.08-1.22-.39-3.5-.59-6.85-.59h-4.63zm-422.69-3.06v1.14c-.82.07-1.53.31-2.1.71-.57.41-1.07 1.03-1.52 1.85-.12.27-.8 1.97-2.03 5.1l-13.91 36.66h-1.2l-10.99-28.93-12.18 28.93h-1.16L6.09 233.94c-1.49-3.68-2.52-5.91-3.11-6.68-.59-.77-1.58-1.22-2.98-1.36v-1.14h19.25v1.14c-1.55.05-2.58.28-3.09.72-.52.43-.78.96-.78 1.6 0 .84.54 2.61 1.61 5.33l8.71 21.56 7.05-17.03-1.77-4.59c-1-2.58-1.78-4.31-2.32-5.17-.55-.86-1.18-1.49-1.89-1.85-.7-.38-1.74-.57-3.12-.57v-1.14h21.34v1.14c-1.5.03-2.58.15-3.24.38-.46.14-.81.41-1.07.77-.27.36-.39.78-.39 1.24 0 .51.48 2.06 1.46 4.67l8.08 21.03 7.23-19.03c.76-1.98 1.23-3.34 1.41-4.07.18-.73.26-1.4.26-2.01 0-.91-.31-1.61-.92-2.14-.6-.51-1.78-.79-3.5-.84v-1.14h11.53zm160.82 85.13-56.83 32.33 33.24-59.05 17.57 4.83-122.08-33.56c1.77 43.32 20.05 82.38 48.72 111.04 28.1 28.11 66.21 46.23 108.52 48.6l-29.14-104.19zm-23.29-101.85-31.93-56.13 56.1 31.58 28.2-102.58c-42.29 2.38-80.37 20.5-108.46 48.59-27.95 27.95-46.03 65.78-48.56 107.81l123.52-34.54-18.87 5.27zm99.06-23.43 57.62-32.78-32.02 56.9-20.43-5.62 124.21 34.14c-2.55-42.01-20.61-79.81-48.55-107.75-28.4-28.4-67.01-46.61-109.85-48.66l29.02 103.77zm25.58 98.85 32.81 57.67-58.27-32.8-29.08 105.82c42.82-2.08 81.4-20.28 109.79-48.67 28.68-28.68 46.96-67.76 48.72-111.1l-103.97 29.08zm-63.79-37.51.39.41-36.72 39.27-144.36-39.68h180.69zm2.1-.17-.4-.4 11.49-12.29-13.29 12.78-39.27-36.72 39.68-144.36v180.63l13.19-12.65 24.92-26.66L447 245.78H266.32zm-1.22 3.33 39.27 36.72-35.31 128.47-4.37 15.89V249.56l.41-.45z" />
-                                    </svg>
+                                    </svg> -->
                                     <h3>2.3 N</h3>
                                     <!-- </div> -->
                                 </div>
                                 <div class="met_param_items1">
+
                                     <div class="met_param_title">
                                         <p>Temperature</p>
                                     </div>
-
                                     <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
                                         text-rendering="geometricPrecision" image-rendering="optimizeQuality"
                                         fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 244 511.71">
@@ -582,34 +633,34 @@
                                     <!-- </div> -->
                                 </div>
                                 <div class="met_param_items1">
-                                    <div class="met_param_title">
-                                        <p>Relative Humidity</p>
-                                    </div>
 
                                     <!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 101.76 122.88">
-                                        <defs>
-                                            <style>
-                                                .cls-1 {
-                                                    fill: #42bdff;
+                                    viewBox="0 0 101.76 122.88">
+                                    <defs>
+                                        <style>
+                                            .cls-1 {
+                                                fill: #42bdff;
                                                 }
-
+                                                
                                                 .cls-1,
                                                 .cls-2 {
                                                     fill-rule: evenodd;
-                                                }
-
-                                                .cls-2 {
-                                                    fill: #fff;
-                                                }
-                                            </style>
-                                        </defs>
-                                        <title>water-color</title>
-                                        <path class="cls-1"
-                                            d="M63.94,10.12C71.59,42.87,101.76,66.68,101.76,86c0,46.84-68.61,49.07-75.1,6.64a34.53,34.53,0,0,1-5.42-1.12A30.87,30.87,0,0,1,11,86.37C3.92,80.9.68,74.41.1,67.56-.58,59.62,2.39,51.32,7,43.6c1.76-2.94,3.37-5.49,5-8.11,6.34-10,13.49-21.24,16.28-33.31a2.81,2.81,0,0,1,5.47,0c2.81,12,9.95,23.27,16.28,33.25l1.82,2.87C57,29.7,61.58,20.37,63.94,10.12ZM26.19,86.9c0-.3,0-.59,0-.9,0-12.1,11.72-25.82,22.39-42.4-1-1.62-2.12-3.38-3.25-5.17-5.05-7.95-10.59-16.69-14.26-26.18C27.38,21.8,21.82,30.54,16.77,38.5c-1.87,2.93-3.66,5.75-5,8-4,6.79-6.66,14-6.09,20.64.46,5.34,3.05,10.44,8.76,14.84a25.48,25.48,0,0,0,8.36,4.19,27.42,27.42,0,0,0,3.37.77Z" />
-                                        <path class="cls-2"
-                                            d="M40.93,80.48a3.84,3.84,0,0,1,7.64-.69,36.87,36.87,0,0,0,3.72,13.84,24.46,24.46,0,0,0,9.54,9.86A3.83,3.83,0,0,1,58,110.1,31.86,31.86,0,0,1,45.5,97.2a44.59,44.59,0,0,1-4.57-16.72Z" />
-                                    </svg> -->
+                                                    }
+                                                    
+                                                    .cls-2 {
+                                                        fill: #fff;
+                                                        }
+                                                    </style>
+                                                </defs>
+                                                <title>water-color</title>
+                                                <path class="cls-1"
+                                                d="M63.94,10.12C71.59,42.87,101.76,66.68,101.76,86c0,46.84-68.61,49.07-75.1,6.64a34.53,34.53,0,0,1-5.42-1.12A30.87,30.87,0,0,1,11,86.37C3.92,80.9.68,74.41.1,67.56-.58,59.62,2.39,51.32,7,43.6c1.76-2.94,3.37-5.49,5-8.11,6.34-10,13.49-21.24,16.28-33.31a2.81,2.81,0,0,1,5.47,0c2.81,12,9.95,23.27,16.28,33.25l1.82,2.87C57,29.7,61.58,20.37,63.94,10.12ZM26.19,86.9c0-.3,0-.59,0-.9,0-12.1,11.72-25.82,22.39-42.4-1-1.62-2.12-3.38-3.25-5.17-5.05-7.95-10.59-16.69-14.26-26.18C27.38,21.8,21.82,30.54,16.77,38.5c-1.87,2.93-3.66,5.75-5,8-4,6.79-6.66,14-6.09,20.64.46,5.34,3.05,10.44,8.76,14.84a25.48,25.48,0,0,0,8.36,4.19,27.42,27.42,0,0,0,3.37.77Z" />
+                                                <path class="cls-2"
+                                                d="M40.93,80.48a3.84,3.84,0,0,1,7.64-.69,36.87,36.87,0,0,0,3.72,13.84,24.46,24.46,0,0,0,9.54,9.86A3.83,3.83,0,0,1,58,110.1,31.86,31.86,0,0,1,45.5,97.2a44.59,44.59,0,0,1-4.57-16.72Z" />
+                                            </svg> -->
+                                    <div class="met_param_title">
+                                        <p>Relative Humidity</p>
+                                    </div>
                                     <svg width="100" height="100" viewBox="0 0 100 100"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <!-- Water Drop Shape -->
@@ -624,10 +675,10 @@
                                     <!-- </div> -->
                                 </div>
                                 <div class="met_param_items1">
+
                                     <div class="met_param_title">
                                         <p>Wind Gust</p>
                                     </div>
-
                                     <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
                                         text-rendering="geometricPrecision" image-rendering="optimizeQuality"
                                         fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 414.65">
@@ -651,10 +702,10 @@
                         <div class="met_params1">
                             <div class="met_param_itembase">
                                 <div class="met_param_items1">
+
                                     <div class="met_param_title">
                                         <p>Barometric Pressure</p>
                                     </div>
-
                                     <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 122.88 108.1">
                                         <defs>
@@ -702,10 +753,10 @@
                                     <h3>2.3 N</h3>
                                 </div>
                                 <div class="met_param_items1">
+
                                     <div class="met_param_title">
                                         <p>Visibility</p>
                                     </div>
-
                                     <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
                                         text-rendering="geometricPrecision" image-rendering="optimizeQuality"
                                         fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 279.703">
@@ -728,37 +779,37 @@
                                     <!-- </div> -->
                                 </div>
                                 <div class="met_param_items1">
-                                    <div class="met_param_title">
-                                        <p>Global Radiation</p>
-                                    </div>
 
                                     <!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 122.88 122.88">
-                                        <defs>
-                                            <style>
-                                                .cls-1 {
-                                                    fill: #ffc903;
+                                    viewBox="0 0 122.88 122.88">
+                                    <defs>
+                                        <style>
+                                            .cls-1 {
+                                                fill: #ffc903;
                                                 }
-
+                                                
                                                 .cls-1,
                                                 .cls-2 {
                                                     fill-rule: evenodd;
-                                                }
-                                            </style>
-                                        </defs>
-                                        <title>nuclear</title>
-                                        <path d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0Z" />
-                                        <path class="cls-1"
+                                                    }
+                                                </style>
+                                            </defs>
+                                            <title>nuclear</title>
+                                            <path d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0Z" />
+                                            <path class="cls-1"
                                             d="M61.44,6.67A54.77,54.77,0,1,1,6.67,61.44,54.77,54.77,0,0,1,61.44,6.67Z" />
-                                        <path class="cls-2"
+                                            <path class="cls-2"
                                             d="M61.5,53.07a8.95,8.95,0,1,1-9,8.94,8.95,8.95,0,0,1,9-8.94Z" />
-                                        <path class="cls-2"
+                                            <path class="cls-2"
                                             d="M15.17,61.89C16,44.64,23.59,31.13,38.4,21.68L54.68,50.34c-3.85,2.16-6.09,6-6.68,11.55Z" />
-                                        <path class="cls-2"
+                                            <path class="cls-2"
                                             d="M84.63,21.46c14.5,9.38,22.42,22.67,23.2,40.23l-33-.24c0-4.41-2.15-8.27-6.66-11.55L84.63,21.46Z" />
-                                        <path class="cls-2"
+                                            <path class="cls-2"
                                             d="M84.87,101.71c-15.36,7.88-30.84,8.09-46.43,0L55.12,73.27c3.79,2.25,8.24,2.27,13.34,0l16.41,28.43Z" />
-                                    </svg> -->
+                                        </svg> -->
+                                    <div class="met_param_title">
+                                        <p>Global Radiation</p>
+                                    </div>
                                     <svg width="50" height="50" viewBox="0 0 100 100"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <!-- Sun -->
@@ -907,7 +958,7 @@
                             <path fill="#395970"
                                 d="M356.83 61.095C401.118-6.639 479.822 101.519 512 0c-16.594 11.395-28.622 18.481-43.884 22.184-38.94 9.448-106.679-26.724-111.286 38.911zM319.038 388.215h27.553c2.748 0 4.996 2.248 4.996 4.997a5.01 5.01 0 01-4.996 4.996h-27.553a5.01 5.01 0 01-4.996-4.996 5.01 5.01 0 014.996-4.997zm64.763 0h27.553a5.01 5.01 0 014.996 4.997 5.01 5.01 0 01-4.996 4.996h-27.553a5.01 5.01 0 01-4.996-4.996c0-2.749 2.248-4.997 4.996-4.997z" />
                         </svg>
-                        <h3>2.3 µg/L<br> <span>PAH</span></h3>
+                        <h3><span>PAH</span><br> 2.3 µg/L</h3>
                     </div>
                     <div class="micro_flu_item">
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -954,7 +1005,7 @@
                                     d="M20.43,12.51c4.35,0,7.87,1.58,7.87,3.54s-3.52,3.54-7.87,3.54s-7.87-1.58-7.87-3.54S16.08,12.51,20.43,12.51 L20.43,12.51z" />
                             </g>
                         </svg>
-                        <h3>5.7 mg/L<br> <span>Oil in Water</span></h3>
+                        <h3> <span>Oil in Water</span><br>5.7 mg/L</h3>
                     </div>
                     <div class="micro_flu_item">
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -994,12 +1045,29 @@
                                     d="M72.4,75.88c-0.8-0.8-1.91-1.29-3.13-1.29s-2.33,0.49-3.13,1.29c-0.79,0.8-1.28,1.91-1.28,3.13 s0.49,2.33,1.29,3.13c0.8,0.8,1.91,1.29,3.13,1.29s2.33-0.49,3.13-1.29c0.8-0.8,1.29-1.91,1.29-3.13 C73.7,77.79,73.21,76.68,72.4,75.88L72.4,75.88L72.4,75.88z" />
                             </g>
                         </svg>
-                        <h3>1.2 ppm<br> <span>BT</span></h3>
+                        <h3> <span>BT</span><br>1.2 ppm</h3>
                     </div>
                 </div>
                 <div class="data_score_main_cont">
 
                     <app-data-score></app-data-score>
+                </div>
+                <div class="battery_level">
+                    <h3>Battery Level</h3>
+                    <div class="battery">
+                        <app-battery [percentage]="80"></app-battery>
+                    </div>
+                    <h4>10.3 v</h4>
+
+                    <!-- <div class="battery">
+                        <div class="battery_box">
+                            <div class="battery_fill"></div>
+                        </div>
+                        <div class="nob"></div>
+                    </div> -->
+
+
+
                 </div>
                 <!-- <app-home-v1-chart></app-home-v1-chart> -->
             </div>
@@ -1357,87 +1425,7 @@
 
                     </div>
                 </div>
-                <div class="water_q_main_columns">
-                    <div class="water_items_main">
-                        <div class="water_title">
-                            <div class="water_param_icon">
-                                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 122.88 114.86">
-                                    <defs>
-                                        <style>
-                                            .cls-1 {
-                                                fill: #00ff55;
-                                            }
-                                        </style>
-                                    </defs>
-                                    <title>leaves</title>
-                                    <path class="cls-1"
-                                        d="M59.07,110.77C110.92,105,139.6,71.12,112.44,0c-21.29,14.9-50.39,24.6-65,44.55C57,52.94,64.89,62.23,67.08,74.37c13.19-16.08,27.63-30.72,35.23-47-7.79,39.07-20,53.84-38.78,73.81a93.64,93.64,0,0,1-4.46,9.62Zm-14.9,4C4,105-15.18,76.09,14.27,24.75c23.8,22.92,65.79,37.48,38.39,85.86a27.08,27.08,0,0,1-1.83,2.93C45.9,89.62,26.21,70.69,20.43,50.61,21.77,83.42,31.23,93,45.88,114.86c-.57,0-1.14-.06-1.71-.13Z" />
-                                </svg>
-                            </div>
-                            <h3><span>3.2 µg/L</span><br>Chlorophyll-a</h3>
-                        </div>
-                        <!-- <div class="water_param_value">
-                            <h3>3.2 µg/L</h3>
-                        </div> -->
 
-                    </div>
-                    <div class="water_items_main">
-                        <div class="water_title">
-                            <div class="water_param_icon">
-                                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 122.88 122.88">
-                                    <defs>
-                                        <style>
-                                            .cls-1 {
-                                                fill: #e5273a;
-                                            }
-
-                                            .cls-1,
-                                            .cls-2 {
-                                                fill-rule: evenodd;
-                                            }
-
-                                            .cls-2 {
-                                                fill: #a71d2a;
-                                            }
-                                        </style>
-                                    </defs>
-                                    <title>corona</title>
-                                    <path class="cls-1"
-                                        d="M64.13,14.73a46.71,46.71,0,0,1,13.06,2.64A16.85,16.85,0,0,0,79.64,13C80,11.43,79.3,10.37,79,8.9A5.26,5.26,0,0,1,79,5.56c1.74-3.72,11.36.26,10,4.12-.6,1.66-2.84,3-4.36,3.71A4.67,4.67,0,0,0,83,14.58c-.64.76-1.17,3.54-1.21,4.71a47,47,0,0,1,11,7.44c1.16-.82,3-1.79,3.94-3.12s.69-2.55.93-4a5.21,5.21,0,0,1,1.36-3.05c3-2.77,10.4,4.58,7.64,7.61-1.18,1.31-3.78,1.71-5.45,1.77a4.59,4.59,0,0,0-2,.46c-.89.46-2.44,2.83-2.93,3.89a46.54,46.54,0,0,1,7.4,11.1c1.38-.32,3.4-.53,4.81-1.38s1.61-2.09,2.41-3.38a5.23,5.23,0,0,1,2.41-2.3c3.86-1.4,7.87,8.2,4.16,10-1.59.75-4.15.13-5.71-.45a4.63,4.63,0,0,0-2-.34c-1,.09-3.31,1.67-4.17,2.46A46.58,46.58,0,0,1,108.18,59c1.4.23,3.35.81,5,.57s2.29-1.33,3.51-2.21a5.22,5.22,0,0,1,3.12-1.2c4.1.17,4.13,10.58,0,10.78-1.75.09-3.88-1.45-5.1-2.59A4.65,4.65,0,0,0,113,63.29c-1-.3-3.7.28-4.8.68a46.9,46.9,0,0,1-2.61,13.09c1.21.75,2.78,2,4.37,2.42s2.63-.35,4.1-.7a5.23,5.23,0,0,1,3.33.08c3.72,1.73-.22,11.36-4.08,10-1.66-.59-3-2.83-3.73-4.34a4.67,4.67,0,0,0-1.19-1.67c-.76-.63-3.51-1.15-4.69-1.2a46.39,46.39,0,0,1-7.43,11.09c.83,1.16,1.8,2.94,3.12,3.92s2.56.68,4.06.92a5.14,5.14,0,0,1,3,1.35c2.78,3-4.55,10.41-7.59,7.66-1.31-1.18-1.72-3.77-1.78-5.44a4.6,4.6,0,0,0-.47-2c-.46-.89-2.83-2.42-3.89-2.91a47,47,0,0,1-11.09,7.43c.33,1.38.54,3.39,1.39,4.8s2.11,1.61,3.4,2.4a5.18,5.18,0,0,1,2.3,2.41c1.42,3.85-8.17,7.89-9.94,4.18-.76-1.59-.15-4.14.43-5.71a4.61,4.61,0,0,0,.33-2c-.09-1-1.67-3.3-2.47-4.16A46.54,46.54,0,0,1,64,108.17c-.23,1.4-.81,3.35-.56,5s1.34,2.29,2.22,3.51a5.26,5.26,0,0,1,1.22,3.11c-.17,4.1-10.57,4.17-10.79.07-.09-1.76,1.44-3.89,2.58-5.11A4.65,4.65,0,0,0,59.76,113c.29-1-.3-3.72-.71-4.81A46.58,46.58,0,0,1,46,105.61c-.75,1.21-2,2.79-2.41,4.39s.36,2.62.71,4.09a5.2,5.2,0,0,1-.07,3.34c-1.71,3.72-11.36-.19-10-4.06.58-1.66,2.82-3,4.33-3.74a4.54,4.54,0,0,0,1.66-1.19c.64-.77,1.15-3.55,1.19-4.71a46.8,46.8,0,0,1-11.1-7.39c-1.15.83-3,1.81-3.92,3.15s-.67,2.55-.91,4.05a5.24,5.24,0,0,1-1.33,3.06c-3,2.78-10.43-4.52-7.69-7.57,1.17-1.31,3.77-1.73,5.43-1.8a4.6,4.6,0,0,0,2-.47c.89-.47,2.43-2.86,2.91-3.92a47.07,47.07,0,0,1-7.46-11c-1.38.33-3.41.55-4.82,1.41s-1.59,2.11-2.38,3.4a5.25,5.25,0,0,1-2.4,2.32C5.85,90.34,1.78,80.76,5.48,79c1.59-.77,4.15-.17,5.71.41a4.66,4.66,0,0,0,2,.33c1-.1,3.32-1.71,4.17-2.51a46.72,46.72,0,0,1-2.65-13.06c-1.4-.22-3.36-.8-5-.54S7.45,65,6.23,65.85a5.23,5.23,0,0,1-3.1,1.22C-1,66.92-1.07,56.51,3,56.28c1.76-.1,3.89,1.44,5.12,2.57a4.75,4.75,0,0,0,1.74,1.07c1,.29,3.75-.32,4.83-.73a46.82,46.82,0,0,1,2.52-13.08c-1.21-.74-2.8-2-4.41-2.41s-2.62.37-4.09.73a5.24,5.24,0,0,1-3.33-.06c-3.74-1.71.15-11.36,4-10,1.66.58,3.05,2.81,3.75,4.33a4.73,4.73,0,0,0,1.2,1.65c.78.64,3.58,1.14,4.74,1.17A46.77,46.77,0,0,1,26.45,30.4c-.84-1.15-1.83-2.95-3.17-3.92s-2.56-.67-4.05-.89a5.19,5.19,0,0,1-3.06-1.33c-2.8-3,4.47-10.44,7.54-7.71C25,17.72,25.45,20.31,25.52,22A4.83,4.83,0,0,0,26,24c.48.88,2.89,2.42,3.94,2.89a47,47,0,0,1,11-7.49c-.33-1.38-.56-3.41-1.42-4.82S37.42,13,36.12,12.18a5.16,5.16,0,0,1-2.32-2.4c-1.44-3.84,8.13-7.94,9.92-4.24.76,1.58.17,4.14-.4,5.71a4.62,4.62,0,0,0-.32,2c.1,1,1.72,3.32,2.52,4.17a46.38,46.38,0,0,1,13.64-2.73c.24-1.4.83-3.36.59-5s-1.31-2.29-2.2-3.52a5.22,5.22,0,0,1-1.19-3.12C56.55-1,67-1,67.15,3.07c.08,1.76-1.47,3.88-2.61,5.1A4.65,4.65,0,0,0,63.45,9.9c-.3,1,.28,3.74.68,4.83Z" />
-                                    <path class="cls-2"
-                                        d="M67.39,25.82a7.28,7.28,0,1,1-7.27,7.28,7.28,7.28,0,0,1,7.27-7.28ZM85.8,40.74a1.86,1.86,0,1,1-1.86,1.85,1.86,1.86,0,0,1,1.86-1.85ZM69.34,93.35a1.86,1.86,0,1,1-1.86,1.86,1.86,1.86,0,0,1,1.86-1.86ZM38.27,81.44a1.86,1.86,0,1,1-1.86,1.86,1.87,1.87,0,0,1,1.86-1.86Zm47.31-3.57a1.86,1.86,0,1,1-1.86,1.86,1.86,1.86,0,0,1,1.86-1.86Zm-9.64,3.84a3.44,3.44,0,1,1-3.43,3.43,3.44,3.44,0,0,1,3.43-3.43Zm-20.49-5a4.73,4.73,0,1,1-4.73,4.73,4.73,4.73,0,0,1,4.73-4.73ZM55.37,63.8a1.86,1.86,0,1,1-1.85,1.85,1.85,1.85,0,0,1,1.85-1.85ZM25.71,42.68a1.86,1.86,0,1,1-1.86,1.86,1.86,1.86,0,0,1,1.86-1.86ZM47.47,47a1.86,1.86,0,1,1-1.86,1.85A1.85,1.85,0,0,1,47.47,47Zm16.39,2a3.38,3.38,0,1,1-3.38,3.37A3.38,3.38,0,0,1,63.86,49Zm31.82,1.17a3.38,3.38,0,1,1-3.38,3.38,3.38,3.38,0,0,1,3.38-3.38ZM79.09,56.32A4.64,4.64,0,1,1,74.46,61a4.64,4.64,0,0,1,4.63-4.64Zm-46.37-.11a7.28,7.28,0,1,1-7.28,7.27,7.28,7.28,0,0,1,7.28-7.27Zm11.86-24.3a4.73,4.73,0,1,1-4.72,4.72,4.72,4.72,0,0,1,4.72-4.72Z" />
-                                </svg>
-                            </div>
-                            <h3><span>1.5 µg/L</span><br>Phycoerythrin</h3>
-                        </div>
-                        <!-- <div class="water_param_value">
-                            <h3>1.5 µg/L</h3>
-                        </div> -->
-
-                    </div>
-                    <div class="water_items_main">
-                        <div class="water_title">
-                            <div class="water_param_icon">
-                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                    viewBox="0 0 83.95 122.88" style="enable-background:new 0 0 83.95 122.88"
-                                    xml:space="preserve">
-                                    <g>
-                                        <path
-                                            d="M44.82,2.28c5.08,21.69,12.03,30.25,19.61,39.58c4.9,6.04,10.06,12.39,15.19,22.47c1.31,2.58,2.39,5.25,3.14,8.06 c0.76,2.84,1.19,5.79,1.19,8.87c0,5.68-1.04,10.99-3.11,15.92c-2.07,4.91-5.16,9.4-9.27,13.46c-4.12,4.05-8.65,7.11-13.6,9.16 c-4.96,2.05-10.3,3.08-16.01,3.08c-5.71,0-11.04-1.03-15.99-3.08c-4.93-2.04-9.45-5.1-13.57-9.16c-4.11-4.06-7.21-8.55-9.28-13.46 C1.04,92.25,0,86.94,0,81.26c0-2.91,0.38-5.7,1.06-8.39c0.67-2.64,1.64-5.18,2.84-7.66c5.02-10.38,10.29-16.84,15.36-23.07 c7.61-9.34,14.79-18.14,19.79-39.85c0.36-1.59,1.95-2.58,3.54-2.22C43.74,0.34,44.57,1.22,44.82,2.28L44.82,2.28z M20.52,70.91 c2.1-0.19,3.95,1.36,4.13,3.45c0.48,5.06,1.59,9.72,3.7,13.74c2.04,3.88,5.08,7.23,9.48,9.8c1.81,1.06,2.42,3.4,1.36,5.21 c-1.06,1.81-3.4,2.42-5.2,1.36c-5.73-3.35-9.69-7.71-12.38-12.82c-2.7-5.14-3.99-10.86-4.54-16.6 C16.88,72.96,18.44,71.1,20.52,70.91L20.52,70.91z M59.85,45.59c-6.68-8.23-12.9-15.88-17.9-31.44 c-5.02,15.66-11.4,23.5-18.1,31.72c-4.86,5.96-9.9,12.14-14.62,21.91c-1.02,2.1-1.85,4.28-2.42,6.55 c-0.56,2.22-0.88,4.52-0.88,6.93c0,4.92,0.88,9.46,2.63,13.63c1.76,4.18,4.43,8.03,7.98,11.54c3.57,3.52,7.47,6.16,11.7,7.91 c4.21,1.74,8.78,2.62,13.72,2.62c4.96,0,9.55-0.88,13.77-2.62c4.22-1.75,8.13-4.39,11.7-7.91c3.55-3.51,6.21-7.36,7.97-11.54 c1.75-4.16,2.63-8.7,2.63-13.63c0-2.57-0.35-5-0.98-7.34c-0.64-2.37-1.56-4.66-2.7-6.9C69.47,57.44,64.54,51.37,59.85,45.59 L59.85,45.59z" />
-                                    </g>
-                                </svg>
-                            </div>
-                            <h3><span>0.9 ppb</span><br>Fluorescein Dye</h3>
-                        </div>
-                        <!-- <div class="water_param_value">
-                            <h3>0.9 ppb</h3>
-                        </div> -->
-
-                    </div>
-                </div>
 
 
 

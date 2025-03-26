@@ -1,0 +1,372 @@
+.Genral_main{
+    width: 100vw;
+    height: 100%;
+    overflow-y: auto;
+    /* border: 2px solid black; */
+    padding: 10px;
+    /* scroll-behavior: smooth; */
+    
+}
+
+.theme{
+    height: 220px;
+    /* max-height: 200px; */
+    /* background-color: antiquewhite; */
+    width: 90%;
+    margin-left: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+.divider{
+    height: 1px;
+    width: 85%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(10, 10, 10);
+
+}
+p{
+    font-size: 12px;
+}
+.righter1{
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+}
+.white{
+height: 30px;
+width: 30px;
+background-color: aliceblue;
+border-radius: 50%;
+position: relative;
+margin-left: 20px;
+}
+.white i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.black i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.blue i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.white_active{
+    border: 2px blue solid;
+}
+.black_active{
+    border: 2px blue solid;
+}
+.blue{
+    border: 2px blue solid;
+}
+.black{
+    height: 30px;
+    width: 30px;
+    background-color: black;
+    border-radius: 50%;
+    margin-left: 20px;
+    position: relative;
+}
+.blue{
+    height: 30px;
+    width: 30px;
+    background-color: blue;
+    border-radius: 50%;
+    position: relative;
+    margin-left: 20px;
+}
+img{
+    height: 100%;
+    width: 70%;
+}
+.current1{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 190px;
+    width: 200px;
+    /* background-color: azure; */
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+    
+}
+.current1_active{
+    border: 2px blue solid;
+}
+.current1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.current2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.wid_1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.wid_2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.wid_3 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.current2{
+    height: 210px;
+    width: 500px;
+    /* background-color: azure; */
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.current3{
+    height: 190px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: azure; */
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+
+
+
+.left_c_2{
+    /* background-color: rgb(26, 76, 119); */
+    height: 65%;
+    width: 35%;
+}
+.right_c_2{
+    height: 50%;
+    width: 30%;
+    /* background-color: antiquewhite; */
+}
+
+.right_c_22{
+    height: 100%;
+    width: 50%;
+    /* background-color: antiquewhite; */
+}
+
+
+
+
+.righter{
+    height: 100%;
+    width: 60%;
+    /* background-color: antiquewhite; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.wid_1, .wid_2, .wid_3{
+    height: 90%;
+    width: 32%;
+    background-color: var(--mainbg);
+    box-shadow: 2px 2px 6px rgb(193, 193, 193) ;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.battery1{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+.battery1_active{
+    border: 2px blue solid;
+}
+.battery1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.battery2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.battery3 i{
+    color: black;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.battery2{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+.battery3{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+
+
+
+
+
+
+
+.tide1{
+    height: 90px;
+    width: 200px;
+    /* background-color: azure; */
+    border-radius: 10px;
+    /* margin-left: 10px; */
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.tide1_active{
+    border: 2px blue solid;
+}
+.tide1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.tide2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.tide3 i{
+    color: black;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.tide2{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    /* margin-left: 10px; */
+    position: relative;
+}
+.tide3{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    /* margin-left: 10px; */
+    position: relative;
+}
+.image{
+    height: 150px;
+    width: 150px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/direction1.png);
+    background-size: cover;
+}
+.image2{
+    height: 150px;
+    width: 170px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/direction2.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+.image3{
+    height: 150px;
+    width: 150px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/direction3.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+
+.image4{
+    height: 150px;
+    width: 170px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/speed1.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+.image5{
+    height: 150px;
+    width: 170px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/speed2.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+.image6{
+    height: 150px;
+    width: 150px; 
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/speed3.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+
+img{
+    height: 180px;
+    width: 170px;
+    display: flex;
+    box-sizing: 100% 100%;
+    justify-content: center;
+    align-items: center;
+
+}

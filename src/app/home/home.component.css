@@ -4,3 +4,81 @@
   width: 100%;
   margin: 0;
 }
+
+.compass{
+  height: 400px;
+  width: 400px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  position: relative;
+}
+img{
+  height:400px;
+  width: 400px;
+  object-fit: cover;
+}
+.needle_div{
+  height: 400px;
+  width: 400px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(0deg);
+  
+  /* animation: rotate 2s forwards; */
+  transition: transform 0.5s ease-in-out; /* Smooth transition */
+
+  /* background-color: #f0f0f0; */
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(90deg);
+      }
+
+  
+}
+.needle{
+  position: absolute;
+  top: 15%;
+  left: 46.3%;
+  height: 20px;
+  width: 30px;
+  background-color: rgb(255, 0, 0);
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  animation: glow 2s infinite;
+  /* transform: rotate(); */
+
+}
+@keyframes glow {
+
+  0%{
+    height: 20px;
+    width: 30px;
+
+    /* left: 45% */
+  }
+  50%{
+    height: 30px;
+    width: 40px;
+    left: 45%;
+    top: 12%;
+    }
+    100%{
+      height: 20px;
+      width: 30px;
+      left: 46.3%;
+      top: 15%;
+      }
+}
+
+
+
+
+
+
+
+.sectionContainer-DS-LTN_e4[data-theme=light]{--title-color:#000;--desc-color:#000000b3;--container-background:radial-gradient(45.87% 55.29% at 50% 100%,#3275f00a 43.42%,#fff0 100%),radial-gradient(50% 3.41% at 50% 100%,#3275f01a 0%,#fff0 100%)}.sectionContainer-DS-LTN_e4[data-theme=dark]{--title-color:#fff;--desc-color:#ffffffb3;--container-background:radial-gradient(45.87% 55.29% at 50% 100%,#0000000a 43.42%,#05050500 100%),radial-gradient(50% 3.41% at 50% 100%,#00000026 0%,#0000 100%)}.sectionContainer-DS-LTN_e4{--card-base-height:118;background:var(--container-background);padding:0 0 32px;position:relative}.weaKumofiedStyle .sectionContainer-DS-LTN_e4{background:none;margin-bottom:64px;padding:0}.sectionTitleContainer-DS-PKpK26{display:flex;justify-content:space-between}.weaKumofiedStyle .sectionTitleContainer-DS-PKpK26{align-items:center}.sectionTitleW1-DS-yQ8TXo,.sectionTitleW2-DS-VHX2YJ{width:620px}.sectionTitleW3-DS-itEnde,.sectionTitleW4-DS-KQnWjP{width:940px}.weaKumofiedStyle .sectionTitleW4-DS-KQnWjP{width:1272px}.sectionTitleW5-DS-fBLsZB{width:1264px}.weaKumofiedStyle .sectionTitleW5-DS-fBLsZB{width:1272px}.sectionTitle-DS-h7rzVJ{color:var(--title-color);display:block;font-size:18px;font-weight:600;line-height:24px;margin-bottom:26px;position:relative}.weaKumofiedStyle .sectionTitle-DS-h7rzVJ{align-items:center;display:flex;font-size:32px;font-weight:550;line-height:48px;margin-bottom:0}.sectionTitleUpdate-DS-n25Spv{color:var(--desc-color);font-size:14px;line-height:16px;padding:0 10px}.weaKumofiedStyle .sectionTitleUpdate-DS-n25Spv{font-size:20px;font-weight:550;line-height:28px;margin-bottom:0;padding:0 16px}.weatherLifeLinkTitle-DS-bnQzBJ{align-items:flex-start;cursor:pointer;display:flex;font-size:14px;font-weight:600;gap:8px}.weatherLifeLink-DS-zmZCMx{color:var(--desc-color);text-decoration:none;text-transform:uppercase}.weatherLifeLink-DS-zmZCMx:hover{border-bottom:1px solid var(--desc-color)}[dir=rtl] .weatherLifeLinkArrow-DS-ldAYQj{transform:rotate(180deg)}.weatherLifeLinkArrow-DS-ldAYQj svg{fill:var(--desc-color)}.sectionContent-DS-wfr62s{align-content:flex-start;align-items:center;display:flex;flex-direction:row;flex-wrap:wrap;gap:20px;justify-content:flex-start}.weaKumofiedStyle .sectionContent-DS-wfr62s{gap:24px;margin-top:24px}.weaKumofiedStyle div[class*=sectionTitleW1]+.sectionContent-DS-wfr62s,.weaKumofiedStyle div[class*=sectionTitleW2]+.sectionContent-DS-wfr62s{gap:20px}.sectionItem-DS-mCqV7F{border-radius:12px;height:250px;overflow:hidden;width:300px}.weaKumofiedStyle .sectionItem-DS-mCqV7F{border:1px solid #0000001a;border-radius:24px;box-sizing:border-box;height:300px}.weaKumofiedStyle [class*=newsTitleNightMode] .sectionItem-DS-mCqV7F{border-color:#ffffff0d}.bannerAds-DS-_F3UuQ{display:flex;height:103px;justify-content:center;margin-top:48px;overflow:hidden;width:100%}.bannerAds-DS-_F3UuQ .displayAdContainer iframe{border-radius:6px}

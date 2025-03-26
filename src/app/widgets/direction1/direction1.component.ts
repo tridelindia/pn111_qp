@@ -72,11 +72,11 @@ this.root._logo?.dispose();
 
       let label = axisDataItem.get('label');
       if (label) {
-        label.setAll({ text, fill: am5.color(0xffffff), forceHidden: false, inside: true, fontSize:8 });
+        label.setAll({ text, fill: am5.color(0x000), forceHidden: false, inside: true, fontSize:8 });
       }
 
       axisRenderer.setAll({
-        stroke: am5.color(0xffffff), // Fixed typo: "0xfffffff" to "0xffffff"
+        stroke: am5.color(0x000), // Fixed typo: "0xfffffff" to "0xffffff"
         strokeOpacity: 1,
         strokeWidth: 5,
         minGridDistance: 5,
@@ -86,7 +86,7 @@ this.root._logo?.dispose();
       if (axis) {
         axis.setAll({
           forceHidden: false,
-          fill: am5.color(0xfffffff),
+          fill: am5.color(0xff000),
           strokeOpacity: tickOpacity,
           length: 12 * tickOpacity,
           visible: true,

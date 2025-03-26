@@ -45,6 +45,7 @@
     align-items: center;
     background: linear-gradient(to right, #1CB5E0, #4747f895);
     border-radius: 6px;
+    font-size: 12px;
   }
   
   .score p {
@@ -73,7 +74,7 @@
   
   .bar {
     height: 80%;
-    width: 40%;
+    width: 45%;
     border-radius: 25px;
     position: relative;
     overflow: hidden;
@@ -84,7 +85,77 @@
     width: 100%;
     position: absolute;
     bottom: 0;
-    background-color: green;
+    background-color: rgb(61, 206, 61);
     transition: height 1s ease-in-out;
   }
+  .sensor_list{
+    height: 40px;
+    width: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+  .sensor_list svg{
+    height: 30px;
+    width: 30px;
+    /* border: 2px 2px 6px blue; */
+  }
+  .svg_icon_bor{
+    height: 30px;
+    width: 30px;
+    border-radius: 16px;
+    background-color: #1CB5E0;
+    position: relative;
+    
+    
+  }
+  .svg_icon_bor::after {
+    content: attr(data-tooltip); /* Get text from data-tooltip attribute */
+    position: absolute;
+    bottom: 120%; /* Position above the div */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.svg_icon_bor:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+  .svg_icon_bor_active{
+    border: 1.5px blue solid;
+  }
+  .svg_icon_bor i{
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    background-color: blue;
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+  }
+  select{
+    height: 30px;
+    width: 120px;
+    border-radius: 10px;
+  }
+
+
+
+
+
+
+
+
+
+  /* test */
   
