@@ -29,7 +29,7 @@ export class BuoyComponent implements OnInit {
     }
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x171a1e);
+    this.scene.background = null;
 
     const containerWidth = container.clientWidth;
     const containerHeight = container.clientHeight;

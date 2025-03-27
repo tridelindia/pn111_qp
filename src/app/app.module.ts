@@ -11,16 +11,20 @@ import { AgChartsModule, AgGauge } from 'ag-charts-angular';
 import { Direction1Component } from './widgets/direction1/direction1.component';
 // import { CompassChartComponent } from './compass-chart/compass-chart.component';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
+import { RouterModule } from '@angular/router';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    
   ],
   imports: [
+    RouterModule,
     BrowserModule,
     BrowserAnimationsModule,
     NoopAnimationsModule,
+    NgSelectModule,
     ToastrModule.forRoot({}),
     HttpClientModule,
     // AgChartsModule,
@@ -32,7 +36,7 @@ import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
     AuthService,
     { provide: NGX_ECHARTS_CONFIG, useValue: { echarts: () => import('echarts') } }
   ],
-  bootstrap: [AppComponent],
-  exports:[] 
+  bootstrap: [],
+  exports:[]
 })
 export class AppModule {}

@@ -1,0 +1,306 @@
+/*container */
+.station-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 2%;
+    width: 96%;
+    height: 100%;
+  }
+
+/* card */
+.station-card{
+    flex: 1;
+    width: 100%;
+    height: 420px;
+    overflow: auto;
+    background-color: #ffffff;
+    padding: 1%;
+    border-radius: 10px;
+    box-shadow: 0px, 4px, 10px , rgba(0, 0, 0, 0.2);
+    color: black;
+}
+
+/* Scroll Bar */
+  
+  /* Custom scrollbar styles */
+  .station-card::-webkit-scrollbar {
+    width: 5px; /* Adjust width */
+    border-radius: 10px;
+  }
+  
+  .station-card::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  
+  .station-card::-webkit-scrollbar-thumb {
+    background: #888; /* Darker gray for the thumb */
+    border-radius: 10px; /* Makes it rounded */
+  }
+  
+  .station-card::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Darker shade on hover */
+  }
+  
+
+/* Left Side */
+
+/* Station Details section */
+.station-details-row {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Ensure inputs take equal space */
+.form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.sensor-group {
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Make inputs and select dropdown look consistent */
+input, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.station-details-row .form-group input {
+    width: 95%; /* Reduce width of textboxes in station details */
+}
+
+/* Geo Location Tabs */
+.geo-tabs {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 10px;
+}
+
+.geo-tabs button {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    background-color: #ddd;
+    border-radius: 50px;
+    font-size: 14px;
+}
+
+.geo-tabs button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Align Latitude and Longitude in a row */
+.geo-row {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.geo-row .form-group input {
+    width: 95%; /* Reduce width to DD part in Geo Location */
+}
+
+/* Ensure equal space for Latitude and Longitude */
+.form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Ensure DMS inputs are in a row */
+.dms-group {
+    display: flex;
+    gap: 10px;
+}
+
+.dms-group input {
+    flex: 1;
+    min-width: 60px;
+}
+
+/* Geo Fencing: Make input boxes appear in a row */
+.geo-fencing-row {
+    display: flex;
+    gap: 30px; /* Spacing between inputs */
+    align-items: center;
+    flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.geo-fencing-row .form-group {
+    flex: 1; /* Equal width for both inputs */
+    min-width: 200px; /* Prevents shrinking too much */
+}
+
+/* Submit Button */
+.form-submit {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.geo-fencing-row .form-group input {
+    width: 95%; /* Reduce width of textboxes in Geo Fencing */
+}
+
+button[type="submit"] {
+    width: 40%;
+    padding: 8px 20px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+  
+  .custom-multi-select {
+    width: 100%;
+    height: 60px;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: #000; /* Ensure text is visible */
+  }
+  
+  ::ng-deep .ng-select {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+    background-color: #fff; /* Light background */
+  }
+  
+  ::ng-deep .ng-select .ng-select-container {
+    min-height: 45px;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #000; /* Ensure text visibility */
+  }
+  
+  ::ng-deep .ng-select .ng-dropdown-panel {
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+  }
+  
+  ::ng-deep .ng-select .ng-option {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #000; /* Dark text for better visibility */
+  }
+  
+  ::ng-deep .ng-select .ng-option:hover {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  ::ng-deep .ng-select .ng-option-selected {
+    background-color: #007bff !important;
+    color: white !important;
+    font-weight: bold;
+  }
+  
+  ::ng-deep .ng-placeholder {
+    display: none !important;
+  }
+  
+  ::ng-deep .ng-select .ng-value-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adds space between selected items */
+    padding: 5px;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px; /* Rounded corners */
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+::ng-deep .ng-select .ng-value .ng-value-label {
+    padding-right: 5px;
+}
+
+::ng-deep .ng-select .ng-value .ng-value-icon {
+    color: white;
+}
+
+/* Styling the selected items inside the input box */
+.selected-option {
+    background-color: #007bff;
+    color: white;
+    padding: 5px;
+    border-radius: 12px;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+/* Adjusting the spacing inside the multi-select input */
+::ng-deep .ng-select-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Adds space between selected items */
+    min-height: 45px;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+/* Styling the dropdown options */
+::ng-deep .ng-option {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #000;
+    border-bottom: 1px solid #ddd;
+}
+
+::ng-deep .ng-option:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Styling the selected option inside the dropdown */
+::ng-deep .ng-option-selected {
+    background-color: #007bff !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+/* Rigth Side */
+
+/* Ensure map container takes full width of the right section */
+.track-path-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .track-path-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+.map-container {
+    width: 600px;
+    height: 400px; /* Adjust height as needed */
+  }

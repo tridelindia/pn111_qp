@@ -19,6 +19,6 @@ constructor(private lay:LayoutComponent){}
    this.selectedIndex = this.lay.selectedIndex;
   }
   ngOnInit(): void {
-      this.selectOption(5);
+      this.selectOption(4);
   }
 }

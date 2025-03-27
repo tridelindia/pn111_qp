@@ -2,7 +2,7 @@
     <h2>Settings</h2>
     <div class="head">
         <div [ngClass]="activeOption ===0 ? 'option_active': 'option'" (click)="changeOption(0)">General</div>
-        <div [ngClass]="activeOption ===1 ? 'option_active': 'option'" (click)="changeOption(1)">Staion Setting</div>
+        <div [ngClass]="activeOption ===1 ? 'option_active': 'option'" (click)="changeOption(1)">Station Setting</div>
         <div [ngClass]="activeOption ===2 ? 'option_active': 'option'" (click)="changeOption(2)">Sensor Setting</div>
         <div [ngClass]="activeOption ===3 ? 'option_active': 'option'" (click)="changeOption(3)">Appearace</div>
         <div [ngClass]="activeOption ===4 ? 'option_active': 'option'" (click)="changeOption(4)">Billing</div>
@@ -13,7 +13,15 @@
         @if (activeOption === 0) {
         <app-general></app-general>
         }@else if (activeOption ===1) {
+        <app-station></app-station>
+        }@else if (activeOption ===2) {
+        <app-sensor></app-sensor>
+        }@else if (activeOption ===3) {
         <app-appearance></app-appearance>
+        }@else if (activeOption ===4) {
+        <app-billing></app-billing>
+        }@else if (activeOption ===5) {
+        <app-notifications></app-notifications>
         }
         <!-- <app-general></app-general> -->
     </div>
