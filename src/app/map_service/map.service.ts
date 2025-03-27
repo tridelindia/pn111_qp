@@ -1,103 +1,72 @@
 import { Injectable } from '@angular/core';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import { fromLonLat } from 'ol/proj';
+import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
-import { XYZ } from 'ol/source';
-import { Feature } from 'ol';
-import { Point, LineString } from 'ol/geom';
-import { Circle as CircleStyle, Fill, Icon, Stroke, Style } from 'ol/style';
-import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
+import { XYZ } from 'ol/source';
+import VectorSource from 'ol/source/Vector';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class MapService {
-  private map: Map | undefined;
-  private vectorLayer: VectorLayer;  // Initialize this variable properly
-  traveledPath: [number, number][] = [
-    // fromLonLat([72.808716, 18.999682]) as [number, number],
-    fromLonLat([72.809211, 18.997958]) as [number, number],
-    fromLonLat([72.809304, 18.997888]) as [number, number],
-    fromLonLat([72.809203, 18.997802]) as [number, number],
-    fromLonLat([72.809050, 18.997865]) as [number, number],
-    fromLonLat([72.808994, 18.997960]) as [number, number],
-    fromLonLat([72.809103, 18.998111]) as [number, number],
-  ];
+export class MapService1 {
+  private map!: Map;
+  private vectorLayer!: VectorLayer;
 
-  constructor() {
-    // Initialize vectorLayer here
-    this.vectorLayer = new VectorLayer({
-      source: new VectorSource()
-    });
-  }
+  initializeMap(
+    targetId: string,
+    center: [number, number],
+    zoom: number,
+    mapUrl: string
+  ): void {
+    if (this.map) {
+      return;
+    }
 
-  addPathLines(): void {
-    const lineString = new Feature({
-      geometry: new LineString(this.traveledPath),
-    });
-
-    const lineStyle = new Style({
-      stroke: new Stroke({
-        color: 'red',
-        width: 2,
-      }),
-    });
-
-    lineString.setStyle(lineStyle);
-    this.vectorLayer.getSource()?.addFeature(lineString);
-
-    // const lastPoint = this.traveledPath[this.traveledPath.length - 1]; // Get the last point
-    // const circleFeatureLastPoint = new Feature({
-    //   geometry: new Point(lastPoint),
-    // });
-
-    const circleStyle = new Style({
-      image: new CircleStyle({
-        radius: 5,
-        fill: new Fill({ color: 'green' }),
-        stroke: new Stroke({ color: 'darkgreen', width: 2 })
-      }),
-    });
-
-    // circleFeatureLastPoint.setStyle(circleStyle);
-    // this.vectorLayer.getSource()?.addFeature(circleFeatureLastPoint);
-  }
-
-  createMap(target: HTMLElement, latitude: number, longitude: number): void {
-    // Destroy existing map instance if it exists
-    this.destroyMap();
-
-    const center = fromLonLat([longitude, latitude]);
-    console.log("location:", center);
+    const vectorSource = new VectorSource();
+    this.vectorLayer = new VectorLayer({ source: vectorSource });
 
     this.map = new Map({
-      target: target,
+      view: new View({
+        center,
+        zoom:
+          mapUrl === '../../../../assets/western/{z}/{x}/{y}.png' ? 10 : zoom,
+        maxZoom:
+          mapUrl === '../../../../assets/western/{z}/{x}/{y}.png'
+            ? 14
+            : undefined,
+        minZoom:
+          mapUrl === '../../../../assets/western/{z}/{x}/{y}.png'
+            ? 8
+            : undefined,
+      }),
+
       layers: [
         new TileLayer({
-          source: new XYZ({
-            url: 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=c30d4b0044414082b818c93c793707a4'
-          }),
+          source: new XYZ({ url: mapUrl }),
         }),
-        this.vectorLayer // Add vector layer here
+        this.vectorLayer,
       ],
-      view: new View({
-        center: center,
-        zoom: 17,
-      })
+      target: targetId,
     });
-
-   
-
-    // Add marker to the map's vector layer
-
   }
 
   destroyMap(): void {
     if (this.map) {
-      this.map.setTarget(undefined);  // Detach the map from the DOM
-      this.map = undefined;  // Clear the map instance
+      this.map.setTarget(undefined);
+      this.map = undefined as unknown as Map;
+    }
+  }
+
+  updateMapLayer(url: string): void {
+    if (!this.map) {
+      return;
+    }
+    const tileLayer = this.map
+      .getLayers()
+      .getArray()
+      .find((layer) => layer instanceof TileLayer) as TileLayer;
+    if (tileLayer) {
+      tileLayer.setSource(new XYZ({ url }));
     }
   }
 }

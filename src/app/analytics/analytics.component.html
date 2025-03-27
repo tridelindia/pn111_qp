@@ -1,1 +1,28 @@
-<p>analytics works!</p>
+<div class="logcontainer">
+    <div class="activeusers">
+        <h2>Active Users</h2>
+        <div *ngFor="let user of activeUsers" class="user-card" (click)="selectUser(user)">
+            <div class="user-icon" [ngClass]="user.icon"></div>
+            <span class="user-name">{{ user.name }}</span>
+        </div>
+    </div>
+    <div class="activity-log-container">
+        <div class="user-activity-log" *ngIf="selectedUser">
+            <h2>{{ selectedUser.name }}'s Activity Log</h2>
+            <div *ngFor="let log of selectedUser.activityLogs" class="log-entry">
+                <div class="log-header">
+                    <div class="log-icon" [ngClass]="log.icon"></div>
+                    <span class="log-title">{{ log.title }}</span>
+                    <span class="log-time">{{ log.timestamp }}</span>
+                </div>
+                <div class="log-events">
+                    <div *ngFor="let event of log.events" class="log-event" [ngClass]="event.status">
+                        <div class="event-icon"></div>
+                        <span class="event-time">{{ event.timestamp }}</span>
+                        <span class="event-message">{{ event.message }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

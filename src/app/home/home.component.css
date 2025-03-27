@@ -1,6 +1,257 @@
-.home_main{
-  background-color: aliceblue;
-  height: 100%;
+main {
+  display: flex;
+  flex-grow: 1;
+}
+
+.map-container {
+  flex-grow: 1;
   width: 100%;
-  margin: 0;
+  height: 100vh;
+  border-radius: 15px;
+  position: relative;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+
+.floating-image1 {
+  position: fixed;
+  bottom: 22px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.floating-image2 {
+  position: fixed;
+  bottom: 22px;
+  right: 100px;
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.floating-image3 {
+  position: fixed;
+  bottom: 22px;
+  right: 180px;
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+  border: 2px solid black;
+  border-radius: 10px;
+
+}
+
+.floating-image4 {
+  position: fixed;
+  bottom: 22px;
+  right: 260px;
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.floating-image5 {
+  position: fixed;
+  bottom: 22px;
+  right: 340px;
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.floating-image6 {
+  position: fixed;
+  bottom: 22px;
+  right: 420px;
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.powered {
+  position: fixed;
+  bottom: 0px;
+  right: 10px;
+  width: 30 0px;
+  height: 20px;
+  background-color: #afaeaed0;
+  opacity: 0.6;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  height: 100%;
+  width: 23px;
+  background-image: url('../../assets/home/logo.png');
+  background-size: cover;
+  margin-right: 10px;
+}
+
+span {
+  font-size: 12px;
+}
+
+
+
+
+.expand-button {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  z-index: 3;
+  width: 35px;
+  height: 35px;
+  background-color: transparent;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.expand-button:hover {
+  transform: scale(1.2);
+}
+
+.expand-space {
+  position: absolute;
+  /* padding-top: 50px; */
+  top: 0px;
+  right: 60px;
+  z-index: 2;
+  width: 40%;
+  height: 100vh;
+  background-color: transparent;
+  display: none;
+  overflow: hidden;
+}
+
+
+.expanded+.expand-space {
+  display: block;
+}
+
+.expand-rectangle {
+  width: 90%;
+  height: 14%;
+  /* background: linear-gradient(45deg, white, green, blue);
+  background-size: 300% 300%;
+  animation: gradientBG 15s ease infinite; */
+
+
+  background: rgba(255, 255, 255, 0.021);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.627);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.522);
+
+  /* 
+  background: rgba(255, 255, 255, 0.021);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.171);
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+
+
+  /* background: #11998e;
+  background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
+  background: linear-gradient(to right, #38ef7d, #11998e);  */
+
+
+
+  /* background: rgba(20, 20, 20, 0.5);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4); */
+
+  /* background: linear-gradient(to right, #7dd4ef, #b0e5f5); */
+
+  border-radius: 10px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.expand-rectangle:hover {
+  transform: scale(1.05);
+}
+
+.info-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.profile-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  /* margin-right: 20px; */
+  background-color: lightblue;
+}
+
+.info-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.locationimg {
+  height: 45px;
+  width: 35px;
+}
+
+.active {
+  /* position: absolute; */
+  width: 20px;
+  height: 20px;
+  /* top: 34px; */
+  border-radius: 50%;
+  background-color: white;
+}
+
+.info-item {
+  /* margin-bottom: 5px; */
+  /* color: white; */
+}
+
+/* .label {
+  font-weight: lighter;
+  color: white;
+} */
+
+.value {
+  margin-left: 5px;
+  /* color: white; */
+  font-weight: bold;
+  font-size: medium;
 }
