@@ -6,6 +6,16 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { provideToastr } from 'ngx-toastr';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import { MyPreset } from './themes/aura';
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(),provideToastr(), provideAnimations(), importProvidersFrom(NgxEchartsModule)]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(),provideToastr(), provideAnimations(), importProvidersFrom(NgxEchartsModule),
+    provideAnimationsAsync(),
+        providePrimeNG({
+            theme: {
+                preset: MyPreset
+            }
+        })
+  ]
 };

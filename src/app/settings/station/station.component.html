@@ -386,19 +386,19 @@
             <div class="addStation" *ngIf="isAdd">
                 <div class="left_details">
                     <p>Station Name</p>
-                    <input type="text" [value]="buoy_name">
+                    <input type="text" [(ngModel)]="buoy_name">
                     <p>Station ID</p>
-                    <input type="text" [value]="buoy_name">
+                    <input type="text" [(ngModel)]="buoy_name">
                     <h5>Thresholds</h5>
 
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Threshold</p>
-                            <input style="width: 80%;" type="number" [value]="buoy_name">
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_name">
                         </div>
                         <div class="danger_field">
                             <p>Danger Threshold</p>
-                            <input style="width: 80%;" type="number" [value]="buoy_name">
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_name">
                         </div>
                     </div>
                     <h5>Coordinates</h5>
@@ -417,11 +417,11 @@
                     <div class="threasholds" *ngIf="!mainToggle">
                         <div class="warning_field">
                             <p>Latitude</p>
-                            <input style="width: 80%;" type="number" [value]="buoy_loc_latitude">
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_loc_latitude">
                         </div>
                         <div class="danger_field">
                             <p>Longitude</p>
-                            <input style="width: 80%;" type="number" [value]="buoy_loc_longitude" (change)="test()"
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_loc_longitude" (change)="test()"
                                 (input)="test()">
                         </div>
                     </div>
@@ -429,15 +429,16 @@
                     <div class="threasholds" *ngIf="mainToggle">
                         <div class="warning_field">
                             <p style="font-size: 12px;">Degree</p>
-                            <input style="width: 70%;" type="number" [value]="buoy_loc_degree_lat">
+                            <input type="text" name="" id="">
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_degree_lat">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Minutes</p>
-                            <input style="width: 70%;" type="number" [value]="buoy_loc_minutes_lat">
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_minutes_lat">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Seconds</p>
-                            <input style="width: 70%;" type="number" [value]="buoy_loc_seconds_lat">
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_seconds_lat">
                         </div>
 
                     </div>
@@ -445,15 +446,15 @@
                     <div class="threasholds" *ngIf="mainToggle">
                         <div class="warning_field">
                             <p style="font-size: 12px;">Degree</p>
-                            <input style="width: 70%;" type="number" [value]="buoy_loc_degree_lon">
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_degree_lon">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Minutes</p>
-                            <input style="width: 70%;" type="number" [value]="buoy_loc_minutes_lon">
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_minutes_lon">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Seconds</p>
-                            <input style="width: 70%;" type="number" [value]="buoy_loc_seconds_lon">
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_seconds_lon">
                         </div>
 
                     </div>
