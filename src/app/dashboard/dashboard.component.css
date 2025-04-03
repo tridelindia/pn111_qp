@@ -58,7 +58,7 @@ h1, h2, h3, h4, h5, h6, p, span{
 .mainBar{
     height: 6%;
     min-height: 6%;
-    margin-left: -50px;
+    margin-left: -70px;
     width: 103.5%;
     background-color: #1050cd;
     /* background-color:var(--basebg); */
