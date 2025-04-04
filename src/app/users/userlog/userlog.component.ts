@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-userlog',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './userlog.component.html',
-  styleUrl: './userlog.component.css'
+    selector: 'app-userlog',
+    standalone:true,
+    imports: [CommonModule, FormsModule],
+    templateUrl: './userlog.component.html',
+    styleUrl: './userlog.component.css'
 })
 export class UserlogComponent {
 

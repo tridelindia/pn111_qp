@@ -5,11 +5,11 @@ import { Component, input, Input } from '@angular/core';
 // import * as anychart from 'anychart';
 
 @Component({
-  selector: 'app-wind-gauge',
-  imports: [],
-  standalone: true,
-  templateUrl: './wind-gauge.component.html',
-  styleUrl: './wind-gauge.component.css'
+    selector: 'app-wind-gauge',
+    imports: [],
+    standalone:true,
+    templateUrl: './wind-gauge.component.html',
+    styleUrl: './wind-gauge.component.css'
 })
 export class WindGaugeComponent {
   @Input() speed!:number;

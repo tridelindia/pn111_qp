@@ -1,11 +1,11 @@
 import { Component, AfterViewInit } from '@angular/core';
 
 @Component({
-  selector: 'app-wave',
-  standalone: true,
-  imports: [],
-  templateUrl: './wave.component.html',
-  styleUrl: './wave.component.css'
+    selector: 'app-wave',
+    imports: [],
+    standalone:true,
+    templateUrl: './wave.component.html',
+    styleUrl: './wave.component.css'
 })
 export class WaveComponent implements AfterViewInit {
 

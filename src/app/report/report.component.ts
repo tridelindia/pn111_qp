@@ -18,23 +18,23 @@ interface Column {
 }
 
 @Component({
-  selector: 'app-report',
-  standalone: true,
-  imports: [
-    FormsModule,
-    CommonModule,
-    ButtonModule,
-    DrawerModule,
-    TableModule,
-    MultiSelectModule,
-    FileUpload,
-    Select,
-    DatePickerModule,
-    SelectButtonModule,
-  ],
-  templateUrl: './report.component.html',
-  styleUrl: './report.component.css',
-  providers: [ReportService],
+    selector: 'app-report',
+    standalone:true,
+    imports: [
+        FormsModule,
+        CommonModule,
+        ButtonModule,
+        DrawerModule,
+        TableModule,
+        MultiSelectModule,
+        FileUpload,
+        Select,
+        DatePickerModule,
+        SelectButtonModule,
+    ],
+    templateUrl: './report.component.html',
+    styleUrl: './report.component.css',
+    providers: [ReportService]
 })
 export class ReportComponent implements OnInit {
   visible: boolean = false;

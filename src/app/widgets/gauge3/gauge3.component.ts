@@ -3,16 +3,16 @@ import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import Background from 'three/src/renderers/common/Background.js';
 
 @Component({
-  selector: 'app-gauge3',
-  imports: [NgxEchartsModule],
-  standalone:true,
-  templateUrl: './gauge3.component.html',
-  styleUrl: './gauge3.component.css',
-  providers: [
-      {
-        provide: NGX_ECHARTS_CONFIG,
-        useValue: { echarts: () => import('echarts') }
-      }
+    selector: 'app-gauge3',
+    imports: [NgxEchartsModule],
+    standalone:true,
+    templateUrl: './gauge3.component.html',
+    styleUrl: './gauge3.component.css',
+    providers: [
+        {
+            provide: NGX_ECHARTS_CONFIG,
+            useValue: { echarts: () => import('echarts') }
+        }
     ]
 })
 export class Gauge3Component {

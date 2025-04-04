@@ -49,28 +49,31 @@
             </div>
 
             <!-- Table Body -->
-            <div class="table-container">
-                <div class="user-row" *ngFor="let user of users">
-                    <div class="column user-info">
-                        <i class="fas fa-user-circle"></i>
-                        <!-- <img [src]="user.image" alt="User Image" class="user-avatar" /> -->
-                        <div>
-                            <strong>{{ user.name }}</strong>
-                            <p>{{ user.email }}</p>
+            <div class="users-table-body">
+
+                <div class="table-container">
+                    <div class="user-row" *ngFor="let user of users">
+                        <div class="column user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <!-- <img [src]="user.image" alt="User Image" class="user-avatar" /> -->
+                            <div>
+                                <strong>{{ user.name }}</strong>
+                                <p>{{ user.email }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="column">{{ user.username }}</div>
-                    <div class="column">{{ user.role }}</div>
-                    <div class="column">{{ user.designation }}</div>
-                    <div class="column">{{ user.created }}</div>
-                    <div class="column actions">
-                        <div class="icon-container">
-                            <i class="fa-solid fa-pen edit-icon tooltip-icon" (click)="editUser(user)"></i>
-                            <span class="tooltip-text">Edit User</span>
-                        </div>
-                        <div class="icon-container">
-                            <i class="fa-solid fa-trash delete-icon" (click)="deleteUser(user.id)"></i>
-                            <span class="tooltip-text">Delete User</span>
+                        <div class="column">{{ user.username }}</div>
+                        <div class="column">{{ user.role }}</div>
+                        <div class="column">{{ user.designation }}</div>
+                        <div class="column">{{ user.created }}</div>
+                        <div class="column actions">
+                            <div class="icon-container">
+                                <i class="fa-solid fa-pen edit-icon tooltip-icon" (click)="editUser(user)"></i>
+                                <span class="tooltip-text">Edit User</span>
+                            </div>
+                            <div class="icon-container">
+                                <i class="fa-solid fa-trash delete-icon" (click)="deleteUser(user.id)"></i>
+                                <span class="tooltip-text">Delete User</span>
+                            </div>
                         </div>
                     </div>
                 </div>

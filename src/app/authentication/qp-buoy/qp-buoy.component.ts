@@ -5,11 +5,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 @Component({
-  selector: 'app-qp-buoy',
-  standalone: true,
-  imports: [],
-  templateUrl: './qp-buoy.component.html',
-  styleUrl: './qp-buoy.component.css'
+    selector: 'app-qp-buoy',
+    imports: [],
+    standalone:true,
+    templateUrl: './qp-buoy.component.html',
+    styleUrl: './qp-buoy.component.css'
 })
 export class QpBuoyComponent implements  OnInit {
   private scene: THREE.Scene = new THREE.Scene();

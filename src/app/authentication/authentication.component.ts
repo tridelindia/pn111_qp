@@ -10,12 +10,12 @@ import { WaveComponent } from "./wave/wave.component";
 import { QpBuoyComponent } from "./qp-buoy/qp-buoy.component";
 
 @Component({
-  selector: 'app-authentication',
-  standalone:true,
-  imports: [HttpClientModule, CommonModule, FormsModule, WaveComponent, QpBuoyComponent],
-  templateUrl: './authentication.component.html',
-  styleUrl: './authentication.component.css',
-  providers:[AuthService]
+    selector: 'app-authentication',
+    standalone:true,
+    imports: [HttpClientModule, CommonModule, FormsModule, WaveComponent, QpBuoyComponent],
+    templateUrl: './authentication.component.html',
+    styleUrl: './authentication.component.css',
+    providers: [AuthService]
 })
 export class AuthenticationComponent {
 username!:string;

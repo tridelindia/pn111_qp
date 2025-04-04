@@ -13,12 +13,12 @@ import { Feature } from 'ol/render/webgl/MixedGeometryBatch';
 import { InfobuoyComponent } from '../home/infobuoy/infobuoy.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [HttpClientModule, CommonModule, InfobuoyComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
-  providers: [InfobuoyComponent, StationconfigService],
+    selector: 'app-home',
+    standalone:true,
+    imports: [HttpClientModule, CommonModule, InfobuoyComponent],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css',
+    providers: [InfobuoyComponent, StationconfigService]
 })
 export class HomeComponent implements OnInit {
   stations = [

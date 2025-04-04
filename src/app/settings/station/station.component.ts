@@ -44,11 +44,11 @@ interface AddBuoyDetails{
 
 }
 @Component({
-  selector: 'app-station',
-  imports: [CommonModule, HttpClientModule, FormsModule],
-  standalone:true,
-  templateUrl: './station.component.html',
-  styleUrl: './station.component.css'
+    selector: 'app-station',
+    standalone:true,
+    imports: [CommonModule, HttpClientModule, FormsModule],
+    templateUrl: './station.component.html',
+    styleUrl: './station.component.css'
 })
 export class StationComponent implements OnInit{
   section?:number = 2;
@@ -309,6 +309,24 @@ export class StationComponent implements OnInit{
       "buoy_image": "../../../assets/image/image-placeholder2.jpg",
       "buoy_status": "Inactive",
       "buoy_sensors": ["Wave Height", "Wind Speed"]
+    },
+    {
+      "buoy_id": 3,
+      "buoy_name": "Tidal Watcher",
+      "buoy_loc_latitude": 40.7128,
+      "buoy_loc_longitude": -74.0060,
+      "buoy_loc_degree_lat": 40,
+      "buoy_loc_minutes_lat": 42,
+      "buoy_loc_seconds_lat": 46,
+      "buoy_loc_degree_lon": -74,
+      "buoy_loc_minutes_lon": 0,
+      "buoy_loc_seconds_lon": 36,
+      "geo_format": "DMS",
+      "buoy_warning":40,
+      "buoy_danger":80,
+      "buoy_image": "../../../assets/image/image-placeholder2.jpg",
+      "buoy_status": "Active",
+      "buoy_sensors": ["Tide Level", "Oxygen Level", "pH"]
     },
     {
       "buoy_id": 3,

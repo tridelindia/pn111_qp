@@ -1,50 +1,5 @@
 <div class="home">
-    <div class="mainBar">
-        <div class="title" style="color: white; flex-grow: 1;">
-            <h3 style="color: white; margin-left: 10px;">Terra</h3>
-        </div>
-        <div class="bar_station_select">
-            <h5 class="field_title">Select Station</h5>
-            <select name="select" id="" class="station_select">
-                <option value="all">Please Select Station</option>
-                <option value="1">Station 1</option>
-                <option value="2">Station 2</option>
-                <option value="3">Station 3</option>
-            </select>
-        </div>
-        <p style="margin-right: 20px;">Last Updated : 2025-03-25 10:07:13</p>
-        <div class="user_session">
 
-            <img src="../../assets/image/profile_default.png" alt="">
-            <!-- <ul class="profile-dropdown" *ngIf="!dropdownOpen">
-                <li>Admin</li>
-                <li>Logout</li>
-            </ul> -->
-            <div class="user_data">
-                <!-- <h5>Kavi</h5> -->
-                <p>Admin</p>
-            </div>
-        </div>
-
-        <!-- <div class="bar_station_select">
-            <h4 class="field_title">Select Station</h4>
-            <select name="select" id="" class="station_select">
-                <option value="all">Please Select Station</option>
-                <option value="1">Station 1</option>
-                <option value="2">Station 2</option>
-                <option value="3">Station 3</option>
-            </select>
-        </div>
-        <div class="period">
-            <h4 class="field_title">Range</h4>
-            <select name="select" id="" class="station_select">
-                <option value="all">Please Select Station</option>
-                <option value="1">Station 1</option>
-                <option value="2">Station 2</option>
-                <option value="3">Station 3</option>
-            </select>
-        </div> -->
-    </div>
     <div class="sections">
         <div class="left">
             <div class="section1">
@@ -182,7 +137,7 @@
                     <div class="parameters_oceanography_item">
                         <div class="parameters_oceanography_left">
                             <div class="param_title">
-                                <p>Dominant Time Period</p>
+                                <p>Tzc</p>
                             </div>
 
                             <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
@@ -195,7 +150,7 @@
                         </div>
                         <div class="parameters_oceanography_right">
                             <div class="param_title">
-                                <p>Max Wave Period</p>
+                                <p>Tz</p>
                             </div>
 
                             <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
@@ -210,7 +165,7 @@
                     <div class="parameters_oceanography_item">
                         <div class="parameters_oceanography_left">
                             <div class="param_title">
-                                <p>APD</p>
+                                <p>Tm02</p>
                             </div>
 
                             <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
@@ -429,10 +384,10 @@
                         <div class="speed">
 
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
+                            <app-direction1 [direction]="direction"></app-direction1>
                             <!-- <app-direction1></app-direction1> -->
-                            <!-- <app-direction1></app-direction1> -->
-                            <app-direction3></app-direction3>
-                            <p>234 WSW</p>
+                            <!-- <app-direction3></app-direction3> -->
+                            <p>{{direction}} {{d1_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -444,8 +399,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction22"></app-direction1>
+                            <p>{{direction22}} {{d2_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -458,8 +413,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction33"></app-direction1>
+                            <p>{{direction33}} {{d3_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -471,8 +426,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction4"></app-direction1>
+                            <p>{{direction4}} {{d4_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -483,8 +438,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction5"></app-direction1>
+                            <p>{{direction5}} {{d5_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -495,8 +450,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction6"></app-direction1>
+                            <p>{{direction6}} {{d6_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -507,8 +462,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction7"></app-direction1>
+                            <p>{{direction7}} {{d7_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -519,8 +474,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction8"></app-direction1>
+                            <p>{{direction8}} {{d8_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -531,8 +486,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction9"></app-direction1>
+                            <p>{{direction9}} {{d9_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -543,8 +498,8 @@
                     <div class="adcp_params">
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal; ">Current Direction</h3>
-                            <app-direction1></app-direction1>
-                            <p>234 WSW</p>
+                            <app-direction1 [direction]="direction10"></app-direction1>
+                            <p>{{direction10}} {{d10_value}}</p>
                         </div>
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed</h3>
@@ -727,7 +682,7 @@
                                 </div>
                                 <div class="met_param_items1">
                                     <div class="met_param_title">
-                                        <p>Rain Fall</p>
+                                        <p>Rainfall</p>
                                     </div>
 
                                     <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"

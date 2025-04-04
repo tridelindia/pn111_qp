@@ -4,6 +4,7 @@ import { RadialGaugeComponent } from '../../widgets/radial-guage/radial-guage.co
 @Component({
   selector: 'app-sensor',
   imports: [RadialGaugeComponent],
+  standalone:true,
   templateUrl: './sensor.component.html',
   styleUrl: './sensor.component.css'
 })

@@ -5,11 +5,11 @@ import { AppearanceComponent } from './appearance/appearance.component';
 import { StationComponent } from './station/station.component';
 
 @Component({
-  selector: 'app-settings',
-  standalone:true,
-  imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent],
-  templateUrl: './settings.component.html',
-  styleUrl: './settings.component.css'
+    selector: 'app-settings',
+    standalone:true,
+    imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent],
+    templateUrl: './settings.component.html',
+    styleUrl: './settings.component.css'
 })
 export class SettingsComponent implements OnInit{
   time = new Date;

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ElementRef, Input, OnInit } from '@angular/core';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import * as am5radar from '@amcharts/amcharts5/radar';
@@ -6,29 +6,30 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-direction1',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './direction1.component.html',
-  styleUrl: './direction1.component.css'
+    selector: 'app-direction1',
+    imports: [CommonModule],
+    standalone:true,
+    templateUrl: './direction1.component.html',
+    styleUrl: './direction1.component.css'
 })
-export class Direction1Component implements AfterViewInit {
+export class Direction1Component implements OnInit {
   private root!: am5.Root;
+  @Input() direction!:number;
 
   constructor(private elRef: ElementRef) {}
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     const chartDiv = this.elRef.nativeElement.querySelector('#chartdiv');
 
-  // Dispose of any existing chart to avoid duplicates
-  if (this.root) {
-    this.root.dispose();
-  }  // Initialize new chart instance
-  this.root = am5.Root.new(chartDiv);
-this.root.setThemes([am5themes_Animated.new(this.root)]);
+    // Dispose of any existing chart to avoid duplicates
+    if (this.root) {
+      this.root.dispose();
+    }  // Initialize new chart instance
+    this.root = am5.Root.new(chartDiv);
+  this.root.setThemes([am5themes_Animated.new(this.root)]);
 
 // Remove amCharts watermark (logo)
-this.root._logo?.dispose();
+  this.root._logo?.dispose();
 
   let chart = this.root.container.children.push(
     am5radar.RadarChart.new(this.root, { panX: false, panY: false, startAngle: -90, endAngle: 270 })
@@ -100,19 +101,14 @@ this.root._logo?.dispose();
     for (let i = 0; i < 360; i += 5) createLabel('', i, 0.5);
 
     // Animate Radar Chart and Hands
-    setInterval(() => {
-      let newAngle = Math.random() * 360;
-      chart.animate({ key: 'startAngle', to: newAngle, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
-      chart.animate({ key: 'endAngle', to: newAngle + 360, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
-      axisDataItemN.animate({ key: 'value', to: am5.math.normalizeAngle(-90 - newAngle), duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
-      axisDataItemS.animate({ key: 'value', to: am5.math.normalizeAngle(90 - newAngle), duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
-    }, 2000);
+    // setInterval(() => {
+      // let newAngle = Math.random() * 360;
+      chart.animate({ key: 'startAngle', to: this.direction, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
+      chart.animate({ key: 'endAngle', to: this.direction + 360, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
+      axisDataItemN.animate({ key: 'value', to: am5.math.normalizeAngle(-90 - this.direction), duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
+      axisDataItemS.animate({ key: 'value', to: am5.math.normalizeAngle(90 - this.direction), duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
+    // }, 2000);
   }
 
-  // ngOnDestroy(): void {
-  //   if (this.root) {
-  //     this.root.container.children.clear(); // Ensures all elements are cleared
-  //     this.root.dispose();
-  //   }
-  // }
+  
 }

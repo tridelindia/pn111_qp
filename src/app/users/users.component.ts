@@ -6,11 +6,11 @@ import { UserlogComponent } from "./userlog/userlog.component";
 
 
 @Component({
-  selector: 'app-users',
-  standalone:true,
-  imports: [CommonModule, FormsModule, UserlogComponent],
-  templateUrl: './users.component.html',
-  styleUrl: './users.component.css'
+    selector: 'app-users',
+    standalone:true,
+    imports: [CommonModule, FormsModule, UserlogComponent],
+    templateUrl: './users.component.html',
+    styleUrl: './users.component.css'
 })
 export class UsersComponent{
 

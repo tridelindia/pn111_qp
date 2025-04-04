@@ -10,11 +10,11 @@ import { Subscription } from 'rxjs';
 import { BuoyService } from '../infobuoy/buoy.service';
 
 @Component({
-  selector: 'app-infobuoy',
-  standalone: true,
-  imports: [],
-  templateUrl: './infobuoy.component.html',
-  styleUrl: './infobuoy.component.css',
+    selector: 'app-infobuoy',
+    imports: [],
+    standalone:true,
+    templateUrl: './infobuoy.component.html',
+    styleUrl: './infobuoy.component.css'
 })
 export class InfobuoyComponent implements OnInit {
   @Input() buoyName!: string;

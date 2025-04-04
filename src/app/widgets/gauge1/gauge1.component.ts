@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
-  selector: 'app-gauge1',
-  standalone: true,
-  imports: [NgxEchartsModule],
-  templateUrl: './gauge1.component.html',
-  styleUrl: './gauge1.component.css',
-  providers: [
-      {
-        provide: NGX_ECHARTS_CONFIG,
-        useValue: { echarts: () => import('echarts') }
-      }
+    selector: 'app-gauge1',
+    imports: [NgxEchartsModule],
+    standalone:true,
+    templateUrl: './gauge1.component.html',
+    styleUrl: './gauge1.component.css',
+    providers: [
+        {
+            provide: NGX_ECHARTS_CONFIG,
+            useValue: { echarts: () => import('echarts') }
+        }
     ]
 })
 export class Gauge1Component {
