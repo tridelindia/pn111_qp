@@ -12,12 +12,12 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AnalyticsComponent } from "../analytics/analytics.component";
 import { UsersComponent } from "../users/users.component";
 import { SettingsComponent } from "../settings/settings.component";
-
+import { DataHealthComponent } from "../data-health/data-health.component";
 
 @Component({
     selector: 'app-layout',
     standalone:true,
-    imports: [HomeComponent, SidebarComponent, ToastrModule, RouterModule, DashboardComponent, ReportComponent, AnalyticsComponent, UsersComponent, SettingsComponent, TopBarComponent],
+    imports: [HomeComponent, SidebarComponent, ToastrModule, RouterModule, DashboardComponent, ReportComponent, AnalyticsComponent, UsersComponent, SettingsComponent, TopBarComponent, DataHealthComponent],
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.css'
 })

@@ -1,0 +1,155 @@
+.parent-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.card {
+  flex: 1;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.health-card {
+  width: 300px;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.card-header {
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0;
+}
+
+.circular-progress-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.circular-progress {
+  position: relative;
+  width: 202px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-circle {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--progress-color) calc(var(--progress-value) * 3.6deg),
+    #e5e7eb calc(var(--progress-value) * 3.6deg)
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: progress 1s ease-out forwards;
+}
+
+.progress-circle__value {
+  position: absolute;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--progress-color);
+  z-index: 1;
+}
+
+.progress-circle__overlay {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  background: white;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.status-good {
+  --progress-color: #10B981;
+}
+
+.status-warning {
+  --progress-color: #F59E0B;
+}
+
+.status-critical {
+  --progress-color: #EF4444;
+}
+
+@keyframes progress {
+  from {
+    background: conic-gradient(
+      var(--progress-color) 0deg,
+      #e5e7eb 0deg
+    );
+  }
+  to {
+    background: conic-gradient(
+      var(--progress-color) calc(var(--progress-value) * 3.6deg),
+      #e5e7eb calc(var(--progress-value) * 3.6deg)
+    );
+  }
+}
+
+.chart-container {
+  width: 100%;
+  height: 300px;
+}
+
+.health-chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin: 1rem 0;
+  min-height: 300px;
+
+  .chart-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  :host ::ng-deep {
+    .health-chart {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .p-chart {
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+  }
+}

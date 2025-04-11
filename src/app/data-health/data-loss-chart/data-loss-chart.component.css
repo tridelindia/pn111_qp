@@ -1,0 +1,83 @@
+.dashboard-container {
+  padding: 1rem;
+}
+
+.sensor-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  
+  .sensor-tab {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+    
+    &.active {
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .sensor-icon {
+      position: relative;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      
+      .status-dot {
+        position: absolute;
+        top: -0.25rem;
+        right: -0.25rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        
+        &.bg-\[\#f97316\] {
+          background: #f97316;
+        }
+        
+        &.bg-\[\#0ea5e9\] {
+          background: #0ea5e9;
+        }
+      }
+    }
+    
+    .sensor-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  
+  .card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .card-description {
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+}
+
+.chart-container {
+  width: 100%;
+  height: 300px;
+}

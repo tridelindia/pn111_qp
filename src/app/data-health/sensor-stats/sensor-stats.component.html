@@ -1,0 +1,96 @@
+<div class="stats-card">
+    <div class="card-header">
+      <h3 class="card-title">Sensor Statistics</h3>
+      <p class="card-description">Averages and performance metrics</p>
+    </div>
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Search metrics..." 
+        class="search-input"
+      >
+    </div>
+    <div class="table-container">
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th (click)="onSort('name')" class="sortable">
+              Metric {{getSortIcon('name')}}
+            </th>
+            <th (click)="onSort('average')" class="sortable">
+              Average Value {{getSortIcon('average')}}
+            </th>
+            <th (click)="onSort('percentage')" class="sortable">
+              Performance {{getSortIcon('percentage')}}
+            </th>
+            <th (click)="onSort('status')" class="sortable">
+              Status {{getSortIcon('status')}}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stat of filteredStats">
+            <td class="metric-name">{{stat.name}}</td>
+            <td class="metric-average">{{stat.average}}</td>
+            <td>
+              <div class="percentage-bar">
+                <div class="bar-fill" [style.width.%]="stat.percentage"></div>
+                <span class="percentage-text">{{stat.percentage}}%</span>
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(stat.status)">
+                {{getStatusIcon(stat.status)}} {{stat.status | titlecase}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination-container">
+      <div class="pagination-info">
+        {{paginationInfo}}
+      </div>
+      <div class="pagination-controls">
+        <button 
+          class="pagination-button" 
+          [disabled]="currentPage === 1"
+          (click)="onPageChange(1)"
+        >
+          First
+        </button>
+        <button 
+          class="pagination-button"
+          [disabled]="currentPage === 1"
+          (click)="onPageChange(currentPage - 1)"
+        >
+          Previous
+        </button>
+        <div class="page-numbers">
+          <button 
+            *ngFor="let page of [].constructor(totalPages); let i = index"
+            class="page-number"
+            [class.active]="currentPage === i + 1"
+            (click)="onPageChange(i + 1)"
+          >
+            {{i + 1}}
+          </button>
+        </div>
+        <button 
+          class="pagination-button" 
+          [disabled]="currentPage === totalPages"
+          (click)="onPageChange(currentPage + 1)"
+        >
+          Next
+        </button>
+        <button 
+          class="pagination-button" 
+          [disabled]="currentPage === totalPages"
+          (click)="onPageChange(totalPages)"
+        >
+          Last
+        </button>
+      </div>
+    </div>
+  </div>
