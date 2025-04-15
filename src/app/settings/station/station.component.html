@@ -15,7 +15,7 @@
                             <p>{{item.buoy_sensors}}</p>
                         </div>
                         <span class="status"
-                            [ngClass]="item.buoy_status === 'Active'? 'status' :'status_inactive'"></span>
+                            [ngClass]="item.buoy_status === 'active'? 'status' :'status_inactive'"></span>
                     </div>
                     <div class="card-actions">
                         <button (click)="editStation(item)">
@@ -175,12 +175,12 @@
 
                 <div class="left_details">
                     <div class="left_details_title">
-                        <h2>{{selectedstation?.buoy_name}}</h2>
+                        <h2>{{selectedstation.buoy_name}}</h2>
                         <button class="activebutton"
-                            [ngClass]="selectedstation?.buoy_status == 'Active'?'activebutton':'inactivebutton'">{{selectedstation?.buoy_status}}</button>
+                            [ngClass]="selectedstation.buoy_status == 'active'?'activebutton':'inactivebutton'">{{selectedstation?.buoy_status}}</button>
                     </div>
-                    <img [src]="selectedstation?.buoy_image" alt="">
-                    <p>{{selectedstation?.buoy_id}}</p>
+                    <!-- <img [src]="selectedstation.buoy_image" alt=""> -->
+                    <p>{{selectedstation.buoy_id}}</p>
                     <h5>Thresholds</h5>
 
                     <div class="threasholds">
@@ -269,14 +269,15 @@
                     <div class="img_name_id">
                         <div class="left_ini">
                             <h5>Station Name</h5>
-                            <input type="text" value="10">
+                            <input type="text" value="" [(ngModel)]="selectedstation!.buoy_name">
                             <h5>Station Name</h5>
-                            <input type="text" value="10">
+                            <input type="text" value="10" [(ngModel)]="selectedstation!.buoy_id" readonly>
                         </div>
                         <div class="right_ini">
-                            <img [src]="imageSrc" alt="Upload Image" (click)="uploadImage($event)" class="upload-img">
-                            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*"
-                                class="inputbox">
+                            <!-- <img [src]="imageUrl || 'default.png'" alt="Upload Image" (click)="uploadImage()"
+                                class="upload-img">
+                            <input type="file" id="fileInput" hidden (change)="onFileSelected($event)"
+                                accept="image/*" /> -->
                         </div>
                     </div>
                     <!-- <div class="left_details_title">
@@ -304,11 +305,11 @@
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Threshold</p>
-                            <input type="number" value="10">
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_warning">
                         </div>
                         <div class="danger_field">
                             <p>Danger Threshold</p>
-                            <input type="number" value="20">
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_danger">
                         </div>
                     </div>
                     <!-- <div class="divider"></div> -->
@@ -328,26 +329,26 @@
                     <div class="threasholds" *ngIf="!mainToggle">
                         <div class="warning_field">
                             <p>Latitude</p>
-                            <input type="number" value="10">
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_loc_latitude">
                         </div>
                         <div class="danger_field">
                             <p>Longitude</p>
-                            <input type="number" value="20">
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_longitude">
                         </div>
                     </div>
                     <p style="font-weight: 500;" *ngIf="mainToggle">Latitude</p>
                     <div class="threasholds" *ngIf="mainToggle">
                         <div class="warning_field">
                             <p style="font-size: 12px;">Degree</p>
-                            <input type="number" value="10">
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_loc_degree_lat">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Minutes</p>
-                            <input type="number" value="20">
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_minutes_lat">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Seconds</p>
-                            <input type="number" value="20">
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_seconds_lat">
                         </div>
 
                     </div>
@@ -355,15 +356,15 @@
                     <div class="threasholds" *ngIf="mainToggle">
                         <div class="warning_field">
                             <p style="font-size: 12px;">Degree</p>
-                            <input type="number" value="10">
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_loc_degree_lon">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Minutes</p>
-                            <input type="number" value="20">
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_minutes_lon">
                         </div>
                         <div class="danger_field">
                             <p style="font-size: 12px;">Seconds</p>
-                            <input type="number" value="20">
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_seconds_lon">
                         </div>
 
                     </div>
@@ -372,11 +373,15 @@
                     <div class="left_details_content">
                         <h5>Sensors</h5>
                         <div class="list_sensors">
-                            <p>Oceaonography</p>
-                            <p>Water Level</p>
-                            <p>Meteriology</p>
-                            <p>MicroFLu</p>
+
+                            <p *ngFor="let item of selectedstation!.buoy_sensors">{{item}}</p>
+
                         </div>
+                    </div>
+                    <div class="actions">
+
+                        <button class="update" (click)="updateStation()">update</button>
+                        <!-- <button class="check" (click)="check_location()">Check</button> -->
                     </div>
                 </div>
                 <div class="right_details">
@@ -388,17 +393,17 @@
                     <p>Station Name</p>
                     <input type="text" [(ngModel)]="buoy_name">
                     <p>Station ID</p>
-                    <input type="text" [(ngModel)]="buoy_name">
+                    <input type="text" [(ngModel)]="buoy_id">
                     <h5>Thresholds</h5>
 
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Threshold</p>
-                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_name">
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_warning">
                         </div>
                         <div class="danger_field">
                             <p>Danger Threshold</p>
-                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_name">
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_danger">
                         </div>
                     </div>
                     <h5>Coordinates</h5>
@@ -429,7 +434,7 @@
                     <div class="threasholds" *ngIf="mainToggle">
                         <div class="warning_field">
                             <p style="font-size: 12px;">Degree</p>
-                            <input type="text" name="" id="">
+                            <!-- <input type="text" name="" id=""> -->
                             <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_degree_lat">
                         </div>
                         <div class="danger_field">
@@ -461,32 +466,15 @@
                     <div class="sensors_selection">
                         <p>Sensors</p>
                         <div class="sensors_li">
-                            <div class="sensornames">
-                                <p>Oceaonography</p>
-                                <input class="check" type="checkbox" id="temperature" name="temperature">
+                            <div class="sensornames" *ngFor="let sensor of sensors">
+                                <p>{{ sensor.label }}</p>
+                                <input class="check" type="checkbox" [id]="sensor.name" [name]="sensor.name"
+                                    [(ngModel)]="sensor.checked" />
                             </div>
-                            <div class="sensornames">
-                                <p>Meteriology</p>
-                                <input class="check" type="checkbox" id="temperature" name="temperature">
-                            </div>
-                            <div class="sensornames">
-                                <p>Water Quality</p>
-                                <input class="check" type="checkbox" id="temperature" name="temperature">
-                            </div>
-                            <div class="sensornames">
-                                <p>ADCP</p>
-                                <input class="check" type="checkbox" id="temperature" name="temperature">
-                            </div>
-                            <div class="sensornames">
-                                <p>MicroFLu</p>
-                                <input class="check" type="checkbox" id="temperature" name="temperature">
-                            </div>
-                            <!-- <div class="sensornames"></div> -->
-
                         </div>
                         <div class="actions">
 
-                            <button class="update">update</button>
+                            <button class="update" (click)="createStation()">update</button>
                             <button class="check" (click)="check_location()">Check</button>
                         </div>
                     </div>

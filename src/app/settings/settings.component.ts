@@ -3,18 +3,19 @@ import { Component, OnInit } from '@angular/core';
 import { GeneralComponent } from "./general/general.component";
 import { AppearanceComponent } from './appearance/appearance.component';
 import { StationComponent } from './station/station.component';
+import { SensorComponent } from "./sensor/sensor.component";
 
 @Component({
     selector: 'app-settings',
     standalone:true,
-    imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent],
+    imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent, SensorComponent],
     templateUrl: './settings.component.html',
     styleUrl: './settings.component.css'
 })
 export class SettingsComponent implements OnInit{
   time = new Date;
   currentTime?:string;
-activeOption:number = 1;
+activeOption:number = 2;
 changeOption(index:number){
   this.activeOption = index
 }

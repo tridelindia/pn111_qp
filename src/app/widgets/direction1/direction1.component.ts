@@ -12,14 +12,15 @@ import { CommonModule } from '@angular/common';
     templateUrl: './direction1.component.html',
     styleUrl: './direction1.component.css'
 })
-export class Direction1Component implements OnInit {
+export class Direction1Component implements AfterViewInit {
   private root!: am5.Root;
   @Input() direction!:number;
+  @Input() ID!:string;
 
   constructor(private elRef: ElementRef) {}
 
-  ngOnInit(): void {
-    const chartDiv = this.elRef.nativeElement.querySelector('#chartdiv');
+  ngAfterViewInit(): void {
+    const chartDiv = this.elRef.nativeElement.querySelector(`#${this.ID}`);
 
     // Dispose of any existing chart to avoid duplicates
     if (this.root) {
@@ -58,7 +59,7 @@ export class Direction1Component implements OnInit {
 
       if (color) clockHand.hand.set('fill', am5.color(color));
 
-      clockHand.adapters.add('rotation', () => rotation);
+      // clockHand.adapters.add('rotation', () => rotation);
       axisDataItem.set('bullet', am5xy.AxisBullet.new(this.root, { sprite: clockHand }));
       xAxis.createAxisRange(axisDataItem);
       return axisDataItem;
@@ -79,7 +80,7 @@ export class Direction1Component implements OnInit {
       axisRenderer.setAll({
         stroke: am5.color(0x000), // Fixed typo: "0xfffffff" to "0xffffff"
         strokeOpacity: 1,
-        strokeWidth: 5,
+        strokeWidth: 2,
         minGridDistance: 5,
       });
 
@@ -103,10 +104,22 @@ export class Direction1Component implements OnInit {
     // Animate Radar Chart and Hands
     // setInterval(() => {
       // let newAngle = Math.random() * 360;
-      chart.animate({ key: 'startAngle', to: this.direction, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
-      chart.animate({ key: 'endAngle', to: this.direction + 360, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
-      axisDataItemN.animate({ key: 'value', to: am5.math.normalizeAngle(-90 - this.direction), duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
-      axisDataItemS.animate({ key: 'value', to: am5.math.normalizeAngle(90 - this.direction), duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
+      // chart.animate({ key: 'startAngle', to: this.direction, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
+      // chart.animate({ key: 'endAngle', to: this.direction + 360, duration: 1000, easing: am5.ease.out(am5.ease.cubic) });
+      axisDataItemN.animate({
+        key: 'value',
+        to: this.direction,
+        duration: 1000,
+        easing: am5.ease.out(am5.ease.cubic)
+      });
+      
+      axisDataItemS.animate({
+        key: 'value',
+        to: (this.direction + 180) % 360, // Opposite direction
+        duration: 1000,
+        easing: am5.ease.out(am5.ease.cubic)
+      });
+      
     // }, 2000);
   }
 

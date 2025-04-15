@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapService } from '../map_service/map.service';
+// import { MapService } from '../map_service/map.service';
 import { RadarHomeComponent } from '../radar-home/radar-home.component';
 import { HomeV1ChartComponent } from '../home-v1-chart/home-v1-chart.component';
 import { BuoyComponent } from '../buoy/buoy.component';
@@ -14,6 +14,7 @@ import { Direction2Component } from "../widgets/direction2/direction2.component"
 import { BatteryComponent } from "./battery/battery.component";
 import { Gauge1Component } from "../widgets/gauge1/gauge1.component";
 import { Direction3Component } from "../widgets/direction3/direction3.component";
+import { MapService } from '../settings/station/map.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -25,6 +26,8 @@ import { Direction3Component } from "../widgets/direction3/direction3.component"
 export class DashboardComponent implements OnInit{
   constructor(private map:MapService){}
   direction1:number = 110;
+  direction_val:string = '';
+  direction2_val:string = '';
   direction2:number = 180;
   direction3:number = 250;
   
@@ -52,16 +55,43 @@ export class DashboardComponent implements OnInit{
   d9_value:string = '';
   d10_value:string = '';
 
+  showMap:boolean = false;
 
+toggleMapon(){
+  this.map.destroyMap();
+  this.showMap = true;
+  setTimeout(() => {
+    
+    this.mapInit()
+  }, 100);
+}
+toggleMapoff(){
+  this.map.destroyMap();
+  this.showMap = false;
+}
     ngOnInit(): void {
+      this.direction_val = this.directionValue(this.direction1);
+      this.direction2_val = this.directionValue(this.direction2);
       this.map.destroyMap();
-      const mapContainer = document.getElementById('ol-map');
-      if(mapContainer){
-        this.map.createMap(mapContainer!, 18.997888,  72.809304);
-        this.map.addPathLines();
-      }
+      // const mapContainer = document.getElementById('ol-map');
+      // if(mapContainer){
+      //   this.map.createMap(mapContainer!, 18.997888,  72.809304, 20, 40, 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}');
+      //   // this.map.addPathLines();
+      // }
       this.directionAndvalue()
-      
+      // this.mapInit();
+    }
+
+
+    mapInit(){
+      const mapContainer = document.getElementById('ol-map');
+      this.map.createMap(
+        mapContainer!,
+        40.7128,
+       -74.0060, 
+      20, 40, 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+        
+      )
     }
     dropdownOpen = false;
     selectedText = 'Please Select Station';
@@ -89,7 +119,19 @@ export class DashboardComponent implements OnInit{
       this.direction8 = parseFloat((Math.random() * 360).toFixed(2));
       this.direction9 = parseFloat((Math.random() * 360).toFixed(2));
       this.direction10 = parseFloat((Math.random() * 360).toFixed(2));
-    
+
+      // this.direction = 60;
+      // this.direction22 = 0;
+      // this.direction33 = 0;
+      // this.direction4 = 0;
+      // this.direction5 = 0;
+      // this.direction6 = 0;
+      // this.direction7 = 0;
+      // this.direction8 = 0;
+      // this.direction9 = 0;
+      // this.direction10 = 0;
+
+
       this.d1_value = this.directionValue(this.direction);
       this.d2_value = this.directionValue(this.direction22);
       this.d3_value = this.directionValue(this.direction33);

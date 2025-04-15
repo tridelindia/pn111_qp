@@ -57,6 +57,10 @@ background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100
   border-radius: 50%;
 
 }
+.head h5{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 .user_data{
   display: flex;
   flex-direction: column;
@@ -149,7 +153,7 @@ width: auto ;
     font-weight: 100;
 }
 .option_active{
-    height: 18px;
+    height: 25px;
     width: auto;
     width: 120px;
     background-color: rgba(157, 206, 249, 0.576);
@@ -157,11 +161,14 @@ width: auto ;
     margin-left: 10px;
     margin-right: 10px;
     padding: 5px;
+    /* padding-top: 5px; */
+    /* padding-bottom: 5px; */
     display: flex;
     font-weight: 100;
     font-size: 15px;
     align-items: center;
-    justify-content: center;cursor: pointer;
+    justify-content: center;
+    cursor: pointer;
 }
 
 

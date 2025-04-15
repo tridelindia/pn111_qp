@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
@@ -16,7 +16,7 @@ import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 })
 export class Direction2Component implements OnInit {
   rotationDegree: number = 180; // Default rotation
-
+  @Input() direction!:number;
     rotateNeedle(degree: number) {
       this.rotationDegree = degree;
     }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-direction3',
@@ -10,14 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Direction3Component implements OnInit{
   rotationDegree: number = 180; // Default rotation
-
+  @Input() direction!:number;
   rotateNeedle(degree: number) {
     this.rotationDegree = degree;
   }
 ngOnInit(): void {
-  setInterval(() => {
-      this.rotationDegree = Math.random() * (360 - 0) + 0;;
-      console.log(this.rotationDegree);
-  }, 2000);
+  // setInterval(() => {
+  //     this.rotationDegree = Math.random() * (360 - 0) + 0;;
+  //     console.log(this.rotationDegree);
+  // }, 2000);
 }
 }

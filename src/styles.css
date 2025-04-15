@@ -45,7 +45,7 @@ p{
 .mainBar{
     height: 6%;
     width: 100%;
-    background-color:var(--basebg);
+    /* background-color:var(--basebg); */
     /* border-radius: 5px; */
     display: flex;
     flex-direction: row;
