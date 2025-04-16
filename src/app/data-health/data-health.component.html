@@ -21,16 +21,20 @@
                 </app-main-chart-section>
             </div>
         </div>
-  
+        
+        <app-sensor-status></app-sensor-status>
+
         <div class="data-loss-chart">
             <app-data-loss-chart 
             [currentSensor]="currentSensor" 
             [chartData]="chartData">
             </app-data-loss-chart>
         </div>
+        
         <app-sensor-stats 
             [activeSensor]="currentSensor"
-            [selectedTabs]="selectedTabs">
+            [selectedTabs]="selectedTabs"
+            [apiData]="apiData">
         </app-sensor-stats>
     </div>
 </div>

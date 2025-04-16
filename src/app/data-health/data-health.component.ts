@@ -8,11 +8,12 @@ import { SensorStatsComponent } from './sensor-stats/sensor-stats.component';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, delay } from 'rxjs/operators';
+import { SensorStatusComponent } from './sensor-status/sensor-status.component';
 
 @Component({
   selector: 'app-data-health',
   standalone: true,
-  imports: [MainChartSectionComponent, NgxEchartsModule, SensorTabComponent, DataLossChartComponent, SensorStatsComponent],
+  imports: [MainChartSectionComponent, NgxEchartsModule, SensorTabComponent, DataLossChartComponent, SensorStatsComponent, SensorStatusComponent],
   templateUrl: './data-health.component.html',
   styleUrl: './data-health.component.css',
   providers: [
@@ -189,13 +190,11 @@ export class DataHealthComponent implements OnInit {
       this.resetChartData();
       return;
     }
-
     const validData = data.filter(item => 
       item && 
       item.timestamp && 
       item.dataPresent
     );
-
     if (validData.length === 0) {
       console.log('No valid data points found, resetting chart');
       this.resetChartData();

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -22,39 +22,110 @@ type SortKey = keyof SensorStat;
   templateUrl: './sensor-stats.component.html',
   styleUrls: ['./sensor-stats.component.scss']
 })
-export class SensorStatsComponent {
+export class SensorStatsComponent implements OnChanges {
   @Input() activeSensor: string = 'sensor1';
   @Input() selectedTabs: string[] = [];
+  @Input() apiData: any = null;
 
   searchTerm: string = '';
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
-  
-  currentPage: number = 1;
-  itemsPerPage: number = 5;
-  totalPages: number = 1;
 
-  stats: SensorStat[] = [
-    { name: 'Wave Height', average: 2.4, percentage: 92, status: 'satisfactory', tabId: '1' },
-    { name: 'Wave Direction', average: 180, percentage: 85, status: 'marginal', tabId: '5' },
-    { name: 'Current Speed', average: 1.2, percentage: 97, status: 'satisfactory', tabId: '16' },
-    { name: 'Wind Speed', average: 8.5, percentage: 78, status: 'unsatisfactory', tabId: '17' },
-    { name: 'Temperature (Air)', average: 22.1, percentage: 95, status: 'satisfactory', tabId: '20' },
-    { name: 'Relative Humidity', average: 65.3, percentage: 88, status: 'satisfactory', tabId: '21' },
-    { name: 'Barometric Pressure', average: 1013.5, percentage: 90, status: 'satisfactory', tabId: '22' },
-    { name: 'Turbidity', average: 1.8, percentage: 82, status: 'marginal', tabId: '29' },
-    { name: 'Conductivity', average: 45.2, percentage: 94, status: 'satisfactory', tabId: '30' },
-    { name: 'Dissolved Oxygen', average: 8.2, percentage: 89, status: 'satisfactory', tabId: '31' }
-  ];
+  stats: SensorStat[] = [];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['apiData'] && this.apiData) {
+      this.updateStatsFromApiData();
+    }
+  }
+
+  private updateStatsFromApiData(): void {
+    if (!this.apiData || !this.apiData.data || !this.apiData.data.length) {
+      this.stats = [];
+      return;
+    }
+
+    const parameterMapping: { [key: string]: { name: string; tabId: string } } = {
+      'oceanography.wave.1': { name: 'Wave Height', tabId: '1' },
+      'oceanography.wave.2': { name: 'Wave Period', tabId: '2' },
+      'oceanography.wave.3': { name: 'Wave Energy', tabId: '3' },
+      'oceanography.wave.4': { name: 'Wave Power', tabId: '4' },
+      'oceanography.wave.5': { name: 'Wave Direction', tabId: '5' },
+      'oceanography.current.6': { name: 'Current Direction', tabId: '6' },
+      'oceanography.current.7': { name: 'Current U Component', tabId: '7' },
+      'oceanography.current.8': { name: 'Current V Component', tabId: '8' },
+      'oceanography.current.9': { name: 'Current Magnitude', tabId: '9' },
+      'oceanography.current.10': { name: 'Current Direction (True)', tabId: '10' },
+      'oceanography.current.11': { name: 'Current Speed', tabId: '11' },
+      'oceanography.current.12': { name: 'Current Direction (Magnetic)', tabId: '12' },
+      'oceanography.current.13': { name: 'Current U Component (True)', tabId: '13' },
+      'oceanography.current.14': { name: 'Current V Component (True)', tabId: '14' },
+      'oceanography.current.15': { name: 'Current U Component (Magnetic)', tabId: '15' },
+      'oceanography.current.16': { name: 'Current V Component (Magnetic)', tabId: '16' },
+      'meteorology.wind.17': { name: 'Wind Speed', tabId: '17' },
+      'meteorology.wind.18': { name: 'Wind Direction', tabId: '18' },
+      'meteorology.wind.19': { name: 'Wind Gust', tabId: '19' },
+      'meteorology.atmospheric.20': { name: 'Temperature (Air)', tabId: '20' },
+      'meteorology.atmospheric.21': { name: 'Relative Humidity', tabId: '21' },
+      'meteorology.atmospheric.22': { name: 'Barometric Pressure', tabId: '22' },
+      'meteorology.atmospheric.23': { name: 'Dew Point', tabId: '23' },
+      'meteorology.atmospheric.24': { name: 'Heat Index', tabId: '24' },
+      'meteorology.atmospheric.25': { name: 'Wind Chill', tabId: '25' },
+      'meteorology.atmospheric.26': { name: 'Visibility', tabId: '26' },
+      'meteorology.atmospheric.27': { name: 'Solar Radiation', tabId: '27' },
+      'meteorology.atmospheric.28': { name: 'UV Index', tabId: '28' },
+      'water_quality.physical.29': { name: 'Turbidity', tabId: '29' },
+      'water_quality.physical.30': { name: 'Conductivity', tabId: '30' },
+      'water_quality.physical.31': { name: 'Dissolved Oxygen', tabId: '31' },
+      'water_quality.physical.32': { name: 'Salinity', tabId: '32' },
+      'water_quality.physical.33': { name: 'Water Temperature', tabId: '33' },
+      'water_quality.physical.34': { name: 'pH', tabId: '34' },
+      'water_quality.physical.35': { name: 'Chlorophyll', tabId: '35' },
+      'water_quality.physical.36': { name: 'Total Suspended Solids', tabId: '36' }
+    };
+
+    const latestData = this.apiData.data[this.apiData.data.length - 1];
+    if (!latestData || !latestData.dataPresent) {
+      this.stats = [];
+      return;
+    }
+    this.stats = Object.entries(latestData.dataPresent)
+      .filter(([key]) => parameterMapping[key])
+      .map(([key, value]) => {
+        const mapping = parameterMapping[key];
+        const average = this.calculateAverage(key);
+        const percentage = average * 100;
+        return {
+          name: mapping.name,
+          average: average,
+          percentage: percentage,
+          status: this.getStatusFromPercentage(percentage),
+          tabId: mapping.tabId
+        };
+      });
+  }
+
+  private calculateAverage(key: string): number {
+    if (!this.apiData || !this.apiData.data) return 0;
+
+    const values = this.apiData.data
+      .map((item: any) => item.dataPresent[key])
+      .filter((value: any) => value !== undefined && value !== null);
+
+    if (values.length === 0) return 0;
+
+    const sum = values.reduce((acc: number, val: number) => acc + val, 0);
+    return Number((sum / values.length).toFixed(2));
+  }
+
+  private getStatusFromPercentage(percentage: number): StatusType {
+    if (percentage >= 90) return 'satisfactory';
+    if (percentage >= 70) return 'marginal';
+    return 'unsatisfactory';
+  }
 
   get filteredStats(): SensorStat[] {
     let filtered = this.stats;
-    
-    if (this.selectedTabs.length > 0) {
-      filtered = filtered.filter(stat => 
-        stat.tabId && this.selectedTabs.includes(stat.tabId)
-      );
-    }
     
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
@@ -77,27 +148,7 @@ export class SensorStatsComponent {
       });
     }
 
-    this.totalPages = Math.ceil(filtered.length / this.itemsPerPage);
-    
-    if (this.currentPage > this.totalPages) {
-      this.currentPage = this.totalPages;
-    }
-    if (this.currentPage < 1) {
-      this.currentPage = 1;
-    }
-
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return filtered.slice(startIndex, startIndex + this.itemsPerPage);
-  }
-
-  get totalItems(): number {
-    return this.stats.length;
-  }
-
-  get paginationInfo(): string {
-    const start = (this.currentPage - 1) * this.itemsPerPage + 1;
-    const end = Math.min(start + this.itemsPerPage - 1, this.totalItems);
-    return `Showing ${start} to ${end} of ${this.totalItems} entries`;
+    return filtered;
   }
 
   onSort(key: SortKey): void {
@@ -111,11 +162,6 @@ export class SensorStatsComponent {
       this.sortKey = key;
       this.sortDirection = 'asc';
     }
-    this.currentPage = 1;
-  }
-
-  onPageChange(page: number): void {
-    this.currentPage = page;
   }
 
   getSortIcon(key: SortKey): string {

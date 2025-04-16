@@ -11,12 +11,12 @@
         class="search-input"
       >
     </div>
-    <div class="table-container">
+    <div class="table-container" style="overflow-y: auto; max-height: 500px;">
       <table class="stats-table">
         <thead>
           <tr>
             <th (click)="onSort('name')" class="sortable">
-              Metric {{getSortIcon('name')}}
+              Parameters {{getSortIcon('name')}}
             </th>
             <th (click)="onSort('average')" class="sortable">
               Average Value {{getSortIcon('average')}}
@@ -32,11 +32,17 @@
         <tbody>
           <tr *ngFor="let stat of filteredStats">
             <td class="metric-name">{{stat.name}}</td>
-            <td class="metric-average">{{stat.average}}</td>
+            <td class="metric-average">{{(stat.average * 100).toFixed(0)}}</td>
             <td>
               <div class="percentage-bar">
-                <div class="bar-fill" [style.width.%]="stat.percentage"></div>
-                <span class="percentage-text">{{stat.percentage}}%</span>
+                <div class="bar-fill" 
+                     [ngClass]="{
+                       'bg-green-500': stat.percentage >= 90,
+                       'bg-yellow-500': stat.percentage >= 70 && stat.percentage < 90,
+                       'bg-red-500': stat.percentage < 70
+                     }"
+                     [style.width.%]="stat.percentage"></div>
+                <span class="percentage-text">{{stat.percentage.toFixed(0)}}%</span>
               </div>
             </td>
             <td>
@@ -47,50 +53,5 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="pagination-container">
-      <div class="pagination-info">
-        {{paginationInfo}}
-      </div>
-      <div class="pagination-controls">
-        <button 
-          class="pagination-button" 
-          [disabled]="currentPage === 1"
-          (click)="onPageChange(1)"
-        >
-          First
-        </button>
-        <button 
-          class="pagination-button"
-          [disabled]="currentPage === 1"
-          (click)="onPageChange(currentPage - 1)"
-        >
-          Previous
-        </button>
-        <div class="page-numbers">
-          <button 
-            *ngFor="let page of [].constructor(totalPages); let i = index"
-            class="page-number"
-            [class.active]="currentPage === i + 1"
-            (click)="onPageChange(i + 1)"
-          >
-            {{i + 1}}
-          </button>
-        </div>
-        <button 
-          class="pagination-button" 
-          [disabled]="currentPage === totalPages"
-          (click)="onPageChange(currentPage + 1)"
-        >
-          Next
-        </button>
-        <button 
-          class="pagination-button" 
-          [disabled]="currentPage === totalPages"
-          (click)="onPageChange(totalPages)"
-        >
-          Last
-        </button>
-      </div>
     </div>
   </div>
