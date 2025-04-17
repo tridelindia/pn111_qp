@@ -4,17 +4,17 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 
 @Component({
-  selector: 'app-wind-gauge',
-  standalone: true,
-  imports: [NgxEchartsModule, CommonModule],
-  templateUrl: './wind-gauge.component.html',
-  styleUrl: './wind-gauge.component.css',
-  providers:[
-    {
-          provide: NGX_ECHARTS_CONFIG,
-          useValue: { echarts: () => import('echarts') }
+    selector: 'app-wind-gauge',
+    standalone:true,
+    imports: [NgxEchartsModule, CommonModule],
+    templateUrl: './wind-gauge.component.html',
+    styleUrl: './wind-gauge.component.css',
+    providers: [
+        {
+            provide: NGX_ECHARTS_CONFIG,
+            useValue: { echarts: () => import('echarts') }
         }
-  ]
+    ]
 })
 export class WindGaugeComponent {
   GaugeOptions:any = {

@@ -8,11 +8,11 @@ import { CurrentUser } from '../../user-model/user-model.module';
 // import { RadialGaugeComponent } from "../../widgets/radial-guage/radial-guage.component";
 
 @Component({
-  selector: 'app-general',
-  standalone:true,
-  imports: [CommonModule],
-  templateUrl: './general.component.html',
-  styleUrl: './general.component.css'
+    selector: 'app-general',
+    imports: [CommonModule],
+    standalone:true,
+    templateUrl: './general.component.html',
+    styleUrl: './general.component.css'
 })
 export class GeneralComponent {
   user?: CurrentUser;

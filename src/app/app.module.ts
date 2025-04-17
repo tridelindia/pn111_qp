@@ -15,7 +15,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
-    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +32,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AuthService,
     { provide: NGX_ECHARTS_CONFIG, useValue: { echarts: () => import('echarts') } }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [],
   exports:[] 
 })
 export class AppModule {}

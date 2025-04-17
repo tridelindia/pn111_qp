@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-data-score',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './data-score.component.html',
-  styleUrl: './data-score.component.css'
+    selector: 'app-data-score',
+    imports: [CommonModule],
+    standalone:true,
+    templateUrl: './data-score.component.html',
+    styleUrl: './data-score.component.css'
 })
 export class DataScoreComponent {
   last7Days: { day: string, value: number, percentage: number }[] = [];

@@ -4,17 +4,17 @@ import { distance } from 'ol/coordinate';
 
 
 @Component({
-  selector: 'app-gauge2',
-  standalone: true,
-  imports: [NgxEchartsModule],  
-  templateUrl: './gauge2.component.html',
-  styleUrls: ['./gauge2.component.css'],
-  providers: [
-    {
-      provide: NGX_ECHARTS_CONFIG,
-      useValue: { echarts: () => import('echarts') }
-    }
-  ]
+    selector: 'app-gauge2',
+    standalone:true,
+    imports: [NgxEchartsModule],
+    templateUrl: './gauge2.component.html',
+    styleUrls: ['./gauge2.component.css'],
+    providers: [
+        {
+            provide: NGX_ECHARTS_CONFIG,
+            useValue: { echarts: () => import('echarts') }
+        }
+    ]
 })
 export class Gauge2Component {
   gaugeOption: any = {

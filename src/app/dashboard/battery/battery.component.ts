@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
-  selector: 'app-battery',
-  standalone: true,
-  imports: [FontAwesomeModule],
-  templateUrl: './battery.component.html',
-  styleUrl: './battery.component.css'
+    selector: 'app-battery',
+    imports: [FontAwesomeModule],
+    standalone:true,
+    templateUrl: './battery.component.html',
+    styleUrl: './battery.component.css'
 })
 export class BatteryComponent  implements OnInit{
   @Input() percentage: number = 0; // Default value

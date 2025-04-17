@@ -4,8 +4,8 @@ import { LayoutComponent } from '../layout/layout.component';
 
 @Component({
     selector: 'app-sidebar',
-    standalone:true,
     imports: [CommonModule],
+    standalone:true,
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.css'
 })
@@ -19,6 +19,6 @@ constructor(private lay:LayoutComponent){}
    this.selectedIndex = this.lay.selectedIndex;
   }
   ngOnInit(): void {
-      this.selectOption(5);
+      this.selectOption(2);
   }
 }

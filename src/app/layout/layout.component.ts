@@ -16,8 +16,8 @@ import { SettingsComponent } from "../settings/settings.component";
 
 @Component({
     selector: 'app-layout',
-    standalone:true, 
-    imports: [HomeComponent, SidebarComponent, ToastrModule, RouterModule, DashboardComponent, ReportComponent, AnalyticsComponent, UsersComponent, SettingsComponent],
+    standalone:true,
+    imports: [HomeComponent, SidebarComponent, ToastrModule, RouterModule, DashboardComponent, ReportComponent, AnalyticsComponent, UsersComponent, SettingsComponent, TopBarComponent],
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.css'
 })
