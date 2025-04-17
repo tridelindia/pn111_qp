@@ -5,7 +5,8 @@ const getStationConfig = async (req, res) => {
     console.log('Received request to getStationConfig');
 
     try {
-        const result = await pool.query('SELECT * FROM tb_stations_config');
+        const result = await pool.query('SELECT * FROM tb_stations_config ORDER BY station_id ASC');
+        ;
         console.log('Query successful:', result.rows);
         res.json(result.rows);
     } catch (err) {
@@ -18,14 +19,32 @@ const getAllSensorData = async (req, res) => {
     console.log('Received request to getAllSensorData');
 
     try {
-        const result = await pool.query('SELECT * FROM tb_buoy_01_measurements');
+        const result = await pool.query('SELECT * FROM tb_buoy_01_measurements ORDER BY id ASC');
         console.log('Query successful:', result.rows);
-        res.json(result.rows);
+        res.json(result.rows.reverse());
     } catch (error) {
         console.error('Error fetching SensorData data:', error.message);
         res.status(500).json({ error: error.message });
     }
 }
+
+const getSensorDataByDate = async (req, res) => {
+    console.log('Received request to getSensorDataByDate');
+    const { fromDate, toDate } = req.query;
+
+    try {
+        const result = await pool.query(
+            `SELECT * FROM tb_buoy_01_measurements 
+         WHERE timestamp BETWEEN $1 AND $2 ORDER BY id ASC`,
+            [fromDate, toDate]
+        );
+
+        res.json(result.rows.reverse());
+    } catch (error) {
+        console.error('Error fetching getSensorDataByDate data:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 const getMetrologicalData = async (req, res) => {
     console.log('Received request to getMetrologicalData');
@@ -431,13 +450,170 @@ const updateSensorConfig = async (req, res) => {
 };
 
 
+
+
+// user management
+const fetchRole =async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM tb_roles ORDER BY name ASC');
+      res.json(result.rows);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  }
+
+const addRole = async (req, res) => {
+    const { name, description, permissions } = req.body;
+  
+    if (!name || !permissions) {
+      return res.status(400).json({ message: 'Name and permissions are required.' });
+    }
+  
+    try {
+      const result = await pool.query(
+        `INSERT INTO tb_roles (name, description, permissions)
+         VALUES ($1, $2, $3)
+         RETURNING *`,
+        [name, description || '', permissions]
+      );
+      res.status(201).json({ message: 'Role added successfully', role: result.rows[0] });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  }
+
+  const deleteRole = async (req, res) => {
+    const { name } = req.params;
+  
+    try {
+      const result = await pool.query(
+        'DELETE FROM tb_roles WHERE name = $1 RETURNING *',
+        [name]
+      );
+  
+      if (result.rowCount === 0) {
+        return res.status(404).json({ message: 'Role not found' });
+      }
+  
+      res.json({ message: 'Role deleted successfully', role: result.rows[0] });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  }
+
+
+  const fetchUser = async (req, res) => {
+    const result = await pool.query('SELECT * FROM tb_users ORDER BY id ASC');
+    res.json(result.rows);
+  }
+
+  const addUser = async (req, res) => {
+    try {
+      const { name, username, email, password, role, designation, avatar } = req.body;
+  
+      // 🔐 Hash the password before storing it
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      const result = await pool.query(
+        `INSERT INTO tb_users (name, username, email, password, role, designation, avatar)
+         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+        [name, username, email, hashedPassword, role, designation, avatar]
+      );
+  
+      res.status(201).json(result.rows[0]);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+
+
+  const updateUser = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name, username, email, password, role, designation, avatar } = req.body;
+  
+      let hashedPassword = password;
+      if (password) {
+        hashedPassword = await bcrypt.hash(password, 10);
+      }
+  
+      const result = await pool.query(
+        `UPDATE tb_users SET name=$1, username=$2, email=$3, password=$4, role=$5, designation=$6, avatar=$7
+         WHERE id=$8 RETURNING *`,
+        [name, username, email, hashedPassword, role, designation, avatar, id]
+      );
+  
+      res.json(result.rows[0]);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+
+  const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    await pool.query('DELETE FROM tb_users WHERE id = $1', [id]);
+    res.status(204).send();
+  }
+
+
+  const fetchDesignation = async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM tb_designations');
+      res.json(result.rows);
+    } catch (error) {
+      console.error('Error fetching designations:', error);
+      res.status(500).send('Internal server error');
+    }
+  }
+  const addDesignation = async (req, res) => {
+    const { title, description } = req.body;
+    try {
+      await pool.query(
+        'INSERT INTO tb_designations (title, description) VALUES ($1, $2)',
+        [title, description]
+      );
+      res.status(201).json({ message: 'Designation added' }); // ✅ Return valid JSON
+    } catch (error) {
+      console.error('Error adding designation:', error);
+      res.status(500).send('Internal server error');
+    }
+  }
+  const deleteDesignation =async (req, res) => {
+    const { id } = req.params;
+    try {
+      await pool.query('DELETE FROM tb_designations WHERE id = $1', [id]);
+      res.json({ message: 'Designation deleted' }); // ✅ Proper JSON response
+    } catch (error) {
+      console.error('Error deleting designation:', error);
+      res.status(500).send('Internal server error');
+    }
+  }
+
+
 module.exports = {
     getStationConfig,
     getAllSensorData,
+    getSensorDataByDate,
     getMetrologicalData,
     addStation,
     editStation,
     insertSensorConfigs,
     getSensorConfig,
-    updateSensorConfig
+    updateSensorConfig,
+    fetchUser,
+    addUser,
+    updateUser,
+    deleteUser,
+    addRole,
+    fetchRole,
+    deleteRole,
+    fetchDesignation,
+    addDesignation,
+    deleteDesignation
+
 }

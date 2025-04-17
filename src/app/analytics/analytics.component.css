@@ -333,8 +333,13 @@ label{
     border-radius: 10px;
 }
 .isSingle{
-    height: 99%;
+    height: 100%;
     width: 100%;
-    background-color: var(--basebg);
+    /* background-color: var(--basebg); */
     border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

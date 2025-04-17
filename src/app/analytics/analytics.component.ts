@@ -97,7 +97,7 @@ this.isSelectParams = false;
       (response:any) => {
         console.log(response);
           this.listparams = response;
-          console.log("params",this.listparams)
+          console.log("params",this.listparams.length)
           this.filteredparams = this.listparams.filter(item => item.name === 'oceanography');
         // return true;
         },

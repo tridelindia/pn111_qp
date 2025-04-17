@@ -11,177 +11,6 @@
   /* background-color: #686a6c; */
 }
 
-
-/* dropdown */
-
-.custom-dropdown {
-  position: relative;
-  width: 200px;
-  cursor: pointer;
-}
-
-.selected-option {
-  padding: 10px;
-  background: #f1f1f1;
-  border: 1px solid #ccc;
-  text-align: center;
-}
-
-.dropdown-options {
-  display: none;
-  position: absolute;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #ccc;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  z-index: 10;
-}
-
-.dropdown-options li {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.dropdown-options li:hover {
-  background: #e0e0e0;
-}
-
-.dropdown-options img {
-  width: 20px;
-  height: 20px;
-}
-/* end dorpdown */
-.mainBar{
-    height: 6%;
-    min-height: 6%;
-    margin-left: -50px;
-    width: 103.5%;
-    background-color: #1050cd;
-    /* background-color:var(--basebg); */
-    background: rgb(10,97,184);
-background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
-    /* border-radius: 5px; */
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--mainbg); 
-  backdrop-filter: blur(10px); /* Glass effect */
-  /* -webkit-backdrop-filter: blur(10px); */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
-  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-  backdrop-filter: blur(8px);
-}
-
-.user_session{
-  width: 120px;
-  display: flex;
-  z-index: 1;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  position: relative;
-
-}
-.profile-dropdown{
-  display:flex;
-  flex-direction: column;
-  position: absolute;
-  z-index: 1;
-  height: 100px;
-  width: 200px;
-  top: 20px;
-  left: 0;
-  background-color: #fff;
-  border-radius: 10px;
-}
-.user_session img{
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-
-}
-.user_data{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  border-radius: 8px;
-  width: 50px;
-  color: white;
-  /* background-color: white; */
-  /* padding-left: 5px; */
-  margin-right: 5px;
-
-
-}
-.user_data h5{
-  /* margin-left: 10px; */
-  margin: 0;
-  color: white;
-  
-  /* color: bl; */
-}
-.user_data p{
-  margin: 0;
-  /* margin-left: 5px; */
-  /* color  : wheat; */
-  font-weight: 600;
-}
-.bar_station_select{
-  margin-left: 5px;
-  height: 85%;
-  width: 200px;
-  color: var(--icons);
-  /* background-color: aqua; */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: start;
-}
-.bar_station_select select{
-  height: 20px;
-  width: 150px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--mainbg);
-  opacity: 0.7;
-  color: var(--icons);
-}
-select option{
-  background-color: var(--basebg);
-  font-size: 18px;
-}
-.field_title{
-  margin: 0;
-}
-.period{
-  margin-left: 5px;
-  height: 85%;
-  width: 200px;
-  color: var(--icons);
-  /* background-color: aqua; */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: start;
-}
-.period select{
-  height: 20px;
-  width: 150px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--mainbg);
-  opacity: 0.7;
-  color: var(--icons);
-}
-
 .topcontent {
   padding: 0px 20px;
   /* line-height: 0.1; */
@@ -199,11 +28,11 @@ select option{
 ::ng-deep .p-datatable-header {
   background-color: white !important;
   color: #000 !important;
-  border-radius: 20px 20px 0px 0px;
-  padding: 20px;
+  border-radius: 20px 20px 0px 0px !important;
+  padding: 20px !important;
   /* margin: 30px 0px 0px 0px; */
-  /* border: 1px solid #1ee1ff;
-  box-shadow: 0 4px 1px #1ee1ff; */
+  border: 1px solid #BDDDFC !important;
+  box-shadow: 0 4px 1px #BDDDFC;
 }
 
 .caption {
@@ -264,6 +93,25 @@ select option{
   border-color: #119C8D;
 }
 
+::ng-deep .highlight {
+  background-color: yellow;
+  color: red;
+  font-weight: bold;
+}
+
+::ng-deep .highlight-row {
+  background-color: yellow !important;
+  color: red;
+  font-weight: bold;
+}
+
+.centered-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+
 .pselect p-selectbutton {
   width: 500px;
   height: 40px;
@@ -281,7 +129,7 @@ select option{
   height: 40px;
 }
 
-.date-picker p-datepicker {
+.date-picker {
   display: flex;
   width: 364px;
   height: 40px;
@@ -290,6 +138,13 @@ select option{
   align-items: center;
   justify-content: center;
 }
+
+::ng-deep .custom-date-input .p-datepicker-input {
+  width: 220px !important;
+}
+
+
+
 
 
 
@@ -342,14 +197,14 @@ select option{
 ::ng-deep .p-datatable-thead th {
   background-color: white !important;
   color: rgba(0, 0, 0, 0.674) !important;
-  /* border: 1px solid #1ee1ff;
-  box-shadow: 0 2px 1px #1ee1ff; */
+  border: 1px solid #BDDDFC;
+  box-shadow: 0 2px 1px #BDDDFC;
   text-align: left;
 
 }
 
 ::ng-deep .p-datatable-tbody td {
-  background-color: white !important;
+  /* background-color: white !important; */
   /* Black background for rows */
   color: black !important;
   /* White text */
@@ -363,14 +218,14 @@ select option{
 
 /* Paginator Styling */
 ::ng-deep .p-paginator {
-  background-color: white !important;
+  /* background-color: white !important; */
   /* Black background for paginator */
   color: black !important;
   /* White text for paginator */
-  /* border-color: #1ee1ff;
-  box-shadow: 0 4px 1px #1ee1ff; */
-  border-radius: 0px 0px 20px 20px;
-  padding: 30px 20px 40px 20px;
+  border-color: #BDDDFC;
+  box-shadow: 0 4px 1px #BDDDFC;
+  border-radius: 0px 0px 20px 20px !important;
+  /* padding: 30px 20px 40px 20px; */
   /* margin: 0px 0px 30px 0px ; */
 }
 
@@ -405,7 +260,7 @@ select option{
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
+  height: auto;
   width: 100%;
   /* background-color: #007bff; */
   /* border-radius: 20px; */

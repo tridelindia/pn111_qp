@@ -1,21 +1,49 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserlogComponent } from "./userlog/userlog.component";
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Role } from './models/role.model';
+import { RoleService } from './service/roles/role.service';
+import { User } from './models/user.model';
+import { UserService } from './service/users/user.service';
+import { DesignationsService } from './service/designations/designations.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 
 @Component({
-    selector: 'app-users',
-    standalone:true,
-    imports: [CommonModule, FormsModule, UserlogComponent],
-    templateUrl: './users.component.html',
-    styleUrl: './users.component.css'
+  selector: 'app-users',
+  standalone:true,
+  imports: [CommonModule, FormsModule, UserlogComponent, NgSelectModule, FormsModule, HttpClientModule],
+  templateUrl: './users.component.html',
+  styleUrl: './users.component.css',
+  animations: [
+    trigger('dropdownAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' })),
+      ]),
+    ]),
+  ],
+  providers:[RoleService, UserService, DesignationsService]
 })
 export class UsersComponent{
 
+  constructor(private roleService: RoleService, private userService: UserService, private designationService: DesignationsService, private http:HttpClient) { }
+
+  ngOnInit() {
+    this.loadRoles();
+    this.loadUsers();
+    this.loadDesignations();
+  }
+
   // ****************Top Tab*****************//
-  activeTab: string = 'addEditUser';
+  activeTab: string = 'rolesDesignations';
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
@@ -26,203 +54,313 @@ export class UsersComponent{
 
 
   // *****************Users******************//
-  users = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', username: 'John', role: 'Administrator', designation: 'Project Manager', created: '2025-03-25 08:53:21', image: 'fas fa-user-circle' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', username: 'Jane', role: 'User', designation: 'Developer', created: '2025-03-25 08:53:21', image: 'fas fa-user-circle' },
-    { id: 3, name: 'Michael Brown', email: 'michael@example.com', username: 'Michael', role: 'Moderator', designation: 'UI Designer', created: '2025-03-25 08:53:21', image: 'fas fa-user-circle' },
-    { id: 4, name: 'Ganapathy', email: 'ganapathy@example.com', username: 'Ganapathy', role: 'Administrator', designation: 'Developer', created: '2025-03-25 08:53:21', image: 'fas fa-user-circle' },
-    { id: 3, name: 'Kishore', email: 'kishore@example.com', username: 'Kishore', role: 'User', designation: 'UI Designer', created: '2025-03-25 08:53:21', image: 'fas fa-user-circle' },
-  ];
+  users: User[] = [];  // array of users
+
+  currentUser: User = {  // single user object
+    name: '',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
+    designation: '',
+    avatar: ''
+  };
+  isEditing: boolean = false;
 
   editUser(user: any) {
     this.isEditing = true;
-    this.currentUser = { ...user };
+    this.currentUser = { ...user, password: '', confirmPassword: '' };
     this.setActiveTab('addEditUser');
   }
 
   deleteUser(userId: number) {
-    this.users = this.users.filter((user) => user.id !== userId);
+    const confirmDelete = confirm("Are you sure you want to delete that user ?");
+    if (confirmDelete) {
+      this.userService.deleteUser(userId).subscribe(() => {
+        this.loadUsers();
+      });
+    }
   }
+
+  loadUsers() {
+    this.userService.getUsers().subscribe(users => {
+      this.users = users;
+    });
+  }
+
   // *****************End******************//
 
 
 
   // ************Add/Edit Users***********//
+  avatars: string[] = [
+    'assets/avatars/avatar1.svg',
+    'assets/avatars/avatar2.svg',
+    'assets/avatars/avatar3.svg',
+    'assets/avatars/avatar4.svg',
+  ];
+
+  selectAvatar(avatar: string): void {
+    this.currentUser.avatar = avatar;
+  }
+
   backtoUsers(): void {
     this.activeTab = 'users';
   }
 
   addUser() {
     this.isEditing = false;
-    this.currentUser = { name: '', email: '', role: '', designation: '', created: '' };
+    this.currentUser = {
+      name: '',
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      role: '',
+      designation: '',
+      avatar: ''
+    };
     this.setActiveTab('addEditUser');
   }
 
   saveUser() {
-    if (this.isEditing) {
-      this.users = this.users.map((user) => (user.id === this.currentUser.id ? this.currentUser : user));
-    } else {
-      this.currentUser.id = this.users.length + 1;
-      this.users.push({ ...this.currentUser });
+    // Basic Validation
+    if (
+      !this.currentUser.name ||
+      !this.currentUser.email ||
+      !this.currentUser.username ||
+      !this.currentUser.password ||
+      !this.currentUser.confirmPassword ||
+      !this.currentUser.role ||
+      !this.currentUser.designation ||
+      !this.currentUser.avatar
+    ) {
+      alert('Please fill in all fields before saving the user.');
+      return;
     }
-    this.setActiveTab('users');
+  
+    if (this.currentUser.password !== this.currentUser.confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+  
+    const payload = { ...this.currentUser };
+    delete payload.confirmPassword; // optional
+
+    if (this.isEditing) {
+      this.userService.updateUser(this.currentUser.id!, payload).subscribe(() => {
+        this.loadUsers();
+        this.resetForm();
+        this.setActiveTab('users');
+      });
+    } else {
+      this.userService.addUser(payload).subscribe(() => {
+        this.loadUsers();
+        this.resetForm();
+        this.setActiveTab('users');
+      });
+    }
   }
+
+  resetForm(): void {
+    this.currentUser = {
+      name: '',
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      role: '',
+      designation: '',
+      avatar: '',
+      created: ''
+    };
+    this.selectedRole = null;
+    this.selectedDesignation = null;
+  }
+
+    // *********Custom Select************** //
+    // Role
+    dropdownOpen = false;
+    selectedRole: string | null = null;
+
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
+    }
+
+    selectRole(value: string, event: MouseEvent): void {
+      event.stopPropagation();
+      this.selectedRole = value;
+      this.currentUser.role = value;
+      setTimeout(() => {
+        this.dropdownOpen = false;
+      }, 200);
+    }
+
+    // Designation
+    designationDropdownOpen = false;
+    selectedDesignation: string | null = null;
+
+    toggleDesignationDropdown() {
+      this.designationDropdownOpen = !this.designationDropdownOpen;
+    }
+
+    selectDesignation(value: string, event: MouseEvent): void {
+      event.stopPropagation();
+      this.selectedDesignation = value;
+      this.currentUser.designation = value;
+
+      setTimeout(() => {
+        this.designationDropdownOpen = false;
+      }, 200);
+    }
+    
+    @HostListener('document:click', ['$event'])
+    onClickOutside(event: MouseEvent) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.custom-select')) {
+        this.dropdownOpen = false;
+        this.designationDropdownOpen = false;
+      }
+    }
   //****************End******************* //
 
 
 
   //****************Roles***************** //
 
-  roles = [
-    { name: 'Administrator', description: 'Full system access' },
-    { name: 'User', description: 'Limited access to system features' },
-    { name: 'Moderator', description: 'Content management access' }
-  ];
+  roles: Role[] = [];
+  
+  loadRoles() {
+    this.roleService.getRoles().subscribe(data => {
+      this.roles = data;
+    });
+  }
+  
+  newRole: { name: string; description: string; permissions: string[] } = {
+    name: '',
+    description: '',
+    permissions: []
+  };
 
-  addRole() {
-    if (this.newRole.name && this.newRole.description) {
-        this.roles.push({ ...this.newRole });
-        this.resetForm();
-    }
+allPermissions: string[] = [
+  'Home',
+  'Dashboard',
+  'Reports',
+  'Analysis',
+  'User Management',
+  'Settings',
+  'Sensor Health',
+];
+
+addRole() {
+  console.log('Button clicked')
+  if (this.newRole.name && !this.roles.find(r => r.name === this.newRole.name)) {
+
+    const roleToSend = {
+      ...this.newRole,
+      permissions: `{${this.newRole.permissions.join(',')}}`
+    };
+    this.roleService.addRole(roleToSend as any).subscribe((response:any) => {
+      console.log('ok', response)
+      this.newRole = { name: '', description: '', permissions: [] };
+      this.loadRoles();
+      this.updateRoleOptions();
+    });
+  }
+}
+
+
+togglePermission(permission: string) {
+
+  if (!Array.isArray(this.newRole.permissions)) {
+    this.newRole.permissions = [];
+    
+  }
+  
+  const index = this.newRole.permissions.indexOf(permission);
+  if (index > -1) {
+    this.newRole.permissions.splice(index, 1);
+  } else {
+    this.newRole.permissions.push(permission);
   }
 
-  deleteRole(role: any) {
-    this.roles = this.roles.filter(r => r !== role);
+  console.log("b4S",this.newRole.permissions);
+  const newper = this.newRole.permissions.join(', ');
+  console.log("after",`"${newper}"`);
+}
+
+updateRoleOptions() {
+  // Ensure selected role stays valid after role list is updated
+  if (!this.roles.find(r => r.name === this.selectedRole)) {
+    this.selectedRole = null;
   }
+}
+
+deleteRole(roleName: string) {
+  const confirmDelete = confirm(`Are you sure you want to delete the role "${roleName}"?`);
+  if (confirmDelete) {
+    this.roleService.deleteRoleByName(roleName).subscribe(() => {
+      this.loadRoles(); // Refresh list
+    });
+  }
+}
   //****************End*******************//
 
 
 
   //***************Designation*********** //
-  designations = [
-    { title: 'Software Engineer', description: 'Develops and maintains software solutions' },
-    { title: 'Project Manager', description: 'Oversees projects and team collaboration' },
-    { title: 'HR Manager', description: 'Manages human resources and recruitment' }
-  ];
+   // Replace hardcoded list
+designations: any[] = [];
 
-  addDesignation() {
-    if (this.newDesignation.title && this.newDesignation.description) {
-        this.designations.push({ ...this.newDesignation });
-        this.resetForm();
+// Object for the form
+newDesignation = { title: '', description: '' };
+
+// Load designations from DB
+loadDesignations() {
+  this.designationService.getDesignations().subscribe(
+    (data) => {
+      this.designations = data;
+    },
+    (error) => {
+      console.error('Error loading designations:', error);
     }
-  }
-  
-  deleteDesignation(designation: any) {
-    this.designations = this.designations.filter(d => d !== designation);
-  }
+  );
+}
 
-  resetForm() {
-    this.newRole = { name: '', description: '' };
+// Add designation to DB
+addDesignation() {
+  if (this.newDesignation.title && this.newDesignation.description) {
+    this.designationService.addDesignation(this.newDesignation).subscribe(
+      () => {
+        this.loadDesignations();
+        this.resetDesForm();
+      },
+      (error) => {
+        console.error('Error adding designation:', error);
+      }
+    );
   }
+}
 
-  newRole = { name: '', description: '' };
-  newDesignation = { title: '', description: '' };
-  isEditing: boolean = false;
-  currentUser: any = { name: '', email: '', role: '', designation: '', created: '' };
+// Delete designation from DB
+deleteDesignation(designation: any) {
+  const confirmDesDelete = confirm(`Are you sure you want to delete that designation ?`);
+  if (confirmDesDelete) {
+  this.designationService.deleteDesignation(designation.id).subscribe(
+    () => {
+      this.loadDesignations();
+    },
+    (error) => {
+      console.error('Error deleting designation:', error);
+    }
+  );
+  }
+}
+
+// Reset form
+resetDesForm() {
+  this.newDesignation = { title: '', description: '' };
+}
   // ***********************End*******************************//
-
-
-
-// ************************User Log*************************//
-
-selectedUser: any = null;
-  activeUsers = [
-    {
-      name: 'Allwin',
-      email: 'user1@example.com',
-      icon: 'fas fa-user-circle',
-      activityLogs: [
-        {
-          timestamp: '11-16-2023 4:27 pm',
-          title: 'Accessing the Account Delete',
-          icon: 'fas fa-user-circle',
-          events: [
-            {
-              timestamp: '11-16-2023 4:37 pm',
-              status: 'success',
-              message:
-                'The user "ABC" Successful event after correct password confirmation',
-            },
-            {
-              timestamp: '11-16-2023 4:37 pm',
-              status: 'failure',
-              message:
-                'The user "ABC" Failed event after wrong password confirmation',
-            },
-          ],
-        },
-        {
-          timestamp: '11-16-2023 4:27 pm',
-          title: 'Delete Process',
-          icon: 'delete',
-          events: [
-            {
-              timestamp: '11-16-2023 4:37 pm',
-              status: 'success',
-              message: 'The user "ABC" Success of below verifications.',
-            },
-            {
-              timestamp: '11-16-2023 4:27 pm',
-              status: 'success',
-              message: 'Email Verification',
-            },
-            {
-              timestamp: '11-16-2023 4:27 pm',
-              status: 'failure',
-              message: 'Phone Number Verification Rejected',
-            },
-            {
-              timestamp: '11-16-2023 4:37 pm',
-              status: 'failure',
-              message:
-                'The user "ABC" Failure of final delete event from the respective Seebiz Product.',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: 'Ganapathy',
-      email: 'user2@example.com',
-      icon: 'fas fa-user-circle',
-      activityLogs: [
-        {
-          timestamp: '11-16-2023 4:27 pm',
-          title: 'Delete Process',
-          icon: 'delete',
-          events: [
-            {
-              timestamp: '11-16-2023 4:37 pm',
-              status: 'success',
-              message: 'The user "ABC" Success of below verifications.',
-            },
-            {
-              timestamp: '11-16-2023 4:27 pm',
-              status: 'success',
-              message: 'Email Verification',
-            },
-            {
-              timestamp: '11-16-2023 4:27 pm',
-              status: 'failure',
-              message: 'Phone Number Verification Rejected',
-            },
-            {
-              timestamp: '11-16-2023 4:37 pm',
-              status: 'failure',
-              message:
-                'The user "ABC" Failure of final delete event from the respective Seebiz Product.',
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
-
-  selectUser(user: any) {
-    this.selectedUser = user;
-    console.log('Selected:', user);
-  }
-
-  // ***************************End***************************** //
 }
