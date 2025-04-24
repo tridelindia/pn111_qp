@@ -1,0 +1,86 @@
+<div class="Genral_main">
+    <div class="theme">
+        <div class="lefter">
+            <h4>Themes</h4>
+            <p>Choose theme for your application</p>
+        </div>
+        <div class="righter1">
+            <div class="white" [ngClass]="{'white_active': selectedColor === 'white'}" (click)="changeColor('white')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'white'"></i>
+
+            </div>
+            <div class="black" [ngClass]="{'black_active': selectedColor === 'black'}" (click)="changeColor('black')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'black'"></i>
+
+            </div>
+            <div class="blue" [ngClass]="{'blue_active': selectedColor === 'blue'}" (click)="changeColor('blue')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'blue'"></i>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="divider"></div>
+    <div class="theme">
+        <div class="lefter">
+            <h4>Current Direction</h4>
+            <p>Choose widget for your Current Direction</p>
+        </div>
+        <div class="righter">
+            <div class="wid_1" [ngClass]="{'current1_active': selectedCurrentdir === 'direction1'}"
+                (click)="changeCurrentdir('direction1')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction1'"></i>
+                <div class="image">
+                    <!-- <img src="../../../assets/widgets/speed1-removebg-preview.png" alt=""> -->
+                </div>
+            </div>
+            <div class="wid_2" [ngClass]="{'current1_active': selectedCurrentdir === 'direction2'}"
+                (click)="changeCurrentdir('direction2')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction2'"></i>
+                <div class="image2">
+                    <!-- <img src="../../../assets/widgets/speed2-removebg-preview.png" alt=""> -->
+                </div>
+            </div>
+            <div class="wid_3" [ngClass]="{'current1_active': selectedCurrentdir === 'direction3'}"
+                (click)="changeCurrentdir('direction3')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction3'"></i>
+                <div class="image3">
+                    <!-- <img src="../../../assets/widgets/speed1-removebg-preview.png" alt=""> -->
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="divider"></div>
+    <div class="theme">
+        <div class="lefter">
+            <h4>Current Speed</h4>
+            <p>Choose widget for your Current Speed</p>
+        </div>
+        <div class="righter">
+            <div class="wid_1" [ngClass]="{'current1_active': selectedCurrentspeed === 'speed1'}"
+                (click)="changeCurrentspeed('speed1')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed1'"></i>
+                <div class="image4"></div>
+            </div>
+            <div class="wid_2" [ngClass]="{'current1_active': selectedCurrentspeed === 'speed2'}"
+                (click)="changeCurrentspeed('speed2')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed2'"></i>
+                <!-- <img src="../../../assets/widgets/99823759326.png" alt=""> -->
+                <div class="image5"></div>
+            </div>
+            <div class="wid_3" [ngClass]="{'current1_active': selectedCurrentspeed === 'speed3'}"
+                (click)="changeCurrentspeed('speed3')">
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed3'"></i>
+                <div class="image6"></div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+</div>

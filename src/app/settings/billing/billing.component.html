@@ -1,0 +1,55 @@
+<div class="billing-wrapper">
+    <div class="section-header">
+      <h1>💎 License & Package Details</h1>
+      <p>Here's everything you need to know about your plan, usage & control.</p>
+    </div>
+  
+    <div class="card-grid">
+      <!-- Plan Info -->
+      <div class="card">
+        <h2><i class="fa-solid fa-box-open"></i> Plan Info</h2>
+        <p><strong>Plan Name:</strong> {{ license.planName }}</p>
+        <p><strong>License ID:</strong> {{ license.licenseId }}</p>
+        <p><strong>License Name:</strong> {{ license.licenseName }}</p>
+        <p><strong>License Key:</strong> <span class="highlight">{{ license.licenseKey }}</span></p>
+      </div>
+  
+      <!-- Validity -->
+      <div class="card">
+        <h2><i class="fa-solid fa-hourglass-half"></i> Validity & Usage</h2>
+        <p><strong>Type:</strong> {{ license.type }}</p>
+        <p><strong>Start:</strong> {{ license.startDate }}</p>
+        <p><strong>Expires:</strong> {{ license.expiryDate }}</p>
+        <p><strong>Duration:</strong> {{ license.duration }}</p>
+        <p><strong>Renewal:</strong> {{ license.renewalStatus }}</p>
+        <p><strong>Devices Allowed:</strong> {{ license.allowedDevices }}</p>
+      </div>
+  
+      <!-- Control -->
+      <div class="card">
+        <h2><i class="fa-solid fa-gamepad"></i> Control & Status</h2>
+        <p>
+          <strong>Status: </strong>
+          <span class="status" [ngClass]="{
+            'active': license.status === 'Active',
+            'inactive': license.status === 'Inactive',
+            'suspended': license.status === 'Suspended'
+          }">{{ license.status }}</span>
+        </p>
+        <p><strong>Registered To:</strong> {{ license.registeredTo }}</p>
+        <p><strong>Assigned Admin:</strong> {{ license.assignedAdmin }}</p>
+        <p><strong>Notes:</strong> {{ license.description }}</p>
+      </div>
+    </div>
+  
+    <div class="actions-card">
+      <h2><i class="fa-solid fa-rocket"></i> Quick Actions</h2>
+      <div class="btn-group">
+        <button (click)="renew()"><i class="fa-solid fa-rotate-right"></i> Renew</button>
+        <button (click)="resetKey()"><i class="fa-solid fa-key"></i> Reset Key</button>
+        <button (click)="downloadPDF()"><i class="fa-solid fa-file-arrow-down"></i> Download PDF</button>
+        <button (click)="reassignAdmin()"><i class="fa-solid fa-user-gear"></i> Reassign Admin</button>
+      </div>
+    </div>
+  </div>
+  

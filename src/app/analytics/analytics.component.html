@@ -1,0 +1,139 @@
+<div class="analisys_main">
+    <div class="analisys_right">
+        <div class="compare_view_space" *ngIf="!isSingleView">
+            <app-test-chart></app-test-chart>
+        </div>
+        <div class="isSingle" *ngIf="isSingleView">
+
+            <div class="singlefull" *ngIf="numberr === 1">
+                <app-test-chart></app-test-chart>
+            </div>
+
+            <div class="right_top" *ngIf=" numberr ===2 || numberr ===3 || numberr ===4">
+                <div class="top_one" *ngIf=" numberr === 2">
+                    <app-test-chart></app-test-chart>
+                </div>
+                <div class="chart_left" *ngIf=" numberr === 4 || numberr ===3">
+                    <app-test-chart></app-test-chart>
+                </div>
+                <div class="chart_right" *ngIf="numberr === 4 || numberr ===3">
+                    <app-test-chart></app-test-chart>
+                </div>
+            </div>
+            <div class="right_bottom" *ngIf=" numberr ===2 || numberr ===4 ||numberr ===3">
+                <div class="chart_left" *ngIf="numberr === 4">
+                    <app-test-chart></app-test-chart>
+                </div>
+                <div class="chart_right" *ngIf=" numberr === 4">
+                    <app-test-chart></app-test-chart>
+                </div>
+                <div class="bottom_one" *ngIf=" numberr === 2 ||numberr == 3">
+                    <app-test-chart></app-test-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="analisys_left">
+        <!-- <div class="analisys_left_top"> -->
+        <!-- <div class="circle_main">
+                <div class="circle_item" style="--i:0;"></div>
+                <div class="circle_item" style="--i:1;"></div>
+                <div class="circle_item" style="--i:2;"></div>
+                <div class="circle_item" style="--i:3;"></div>
+                <div class="circle_item" style="--i:4;"></div>
+
+            </div> -->
+        <!-- </div> -->
+        <div class="analisys_left_bottom" *ngIf="!isSelectParams">
+            <h3>Filter</h3>
+
+            <div class="sensors">
+                <p>Select Sensor Group</p>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('oceanography')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'oceanography'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Oceanography</p>
+                    </div>
+                    <div class="sensor_item" (click)="onSelectSensor('meteriology')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'meteriology'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Meteriology</p>
+                    </div>
+                </div>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('waterQuality')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'waterQuality'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Water Quality</p>
+                    </div>
+                    <div class="sensor_item" (click)="onSelectSensor('microFlu')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'microFlu'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>MicroFLu</p>
+                    </div>
+                </div>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('adcp')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'adcp'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>ADCP</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <p class="tit">Select View</p>
+            <div class="options_container">
+                <div class="single" [ngClass]="isSingleView ? 'single_active':'single'"
+                    (click)="isViewChange('single')">
+                    <p>Single view</p>
+                </div>
+                <div class="single" [ngClass]="!isSingleView ? 'single_active':'single'"
+                    (click)="isViewChange('compare')">
+                    <p>Compare view</p>
+                </div>
+            </div>
+            <!-- <button>tap</button> -->
+            <p class="tit">Select Parameters</p>
+            <div class="parameter" (click)="onParamSelection('tap')">
+                <div class="parameters" *ngFor="let param of selectedParams">
+                    <p>{{param.param_name}}</p>
+                    <i class="fa fa-close" (click)="removeSelected(param)"></i>
+                </div>
+                <!-- <div class="parameters"></div> -->
+
+
+            </div>
+            <span>Select upto 4 Parameters</span>
+            <button (click)="isTest()">test</button>
+        </div>
+        <div class="param_lists" *ngIf="isSelectParams">
+            <i class="fa fa-arrow-left" (click)="onParamSelection('back')"></i>
+            <h3>Select parameters</h3>
+
+            <div class="lists">
+
+                <div class="list" *ngFor="let item of filteredparams">
+                    <input type="checkbox" [value]="item" (change)="onParamChange($event, item)"
+                        [checked]="isChecked(item)" [disabled]="!isChecked(item) && selectedParams.length >= 4" />
+                    <label for="param">{{item.param_name}}</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

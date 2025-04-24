@@ -1,0 +1,513 @@
+<div class="station_main">
+    <div class="section_divide">
+
+        <div class="station_list_tab">
+            <div class="title_card">
+                <h3>Stations</h3>
+
+            </div>
+            <div class="station_list_tab_inner">
+                @for (item of Stations_list; track $index) {
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>{{item.buoy_name}}</h2>
+                            <p>{{item.buoy_sensors}}</p>
+                        </div>
+                        <span class="status"
+                            [ngClass]="item.buoy_status === 'active'? 'status' :'status_inactive'"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button (click)="editStation(item)">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button (click)="infoStation(item)">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div>
+                }
+                <!-- <div class="card" >
+                    <div class="card-header">
+                        <div>
+                            <h2>North Station</h2>
+                            <p>temperature, humidity, pressure</p>
+                        </div>
+                        <span class="status"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button (click)="editStation(1)">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button (click)="infoStation(2)">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>North Station</h2>
+                            <p>temperature, humidity, pressure</p>
+                        </div>
+                        <span class="status"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button>
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>North Station</h2>
+                            <p>temperature, humidity, pressure</p>
+                        </div>
+                        <span class="status"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button>
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>North Station</h2>
+                            <p>temperature, humidity, pressure</p>
+                        </div>
+                        <span class="status"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button>
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>North Station</h2>
+                            <p>temperature, humidity, pressure</p>
+                        </div>
+                        <span class="status"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button>
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>North Station</h2>
+                            <p>temperature, humidity, pressure</p>
+                        </div>
+                        <span class="status"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button>
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2>North Station</h2>
+                            <p>temperature, humidity, pressure</p>
+                        </div>
+                        <span class="status"></span>
+                    </div>
+                    <div class="card-actions">
+                        <button>
+                            <i class="fas fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button>
+                            <i class="fas fa-info-circle"></i>
+                            <span>Details</span>
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+
+        </div>
+        <div class="actions_section">
+            <div class="action_title">
+
+                <h3>Station Details</h3>
+                <button (click)="addStation()">Add Station</button>
+            </div>
+            <div class="section_details" *ngIf="isInfo">
+
+                <div class="left_details">
+                    <div class="left_details_title">
+                        <h2>{{selectedstation.buoy_name}}</h2>
+                        <button class="activebutton"
+                            [ngClass]="selectedstation.buoy_status == 'active'?'activebutton':'inactivebutton'">{{selectedstation?.buoy_status}}</button>
+                    </div>
+                    <!-- <img [src]="selectedstation.buoy_image" alt=""> -->
+                    <p>{{selectedstation.buoy_id}}</p>
+                    <h5>Thresholds</h5>
+
+                    <div class="threasholds">
+                        <div class="warning_field">
+                            <p>Warning Threshold</p>
+                            <input type="number" [value]="selectedstation?.buoy_warning" readonly>
+                        </div>
+                        <div class="danger_field">
+                            <p>Danger Threshold</p>
+                            <input type="number" [value]="selectedstation?.buoy_danger" readonly>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <h5>Geo Format</h5>
+                    <p>{{selectedstation?.geo_format}}
+                        {{selectedstation?.geo_format ==='DD'? '(Decimal Decimal)':'(DegreeMinutes Seconds)'}}</p>
+                    <h5>Coordinates</h5>
+
+                    <div class="threasholds" *ngIf="selectedstation?.geo_format==='DD'">
+                        <div class="warning_field">
+                            <p>Latitude</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_latitude" readonly>
+                        </div>
+                        <div class="danger_field">
+                            <p>Longitude</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_longitude" readonly>
+                        </div>
+
+
+
+                    </div>
+                    <p style="font-weight: 500;" *ngIf="selectedstation?.geo_format==='DMS'">Latitude</p>
+                    <div class="threasholds" *ngIf="selectedstation?.geo_format==='DMS'">
+                        <div class="warning_field">
+                            <p style="font-size: 12px;">Degree</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_degree_lat">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Minutes</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_minutes_lat">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Seconds</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_seconds_lat">
+                        </div>
+
+                    </div>
+                    <p style="font-weight: 500;" *ngIf="selectedstation?.geo_format==='DMS'">Longitude</p>
+                    <div class="threasholds" *ngIf="selectedstation?.geo_format==='DMS'">
+                        <div class="warning_field">
+                            <p style="font-size: 12px;">Degree</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_degree_lon">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Minutes</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_minutes_lon">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Seconds</p>
+                            <input type="number" [value]="selectedstation?.buoy_loc_seconds_lon">
+                        </div>
+
+                    </div>
+                    <!-- <div class="divider"></div> -->
+
+                    <div class="left_details_content">
+                        <h5>Sensors</h5>
+                        <div class="list_sensors">
+                            <!-- @for (item of selectedstation?.buoy_sensors; track $index) {} -->
+                            <p *ngFor="let sensor of selectedstation?.buoy_sensors">{{sensor}}</p>
+                            <!-- <p>Water Level</p>
+                            <p>Meteriology</p>
+                            <p>MicroFLu</p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="right_details">
+                    <div id="ol-map" class="map-container"></div>
+                </div>
+            </div>
+            <!-- </div>
+        <div class="actions_section"> -->
+            <div class="section_details" *ngIf="isEdit">
+
+                <div class="left_details">
+                    <div class="img_name_id">
+                        <div class="left_ini">
+                            <h5>Station Name</h5>
+                            <input type="text" value="" [(ngModel)]="selectedstation!.buoy_name">
+                            <h5>Station Name</h5>
+                            <input type="text" value="10" [(ngModel)]="selectedstation!.buoy_id" readonly>
+                        </div>
+                        <div class="right_ini">
+                            <!-- <img [src]="imageUrl || 'default.png'" alt="Upload Image" (click)="uploadImage()"
+                                class="upload-img">
+                            <input type="file" id="fileInput" hidden (change)="onFileSelected($event)"
+                                accept="image/*" /> -->
+                        </div>
+                    </div>
+                    <!-- <div class="left_details_title">
+                        <h2></h2>
+                        <img [src]="imageUrl" alt="Upload Image" (click)="uploadImage($event)" class="upload-img">
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*"
+                            class="inputbox">
+                    </div>
+                    <div class="threasholds" style="margin-top: -10px; margin-left: 0px;">
+                        <div class="warning_field">
+                            <p style="font-weight: 600;">Station Name</p>
+                            <input type="text" value="10">
+                        </div>
+
+                    </div>
+                    <div class="threasholds" style="margin-left: 0px;">
+                        <div class="warning_field">
+                            <p style="font-weight: 600;">Station ID</p>
+                            <input type="text" value="10">
+                        </div>
+
+                    </div> -->
+                    <h5>Thresholds</h5>
+
+                    <div class="threasholds">
+                        <div class="warning_field">
+                            <p>Warning Threshold</p>
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_warning">
+                        </div>
+                        <div class="danger_field">
+                            <p>Danger Threshold</p>
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_danger">
+                        </div>
+                    </div>
+                    <!-- <div class="divider"></div> -->
+                    <h5>Coordinates</h5>
+                    <div class="toggle_pint">
+                        <p>DD</p>
+                        <div class="toggle" [ngClass]="{'toggledms': mainToggle}"
+                            [ngStyle]="{'background-color': mainToggle ? 'blue' : 'rgb(224, 223, 223)'}"
+                            (click)="toggle()">
+                            <div class="t_button"></div>
+                        </div>
+                        <p style="margin-left: -5px;">DMS</p>
+                    </div>
+                    <!-- <p>DD (Degree Decimal)</p> -->
+                    <h5>Coordinates</h5>
+
+                    <div class="threasholds" *ngIf="!mainToggle">
+                        <div class="warning_field">
+                            <p>Latitude</p>
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_loc_latitude">
+                        </div>
+                        <div class="danger_field">
+                            <p>Longitude</p>
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_longitude">
+                        </div>
+                    </div>
+                    <p style="font-weight: 500;" *ngIf="mainToggle">Latitude</p>
+                    <div class="threasholds" *ngIf="mainToggle">
+                        <div class="warning_field">
+                            <p style="font-size: 12px;">Degree</p>
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_loc_degree_lat">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Minutes</p>
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_minutes_lat">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Seconds</p>
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_seconds_lat">
+                        </div>
+
+                    </div>
+                    <p style="font-weight: 500;" *ngIf="mainToggle">Longitude</p>
+                    <div class="threasholds" *ngIf="mainToggle">
+                        <div class="warning_field">
+                            <p style="font-size: 12px;">Degree</p>
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_loc_degree_lon">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Minutes</p>
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_minutes_lon">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Seconds</p>
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_loc_seconds_lon">
+                        </div>
+
+                    </div>
+                    <!-- <div class="divider"></div> -->
+
+                    <div class="left_details_content">
+                        <h5>Sensors</h5>
+                        <div class="list_sensors">
+
+                            <p *ngFor="let item of selectedstation!.buoy_sensors">{{item}}</p>
+
+                        </div>
+                    </div>
+                    <div class="actions">
+
+                        <button class="update" (click)="updateStation()">update</button>
+                        <!-- <button class="check" (click)="check_location()">Check</button> -->
+                    </div>
+                </div>
+                <div class="right_details">
+                    <div id="ol-map" class="map-container"></div>
+                </div>
+            </div>
+            <div class="addStation" *ngIf="isAdd">
+                <div class="left_details">
+                    <p>Station Name</p>
+                    <input type="text" [(ngModel)]="buoy_name">
+                    <p>Station ID</p>
+                    <input type="text" [(ngModel)]="buoy_id">
+                    <h5>Thresholds</h5>
+
+                    <div class="threasholds">
+                        <div class="warning_field">
+                            <p>Warning Threshold</p>
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_warning">
+                        </div>
+                        <div class="danger_field">
+                            <p>Danger Threshold</p>
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_danger">
+                        </div>
+                    </div>
+                    <h5>Coordinates</h5>
+                    <div class="toggle_pint">
+                        <p>DD</p>
+                        <div class="toggle" [ngClass]="{'toggledms': mainToggle}"
+                            [ngStyle]="{'background-color': mainToggle ? 'blue' : 'rgb(224, 223, 223)'}"
+                            (click)="toggle()">
+                            <div class="t_button"></div>
+                        </div>
+                        <p style="margin-left: -5px;">DMS</p>
+                    </div>
+                    <!-- <p>DD (Degree Decimal)</p> -->
+                    <h5>Coordinates</h5>
+
+                    <div class="threasholds" *ngIf="!mainToggle">
+                        <div class="warning_field">
+                            <p>Latitude</p>
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_loc_latitude">
+                        </div>
+                        <div class="danger_field">
+                            <p>Longitude</p>
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_loc_longitude" (change)="test()"
+                                (input)="test()">
+                        </div>
+                    </div>
+                    <p style="font-weight: 500;" *ngIf="mainToggle">Latitude</p>
+                    <div class="threasholds" *ngIf="mainToggle">
+                        <div class="warning_field">
+                            <p style="font-size: 12px;">Degree</p>
+                            <!-- <input type="text" name="" id=""> -->
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_degree_lat">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Minutes</p>
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_minutes_lat">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Seconds</p>
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_seconds_lat">
+                        </div>
+
+                    </div>
+                    <p style="font-weight: 500;" *ngIf="mainToggle">Longitude</p>
+                    <div class="threasholds" *ngIf="mainToggle">
+                        <div class="warning_field">
+                            <p style="font-size: 12px;">Degree</p>
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_degree_lon">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Minutes</p>
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_minutes_lon">
+                        </div>
+                        <div class="danger_field">
+                            <p style="font-size: 12px;">Seconds</p>
+                            <input style="width: 70%;" type="number" [(ngModel)]="buoy_loc_seconds_lon">
+                        </div>
+
+                    </div>
+                    <div class="sensors_selection">
+                        <p>Sensors</p>
+                        <div class="sensors_li">
+                            <div class="sensornames" *ngFor="let sensor of sensors">
+                                <p>{{ sensor.label }}</p>
+                                <input class="check" type="checkbox" [id]="sensor.name" [name]="sensor.name"
+                                    [(ngModel)]="sensor.checked" />
+                            </div>
+                        </div>
+                        <div class="actions">
+
+                            <button class="update" (click)="createStation()">update</button>
+                            <button class="check" (click)="check_location()">Check</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="right_details">
+                    <div id="ol-map" class="map-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!-- 
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h2>North Station</h2>
+            <p>temperature, humidity, pressure</p>
+        </div>
+        <span class="status">Active</span>
+    </div>
+    <div class="card-actions">
+        <button>
+            <i class="fas fa-edit"></i>
+            <span>Edit</span>
+        </button>
+        <button>
+            <i class="fas fa-info-circle"></i>
+            <span>Details</span>
+        </button>
+    </div>
+</div> -->

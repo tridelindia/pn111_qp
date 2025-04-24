@@ -1,0 +1,132 @@
+.billing-wrapper {
+    width: 100%;
+    padding: 10px;
+    color: #2e2e2e;
+    height: 86vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .section-header {
+    text-align: center;
+    /* margin-bottom: 30px; */
+  }
+  
+  .section-header h1 {
+    font-size: 36px;
+    background: rgb(68, 159, 250);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+  
+  .section-header p {
+    color: #555;
+    font-size: 16px;
+  }
+  
+  .card-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .card {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: rgb(68, 159, 250);
+  }
+  
+  .card p {
+    font-size: 14px;
+    margin: 8px 0;
+  }
+  
+  .highlight {
+    background-color: #f7f7ff;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-family: monospace;
+    color: rgb(68, 159, 250);
+    font-weight: bold;
+  }
+  
+  .status {
+    padding: 4px 12px;
+    border-radius: 25px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .status.active {
+    background: linear-gradient(to right, #00c853, #00e676);
+  }
+  
+  .status.inactive {
+    background: linear-gradient(to right, #ff9800, #ffc107);
+  }
+  
+  .status.suspended {
+    background: linear-gradient(to right, #d50000, #ff1744);
+  }
+  
+  .actions-card {
+    margin-top: 20px;
+    width: fit-content;
+    background: rgba(255, 255, 255, 0.75);
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    justify-content: center;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
+  }
+  
+  .actions-card h2 {
+    margin-bottom: 20px;
+    color: rgb(68, 159, 250);
+  }
+  
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .btn-group button {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-group button:hover {
+    background: linear-gradient(90deg, rgb(55, 155, 255) 0%, rgb(68, 159, 250) 100%);
+    transform: scale(1.05);
+  }
+  

@@ -1,0 +1,106 @@
+<div class="sensors_main">
+    <div class="sensor_left_section">
+        <div class="sensors">
+            <div class="ocean" [ngClass]="selectedSensor === 'ocean'? 'ocean_selected' : 'ocean'"
+                (click)="onSensorSelect('ocean')">
+                <p>
+
+                    Oceanography
+                </p>
+            </div>
+            <div class="ocean" [ngClass]="selectedSensor === 'met'? 'ocean_selected' : 'ocean'"
+                (click)="onSensorSelect('met')">
+                <p>Meteriology</p>
+            </div>
+            <div class="ocean" [ngClass]="selectedSensor === 'wat'? 'ocean_selected' : 'ocean'"
+                (click)="onSensorSelect('wat')">
+                <p>Water Quality</p>
+            </div>
+            <div class="ocean" [ngClass]="selectedSensor === 'mic'? 'ocean_selected' : 'ocean'"
+                (click)="onSensorSelect('mic')">
+                <p>MicroFLu</p>
+            </div>
+        </div>
+        <div class="sensor_table_container">
+            <div class="sensor_table_header">
+                <table>
+                    <thead>
+                        <tr>
+                            <!-- <th>Id</th> -->
+                            <!-- <th>Sensor</th> -->
+                            <th>Name</th>
+                            <th>Unit</th>
+                            <th>Warning</th>
+                            <th>Danger</th>
+                            <th>Notification</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="sensor_table_body">
+                <table>
+                    <tbody>
+                        <tr *ngFor="let item of tableData; let i = index">
+                            <!-- <td>{{ i + 1 }}</td> -->
+                            <!-- <td>{{ item.sensor }}</td> -->
+                            <td>
+                                {{ item?.param_name }}
+
+                            </td>
+                            <td>{{ item!.unit }}</td>
+                            <td>{{ item!.warning !== null ? item!.warning : '—' }}</td>
+                            <td>{{ item!.danger !== null ? item!.danger : '—' }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="{
+                    'bg-success': item!.notification === 'enabled',
+                    'bg-secondary': item!.notification === 'disabled'
+                  }">
+                                    {{ item!.notification }}
+                                </span>
+                            </td>
+                            <td><i class="fa fa-edit" style="color: rgb(109, 109, 245);" (click)="onEdit(item)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="sensor_right_section">
+        <!-- Right section content -->
+
+        <h4>Edit Parameter</h4>
+
+        <p style="font-weight: 500;">{{editData.param_name}}</p>
+        <!-- <input type="text" placeholder="Enter name"> -->
+
+        <p>unit</p>
+        <input *ngIf="!isMulti" type="text" placeholder="Enter unit" [(ngModel)]="editData.unit">
+
+        <div class="multi" *ngIf="isMulti">
+            <div class="item" [ngClass]="selectedUnit === i ? 'item_active':'item'" *ngFor="let i of multiData"
+                (click)="onUnitSelect(i)">
+                <p>{{i}}</p>
+            </div>
+        </div>
+        <p>Warning</p>
+        <input type="text" placeholder="Enter warning" [(ngModel)]="editData.warning">
+        <p>Danger</p>
+        <input type="text" placeholder="Enter danger" [(ngModel)]="editData.danger">
+        <p>Notification</p>
+        <div class="toggle_pint">
+            <p></p>
+            <div class="toggle" [ngClass]="{'toggledms': mainToggle}"
+                [ngStyle]="{'background-color': mainToggle ? 'blue' : 'rgb(224, 223, 223)'}" (click)="toggle()">
+                <div class="t_button"></div>
+            </div>
+            <p style="margin-left: -5px;">{{mainToggle ? 'Enabled':'Disabled'}}</p>
+        </div>
+        <div class="but">
+
+            <button (click)="Update()">Update</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="sidebar">
+    <div class="navigators">
+        <a *ngIf="permissions.includes('Home')" routerLink="/home">
+            <i class="fa-solid fa-house" [ngClass]="{'selected': selectedIndex === 0}" (click)="selectOption(0)"></i>
+        </a>
+        <a *ngIf="permissions.includes('Dashboard')" routerLink="/dashboard">
+            <i class="fa-solid fa-square-poll-vertical" [ngClass]="{'selected': selectedIndex === 1}" (click)="selectOption(1)"></i>
+        </a>
+        <a *ngIf="permissions.includes('Analysis')" routerLink="/analytics">
+            <i class="fa-solid fa-chart-line" [ngClass]="{'selected': selectedIndex === 2}" (click)="selectOption(2)"></i>
+        </a>
+        <a *ngIf="permissions.includes('Reports')" routerLink="/reports">
+            <i class="fa-regular fa-rectangle-list" [ngClass]="{'selected': selectedIndex === 3}"(click)="selectOption(3)"></i>
+        </a>
+        <a *ngIf="permissions.includes('User Management')" routerLink="/users">
+            <i class="fa-solid fa-users-cog" [ngClass]="{'selected': selectedIndex === 4}" (click)="selectOption(4)"></i>
+        </a>
+        <a *ngIf="permissions.includes('Settings')" routerLink="/settings">
+            <i class="fa-solid fa-gears" [ngClass]="{'selected': selectedIndex === 5}" (click)="selectOption(5)"></i>
+        </a>
+        <a (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket" [ngClass]="{'selected': selectedIndex === 6}" (click)="selectOption(6)"></i>
+        </a>
+    </div>
+</div>

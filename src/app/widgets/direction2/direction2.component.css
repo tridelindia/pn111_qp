@@ -1,0 +1,79 @@
+.home_main{
+  /* background-color: aliceblue; */
+  height: 95%;
+  width: 95%;
+  margin: 0;
+}
+
+.compass{
+  height: 95%;
+  width: 95%;
+  border-radius: 50%;
+  /* background-color: #f0f0f0; */
+  position: relative;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+img{
+  height:95%;
+  width: 95%;
+  object-fit: cover;
+}
+.needle_div{
+  height: 95%;
+  width: 95%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(0deg);
+  
+  /* animation: rotate 2s forwards; */
+  transition: transform 0.5s ease-in-out; /* Smooth transition */
+
+  /* background-color: #f0f0f0; */
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(90deg);
+      }
+
+  
+}
+.needle{
+  position: absolute;
+  top: 15%;
+  left: 46.3%;
+  height: 5%;
+  width: 5%;
+  background-color: rgb(255, 0, 0);
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  animation: glow 2s infinite;
+  /* transform: rotate(); */
+
+}
+@keyframes glow {
+
+  0%{
+    height: 5%;
+    width: 5%;
+
+    /* left: 45% */
+  }
+  50%{
+    height: 6%;
+    width: 7%;
+    left: 45%;
+    top: 12%;
+    }
+    100%{
+      height: 5%;
+      width: 5%;
+      left: 46.3%;
+      top: 15%;
+      }
+}
