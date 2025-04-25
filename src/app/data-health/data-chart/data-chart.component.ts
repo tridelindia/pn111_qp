@@ -18,41 +18,25 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
   @Input() currentSensor: string | null = null;
   @Input() xAxisData: string[] = [];
   @Input() set apiData(value: any) {
-    console.log('apiData:', value);
     if (value && value.tabScores) {
-      console.log('Inside if condition:', value.tabScores);
-      this.chartHealthData = {
-        labels: ['Wave', 'Current', 'Wind', 'Atmospheric', 'Chemical', 'Physical', 'Biological'],
-        datasets: [{
-          data: [
-            value.tabScores.wave,
-            value.tabScores.current,
-            value.tabScores.wind,
-            value.tabScores.atmospheric,
-            value.tabScores.chemical,
-            value.tabScores.physical,
-            value.tabScores.biological
-          ],
-          backgroundColor: [
-            '#42A5F5',
-            '#66BB6A',
-            '#FFA726',
-            '#26C6DA',
-            '#EC407A',
-            '#7E57C2',
-            '#8D6E63'
-          ]
-        }]
-      };
+      this.updateHealthChartData(value.tabScores);
     }
   }
+
   private chartInstance: any;
   private isInitialized = false;
-  private initializationPromise: Promise<void> | null = null;
-
 
   waveChartOptions: any = {
-    tooltip: { trigger: 'axis' },
+    tooltip: { 
+      trigger: 'axis',
+      formatter: function(params: any) {
+        let result = params[0].axisValue + '<br/>';
+        params.forEach((param: any) => {
+          result += `${param.seriesName}: ${Math.round(param.value)}%<br/>`;
+        });
+        return result;
+      }
+    },
     legend: { data: [] },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
@@ -69,7 +53,12 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     },
     yAxis: {
       type: 'value',
-      axisLabel: { color: '#6b7280' },
+      axisLabel: { 
+        color: '#6b7280',
+        formatter: function(value: number) {
+          return Math.round(value);
+        }
+      },
       splitLine: { lineStyle: { color: '#f3f4f6' } }
     },
     series: []
@@ -103,41 +92,34 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
       this.chartInstance = null;
     }
     this.isInitialized = false;
-    this.initializationPromise = null;
-  }  
+  }
 
-  async onChartInit(ec: any) {    
-    if (this.initializationPromise) {
-      await this.initializationPromise;
+  onChartInit(ec: any) {    
+    if (this.chartInstance) {
+      this.chartInstance.dispose();
     }
-
-    this.initializationPromise = new Promise<void>((resolve) => {      
-      if (this.chartInstance && !this.chartInstance.isDisposed?.()) {
-        this.chartInstance.dispose();
-      }
-      
-      this.chartInstance = ec;
-      this.isInitialized = true;
-      
+    
+    this.chartInstance = ec;
+    this.isInitialized = true;
+    
+    if (this.chartData) {
+      this.initChartOptions();
       this.chartInstance.setOption(this.waveChartOptions, true);
-      
-      if (this.chartData) {
-        this.initChartOptions();
-        this.chartInstance.setOption(this.waveChartOptions, true);
-      }
-      
-      resolve();
-    });
-
-    await this.initializationPromise;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['chartData'] || changes['currentSensor'] || changes['xAxisData']) {
+    if (!this.isInitialized || !this.chartInstance) {
+      return;
+    }
+
+    if (changes['chartData'] || changes['currentSensor'] || changes['xAxisData'] || changes['dateRange']) {
       this.initChartOptions();
-      if (this.chartInstance && this.isInitialized) {
-        this.chartInstance.setOption(this.waveChartOptions, true);
-      }
+      this.chartInstance.setOption(this.waveChartOptions, true);
+    }
+
+    if (changes['apiData']) {
+      this.initChart();
     }
   }
 
@@ -183,7 +165,7 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
       lineStyle: { width: 2, color },
       showSymbol: false,
       areaStyle: { opacity: 0.3, color },
-      data: data.length ? data : [0]
+      data: data.length ? data.map(value => Math.round(value)) : [0]
     };
   }
 
@@ -208,61 +190,53 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
   chartHealthOptions: any;
 
   constructor() {
-    this.initChart();
+    this.initChartOptions();
   }
 
   initChart() {
-    console.log('initChart');
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
     const grayColor  = '#E0E0E0';
     
-    console.log('apiData:', this.apiData);
-    this.chartHealthData = {
-      datasets: [{
-        data: [
-          this.apiData?.tabScores?.wave || 0,
-          this.apiData?.tabScores?.current || 0,
-          this.apiData?.tabScores?.wind || 0,
-          this.apiData?.tabScores?.atmospheric || 0,
-          this.apiData?.tabScores?.chemical || 0,
-          this.apiData?.tabScores?.physical || 0,
-          this.apiData?.tabScores?.biological || 0
-        ],
-        backgroundColor: [
-          '#42A5F5',
-          '#66BB6A',
-          '#FFA726',
-          '#26C6DA',
-          '#EC407A',
-          '#7E57C2',
-          '#8D6E63'
-        ],
-        borderColor: [
-          '#42A5F5',
-          '#66BB6A',
-          '#FFA726',
-          '#26C6DA',
-          '#EC407A',
-          '#7E57C2',
-          '#8D6E63'
-        ],
-        borderWidth: 2,
-        label: 'Data Health'
-      }],
-      labels: ['Wave', 'Current', 'Wind', 'Atmospheric', 'Chemical', 'Physical', 'Biological']
-    };
+    if (!this.chartHealthData) {
+      this.chartHealthData = {
+        labels: ['Wave', 'Current', 'Wind', 'Atmospheric', 'Chemical', 'Physical', 'Biological'],
+        datasets: [{
+          data: [0, 0, 0, 0, 0, 0, 0],
+          backgroundColor: [
+            '#42A5F5',
+            '#66BB6A',
+            '#FFA726',
+            '#26C6DA',
+            '#EC407A',
+            '#7E57C2',
+            '#8D6E63'
+          ],
+          borderColor: [
+            '#42A5F5',
+            '#66BB6A',
+            '#FFA726',
+            '#26C6DA',
+            '#EC407A',
+            '#7E57C2',
+            '#8D6E63'
+          ],
+          borderWidth: 2,
+          label: 'Data Health'
+        }]
+      };
+    }
 
     this.chartHealthOptions = {
       plugins: {
         legend: {
-          display: false
+          display: true
         },
         tooltip: {
           callbacks: {
             label: function(context: any) {
-              return `${context.label}: ${context.raw}%`;
+              return `${context.label}: ${Math.round(context.raw)}%`;
             }
           }
         }
@@ -274,7 +248,10 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
           ticks: {
             stepSize: 20,
             color: textColor,
-            backdropColor: 'transparent'
+            backdropColor: 'transparent',
+            callback: function(value: number) {
+              return Math.round(value);
+            }
           },
           grid: {
             color: grayColor,
@@ -299,6 +276,43 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
           borderWidth: 2
         }
       }
+    };
+  }
+
+  private updateHealthChartData(tabScores: any) {
+    this.chartHealthData = {
+      labels: ['Wave', 'Current', 'Wind', 'Atmospheric', 'Chemical', 'Physical', 'Biological'],
+      datasets: [{
+        data: [
+          Math.round(tabScores.wave || 0),
+          Math.round(tabScores.current || 0),
+          Math.round(tabScores.wind || 0),
+          Math.round(tabScores.atmospheric || 0),
+          Math.round(tabScores.chemical || 0),
+          Math.round(tabScores.physical || 0),
+          Math.round(tabScores.biological || 0)
+        ],
+        backgroundColor: [
+          '#42A5F5',
+          '#66BB6A',
+          '#FFA726',
+          '#26C6DA',
+          '#EC407A',
+          '#7E57C2',
+          '#8D6E63'
+        ],
+        borderColor: [
+          '#42A5F5',
+          '#66BB6A',
+          '#FFA726',
+          '#26C6DA',
+          '#EC407A',
+          '#7E57C2',
+          '#8D6E63'
+        ],
+        borderWidth: 2,
+        label: 'Data Health'
+      }]
     };
   }
 }

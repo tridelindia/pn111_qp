@@ -1,5 +1,10 @@
 const { pool } = require('./db');
 const moment = require('moment/moment');
+const sendEmail = require('./sendEmail');
+const { last } = require('rxjs');
+require('dotenv').config();
+const whatsappSender = require('./sendWhatsapp');
+const sendSMS = require('./sendSMS');
 
 const getStationConfig = async (req, res) => {
     console.log('Received request to getStationConfig');
@@ -44,7 +49,7 @@ const getSensorDataForHealth = async (req, res) => {
     console.log('Received request getSensorDataForHealth');
     
     try {
-        const { startDate, endDate } = req.query;
+        const { startDate, endDate, station_id } = req.query;
         
         if (!startDate || !endDate) {
             return res.status(400).json({ error: 'Both startDate and endDate parameters are required' });
@@ -53,12 +58,24 @@ const getSensorDataForHealth = async (req, res) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
         
-        const query = `
-            SELECT * FROM tb_buoy_01_measurements 
-            WHERE timestamp >= $1 AND timestamp <= $2
-            ORDER BY timestamp`;
-            
-        const { rows } = await pool.query(query, [startDate, endDate]);
+        let query;
+        let params;
+
+        if (station_id !== 'all') {
+            query = `
+                SELECT * FROM tb_buoy_01_measurements 
+                WHERE timestamp >= $1 AND timestamp <= $2 
+                AND station_id = $3 
+                ORDER BY timestamp`;
+            params = [startDate, endDate, station_id];
+        } else {
+            query = `
+                SELECT * FROM tb_buoy_01_measurements 
+                WHERE timestamp >= $1 AND timestamp <= $2 
+                ORDER BY timestamp`;
+            params = [startDate, endDate];
+        }
+        const { rows } = await pool.query(query, params);
 
         console.log(`Found ${rows.length} records`);
 
@@ -84,6 +101,7 @@ const getSensorDataForHealth = async (req, res) => {
         });
     }
 };
+
 
 async function processData(rows, startDate, endDate) {
     const parameterMappings = {
@@ -586,10 +604,328 @@ function processSingleRow(row) {
     return result;
 }
 
+const addNotification = async (req, res) => {
+    try{
+        const { station_id, user_name, user_email, user_phone_number, country_code, enabled, station_name } = req.body;
+        
+        if (user_phone_number && user_phone_number.length > 10) {
+            return res.status(400).json({
+                success: false,
+                error: 'Phone number must be 10 digits or less'
+            });
+        }
+
+        const query = `
+            INSERT INTO tb_event_notifications (station_id, user_name, user_email, user_phone_number, issue, enabled, station_name)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `;
+        const { rows } = await pool.query(query, [station_id, user_name, user_email, country_code + user_phone_number, null, enabled, station_name]);
+
+        res.status(201).json({
+            success: true,
+            data: rows[0],
+            message: 'Notification added successfully'
+        });
+    } catch (error) {
+        console.error('Error adding notification:', error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+const updateNotificationStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { enabled } = req.body;
+        
+        const query = `
+            UPDATE tb_event_notifications 
+            SET enabled = $1 
+            WHERE id = $2
+            RETURNING *
+        `;
+        
+        const { rows } = await pool.query(query, [
+            enabled,
+            id
+        ]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                error: 'Notification not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: rows[0],
+            message: 'Notification updated successfully'
+        });
+    } catch (error) {
+        console.error('Error updating notification:', error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+const updateNotification = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { station_id, user_name, user_email, user_phone_number, station_name } = req.body;
+        
+        if (user_phone_number && user_phone_number.length > 10) {
+            return res.status(400).json({
+                success: false,
+                error: 'Phone number must be 10 digits or less'
+            });
+        }
+
+        const query = `
+            UPDATE tb_event_notifications 
+            SET station_id = $1,
+                user_name = $2,
+                user_email = $3,
+                user_phone_number = $4,
+                issue = $5,
+                station_name = $6
+            WHERE id = $7
+            RETURNING *
+        `;
+        
+        const { rows } = await pool.query(query, [
+            station_id,
+            user_name,
+            user_email,
+            user_phone_number,
+            null,
+            station_name,
+            id
+        ]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                error: 'Notification not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: rows[0],
+            message: 'Notification updated successfully'
+        });
+    } catch (error) {
+        console.error('Error updating notification:', error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+const deleteNotification = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const query = `
+            DELETE FROM tb_event_notifications WHERE id = $1
+        `;
+        await pool.query(query, [id]);
+
+        res.status(200).json({
+            success: true,
+            message: 'Notification deleted successfully'
+        });
+    } catch (error) {
+        console.error('Error deleting notification:', error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+const getAllNotifications = async (req, res) => {
+    try {
+        const query = `
+            SELECT * FROM tb_event_notifications
+            ORDER BY id ASC
+        `;
+        const { rows } = await pool.query(query);
+
+        res.json({
+            success: true,
+            data: rows
+        });
+    } catch (error) {
+        console.error('Error fetching all notifications:', error.message);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
+
+const checkAndTriggerNotifications = async (req, res) => {
+  try {
+    const { station_id } = req.params || req.body || req.query;
+    
+    if (!station_id) {
+      return res.status(400).json({
+        success: false,
+        error: 'station_id is required'
+      });
+    }
+
+    const sensorConfigs = await pool.query(
+      `SELECT * FROM tb_sensor_config 
+       WHERE notification = 'enable'`,
+      []
+    );
+
+    if (sensorConfigs.rows.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: 'No sensor configurations with enabled notifications'
+      });
+    }
+
+    const measurements = await pool.query(
+      `SELECT * FROM tb_buoy_01_measurements
+       WHERE station_id = $1
+       ORDER BY timestamp DESC
+       LIMIT 1`,
+      [station_id]
+    );
+
+    if (measurements.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: `No measurement data available for station ${station_id}`
+      });
+    }
+
+    const notifications = await pool.query(
+      `SELECT * FROM tb_event_notifications
+       WHERE station_id = $1 AND enabled = true`,
+      [station_id]
+    );
+
+    if (notifications.rows.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: `No enabled notifications for station ${station_id}`
+      });
+    }
+
+    const latestData = measurements.rows[0];
+    const notificationsSent = [];
+
+    for (const config of sensorConfigs.rows) {
+      const paramName = config.param_name;
+      if (!paramName || !latestData[paramName]) continue;
+
+      const currentValue = latestData[paramName];
+      const userEmail = notifications.rows[0]?.user_email;
+
+      let alert = null;
+      if (currentValue >= config.danger) {
+        alert = { level: 'danger', threshold: config.danger };
+      } else if (currentValue >= config.warning) {
+        alert = { level: 'warning', threshold: config.warning };
+      }
+
+      if (alert && userEmail) {
+        try {
+          const subject = `${alert.level.toUpperCase()} ALERT: ${paramName} at ${station_id}`;
+          const message = `Parameter ${paramName} value ${currentValue} exceeded ${alert.level} threshold (${alert.threshold})`;
+        // send mail
+          await sendEmail(userEmail, subject, message);
+          
+        // send WhatsApp message
+        //   const phoneNumber = notifications.rows[0]?.user_phone_number;
+        //   if (phoneNumber) {
+        //     const currentDate = new Date().toLocaleDateString('en-GB');
+        //     const currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
+        //     const whatsappMessage = {
+        //       phone: phoneNumber,
+        //       template: 'HXb5b62575e6e4ff6129ad7c8efe1f983e',
+        //       vars: {
+        //         "1": currentDate,
+        //         "2": currentTime
+        //       }
+        //     };
+
+        //     const whatsappResult = await whatsappSender.sendMessage(
+        //       whatsappMessage.phone,
+        //       whatsappMessage.template,
+        //       whatsappMessage.vars
+        //     );
+
+        //     console.log(whatsappResult.success ? 'WhatsApp Success' : 'WhatsApp Failed', phoneNumber);
+        //   }
+
+        //   send SMS
+        // sendSMS(notifications.rows[0]?.user_phone_number, 'Station 01 has very low temperature.')
+        // .then(sid => console.log('Message SID:', sid))
+        // .catch(error => console.error('Failed to send message:', error));
+          
+          notificationsSent.push({
+            station_id,
+            parameter: paramName,
+            value: currentValue,
+            threshold: alert.threshold,
+            level: alert.level,
+            email: userEmail,
+            status: 'sent',
+            timestamp: new Date().toISOString()
+          });
+        } catch (error) {
+          notificationsSent.push({
+            station_id,
+            parameter: paramName,
+            status: 'failed',
+            error: error.message
+          });
+        }
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      station_id,
+      notifications_sent: notificationsSent.length,
+      details: notificationsSent,
+      message: notificationsSent.length > 0 
+        ? 'Alerts processed successfully' 
+        : 'No thresholds exceeded'
+    });
+
+  } catch (error) {
+    console.error('Notification processing error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      details: error.message
+    });
+  }
+};
+
+
 module.exports = {
     getStationConfig,
     getAllSensorData,
     getMetrologicalData,
     getSensorDataForHealth,
-    getLastSensorData
+    getLastSensorData,
+    getAllNotifications,
+    addNotification,
+    deleteNotification,
+    updateNotification,
+    updateNotificationStatus
 }

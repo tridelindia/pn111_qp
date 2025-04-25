@@ -54,6 +54,7 @@
               [showClear]="true"
               [placeholder]="'Select ' + tab.title"
               (onChange)="onTabChange(tab.value)"
+              (onClear)="onTabChange(tab.value)"
               [showTransitionOptions]="'0ms'"
               [hideTransitionOptions]="'0ms'"
               [panelStyleClass]="'hover-panel'"

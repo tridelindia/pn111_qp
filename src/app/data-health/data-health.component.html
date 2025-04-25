@@ -1,5 +1,6 @@
 <div class="parent-container">
     <div class="fixed-header">
+        <app-top-bar (stationSelected)="onStationSelected($event)"></app-top-bar>
     </div>
   
     <div class="scrollable-content">
@@ -21,8 +22,12 @@
                 </app-main-chart-section>
             </div>
         </div>
-        
-        <app-sensor-status></app-sensor-status>
+
+        <app-sensor-stats 
+            [activeSensor]="currentSensor"
+            [selectedTabs]="selectedTabs"
+            [apiData]="apiData">
+        </app-sensor-stats>
 
         <div class="data-loss-chart">
             <app-data-loss-chart 
@@ -30,11 +35,7 @@
             [chartData]="chartData">
             </app-data-loss-chart>
         </div>
-        
-        <app-sensor-stats 
-            [activeSensor]="currentSensor"
-            [selectedTabs]="selectedTabs"
-            [apiData]="apiData">
-        </app-sensor-stats>
+
+        <app-sensor-status></app-sensor-status>
     </div>
 </div>

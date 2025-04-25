@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MainChartSectionComponent } from './data-chart/data-chart.component';
 import { DateRange, ChartData } from '../models/dashboard.models';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
@@ -9,11 +11,23 @@ import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, delay } from 'rxjs/operators';
 import { SensorStatusComponent } from './sensor-status/sensor-status.component';
+import { environment } from '../../environments/environment';
+import { TopBarComponent } from '../top-bar/top-bar.component';
 
 @Component({
   selector: 'app-data-health',
   standalone: true,
-  imports: [MainChartSectionComponent, NgxEchartsModule, SensorTabComponent, DataLossChartComponent, SensorStatsComponent, SensorStatusComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TopBarComponent,
+    MainChartSectionComponent,
+    NgxEchartsModule,
+    SensorTabComponent,
+    DataLossChartComponent,
+    SensorStatsComponent,
+    SensorStatusComponent
+  ],
   templateUrl: './data-health.component.html',
   styleUrl: './data-health.component.css',
   providers: [
@@ -53,6 +67,7 @@ export class DataHealthComponent implements OnInit {
   loading = false;
   currentSensor = '';
   selectedTabs: string[] = [];
+  selectedStation: string = 'all';
 
   constructor(private http: HttpClient) {
     this.updateSubject.pipe(
@@ -78,18 +93,23 @@ export class DataHealthComponent implements OnInit {
     this.updateSubject.next();
   }
 
+  onStationSelected(stationId: string) {
+    this.selectedStation = stationId;
+    this.loadChartData();
+  }
+
   private loadChartData(): void {
-    this.loading = true;
+    const url = `${environment.apiUrl}/getHealthData`;
     const params = {
+      station_id: this.selectedStation,
       startDate: this.dateRange.from.toISOString(),
       endDate: this.dateRange.to.toISOString()
     };
-    
+
+    this.loading = true;
     this.resetChartData();
     
-    this.http.get(`${this.apiUrl}getHealthData`, { params }).pipe(
-      delay(100)
-    ).subscribe({
+    this.http.get(url, { params }).subscribe({
       next: (response: any) => {
         if (response.success && response.data) {
           this.rawData = response.data;
@@ -102,7 +122,7 @@ export class DataHealthComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error fetching health data:', error);
+        console.error('Error loading chart data:', error);
         this.resetChartData();
         this.loading = false;
       }
@@ -195,7 +215,7 @@ export class DataHealthComponent implements OnInit {
       item.timestamp && 
       item.dataPresent
     );
-    if (validData.length === 0) {
+    if(validData.length === 0){
       console.log('No valid data points found, resetting chart');
       this.resetChartData();
       return;

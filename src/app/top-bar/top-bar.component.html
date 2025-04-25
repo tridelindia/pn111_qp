@@ -4,11 +4,13 @@
     </div>
     <div class="bar_station_select">
         <h5 class="field_title">Select Station</h5>
-        <select name="select" id="" class="station_select">
+        <select name="select" id="" class="station_select" [(ngModel)]="selectedStation" (change)="onStationChange($event)">
             <option value="all">Please Select Station</option>
-            <option value="1">Station 1</option>
-            <option value="2">Station 2</option>
-            <option value="3">Station 3</option>
+            <option value="ST001">Station 1</option>
+            <option value="ST002">Station 2</option>
+            <option value="ST003">Station 3</option>
+            <option value="ST004">Station 4</option>
+            <option value="ST005">Station 5</option>
         </select>
     </div>
     <p style="margin-right: 20px;">Last Updated : 2025-03-25 10:07:13</p>
