@@ -1,5 +1,6 @@
 const express = require('express')
 const { getStationConfig, getAllSensorData, getSensorDataByDate, getMetrologicalData, addStation, editStation, saveSensorConfigurations, insertSensorConfigs, getSensorConfig, updateSensorConfig, fetchDesignation, addDesignation, deleteDesignation, fetchRole, addRole, deleteRole, fetchUser, addUser, updateUser, deleteUser } = require('./controller')
+const { addLogs } = require('./logger');
 
 const router = express.Router();
 
@@ -27,6 +28,6 @@ router.get('/users', fetchUser);
 router.post('/users', addUser);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
-
+router.post('/log/:userName/:activity', addLogs);
 
 module.exports = router;;

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-userlog',
@@ -10,9 +11,6 @@ import { FormsModule } from '@angular/forms';
     styleUrl: './userlog.component.css'
 })
 export class UserlogComponent {
-
-  // ************************User Log*************************//
-
 selectedUser: any = null;
 activeUsers = [
   {
@@ -107,11 +105,9 @@ activeUsers = [
 ];
 
 
+
 selectUser(user: any) {
   this.selectedUser = user;
   console.log('Selected:', user);
 }
-
-// ***************************End***************************** //
-
 }
