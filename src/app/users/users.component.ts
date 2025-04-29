@@ -10,8 +10,7 @@ import { UserService } from './service/users/user.service';
 import { DesignationsService } from './service/designations/designations.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
-
+import { LoggingService } from './service/users/logging.service';
 
 @Component({
   selector: 'app-users',
@@ -34,7 +33,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 })
 export class UsersComponent{
 
-  constructor(private roleService: RoleService, private userService: UserService, private designationService: DesignationsService) { }
+  constructor(private roleService: RoleService, private userService: UserService, private designationService: DesignationsService, private loggingService: LoggingService, private http: HttpClient) { }
 
   ngOnInit() {
     this.loadRoles();
@@ -80,6 +79,18 @@ export class UsersComponent{
       this.userService.deleteUser(userId).subscribe(() => {
         this.loadUsers();
       });
+      const currentUserStr = localStorage.getItem('currentUser');
+      if (currentUserStr) {
+        const currentUser = JSON.parse(currentUserStr);
+        this.loggingService.addLog(
+          currentUser.username,
+          `User with ID ${userId} has been deleted.`, 
+          currentUser.id
+        ).subscribe({
+          next: () => console.log('Activity logged successfully'),
+          error: (err) => console.error('Failed to log activity', err)
+        });
+      }
     }
   }
 
@@ -153,12 +164,37 @@ export class UsersComponent{
         this.loadUsers();
         this.resetForm();
         this.setActiveTab('users');
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (currentUserStr) {
+          const currentUser = JSON.parse(currentUserStr);
+          this.loggingService.addLog(
+            currentUser.username,
+            `${this.currentUser.username} profile has been updated.`, 
+            currentUser.id
+          ).subscribe({
+            next: () => console.log('Activity logged successfully'),
+            error: (err) => console.error('Failed to log activity', err)
+          });
+        }
       });
     } else {
       this.userService.addUser(payload).subscribe(() => {
         this.loadUsers();
         this.resetForm();
         this.setActiveTab('users');
+        // Add log
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (currentUserStr) {
+          const currentUser = JSON.parse(currentUserStr);
+          this.loggingService.addLog(
+            currentUser.username,
+            `User with email ${this.currentUser.email} has been added.`, 
+            currentUser.id
+          ).subscribe({
+            next: () => console.log('Activity logged successfully'),
+            error: (err) => console.error('Failed to log activity', err)
+          });
+        }
       });
     }
   }
