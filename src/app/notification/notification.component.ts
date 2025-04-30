@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -21,6 +21,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
+import { LoggingService } from '../users/service/users/logging.service';
 
 interface Notification {
   id: number;
@@ -44,6 +45,7 @@ interface Station {
   imports: [
     CommonModule, 
     FormsModule,
+    HttpClientModule,
     InputTextModule,
     InputNumberModule,
     DropdownModule,
@@ -64,7 +66,7 @@ interface Station {
   ],
   templateUrl: './notification.component.html',
   styleUrl: './notification.component.css',
-  providers: [MessageService]
+  providers: [MessageService, LoggingService]
 })
 export class NotificationComponent implements OnInit {
   notifications: Notification[] = [];
@@ -114,7 +116,7 @@ export class NotificationComponent implements OnInit {
     { code: '+993', name: 'Turkmenistan' },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private loggingService: LoggingService) {}
 
   ngOnInit() {
     console.log('Component initialized');
@@ -199,6 +201,21 @@ export class NotificationComponent implements OnInit {
           this.successMessage = 'Notification added successfully';
           this.hideAddDialog();
           this.loadNotifications();
+          // Add log
+          const currentUserStr = localStorage.getItem('currentUser');
+          if (currentUserStr) {
+            const currentUser = JSON.parse(currentUserStr);
+            this.loggingService.addLog(
+              currentUser.username,
+              `New notification has been added.`, 
+              currentUser.id,
+              'N001',
+              'notification.component.ts/addNotification'
+            ).subscribe({
+              next: () => console.log('Activity logged successfully'),
+              error: (err) => console.error('Failed to log activity', err)
+            });
+          }
         }
       },
       error: (error) => {
@@ -218,6 +235,21 @@ export class NotificationComponent implements OnInit {
         if (response.success) {
           this.successMessage = 'Notification deleted successfully';
           this.loadNotifications();
+          // Add log
+          const currentUserStr = localStorage.getItem('currentUser');
+          if (currentUserStr) {
+            const currentUser = JSON.parse(currentUserStr);
+            this.loggingService.addLog(
+              currentUser.username,
+              `Notification has been deleted.`, 
+              currentUser.id,
+              'N003',
+              'notification.component.ts/deleteNotification'
+            ).subscribe({
+              next: () => console.log('Activity logged successfully'),
+              error: (err) => console.error('Failed to log activity', err)
+            });
+          }
         }
       },
       error: (error) => {
@@ -237,6 +269,21 @@ export class NotificationComponent implements OnInit {
         if (response.success) {
           this.successMessage = 'Notification status updated successfully';
           this.loadNotifications();
+        }
+        // Add log
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (currentUserStr) {
+          const currentUser = JSON.parse(currentUserStr);
+          this.loggingService.addLog(
+            currentUser.username,
+            `Notification status has been updated.`, 
+            currentUser.id,
+            'N004',
+            'notification.component.ts/toggleNotificationStatus'
+          ).subscribe({
+            next: () => console.log('Activity logged successfully'),
+            error: (err) => console.error('Failed to log activity', err)
+          });
         }
       },
       error: (error) => {
@@ -290,8 +337,8 @@ export class NotificationComponent implements OnInit {
       return;
     }
 
-    if (this.newNotification.user_phone_number && this.newNotification.user_phone_number.length > 10) {
-      this.errorMessage = 'Phone number must be 10 digits or less';
+    if (this.newNotification.user_phone_number && this.newNotification.user_phone_number.length > 15) {
+      this.errorMessage = 'Phone number must be 15 digits or less';
       return;
     }
     
@@ -301,6 +348,21 @@ export class NotificationComponent implements OnInit {
           this.successMessage = 'Notification updated successfully';
           this.hideEditDialog();
           this.loadNotifications();
+        }
+        // Add log
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (currentUserStr) {
+          const currentUser = JSON.parse(currentUserStr);
+          this.loggingService.addLog(
+            currentUser.username,
+            `Notification data has been updated.`, 
+            currentUser.id,
+            'N002',
+            'notification.component.ts/updateNotification'
+          ).subscribe({
+            next: () => console.log('Activity logged successfully'),
+            error: (err) => console.error('Failed to log activity', err)
+          });
         }
       },
       error: (error) => {

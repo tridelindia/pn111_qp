@@ -3,8 +3,8 @@ const moment = require('moment/moment');
 const sendEmail = require('./sendEmail');
 const { last } = require('rxjs');
 require('dotenv').config();
-const whatsappSender = require('./sendWhatsapp');
-const sendSMS = require('./sendSMS');
+// const whatsappSender = require('./sendWhatsapp');
+// const sendSMS = require('./sendSMS');
 
 const getStationConfig = async (req, res) => {
     console.log('Received request to getStationConfig');
@@ -608,10 +608,10 @@ const addNotification = async (req, res) => {
     try{
         const { station_id, user_name, user_email, user_phone_number, country_code, enabled, station_name } = req.body;
         
-        if (user_phone_number && user_phone_number.length > 10) {
+        if (user_phone_number && user_phone_number.length > 15) {
             return res.status(400).json({
                 success: false,
-                error: 'Phone number must be 10 digits or less'
+                error: 'Phone number must be 15 digits or less'
             });
         }
 
@@ -678,10 +678,10 @@ const updateNotification = async (req, res) => {
         const { id } = req.params;
         const { station_id, user_name, user_email, user_phone_number, station_name } = req.body;
         
-        if (user_phone_number && user_phone_number.length > 10) {
+        if (user_phone_number && user_phone_number.length > 15) {
             return res.status(400).json({
                 success: false,
-                error: 'Phone number must be 10 digits or less'
+                error: 'Phone number must be 15 digits or less'
             });
         }
 
@@ -916,6 +916,57 @@ const checkAndTriggerNotifications = async (req, res) => {
   }
 };
 
+const saveLogs = async (req, res) => {
+    try {
+        const fs = require('fs');
+        const path = require('path');
+        const logFilePath = path.join(__dirname, 'activity_logs.txt');
+
+        if (!fs.existsSync(logFilePath)) {
+            return res.status(200).json({ success: true, message: 'No logs file found' });
+        }
+
+        const logs = fs.readFileSync(logFilePath, 'utf8')
+            .split('\n')
+            .filter(line => line.trim() !== '')
+            .map(line => JSON.parse(line));
+
+        if (logs.length === 0) {
+            return res.status(200).json({ success: true, message: 'No logs to process' });
+        }
+
+        const insertQuery = `
+            INSERT INTO public.tb_activity_logs (log, timestamp, "performedBy", code, filepath)
+            VALUES ($1, $2, $3, $4, $5)
+        `;
+
+        for (let i = 0; i < logs.length; i++) {
+            const log = logs[i];
+            console.log(log);
+            await pool.query(insertQuery, [
+                log.activity,
+                log.timestamp,
+                log.userId,
+                log.statusCode || null,
+                log.filePath || null
+            ]);
+        }
+
+        fs.writeFileSync(logFilePath, '');
+
+        res.status(200).json({ 
+            success: true, 
+            message: `${logs.length} logs inserted successfully` 
+        });
+    } catch (error) {
+        console.error('Error saving logs:', error);
+        res.status(500).json({
+            success: false, 
+            message: 'Failed to save logs',
+            error: error.message 
+        });
+    }
+};
 
 module.exports = {
     getStationConfig,
@@ -927,5 +978,6 @@ module.exports = {
     addNotification,
     deleteNotification,
     updateNotification,
-    updateNotificationStatus
+    updateNotificationStatus,
+    saveLogs
 }
