@@ -3,6 +3,7 @@ import { DateRange, ChartData } from '../../models/dashboard.models';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ChartModule } from 'primeng/chart';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-main-chart-section',
@@ -25,9 +26,10 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
 
   private chartInstance: any;
   private isInitialized = false;
+  chartPlugins = [ChartDataLabels];
 
   waveChartOptions: any = {
-    tooltip: { 
+    tooltip: {
       trigger: 'axis',
       formatter: function(params: any) {
         let result = params[0].axisValue + '<br/>';
@@ -239,6 +241,20 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
               return `${context.label}: ${Math.round(context.raw)}%`;
             }
           }
+        },
+        datalabels: {
+          color: '#393E46',
+          font: {
+            weight: 'bold',
+            size: 12
+          },
+          formatter: function(value: number) {
+            return Math.round(value) + '%';
+          },
+          anchor: 'center',
+          align: 'center',
+          offset: 0,
+          display: 'auto'
         }
       },
       scales: {
