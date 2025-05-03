@@ -1,0 +1,67 @@
+<div class="mainBar">
+    <div class="title" style="color: white; flex-grow: 1;">
+        <h3 style="color: white; margin-left: 10px;">TEMS
+            <!-- {{screen}} -->
+        </h3>
+    </div>
+    <!-- <div class="bar_station_select">
+        <h5 class="field_title">Select Station</h5>
+        <select name="select" id="" class="station_select">
+            <option value="all">Please Select Station</option>
+            <option value="1">Station 1</option>
+            <option value="2">Station 2</option>
+            <option value="3">Station 3</option>
+        </select>
+    </div> -->
+    <div class="selec_station" (click)="touggleDrop()" *ngIf="page === 1">
+
+        <img class="station_image" src="../../assets/buoyimg/buoy.png" alt="">
+        <p>{{selectedStation}}</p>
+        <i class="fa-solid fa-caret-down" *ngIf="!dropdownOpen" (click)="touggleDrop()"></i>
+        <i class="fa-solid fa-caret-up" *ngIf="dropdownOpen" (click)="touggleDrop()"></i>
+    </div>
+    <!-- <i class="fa-solid fa-gauge"></i> -->
+    <div class="stations" *ngIf="dropdownOpen">
+        <div class="list_of_station" *ngFor="let station of listStations"
+            [ngClass]="selectedStation === station.station_name ? 'list_of_station_active':'list_of_station'"
+            (click)="onSelect(station.station_name)">
+            <img src="../../assets/buoyimg/buoy.png" alt="">
+
+            <p>{{station.station_name}}</p>
+
+        </div>
+
+    </div>
+    <p style="margin-right: 20px;">UTC Time : 2025-03-25 10:07:13</p>
+    <div class="user_session">
+
+        <img [src]="(currentUser?.avatar || 'profile_default.png')" alt="User Avatar">
+        <!-- <ul class="profile-dropdown" *ngIf="!dropdownOpen">
+            <li>Admin</li>
+            <li>Logout</li>
+        </ul> -->
+        <div class="user_data">
+            <!-- <h5>Kavi</h5> -->
+            <p>{{ currentUser?.name }}</p>
+        </div>
+    </div>
+
+    <!-- <div class="bar_station_select">
+        <h4 class="field_title">Select Station</h4>
+        <select name="select" id="" class="station_select">
+            <option value="all">Please Select Station</option>
+            <option value="1">Station 1</option>
+            <option value="2">Station 2</option>
+            <option value="3">Station 3</option>
+        </select>
+    </div>
+    <div class="period">
+        <h4 class="field_title">Range</h4>
+        <select name="select" id="" class="station_select">
+            <option value="all">Please Select Station</option>
+            <option value="1">Station 1</option>
+            <option value="2">Station 2</option>
+            <option value="3">Station 3</option>
+        </select>
+    </div> -->
+</div>

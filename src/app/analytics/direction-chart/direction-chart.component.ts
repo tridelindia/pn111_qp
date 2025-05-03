@@ -1,0 +1,102 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { singleAxis } from '../analytics.component';
+import * as echarts from 'echarts';
+import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
+
+@Component({
+  selector: 'app-direction-chart',
+  imports: [NgxEchartsModule],
+  templateUrl: './direction-chart.component.html',
+  styleUrl: './direction-chart.component.css',
+  providers: [
+      {
+        provide: NGX_ECHARTS_CONFIG,
+        useValue: { echarts: () => import('echarts') }
+      }
+    ]
+})
+export class DirectionChartComponent implements OnInit{
+  @Input() singleAxis: singleAxis[] = [];
+  @Input() plotType!:string;
+  option: any;
+  xData: number[] = []; // Store timestamps for x-axis
+  yData: number[] = []; // Store values for y-axis
+   arrowSvg = 'path://M0,-10 L5,0 L2,0 L2,10 L-2,10 L-2,0 L-5,0 Z';
+
+
+  ngOnInit(): void {
+
+    const seriesData = this.singleAxis.map(item => [
+      new Date(item.DateTime).getTime(),
+      parseFloat(item.value)
+    ]);
+
+    console.log("seriesData:", seriesData); // Debug
+
+    this.setChartOptions(seriesData as [number, number][]);
+    // this.setChartOptions();
+  }
+
+  setChartOptions(seriesData: [number, number][]) {
+    this.option = {
+      title: {
+        text: 'Single Axis Plot'
+      },
+      tooltip: {
+        trigger: 'axis',
+        formatter: (params: any) => {
+          return `${echarts.format.formatTime('yyyy-MM-dd hh:mm:ss', params[0].value[0])}<br/>Direction: ${params[0].value[1]}°`;
+        }
+      },
+      xAxis: {
+        type: 'time',
+        axisLabel: {
+          formatter: (value: any) => {
+            return echarts.format.formatTime('yyyy-MM-dd\nhh:mm:ss', value);
+          }
+        }
+      },
+      yAxis: {
+        type: 'value',
+        name: this.singleAxis[0]?.name || 'Direction (°)',
+        nameLocation: 'middle',
+        nameGap: 30
+      },
+      series: [
+        {
+          type: this.plotType, // usually 'line'
+          data: seriesData,
+          symbol: this.arrowSvg, // arrow-like
+          symbolSize: 10,
+          // Dynamically set symbol rotation for each point
+          symbolRotate: (value: any) => value[1], // Rotate based on direction
+          lineStyle: {
+            color: '#5470C6',
+            width: 2
+          },
+          itemStyle: {
+            color: 'green'
+          },
+          label: {
+            show: false,
+            formatter: (params: any) => `${params.value[1]}°`,
+            position: 'top'
+          }
+        }
+      ],
+      dataZoom: [
+        {
+          type: 'inside',
+          xAxisIndex: [0]
+        },
+        {
+          type: 'slider',
+          xAxisIndex: [0],
+          handleSize: '8%'
+        }
+      ]
+    };
+  }
+  
+  
+}

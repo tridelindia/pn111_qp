@@ -1,0 +1,90 @@
+<div class="log-container">
+    <div class="sidebar">
+      <div class="calendar-container">
+        <p-calendar [(ngModel)]="dateRange" selectionMode="range" [inline]="true" 
+                    [readonlyInput]="true" dateFormat="dd/mm/yy"
+                    styleClass="custom-calendar">
+        </p-calendar>
+        <div class="update-btn-container" style="margin-top: 310px; margin-left: 114px;">
+          <p-button label="Update" icon="pi pi-refresh" (onClick)="filterByDateRange()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <div class="title-section">
+          <h1>Activity Log</h1>
+          <p class="subtitle">Track and monitor user activities</p>
+        </div>
+        <div class="controls">
+          <!-- <p-button icon="pi pi-refresh" (onClick)="loadLogs()" 
+                    styleClass="p-button-rounded p-button-text p-button-secondary"></p-button> -->
+          <span class="p-input-icon-left">
+            <input type="text" pInputText [(ngModel)]="searchTerm" 
+                   (input)="filterLogs()" placeholder="Search logs..." />
+          </span>
+        </div>
+      </div>
+    
+      <div *ngIf="isLoading" class="loading">
+        <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+        <p>Loading logs...</p>
+      </div>
+    
+      <p-message *ngIf="error" severity="error" (onClose)="error = null">
+        {{ error }}
+        <button pButton label="Retry" (click)="loadLogs()" class="p-button-text p-button-sm"></button>
+      </p-message>
+    
+      <div *ngIf="!isLoading && !error" class="log-list">
+        <p-card *ngIf="filteredLogs.length === 0" class="no-logs">
+          <div class="empty-state">
+            <i class="pi pi-inbox"></i>
+            <h3>No logs found</h3>
+            <p>No activity logs match your search criteria</p>
+          </div>
+        </p-card>
+    
+        <div class="table-container" *ngIf="filteredLogs.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-number">#</th>
+                <th class="col-timestamp">Timestamp</th>
+                <th class="col-user">User</th>
+                <th class="col-activity">Activity</th>
+                <th class="col-status">Code</th>
+                <th class="col-file">FilePath</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of filteredLogs; let i = index">
+                <td class="col-number">
+                  <span>{{ i + 1 }}</span>
+                </td>
+                <td class="col-timestamp">
+                  <i class="pi pi-clock"></i>
+                  <span> {{ formatDate(log.timestamp) }}</span>
+                </td>
+                <td class="col-user">
+                  <i class="pi pi-user"></i>
+                  <span> {{ log.userName }} - {{ log.userId }}</span>
+                </td>
+                <td class="col-activity">
+                  <i class="pi pi-file"></i>
+                  <span> {{ log.message }}</span>
+                </td>
+                <td class="col-status">
+                  <span> {{ log.statusCode }}</span>
+                </td>
+                <td class="col-file">
+                  <span> {{ log.filePath }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

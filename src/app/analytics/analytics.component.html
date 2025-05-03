@@ -1,0 +1,290 @@
+<div class="analisys_main">
+    <div class="analisys_right">
+        <div class="compare_view_space" *ngIf="!isSingleView">
+            <div class="dropDowns">
+                <div class="select_div">
+                    <p>Select Parameter</p>
+                    <select name="Parameters" id="parameters" [(ngModel)]="selectedMultiStationParam"
+                        (change)="changetiMultiStationView()">
+                        <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                            {{ param .param_name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="selectedParams.length"
+                [title]="selectedMultiStationParam" [params]="multiStationData"></app-test-chart>
+            <app-wind-chart *ngIf="isPolar"></app-wind-chart>
+        </div>
+        <div class="isSingle" *ngIf="isSingleView">
+
+            <div class="singlefull" *ngIf="numberr === 1">
+                <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="example-viewport">
+                    <!-- <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div> -->
+                    <div class="one">
+                        <div class="dropDowns">
+                            <div class="select_div">
+                                <p>Select Parameter</p>
+                                <select name="Parameters" id="parameters" [(ngModel)]="selectedparam"
+                                    (change)="changesingle()" [disabled]="false">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                                        {{ param.param_name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="select_div" *ngIf="isCurrent">
+                                <p>Select Profile</p>
+                                <select name="Parameters" id="parameters" [(ngModel)]="selectedBin"
+                                    (change)="changewithBin()" [disabled]="false">
+                                    <option *ngFor="let param of Bins" [value]="param.name">
+                                        {{ param.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <app-single-axis [singleAxis]="singleAxis" *ngIf="!isSingleLoad"
+                            [plotType]="selectedPlot"></app-single-axis>
+                        <app-direction-chart [singleAxis]="singleAxis" *ngIf="!isSingledirection"
+                            [plotType]="selectedPlot"></app-direction-chart>
+                    </div>
+                    <div class="two">
+                        <div class="dropDowns">
+                            <div class="select_div">
+                                <p>Select X1 Parameter</p>
+                                <select name="Parameters" id="parameters" [(ngModel)]="selectedMultix1"
+                                    (change)="changetiMulOne()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                                        {{ param.param_name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="select_div">
+                                <p>Select X2 Parameter</p>
+                                <select name="Parameters" id="parameters" [(ngModel)]="selectedMultix2"
+                                    (change)="changetiMulOne()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                                        {{ param .param_name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <app-multi-axis [MultiAxis]="multiAxis" *ngIf="!isMultiLoading"
+                            [plotType]="selectedPlot"></app-multi-axis>
+                    </div>
+                    <div class="three">
+                        <div class="dropDowns">
+                            <div class="select_div">
+                                <p>Select X Axis</p>
+                                <select name="Parameters" id="parameters" [(ngModel)]="selectedScactterX"
+                                    (change)="changeScatterOne()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                                        {{ param .param_name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="select_div">
+                                <p>Select Y Axis</p>
+                                <select name="Parameters" id="parameters" [(ngModel)]="selectedScatterY"
+                                    (change)="changeScatterOne()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                                        {{ param.param_name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <app-scatter-axis [scatterAxis]="scatterAxis" *ngIf="!isScatterLoading"></app-scatter-axis>
+                    </div>
+                    <div class="four">
+                        <app-rose-plot [polarAxis]="PolarAxis" *ngIf="!isPolarLoading"></app-rose-plot>
+                    </div>
+                    <div class="five"></div>
+                </cdk-virtual-scroll-viewport>
+                <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
+                    [params]="[selectedParams[0]]"></app-test-chart> -->
+                <!-- <app-wind-chart *ngIf="!isPolar"></app-wind-chart> -->
+            </div>
+
+            <div class="right_top" *ngIf=" numberr ===2 || numberr ===3 || numberr ===4">
+                <div class="top_one" *ngIf=" numberr === 2">
+
+                    <!-- <app-scatter></app-scatter> -->
+                    <!-- <app-chart2></app-chart2> -->
+
+                    <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
+                        [params]="[selectedParams[0]]"></app-test-chart> -->
+                </div>
+                <div class="chart_left" *ngIf=" numberr === 4 || numberr ===3">
+                    <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
+                        [params]="[selectedParams[0]]"></app-test-chart> -->
+                </div>
+                <div class="chart_right" *ngIf="numberr === 4 || numberr ===3">
+                    <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
+                        [params]="[selectedParams[1]]"></app-test-chart> -->
+                </div>
+            </div>
+            <div class="right_bottom" *ngIf=" numberr ===2 || numberr ===4 ||numberr ===3">
+                <div class="chart_left" *ngIf="numberr === 4">
+                    <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
+                        [params]="[selectedParams[2]]"></app-test-chart> -->
+                </div>
+                <div class="chart_right" *ngIf=" numberr === 4">
+                    <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
+                        [params]="[selectedParams[3]]"></app-test-chart> -->
+                </div>
+                <div class="bottom_one" *ngIf=" numberr === 2 ||numberr == 3">
+                    <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
+                        [params]="[selectedParams[1]]"></app-test-chart> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="analisys_left">
+        <div class="analisys_left_bottom" *ngIf="!isSelectParams">
+            <h3>Filter</h3>
+            <p class="tit">Select View</p>
+            <div class="options_container">
+                <div class="single" [ngClass]="isSingleView ? 'single_active':'single'"
+                    (click)="isViewChange('single')">
+                    <p>Single view</p>
+                </div>
+                <div class="single" [ngClass]="!isSingleView ? 'single_active':'single'"
+                    (click)="isViewChange('compare')">
+                    <p>Compare view</p>
+                </div>
+            </div>
+
+
+            <div class="selectPlot">
+                <p class="tit">Select Station</p>
+                <p-multiselect [options]="stations" [(ngModel)]="selectedStation" name="stationId" optionLabel="name"
+                    optionValue="stationId" placeholder="Select Stations" class="w-full md:w-56" required
+                    [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView">
+                </p-multiselect>
+                <select name="Stations" id="" [(ngModel)]="singleStation" *ngIf="isSingleView">
+                    <option value="" *ngFor="let station of stations" [value]="station.name">{{station.name}}</option>
+                </select>
+            </div>
+
+            <!-- <p class="tit">Select Plot</p>
+            <div class="options_container">
+                <div class="line" [ngClass]="plotType ==='line' ? 'line_active':'line'" (click)="changePlot('line')">
+                    <p>Line</p>
+                </div>
+                <div class="polar" [ngClass]="plotType ==='polar'? 'line_active':'line'" (click)="changePlot('polar')">
+                    <p>Polar</p>
+                </div>
+                <div class="scatter" [ngClass]="plotType ==='scatter' ? 'line_active':'line'"
+                    (click)="changePlot('scatter')">
+                    <p>Scatter</p>
+                </div>
+            </div> -->
+
+
+
+            <div class="sensors">
+                <p>Select Sensor Group</p>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('oceanography')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'oceanography'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Oceanography</p>
+                    </div>
+                    <div class="sensor_item" (click)="onSelectSensor('meteriology')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'meteriology'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Meteriology</p>
+                    </div>
+                </div>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('waterQuality')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'waterQuality'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Water Quality</p>
+                    </div>
+                    <div class="sensor_item" (click)="onSelectSensor('microFlu')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'microFlu'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>MicroFLu</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <p class="tit">Select Date</p>
+            <div class="dateColumn">
+                <div class="datePickers">
+                    <div class="pickers" [ngClass]="pickerState === 'date'? 'picker_active':'pickers'"
+                        (click)="onPickerTap('date')">
+                        <p>Date</p>
+                    </div>
+                    <div class="pickers" [ngClass]="pickerState === 'week'? 'picker_active':'pickers'"
+                        (click)="onPickerTap('week')">
+                        <p>Week</p>
+                    </div>
+                    <div class="pickers" [ngClass]="pickerState === 'month'? 'picker_active':'pickers'"
+                        (click)="onPickerTap('month')">
+                        <p>Month</p>
+                    </div>
+                    <div class="pickers" [ngClass]="pickerState === 'year'? 'picker_active':'pickers'"
+                        (click)="onPickerTap('year')">
+                        <p>Year</p>
+                    </div>
+                </div>
+                <p-datepicker [(ngModel)]="selectedDate" [showIcon]="true"
+                    [selectionMode]="pickerState === 'date'? 'range':'single'"
+                    [view]="pickerState === 'date' || pickerState === 'week'? 'date' : pickerState === 'month'? 'month': 'year'"></p-datepicker>
+            </div>
+
+
+            <!-- <button>tap</button> -->
+            <!-- <p class="tit">Select Parameters</p>
+            <div class="parameter" (click)="onParamSelection('tap')">
+                <div class="parameters" *ngFor="let param of selectedParams">
+                    <p>{{param.param_name}}</p>
+                    <i class="fa fa-close" (click)="removeSelected(param)"></i>
+                </div> -->
+            <!-- <div class="parameters"></div> -->
+
+
+            <!-- </div>
+            <span>Select upto 4 Parameters</span> -->
+            <div class="selectPlot">
+                <p class="tit">Select Plot Style</p>
+                <select name="plot" id="" (change)="onPlotSelect($event)">
+                    <option value="line">Line</option>
+                    <!-- <option value="bar">Bar</option> -->
+                    <option value="scatter">Bubble</option>
+
+                </select>
+            </div>
+            <button (click)="isTest()">test</button>
+        </div>
+        <div class="param_lists" *ngIf="isSelectParams">
+            <i class="fa fa-arrow-left" (click)="onParamSelection('back')"></i>
+            <h3>Select parameters</h3>
+
+            <div class="lists">
+
+                <div class="list" *ngFor="let item of filteredparams">
+                    <input type="checkbox" [value]="item" (change)="onParamChange($event, item)"
+                        [checked]="isChecked(item)" [disabled]="!isChecked(item) && selectedParams.length >= 4" />
+                    <label for="param">{{item.param_name}}</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

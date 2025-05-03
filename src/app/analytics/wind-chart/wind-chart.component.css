@@ -1,0 +1,10 @@
+highcharts-chart{
+    height: 400px;
+    width: 100%;
+    background-image: url('../../../assets/barb/wind_barb.json');
+}
+.chart-container {
+    width: 100%;
+    height: 400px;
+  }
+  

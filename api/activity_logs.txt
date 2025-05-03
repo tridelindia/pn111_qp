@@ -1,0 +1,3 @@
+{"timestamp":"2025-05-03T10:34:09.304Z","userName":"Admin","activity":"New notification has been added.","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-05-03T10:34:11.691Z","userName":"Admin","activity":"Notification status has been updated.","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-05-03T10:34:12.333Z","userName":"Admin","activity":"Notification status has been updated.","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}

@@ -1,0 +1,61 @@
+<div class="login1">
+
+
+    <!-- Company Branding (Logo + Name + Quote) -->
+    <div class="company-header">
+        <img src="assets/logo.png" alt="Company Logo" class="company-logo">
+        <div class="company-text">
+            <!-- <p class="company-name">QATAR LUSAIL</p> -->
+        </div>
+    </div>
+
+    <!-- Top Right -->
+    <div class="project">
+        <img src="assets/image/authentication/tridel_logo.png" alt="Company Logo" class="project-logo">
+        <span>Tridel Technologies</span>
+    </div>
+
+    <div class="dd">
+        <!-- <div class="gif-container">
+        <img src="assets/image/authentication/buoy2.gif" alt="Loading animation" />
+    </div>   -->
+        <app-qp-buoy></app-qp-buoy>
+    </div>
+
+
+    <!-- Glassy Login Card -->
+    <app-wave></app-wave>
+    <!-- <div class="right"> -->
+    <div class="circular-card">
+        <div class="background-img"></div>
+        <h2>TEMS</h2>
+        <p>QATAR LUSAIL</p>
+
+        <!-- Username Input -->
+        <!-- <form (ngSubmit)="login($event)"> -->
+        <div class="input-group">
+            <label for="username">Username</label>
+            <div class="input-container">
+                <input type="text" id="username" placeholder="Enter your username" class="input-box" required
+                    [(ngModel)]="username" [ngModelOptions]="{standalone: true}" required>
+                <i class="fa-solid fa-user input-icon"></i>
+            </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="input-group">
+            <label for="password">Password</label>
+            <div class="input-container">
+                <input type="password" id="password" placeholder="Enter your password" class="input-box" required
+                    [(ngModel)]="password" [ngModelOptions]="{standalone: true}" required>
+                <i class="fa fa-unlock-keyhole input-icon"></i>
+            </div>
+        </div>
+
+        <a href="base" class="forget-pass">Forget Password</a>
+
+        <button type="submit" class="login-btn" (click)="login($event)">Login</button>
+        <!-- </form> -->
+    </div>
+    <!-- </div> -->
+</div>
