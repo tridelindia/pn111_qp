@@ -78,7 +78,7 @@ margin: 0;
 
 .gif-container{
 position: absolute;
-top: 240px;
+top: 90px;
 left: -200px;
 display: flex;
 align-items: center;
@@ -86,8 +86,8 @@ justify-content: center;
 }
 
 img {
-width: 500%;
-height: 550px;
+width: 900%;
+height: 950px;
 }
 
 /* .right{

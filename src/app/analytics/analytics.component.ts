@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { TestChartComponent } from "./test-chart/test-chart.component";
+import { HeatmapComponent } from "./heatmap/heatmap.component";
+import { LineChartComponent } from "./line-chart/line-chart.component";
+import { AuthService } from '../services/auth.service';
 interface param{
   param_name:string;
   name:string;
@@ -9,7 +12,7 @@ interface param{
 @Component({
   selector: 'app-analytics',
   standalone:true,
-  imports: [CommonModule, HttpClientModule, TestChartComponent],
+  imports: [CommonModule, HttpClientModule, TestChartComponent, HeatmapComponent, LineChartComponent],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.css'
 })
@@ -84,12 +87,25 @@ this.isSelectParams = false;
     
   }
 
+  loggedInUser: any;
+
+
+
+
+  hasPermissions(page: string, requiredPermissions: string[]): boolean {
+    const rolePermissions = this.loggedInUser?.role?.permissions || {}; // role has permissions
+    const pagePermissions = rolePermissions[page] || [];
+    return requiredPermissions.every(p => pagePermissions.includes(p));
+  }  
+
   ngOnInit(): void {
       this.fetchSensors()
+      this.loggedInUser = this.authService.getCurrentUser(); // or whatever method returns user info 
   }
 
   constructor(
-    private http:HttpClient
+    private http:HttpClient,
+    private authService: AuthService
   ){}
 
   fetchSensors(){

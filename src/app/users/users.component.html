@@ -15,15 +15,15 @@
             <div class="nav-card">
                 <nav>
                     <button (click)="setActiveTab('users')" [class.active]="activeTab === 'users'"><i
-                            class="fa-solid fa-user-group"></i> Users</button>
+                            class="fa-solid fa-user-group"></i> User</button>
                     <button (click)="setActiveTab('addEditUser')" [class.active]="activeTab === 'addEditUser'"><i
                             class="fa-solid fa-user-plus"></i> Add/Edit User</button>
                     <!-- <button (click)="setActiveTab('roles')" [class.active]="activeTab === 'roles'"><i class="fa-solid fa-shield"></i> Roles</button> -->
                     <button (click)="setActiveTab('rolesDesignations')"
                         [class.active]="activeTab === 'rolesDesignations'"><i class="fa-solid fa-id-card"></i>
-                        Roles/Designations</button>
+                        Role/Designation</button>
                     <button (click)="setActiveTab('userLog')" [class.active]="activeTab === 'userLog'"><i
-                            class="fa-solid fa-rotate-left"></i> User Log</button>
+                            class="fa-solid fa-rotate-left"></i> Session Log</button>
                 </nav>
             </div>
         </div>
@@ -33,7 +33,7 @@
     <!-- Users List Section -->
     <div class="users-card" *ngIf="activeTab === 'users'">
         <div class="users-header">
-            <h3><i class="fa-solid fa-user-group"></i> Users</h3>
+            <h3><i class="fa-solid fa-user-group"></i> Registered Members </h3>
             <button class="new-user-btn" (click)="addUser()"><i class="fa-solid fa-plus"></i>&nbsp; New User</button>
         </div>
 
@@ -44,7 +44,7 @@
                 <div class="column">Username</div>
                 <div class="column">Role</div>
                 <div class="column">Designation</div>
-                <div class="column">Created At</div>
+                <div class="column">Created Time</div>
                 <div class="column actions-header">Actions</div>
             </div>
 
@@ -63,8 +63,10 @@
                     <div class="column">{{ user.username }}</div>
                     <div class="column">{{ user.role }}</div>
                     <div class="column">{{ user.designation }}</div>
-                    <div class="column">UTC: {{ user.created | date:'yyyy-MM-dd HH:mm:ss':'UTC' }} <br /> IST: {{ user.created |
-                        date:'yyyy-MM-dd HH:mm:ss' }}</div>
+                    <div class="column">
+                        UTC: {{ user.created | date:'yyyy-MM-dd HH:mm:ss' }} (+3)<br /> 
+                        AST: {{ user.created | date:'yyyy-MM-dd HH:mm:ss':'UTC+8:30' }}
+                    </div>
                     <div class="column actions">
                         <div class="icon-container">
                             <i class="fa-solid fa-edit edit-icon tooltip-icon" (click)="editUser(user)"></i>
@@ -85,7 +87,7 @@
         <div class="addedit-container">
             <!-- Left Section: User List -->
             <div class="left-section">
-                <h3><i class="fa-solid fa-user-group"></i> Users</h3>
+                <h3><i class="fa-solid fa-user-group"></i> All Members</h3>
                 <div class="form-card user-list">
                     <div *ngFor="let user of users" class="user-item">
                         <!-- <i class="user-avatar fa-solid fa-user-circle"></i> -->
@@ -133,8 +135,12 @@
                             </div>
                             <div class="form-group">
                                 <label><i class="fa-solid fa-id-badge"></i> Username</label>
-                                <input type="text" [(ngModel)]="currentUser.username" name="username"
-                                    placeholder="Enter username" required />
+                                <!-- <input type="text" [(ngModel)]="currentUser.username" name="username"
+                                    placeholder="Enter username" required /> -->
+
+                                    <input type="text" [(ngModel)]="currentUser.username" name="username"
+                                        placeholder="Enter username" required (input)="onUsernameInput(currentUser.username)" />
+                                    <div *ngIf="usernameTaken" class="validation-error">Username is already taken.</div>
                             </div>
                         </div>
 
@@ -142,12 +148,17 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label><i class="fa-solid fa-envelope"></i> Email Address</label>
-                                <input type="email" [(ngModel)]="currentUser.email" name="email"
-                                    placeholder="Enter email address" required />
+                                <!-- <input type="email" [(ngModel)]="currentUser.email" [disabled]="isEditingAdmin"
+                                    name="email" placeholder="Enter email address" required /> -->
+
+                                    <input type="email" [(ngModel)]="currentUser.email" [disabled]="isEditingAdmin"
+                                        name="email" placeholder="Enter email address" required (input)="onEmailInput(currentUser.email)" />
+                                    <div *ngIf="emailTaken" class="validation-error">Email is already in use.</div>
+
                             </div>
                             <div class="form-group">
                                 <label><i class="fa-solid fa-user-tag"></i> Role</label>
-                                <div class="custom-select" (click)="toggleDropdown()" [class.open]="dropdownOpen">
+                                <div class="custom-select" [class.disabled]="isEditingAdmin" (click)="!isEditingAdmin && toggleDropdown()" [class.open]="dropdownOpen">
                                     <div class="selected-option">
                                         <span>
                                             {{ selectedRole || 'Select Role' }}
@@ -156,8 +167,8 @@
                                             <i class="fa-solid fa-chevron-down"></i>
                                         </span>
                                     </div>
-                                    <div class="options" *ngIf="dropdownOpen" [@dropdownAnimation]>
-                                        <div class="option" *ngFor="let role of roles"
+                                    <div class="options" *ngIf="!isEditingAdmin && dropdownOpen" [@dropdownAnimation]>
+                                        <div class="option" *ngFor="let role of filteredRoles"
                                             (click)="selectRole(role.name, $event)">
                                             {{ role.name }}
                                         </div>
@@ -171,7 +182,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label><i class="fa-solid fa-briefcase"></i> Designation</label>
-                                <div class="custom-select" (click)="toggleDesignationDropdown()"
+                                <div class="custom-select" [class.disabled]="isEditingAdmin" (click)="!isEditingAdmin && toggleDesignationDropdown()"
                                     [class.open]="designationDropdownOpen">
                                     <div class="selected-option">
                                         <span>
@@ -181,8 +192,8 @@
                                             <i class="fa-solid fa-chevron-down"></i>
                                         </span>
                                     </div>
-                                    <div class="options" *ngIf="designationDropdownOpen" [@dropdownAnimation]>
-                                        <div class="option" *ngFor="let designation of designations"
+                                    <div class="options" *ngIf="!isEditingAdmin && designationDropdownOpen" [@dropdownAnimation]>
+                                        <div class="option" *ngFor="let designation of filteredDesignations"
                                             (click)="selectDesignation(designation.title, $event)">
                                             {{ designation.title }}
                                         </div>
@@ -229,81 +240,13 @@
         </div>
     </div>
 
-    <!-- Roles -->
-    <!-- <div *ngIf="activeTab === 'roles'">
-        <div class="roles-container">
-            Left Side: Role List
-            <div class="roles-list">
-                <h2><i class="icon-shield"></i> Roles</h2>
-                <div class="roles-list-container">
-                    <div class="role-card" *ngFor="let role of roles; let i = index">
-                        <div class="role-info">
-                            <h3>{{ role.name }}</h3>
-                            <p>{{ role.description }}</p>
-                        </div>
-                        <div class="role-actions">
-                            <p>Access:</p>
-                            <div class="permissions">
-                            <p *ngFor="let permission of role.permissions"> {{ permission }} &nbsp;</p>
-                            </div>
-                        </div>
-                        <div class="icon-container">
-                            <i class="fa-solid fa-trash delete-icon" (click)="deleteRole(role.name)"></i>
-                            <span class="tooltip-text">Delete Role</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-            Right Side: Add New Role
-            <div class="add-role-form">
-                <h2>Add Role</h2>
-                <form (ngSubmit)="addRole()">
-
-                    <div class="form-group">
-                        <label for="roleName"><i class="fa-solid fa-user-shield"></i> Role Name</label>
-                        <input type="text" id="roleName" [(ngModel)]="newRole.name" name="roleName" placeholder="Enter role name" class="input-box" required />
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="roleDescription"><i class="fa-solid fa-align-left"></i> Description</label>
-                        <input type="text" id="roleDescription" [(ngModel)]="newRole.description" name="description" placeholder="Enter role description" required />
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                          <label><i class="fa-solid fa-key"></i> Permissions</label>
-                          <div class="multi-select">
-                            <div *ngFor="let permission of allPermissions">
-                              <input
-                                type="checkbox"
-                                [id]="permission"
-                                name="permissions"
-                                [checked]="newRole.permissions.includes(permission)"
-                                (change)="togglePermission(permission)"
-                              />
-                              <label [for]="permission">{{ permission }}</label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                    <div class="button-group">
-                        <button type="button" class="cancel-btn" (click)="resetForm()"><i class="fa-solid fa-xmark"></i>&nbsp; Cancel</button>
-                        <button type="submit" class="add-button"><i class="fa-solid fa-plus"></i>&nbsp; Add Role</button>
-                    </div>
-                </form>
-            </div>
-        </div>        
-    </div> -->
-
     <!-- Roles/Designations -->
     <div *ngIf="activeTab === 'rolesDesignations'">
         <div class="designation-container">
 
             <!-- Roles List -->
             <div class="roles-list">
-                <h3><i class="icon-shield"></i> Roles</h3>
+                <h3><i class="icon-shield"></i> Role</h3>
                 <div class="roles-list-container">
                     <div class="role-card" *ngFor="let role of roles; let i = index">
                         <div class="Column role-info">
@@ -313,19 +256,49 @@
                         <div class="Column role-actions">
                             <p>Access:</p>
                             <div class="permissions">
-                                <div class="tooltip-icon" *ngFor="let permission of role.permissions">
+                                <!-- <div class="tooltip-icon" *ngFor="let permission of role.permissions">
                                   <i class="fa-solid" [ngClass]="permissionIcons[permission]"></i>
                                   <span class="tooltip-text2">{{ permission }}</span>
-                                </div>
+                                </div> -->
+
+                                <!-- <div class="permissions" *ngIf="role.permissions">
+                                    <div *ngFor="let entry of objectEntries(role.permissions)">
+                                      <strong>{{ entry[0] }}</strong>: 
+                                      <span *ngFor="let action of entry[1]" class="action-icon">
+                                        <i class="fa-solid" [ngClass]="actionIcons[action]"></i> {{ action }}
+                                      </span>
+                                    </div>
+                                  </div> -->
+
+                                  <div class="permissions-icons" *ngIf="role.permissions">
+                                    <div class="page-icon-tooltip" *ngFor="let entry of objectEntries(role.permissions)">
+                                      <i class="fa-solid" [ngClass]="permissionIcons[entry[0]] || 'fa-circle-question'"></i>
+                                      <div class="tooltip-text2">
+                                        <strong>{{ entry[0] }}</strong><br />
+                                        <ng-container *ngFor="let action of entry[1]">
+                                          • {{ action }}<br />
+                                        </ng-container>
+                                      </div>
+                                    </div>
+                                  </div>                                  
+
+
                               </div>                              
                         </div>
-                        <div class="Column icon-container">
-                            <i class="fa-solid fa-trash-can delete-icon" (click)="deleteRole(role.name)"></i>
-                            <span class="tooltip-text">Delete Role</span>
+                        <div class="column action">
+                            <!-- <div class="icon-container">
+                                <i class="fa-solid fa-edit edit-icon tooltip-icon" (click)="editRole(role)"></i>
+                                <span class="tooltip-text">Edit Role</span>
+                            </div> -->
+                            <div class="icon-container">
+                                <i class="fa-solid fa-trash-can delete-icon" (click)="deleteRole(role.name)"></i>
+                                <span class="tooltip-text">Delete Role</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Designation List -->
             <div class="designation-list">
@@ -344,8 +317,11 @@
                 </div>
             </div>
 
-            <!-- Add New Role -->
+
+            <!-- Add Role / Designation Form -->
             <div class="form-container">
+
+            <!-- Add New Role -->
                 <div class="add-role-form">
                     <form (ngSubmit)="addRole()">
 
@@ -356,9 +332,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="roleName"><i class="fa-solid fa-user-shield"></i> Role Name</label>
+                            <label for="roleName"><i class="fa-solid fa-user-shield"></i> Role</label>
                             <input type="text" id="roleName" [(ngModel)]="newRole.name" name="roleName"
-                                placeholder="Enter role name" class="input-box" required />
+                                placeholder="Enter role" class="input-box" required />
                         </div>
 
                         <div class="form-group">
@@ -370,14 +346,46 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label><i class="fa-solid fa-key"></i>Select Permissions</label>
-                                <ng-select [items]="allPermissions" bindLabel="" bindValue="" name="permission"
+                                <!-- <ng-select [items]="allPermissions" bindLabel="" bindValue="" name="permission"
                                     [ngModelOptions]="{ standalone: true }" [(ngModel)]="newRole.permissions"
                                     [multiple]="true" class=" ng-select-custom">
-                                </ng-select>
+                                </ng-select> -->
+
+                                <!-- <ng-select 
+                                    [items]="actions"
+                                    [multiple]="true"
+                                    [(ngModel)]="newRole.permissions[page]"
+                                    [ngModelOptions]="{ standalone: true }"
+                                    placeholder="Select actions"
+                                    class="ng-select-custom">
+                                </ng-select> -->
+
+                                <!-- <ng-select
+                                [items]="allPermissions"
+                                [(ngModel)]="newRole.flatPermissions"
+                                [multiple]="true"
+                                class="ng-select-custom"
+                                name="permissions"
+                                [ngModelOptions]="{ standalone: true }">
+                                </ng-select>                             -->
+
+                                <p-multiSelect
+                                    [options]="allPermissions"
+                                    [(ngModel)]="newRole.flatPermissions"
+                                    name="permissions"
+                                    optionLabel=""
+                                    defaultLabel="Select Permissions"
+                                    [showToggleAll]="true"
+                                    [display]="'chip'"
+                                    class="p-multiselect-custom"
+                                    [ngModelOptions]="{ standalone: true }">
+                                </p-multiSelect>
                             </div>
                         </div>
                     </form>
                 </div>
+
+
                 <!-- Add New Designation -->
                 <div class="add-designation-form">
                     <form (submit)="addDesignation()">
@@ -389,13 +397,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="designationTitle">Title</label>
+                            <label for="designationTitle"><i class="fa-solid fa-id-badge"></i> Title</label>
                             <input type="text" id="designationTitle" name="title" [(ngModel)]="newDesignation.title"
                                 [ngModelOptions]="{standalone: true}" placeholder="Enter designation title" required />
                         </div>
 
                         <div class="form-group">
-                            <label for="designationDescription">Description</label>
+                            <label for="designationDescription"><i class="fa-solid fa-align-left"></i> Description</label>
                             <input type="text" id="designationDescription" name="description"
                                 [(ngModel)]="newDesignation.description" [ngModelOptions]="{standalone: true}"
                                 placeholder="Enter designation description" required />

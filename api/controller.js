@@ -19,7 +19,7 @@ const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: 'Invalid password' });
 
-    const roleQuery = `SELECT permissions FROM tb_roles WHERE name = $1`;
+    const roleQuery = `SELECT permissions FROM tb_roles_backup WHERE name = $1`;
     const roleResult = await pool.query(roleQuery, [user.role]);
     const permissions = roleResult.rows[0]?.permissions || [];
 
@@ -31,7 +31,7 @@ const loginUser = async (req, res) => {
       role: user.role,
       designation: user.designation,
       avatar: user.avatar,
-      permissions, // ⬅️ Include permissions
+      permissions,
     };
 
     res.json(userWithoutPassword);
@@ -495,7 +495,7 @@ const updateSensorConfig = async (req, res) => {
 // user management
 const fetchRole =async (req, res) => {
     try {
-      const result = await pool.query('SELECT * FROM tb_roles ORDER BY name ASC');
+      const result = await pool.query('SELECT * FROM tb_roles_backup ORDER BY name ASC');
       res.json(result.rows);
     } catch (err) {
       console.error(err.message);
@@ -503,7 +503,7 @@ const fetchRole =async (req, res) => {
     }
   }
 
-const addRole = async (req, res) => {
+  const addRole = async (req, res) => {
     const { name, description, permissions } = req.body;
   
     if (!name || !permissions) {
@@ -512,24 +512,24 @@ const addRole = async (req, res) => {
   
     try {
       const result = await pool.query(
-        `INSERT INTO tb_roles (name, description, permissions)
-         VALUES ($1, $2, $3)
+        `INSERT INTO tb_roles_backup (name, description, permissions)
+         VALUES ($1, $2, $3::jsonb)
          RETURNING *`,
-        [name, description || '', permissions]
+        [name, description || '', JSON.stringify(permissions)]
       );
       res.status(201).json({ message: 'Role added successfully', role: result.rows[0] });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
-  }
+  };  
 
   const deleteRole = async (req, res) => {
     const { name } = req.params;
   
     try {
       const result = await pool.query(
-        'DELETE FROM tb_roles WHERE name = $1 RETURNING *',
+        'DELETE FROM tb_roles_backup WHERE name = $1 RETURNING *',
         [name]
       );
   
@@ -549,6 +549,34 @@ const addRole = async (req, res) => {
     const result = await pool.query('SELECT * FROM tb_users ORDER BY id ASC');
     res.json(result.rows);
   }
+
+  const checkUsername = async (req, res) => {
+    const { username } = req.query;
+    try {
+      const result = await pool.query(
+        'SELECT COUNT(*) AS count FROM tb_users WHERE username = $1',
+        [username]
+      );
+      res.json({ exists: result.rows[0].count > 0 });
+    } catch (error) {
+      console.error('Error in checkUsername:', error);
+      res.status(500).json({ message: 'Error checking username.' });
+    }
+  };  
+
+  const checkEmail = async (req, res) => {
+    const { email } = req.query;
+    try {
+      const result = await pool.query(
+        'SELECT COUNT(*) AS count FROM tb_users WHERE email = $1',
+        [email]
+      );
+      res.json({ exists: result.rows[0].count > 0 });
+    } catch (error) {
+      console.error('Error in checkEmail:', error);
+      res.status(500).json({ message: 'Error checking email.' });
+    }
+  };  
 
   const addUser = async (req, res) => {
     try {
@@ -576,15 +604,40 @@ const addRole = async (req, res) => {
       const { id } = req.params;
       const { name, username, email, password, role, designation, avatar } = req.body;
   
-      let hashedPassword = password;
+      // Step 1: Get current user from DB
+      const existingUserResult = await pool.query('SELECT * FROM tb_users WHERE id = $1', [id]);
+      const existingUser = existingUserResult.rows[0];
+  
+      if (!existingUser) {
+        return res.status(404).send('User not found');
+      }
+  
+      // Step 2: Only update password if it's provided
+      let hashedPassword = existingUser.password;
       if (password) {
         hashedPassword = await bcrypt.hash(password, 10);
       }
   
+      // Step 3: Fallback to current DB values for restricted fields if not provided
+      const updatedEmail = email ?? existingUser.email;
+      const updatedRole = role ?? existingUser.role;
+      const updatedDesignation = designation ?? existingUser.designation;
+  
+      // Step 4: Perform the update
       const result = await pool.query(
-        `UPDATE tb_users SET name=$1, username=$2, email=$3, password=$4, role=$5, designation=$6, avatar=$7
-         WHERE id=$8 RETURNING *`,
-        [name, username, email, hashedPassword, role, designation, avatar, id]
+        `UPDATE tb_users 
+         SET name = $1, username = $2, email = $3, password = $4, role = $5, designation = $6, avatar = $7
+         WHERE id = $8 RETURNING *`,
+        [
+          name,
+          username,
+          updatedEmail,
+          hashedPassword,
+          updatedRole,
+          updatedDesignation,
+          avatar,
+          id
+        ]
       );
   
       res.json(result.rows[0]);
@@ -592,7 +645,8 @@ const addRole = async (req, res) => {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-  }
+  };
+  
 
   const deleteUser = async (req, res) => {
     const { id } = req.params;
@@ -627,7 +681,7 @@ const addRole = async (req, res) => {
     const { id } = req.params;
     try {
       await pool.query('DELETE FROM tb_designations WHERE id = $1', [id]);
-      res.json({ message: 'Designation deleted' }); // ✅ Proper JSON response
+      res.json({ message: 'Designation deleted' });
     } catch (error) {
       console.error('Error deleting designation:', error);
       res.status(500).send('Internal server error');
@@ -647,6 +701,8 @@ module.exports = {
     getSensorConfig,
     updateSensorConfig,
     fetchUser,
+    checkUsername,
+    checkEmail,
     addUser,
     updateUser,
     deleteUser,

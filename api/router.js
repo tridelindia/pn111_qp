@@ -1,5 +1,16 @@
 const express = require('express')
-const { loginUser, getStationConfig, getAllSensorData, getSensorDataByDate, getMetrologicalData, addStation, editStation, saveSensorConfigurations, insertSensorConfigs, getSensorConfig, updateSensorConfig, fetchDesignation, addDesignation, deleteDesignation, fetchRole, addRole, deleteRole, fetchUser, addUser, updateUser, deleteUser } = require('./controller')
+const { 
+    loginUser, getStationConfig, 
+    getAllSensorData, getSensorDataByDate, 
+    getMetrologicalData, addStation, 
+    editStation, saveSensorConfigurations, 
+    insertSensorConfigs, getSensorConfig, 
+    updateSensorConfig, fetchDesignation, 
+    addDesignation, deleteDesignation, 
+    fetchRole, addRole, deleteRole, 
+    fetchUser, checkEmail, checkUsername, 
+    addUser, updateUser, deleteUser 
+} = require('./controller')
 
 const router = express.Router();
 
@@ -24,6 +35,8 @@ router.post('/roles/add', addRole);
 router.delete('/roles/name/:name', deleteRole);
 
 router.get('/users', fetchUser);
+router.get('/users/check-username', checkUsername);
+router.get('/users/check-email', checkEmail);
 router.post('/users/login', loginUser);
 router.post('/users', addUser);
 router.put('/users/:id', updateUser);

@@ -1,10 +1,15 @@
 import { CanActivateFn, Router } from '@angular/router';
 
 export const permissionGuard: CanActivateFn = (route, state) => {
-  
-  const requiredPermission = route.data['permission'];
-  const permissions = JSON.parse(localStorage.getItem('permissions') || '[]');
+  const requiredPage = route.data['permission'];
+  const requiredAction = route.data['action'];
 
-  return permissions.includes(requiredPermission);
-  
+  const permissions = JSON.parse(localStorage.getItem('permissions') || '{}');
+
+  if (permissions[requiredPage] && permissions[requiredPage].includes(requiredAction)) {
+    return true;
+  }
+
+  return false;
 };
+

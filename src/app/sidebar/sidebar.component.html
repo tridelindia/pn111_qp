@@ -1,21 +1,21 @@
 <div class="sidebar">
     <div class="navigators">
-        <a *ngIf="permissions.includes('Home')" routerLink="/home">
+        <a *ngIf="permissions['Home']?.includes('read')" routerLink="/home">
             <i class="fa-solid fa-house" [ngClass]="{'selected': selectedIndex === 0}" (click)="selectOption(0)"></i>
         </a>
-        <a *ngIf="permissions.includes('Dashboard')" routerLink="/dashboard">
+        <a *ngIf="permissions['Dashboard']?.includes('read')" routerLink="/dashboard">
             <i class="fa-solid fa-square-poll-vertical" [ngClass]="{'selected': selectedIndex === 1}" (click)="selectOption(1)"></i>
         </a>
-        <a *ngIf="permissions.includes('Analysis')" routerLink="/analytics">
+        <a *ngIf="permissions['Analysis']?.includes('read')" routerLink="/analytics">
             <i class="fa-solid fa-chart-line" [ngClass]="{'selected': selectedIndex === 2}" (click)="selectOption(2)"></i>
         </a>
-        <a *ngIf="permissions.includes('Reports')" routerLink="/reports">
+        <a *ngIf="permissions['Reports']?.includes('read')" routerLink="/reports">
             <i class="fa-regular fa-rectangle-list" [ngClass]="{'selected': selectedIndex === 3}"(click)="selectOption(3)"></i>
         </a>
-        <a *ngIf="permissions.includes('User Management')" routerLink="/users">
+        <a *ngIf="permissions['User Management']?.includes('read')" routerLink="/users">
             <i class="fa-solid fa-users-cog" [ngClass]="{'selected': selectedIndex === 4}" (click)="selectOption(4)"></i>
         </a>
-        <a *ngIf="permissions.includes('Settings')" routerLink="/settings">
+        <a *ngIf="permissions['Settings']?.includes('read')" routerLink="/settings">
             <i class="fa-solid fa-gears" [ngClass]="{'selected': selectedIndex === 5}" (click)="selectOption(5)"></i>
         </a>
         <a (click)="logout()">

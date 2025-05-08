@@ -9,6 +9,7 @@ import { UsersComponent } from './users/users.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AuthGuard } from './services/auth.guard';
 import { permissionGuard } from './services/permission.guard';
+import { HeatmapComponent } from './analytics/heatmap/heatmap.component';
 
 export const routes: Routes = [
     {
@@ -29,37 +30,37 @@ export const routes: Routes = [
                 path:'home',
                 component: HomeComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Home'}
+                data: { permission: 'Home', action: 'read'}
             },
             {
                 path:'dashboard',
                 component:DashboardComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Dashboard'}
+                data: { permission: 'Dashboard', action: 'read'}
             },
             {
                 path:'reports',
                 component:ReportComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Reports'}
+                data: { permission: 'Reports', action: 'read'}
             },
             {
                 path:'analytics',
                 component:AnalyticsComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Analytics'}
+                data: { permission: 'Analytics', action: 'read'}
             },
             {
                 path:'users',
                 component:UsersComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'User Management'}
+                data: { permission: 'User Management', action: 'read'}
             },
             {
                 path:'settings',
                 component:SettingsComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Settings'}
+                data: { permission: 'Settings', action: 'read'}
             }
             
         ]

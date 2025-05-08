@@ -46,9 +46,16 @@
                         </div>
 
                         <div class="filter">
-                            <p-multiselect display="chip" [options]="dynaColumns" optionLabel="header"
-                                [(ngModel)]="selectedColumns" placeholder="Select Columns" [maxSelectedLabels]="7"
-                                styleClass="w-full md:w-80" showHeader="false" selectedItemsLabel="{0} columns selected"
+                            <p-multiselect 
+                                display="chip" 
+                                [options]="dynaColumns" 
+                                optionLabel="header"
+                                [(ngModel)]="selectedColumns" 
+                                placeholder="Select Columns" 
+                                [maxSelectedLabels]="7"
+                                styleClass="w-full md:w-80" 
+                                showHeader="false" 
+                                selectedItemsLabel="{0} columns selected"
                                 [filter]="true" />
                         </div>
                     </div>

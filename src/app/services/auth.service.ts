@@ -18,14 +18,30 @@ export class AuthService {
   constructor(private http:HttpClient, private router:Router) { }
 
 
+  // login(cred: any): Observable<CurrentUser> {
+  //   return this.http.post<CurrentUser>(`${this.apiUrl}login`, cred).pipe(
+  //     tap((user: any) => {
+  //       localStorage.setItem('currentUser', JSON.stringify(user));
+  //       localStorage.setItem('permissions', JSON.stringify(user.permissions || []));
+  //     })
+  //   );
+  // }
+
   login(cred: any): Observable<CurrentUser> {
     return this.http.post<CurrentUser>(`${this.apiUrl}login`, cred).pipe(
       tap((user: any) => {
+        console.log('User returned from login:', user);
+      
+        const permissions = typeof user.permissions === 'object' && user.permissions !== null
+          ? user.permissions
+          : {};
+      
         localStorage.setItem('currentUser', JSON.stringify(user));
-        localStorage.setItem('permissions', JSON.stringify(user.permissions || []));
+        localStorage.setItem('permissions', JSON.stringify(permissions));
       })
+      
     );
-  }
+  }  
   
   getCurrentUser(): any {
     return JSON.parse(localStorage.getItem('currentUser') || '{}');

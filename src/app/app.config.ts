@@ -3,12 +3,14 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { provideToastr } from 'ngx-toastr';
+import { provideToastr, ToastrModule } from 'ngx-toastr';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
+import * as echarts from 'echarts';
 import { MyPreset } from './themes/aura';
+import { HttpClientModule } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
@@ -16,7 +18,13 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideToastr(), 
     provideAnimations(), 
-    importProvidersFrom(NgxEchartsModule),
+    importProvidersFrom(
+      NgxEchartsModule,
+      HttpClientModule,
+      BrowserAnimationsModule,
+      ToastrModule.forRoot(),
+      NgxEchartsModule.forRoot({ echarts })
+    ),
     provideAnimationsAsync(),
         providePrimeNG({
             theme: {

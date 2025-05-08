@@ -1,5 +1,6 @@
 <div class="analisys_main">
     <div class="analisys_right">
+        <!-- <app-heatmap *ngIf="selectedSensor === 'waterQuality'"></app-heatmap> -->
         <div class="compare_view_space" *ngIf="!isSingleView">
             <app-test-chart></app-test-chart>
         </div>
@@ -11,7 +12,9 @@
 
             <div class="right_top" *ngIf=" numberr ===2 || numberr ===3 || numberr ===4">
                 <div class="top_one" *ngIf=" numberr === 2">
-                    <app-test-chart></app-test-chart>
+                    <!-- <app-test-chart></app-test-chart> -->
+                    <!-- <app-heatmap ></app-heatmap> -->
+                     <app-line-chart></app-line-chart>
                 </div>
                 <div class="chart_left" *ngIf=" numberr === 4 || numberr ===3">
                     <app-test-chart></app-test-chart>
@@ -119,7 +122,7 @@
 
             </div>
             <span>Select upto 4 Parameters</span>
-            <button (click)="isTest()">test</button>
+            <button *ngIf="hasPermissions('User Management', ['read', 'write'])" (click)="isTest()">test</button>
         </div>
         <div class="param_lists" *ngIf="isSelectParams">
             <i class="fa fa-arrow-left" (click)="onParamSelection('back')"></i>

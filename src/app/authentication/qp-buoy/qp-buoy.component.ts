@@ -75,7 +75,7 @@ export class QpBuoyComponent implements  OnInit {
     loader.setDRACOLoader(dracoLoader);  // Set the DRACOLoader to the GLTFLoader
 
     loader.load(
-      'assets/3d/buoy2/qatar_buoy_assembly_13.02.25_13.03.25.glb',  // Ensure you use a .glb file
+      'assets/3d/buoy/buoy3.glb',  // Ensure you use a .glb file
       (gltf) => {
         this.ship = gltf.scene;
         this.ship.scale.set(3, 2.5, 3);

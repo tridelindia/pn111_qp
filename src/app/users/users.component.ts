@@ -10,13 +10,23 @@ import { UserService } from './service/users/user.service';
 import { DesignationsService } from './service/designations/designations.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Settings } from '@amcharts/amcharts5/.internal/core/util/Entity';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 
 @Component({
   selector: 'app-users',
   standalone:true,
-  imports: [CommonModule, FormsModule, UserlogComponent, NgSelectModule, FormsModule, HttpClientModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    UserlogComponent, 
+    NgSelectModule, 
+    MultiSelectModule,
+    FormsModule, 
+    HttpClientModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
   animations: [
@@ -36,17 +46,27 @@ export class UsersComponent{
 
   constructor(private roleService: RoleService, private userService: UserService, private designationService: DesignationsService) { }
 
-  ngOnInit() {
-    this.loadRoles();
-    this.loadUsers();
-    this.loadDesignations();
-  }
+  // ngOnInit() {
+  //   this.loadRoles();
+  //   this.loadUsers();
+  //   this.loadDesignations();
+  //   this.generateAllPermissionOptions();
+  // }
 
   // ****************Top Tab*****************//
   activeTab: string = 'users';
 
   setActiveTab(tab: string) {
-    this.activeTab = tab;
+    this.activeTab = tab;  
+    
+    if (tab === 'users') {
+      this.resetForm();
+    }if (tab === 'rolesDesignations'){
+      this.resetForm();
+    }if (tab === 'userLog'){
+      this.resetForm();
+    }
+    
     console.log(tab, this.activeTab);
   }
   // ****************End**********************//
@@ -64,24 +84,49 @@ export class UsersComponent{
     confirmPassword: '',
     role: '',
     designation: '',
-    avatar: ''
+    avatar: '',
+    is_admin: false
   };
+  
+  
   isEditing: boolean = false;
+  isEditingAdmin: boolean = false;
 
   editUser(user: any) {
+    
+    // Prevent edit option of Admin
+    // if (user.is_admin) {
+    //   alert("Prime Admin cannot be edited.");
+    //   return;
+    // }
+
+    // Edit option for admin
     this.isEditing = true;
+    this.isEditingAdmin = user.is_admin ?? false;
+
     this.currentUser = { ...user, password: '', confirmPassword: '' };
     this.setActiveTab('addEditUser');
   }
 
+
   deleteUser(userId: number) {
-    const confirmDelete = confirm("Are you sure you want to delete that user ?");
+
+    const userToDelete = this.users.find(u => u.id === userId);
+
+    // Prevent deletion of Admin
+    if (userToDelete?.is_admin) {
+      alert("Admin cannot be deleted.");
+      return;
+    }
+
+    const confirmDelete = confirm("Are you sure you want to delete this user ?");
     if (confirmDelete) {
       this.userService.deleteUser(userId).subscribe(() => {
         this.loadUsers();
       });
     }
   }
+
 
   loadUsers() {
     this.userService.getUsers().subscribe(users => {
@@ -94,6 +139,49 @@ export class UsersComponent{
 
 
   // ************Add/Edit Users***********//
+
+  // ******Check Username/Email***********//
+
+  usernameTaken: boolean = false;
+  emailTaken: boolean = false;
+
+  private usernameInput$ = new Subject<string>();
+  private emailInput$ = new Subject<string>();
+
+  ngOnInit(): void {
+
+    this.loadRoles();
+    this.loadUsers();
+    this.loadDesignations();
+    this.generateAllPermissionOptions();
+
+    this.usernameInput$.pipe(debounceTime(400), distinctUntilChanged()).subscribe(username => {
+      if (!this.isEditing) {
+        this.userService.checkUsername(username).subscribe(res => {
+          this.usernameTaken = res.exists;
+        });
+      }
+    });
+  
+    this.emailInput$.pipe(debounceTime(400), distinctUntilChanged()).subscribe(email => {
+      if (!this.isEditing) {
+        this.userService.checkEmail(email).subscribe(res => {
+          this.emailTaken = res.exists;
+        });
+      }
+    });
+  }
+  
+  onUsernameInput(username: string): void {
+    this.usernameInput$.next(username);
+  }
+  
+  onEmailInput(email: string): void {
+    this.emailInput$.next(email);
+  }
+
+  //*****************end*****************//
+  
   avatars: string[] = [
     'assets/avatars/avatar1.svg',
     'assets/avatars/avatar2.svg',
@@ -105,9 +193,11 @@ export class UsersComponent{
     this.currentUser.avatar = avatar;
   }
 
+
   backtoUsers(): void {
     this.activeTab = 'users';
   }
+
 
   addUser() {
     this.isEditing = false;
@@ -119,7 +209,8 @@ export class UsersComponent{
       confirmPassword: '',
       role: '',
       designation: '',
-      avatar: ''
+      avatar: '',
+      is_admin: false,
     };
     this.setActiveTab('addEditUser');
   }
@@ -130,24 +221,44 @@ export class UsersComponent{
       !this.currentUser.name ||
       !this.currentUser.email ||
       !this.currentUser.username ||
-      !this.currentUser.password ||
-      !this.currentUser.confirmPassword ||
-      !this.currentUser.role ||
-      !this.currentUser.designation ||
+      (!this.isEditing && (!this.currentUser.password || !this.currentUser.confirmPassword)) ||
+      (!this.isEditingAdmin && (!this.currentUser.role || !this.currentUser.designation)) ||
       !this.currentUser.avatar
     ) {
       alert('Please fill in all fields before saving the user.');
       return;
     }
+
+    if (this.usernameTaken) {
+      alert('Username is already taken.');
+      return;
+    }
+    
+    if (this.emailTaken) {
+      alert('Email is already in use.');
+      return;
+    }    
   
-    if (this.currentUser.password !== this.currentUser.confirmPassword) {
+    if (!this.isEditing && this.currentUser.password !== this.currentUser.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
   
-    const payload = { ...this.currentUser };
-    delete payload.confirmPassword; // optional
-
+    const payload: any = { ...this.currentUser };
+    delete payload.confirmPassword; // Remove confirmPassword before sending
+  
+    // Prevent setting is_admin manually via frontend
+    if (!this.isEditing) {
+      payload.is_admin = false;
+    }
+  
+    // If editing Admin, REMOVE email, role, and designation completely from payload
+    if (this.isEditingAdmin) {
+      delete payload.email;
+      delete payload.role;
+      delete payload.designation;
+    }
+  
     if (this.isEditing) {
       this.userService.updateUser(this.currentUser.id!, payload).subscribe(() => {
         this.loadUsers();
@@ -161,9 +272,15 @@ export class UsersComponent{
         this.setActiveTab('users');
       });
     }
-  }
+  }  
+  
+
+
 
   resetForm(): void {
+    this.isEditing = false;
+    this.isEditingAdmin = false;
+
     this.currentUser = {
       name: '',
       email: '',
@@ -173,11 +290,15 @@ export class UsersComponent{
       role: '',
       designation: '',
       avatar: '',
-      created: ''
+      created: '',
+      is_admin: false,
     };
-    this.selectedRole = null;
-    this.selectedDesignation = null;
+
+    this.selectedRole = '';
+    this.selectedDesignation = '';
   }
+
+
 
     // *********Custom Select************** //
     // Role
@@ -197,6 +318,7 @@ export class UsersComponent{
       }, 200);
     }
 
+
     // Designation
     designationDropdownOpen = false;
     selectedDesignation: string | null = null;
@@ -215,6 +337,7 @@ export class UsersComponent{
       }, 200);
     }
     
+
     @HostListener('document:click', ['$event'])
     onClickOutside(event: MouseEvent) {
       const target = event.target as HTMLElement;
@@ -230,30 +353,41 @@ export class UsersComponent{
   //****************Roles***************** //
 
   roles: Role[] = [];
+
+  filteredRoles: any[] = [];
   
   loadRoles() {
-    this.roleService.getRoles().subscribe(data => {
-      this.roles = data;
+    this.roleService.getRoles().subscribe(roles => {
+      this.roles = roles;
+      this.filteredRoles = roles.filter(role => role.name.toLowerCase() !== 'admin');
     });
   }
   
-  newRole: { name: string; description: string; permissions: string[] } = {
+  // newRole: { name: string; description: string; permissions: string[] } = {
+  //   name: '',
+  //   description: '',
+  //   permissions: []
+  // };
+
+  newRole: {
+    name: string;
+    description: string;
+    permissions: { [page: string]: string[] };
+    flatPermissions?: string[]; // used only for ng-select binding
+  } = {
     name: '',
     description: '',
-    permissions: []
+    permissions: {},
+    flatPermissions:[]
   };
+  
 
   
 
-allPermissions: string[] = [
-  'Home',
-  'Dashboard',
-  'Reports',
-  'Analysis',
-  'Settings',
-  'User Management',
-  'Sensor Health',
-];
+allPermissions: string[] = [];
+
+pages: string[] = ['Home', 'Dashboard', 'Reports', 'Analysis', 'Sensor Health', 'Notification'];
+actions: string[] = ['read', 'write', 'execute'];
 
 permissionIcons: { [key: string]: string } = {
   'Home': 'fa-house',
@@ -262,44 +396,110 @@ permissionIcons: { [key: string]: string } = {
   'Reports': 'fa-rectangle-list',
   'User Management': 'fa-users-cog',
   'Settings': 'fa-gears',
-  'Sensor Health': 'fa-heart-pulse'
+  'Sensor Health': 'fa-heart-pulse',
+  'Notification': 'fa-solid fa-envelope',
 };
 
+generateAllPermissionOptions() {
+  this.allPermissions = [];
+  for (const page of this.pages) {
+    for (const action of this.actions) {
+      this.allPermissions.push(`${page} - ${action}`);
+    }
+  }
+}
+
+
+// addRole() {
+//   console.log('Button clicked')
+//   if (this.newRole.name && !this.roles.find(r => r.name === this.newRole.name)) {
+
+//     const roleToSend = {
+//       ...this.newRole,
+//       permissions: `{${this.newRole.permissions.join(',')}}`
+//     };
+//     this.roleService.addRole(roleToSend as any).subscribe(() => {
+//       this.newRole = { name: '', description: '', permissions: [] };
+//       this.loadRoles();
+//       this.updateRoleOptions();
+//     });
+//   }
+// }
+
+// addRole() {
+//   if (this.newRole.name && !this.roles.find(r => r.name === this.newRole.name)) {
+//     this.roleService.addRole(this.newRole).subscribe(() => {
+//       this.newRole = { name: '', description: '', permissions: {} };
+//       this.loadRoles();
+//     });
+//   }
+// }
+
 addRole() {
-  console.log('Button clicked')
-  if (this.newRole.name && !this.roles.find(r => r.name === this.newRole.name)) {
+  const parsedPermissions: { [page: string]: string[] } = {};
 
-    const roleToSend = {
-      ...this.newRole,
-      permissions: `{${this.newRole.permissions.join(',')}}`
+  if (this.newRole.flatPermissions) {
+    for (const perm of this.newRole.flatPermissions) {
+      const [page, action] = perm.split(' - ');
+      if (!parsedPermissions[page]) {
+        parsedPermissions[page] = [];
+      }
+      if (!parsedPermissions[page].includes(action)) {
+        parsedPermissions[page].push(action);
+      }
+    }
+  }
+
+  const roleToSend = {
+    name: this.newRole.name,
+    description: this.newRole.description,
+    permissions: parsedPermissions
+  };
+
+  this.roleService.addRole(roleToSend as Role).subscribe(() => {
+    this.newRole = {
+      name: '',
+      description: '',
+      permissions: {},
+      flatPermissions: []
     };
-    this.roleService.addRole(roleToSend as any).subscribe(() => {
-      this.newRole = { name: '', description: '', permissions: [] };
-      this.loadRoles();
-      this.updateRoleOptions();
-    });
-  }
+    this.loadRoles();
+    this.updateRoleOptions();
+  });
 }
 
 
-togglePermission(permission: string) {
+objectEntries(obj: any): [string, string[]][] {
+  return Object.entries(obj || {});
+}
 
-  if (!Array.isArray(this.newRole.permissions)) {
-    this.newRole.permissions = [];
+actionIcons: { [key: string]: string } = {
+  read: 'fa-eye',
+  write: 'fa-pen',
+  execute: 'fa-terminal'
+};
+
+
+
+// togglePermission(permission: string) {
+
+//   if (!Array.isArray(this.newRole.permissions)) {
+//     this.newRole.permissions = [];
     
-  }
+//   }
   
-  const index = this.newRole.permissions.indexOf(permission);
-  if (index > -1) {
-    this.newRole.permissions.splice(index, 1);
-  } else {
-    this.newRole.permissions.push(permission);
-  }
+//   const index = this.newRole.permissions.indexOf(permission);
+//   if (index > -1) {
+//     this.newRole.permissions.splice(index, 1);
+//   } else {
+//     this.newRole.permissions.push(permission);
+//   }
 
-  console.log("b4S",this.newRole.permissions);
-  const newper = this.newRole.permissions.join(', ');
-  console.log("after",`"${newper}"`);
-}
+//   console.log("b4S",this.newRole.permissions);
+//   const newper = this.newRole.permissions.join(', ');
+//   console.log("after",`"${newper}"`);
+// }
+
 
 updateRoleOptions() {
   // Ensure selected role stays valid after role list is updated
@@ -308,13 +508,33 @@ updateRoleOptions() {
   }
 }
 
+generateTooltip(page: string, actions: string[]): string {
+  return `${page}\n${actions.map(a => `• ${a}`).join('\n')}`;
+}
+
 deleteRole(roleName: string) {
+
+  if (roleName === "Admin"){
+    alert("Role Admin cannot be deleted");
+    return;
+  }
+
   const confirmDelete = confirm(`Are you sure you want to delete the role "${roleName}"?`);
   if (confirmDelete) {
     this.roleService.deleteRoleByName(roleName).subscribe(() => {
       this.loadRoles(); // Refresh list
     });
   }
+}
+
+editRole(roleName: any){
+  
+  if (roleName === "Admin"){
+    alert("Role Admin cannot be deleted");
+    return;
+  }
+
+  
 }
   //****************End*******************//
 
@@ -324,19 +544,17 @@ deleteRole(roleName: string) {
    // Replace hardcoded list
 designations: any[] = [];
 
+filteredDesignations: any[] = [];
+
 // Object for the form
 newDesignation = { title: '', description: '' };
 
 // Load designations from DB
 loadDesignations() {
-  this.designationService.getDesignations().subscribe(
-    (data) => {
-      this.designations = data;
-    },
-    (error) => {
-      console.error('Error loading designations:', error);
-    }
-  );
+  this.designationService.getDesignations().subscribe(designations => {
+    this.designations = designations;
+    this.filteredDesignations = designations.filter(designation => designation.title.toLowerCase() !== 'admin');
+  });
 }
 
 // Add designation to DB
@@ -356,7 +574,8 @@ addDesignation() {
 
 // Delete designation from DB
 deleteDesignation(designation: any) {
-  const confirmDesDelete = confirm(`Are you sure you want to delete that designation ?`);
+  
+  const confirmDesDelete = confirm(`Are you sure you want to deleteis designation ?`);
   if (confirmDesDelete) {
   this.designationService.deleteDesignation(designation.id).subscribe(
     () => {

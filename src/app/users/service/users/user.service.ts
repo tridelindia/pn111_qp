@@ -14,6 +14,18 @@ export class UserService {
     return this.http.get<any[]>(this.baseUrl);
   }
 
+  checkUsername(username: string) {
+    return this.http.get<{ exists: boolean }>(`${this.baseUrl}/check-username`, {
+      params: { username },
+    });
+  }
+  
+  checkEmail(email: string) {
+    return this.http.get<{ exists: boolean }>(`${this.baseUrl}/check-email`, {
+      params: { email },
+    });
+  }  
+
   addUser(user: any) {
     return this.http.post<any>(this.baseUrl, user);
   }

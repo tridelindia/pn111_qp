@@ -9,6 +9,7 @@ export interface User {
     designation: string;
     avatar: string;
     created?: string;
+    is_admin: boolean;
   }
   
   export interface CurrentUser {

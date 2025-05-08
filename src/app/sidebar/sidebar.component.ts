@@ -21,15 +21,39 @@ constructor(private lay:LayoutComponent, private auth:AuthService, private toast
    this.selectedIndex = this.lay.selectedIndex;
   }
 
-  permissions: string[] = [];
+  // permissions: string[] = [];
 
-  ngOnInit(): void {
-      this.selectOption(0);
-      this.permissions = JSON.parse(localStorage.getItem('permissions') || '[]');
+  // ngOnInit(): void {
+  //     this.selectOption(0);
+  //     this.permissions = JSON.parse(localStorage.getItem('permissions') || '[]');
+  // }
+
+  permissions: { [key: string]: string[] } = {};
+
+ngOnInit(): void {
+  this.selectOption(0);
+
+  const permString = localStorage.getItem('permissions');
+  let parsedPermissions: any;
+
+  try {
+    parsedPermissions = JSON.parse(permString || '{}');
+  } catch (err) {
+    console.error('Error parsing permissions from localStorage', err);
+    parsedPermissions = {};
   }
 
+  if (typeof parsedPermissions !== 'object' || parsedPermissions === null || Array.isArray(parsedPermissions)) {
+    console.warn('Parsed permissions is not a valid object. Resetting.');
+    parsedPermissions = {};
+  }
+
+  this.permissions = parsedPermissions;
+  console.log('Final permissions:', this.permissions);
+}
+      
+
   logout() {
-    // this.auth.logUserActivity(this.auth.CurrentUser?.id, 'Logout');
     this.auth.logout();
     this.toast.success('Logged out successfully');
   }
