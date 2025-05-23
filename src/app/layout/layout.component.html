@@ -1,0 +1,25 @@
+<div class="layout">
+    <app-sidebar></app-sidebar>
+    <div class="basee">
+        <app-top-bar [page]="selectedIndex" *ngIf="!isTopBarLoading"></app-top-bar>
+        @if (selectedIndex === 0) {
+        <app-home></app-home>
+        }@else if(selectedIndex === 1){
+        <app-dashboard *ngIf="!isDashboardLoading" [sensorsss]="sensors"></app-dashboard>
+        }@else if(selectedIndex === 2){
+        <!-- <app-analysis></app-analysis> -->
+        <!-- <app-homeanalysis style="height: 100%;"></app-homeanalysis> -->
+        <app-analytics></app-analytics>
+        }@else if(selectedIndex === 3){
+        <app-report></app-report>
+        }@else if(selectedIndex === 4){
+        <app-users></app-users>
+        }@else if(selectedIndex === 5){
+        <app-settings></app-settings>
+        }@else if(selectedIndex === 7){
+        <app-data-health></app-data-health>
+        }
+        <!-- <app-report></app-report> -->
+    </div>
+
+</div>

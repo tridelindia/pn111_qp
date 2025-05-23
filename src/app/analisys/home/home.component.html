@@ -1,0 +1,63 @@
+<!-- <div class="analysis_main">
+    <div class="right">
+
+    </div>
+    <div class="left"> -->
+<div class="top">
+    <div class="dropDowns">
+        <select name="Parameters" id="parameters" [(ngModel)]="selectedparam" (change)="changesingle()">
+            <option *ngFor="let param of parametres" [value]="param">
+                {{ param }}
+            </option>
+        </select>
+    </div>
+    <app-single-axis [singleAxis]="singleAxis" *ngIf="!isSingleLoad"></app-single-axis>
+</div>
+<div class="center">
+    <div class="dropDowns">
+        <div class="select_div">
+            <p>Select X1 Parameter</p>
+            <select name="Parameters" id="parameters" [(ngModel)]="selectedparam" (change)="changesingle()">
+                <option *ngFor="let param of parametres" [value]="param">
+                    {{ param }}
+                </option>
+            </select>
+        </div>
+        <div class="select_div">
+            <p>Select X2 Parameter</p>
+            <select name="Parameters" id="parameters" [(ngModel)]="selectedparam" (change)="changesingle()">
+                <option *ngFor="let param of parametres" [value]="param">
+                    {{ param }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <app-multi-axis [MultiAxis]="multiAxis" *ngIf="!isMultiLoading"></app-multi-axis>
+</div>
+<div class="middle">
+    <div class="dropDowns">
+        <div class="select_div">
+            <p>Select X Axis</p>
+            <select name="Parameters" id="parameters" [(ngModel)]="selectedScactterX" (change)="changeScatterOne()">
+                <option *ngFor="let param of parametres" [value]="param">
+                    {{ param }}
+                </option>
+            </select>
+        </div>
+        <div class="select_div">
+            <p>Select Y Axis</p>
+            <select name="Parameters" id="parameters" [(ngModel)]="selectedScatterY" (change)="changeScatterOne()">
+                <option *ngFor="let param of parametres" [value]="param">
+                    {{ param }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <app-scatter-axis [scatterAxis]="scatterAxis" *ngIf="!isScatterLoading"></app-scatter-axis>
+</div>
+<div class="bottom">
+    <div class="dropDowns"></div>
+    <app-rose-plot></app-rose-plot>
+</div>
+<!-- </div>
+</div> -->

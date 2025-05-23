@@ -1,0 +1,35 @@
+<div class="sidebar">
+    <div class="navigators">
+        <a *ngIf="permissions['Home']?.includes('read')" routerLink="/home" title="Home">
+            <i class="fa-solid fa-house" [ngClass]="{'selected': selectedIndex === 0}" (click)="selectOption(0)"></i>
+        </a>
+        <a *ngIf="permissions['Dashboard']?.includes('read')" routerLink="/dashboard" title="Dashboard">
+            <i class="fa-solid fa-square-poll-vertical" [ngClass]="{'selected': selectedIndex === 1}"
+                (click)="selectOption(1)"></i>
+        </a>
+        <a *ngIf="permissions['Analysis']?.includes('read')" routerLink="/analytics">
+            <i class="fa-solid fa-chart-line" [ngClass]="{'selected': selectedIndex === 2}"
+                (click)="selectOption(2)"></i>
+        </a>
+        <a *ngIf="permissions['Reports']?.includes('read')" routerLink="/reports" title="Reports">
+            <i class="fa-regular fa-rectangle-list" [ngClass]="{'selected': selectedIndex === 3}"
+                (click)="selectOption(3)"></i>
+        </a>
+        <a *ngIf="permissions['User Management']?.includes('read')" routerLink="/users" title="User Management">
+            <i class="fa-solid fa-users-cog" [ngClass]="{'selected': selectedIndex === 4}"
+                (click)="selectOption(4)"></i>
+        </a>
+        <a *ngIf="permissions['Settings']?.includes('read')" routerLink="/settings" title="Settings">
+            <i class="fa-solid fa-gears" [ngClass]="{'selected': selectedIndex === 5}" (click)="selectOption(5)"></i>
+        </a>
+        <i class="fa-solid fa-heart-pulse" [ngClass]="{'selected': selectedIndex === 7}" (click)="selectOption(7)"
+            title="Data Health"></i>
+        <!-- <i class="fa-solid fa-envelope" [ngClass]="{'selected': selectedIndex === 8}" (click)="selectOption(8)"
+            title="Notification Management"></i> -->
+        <a (click)="logout()" title="Logout">
+            <i class="fa-solid fa-right-from-bracket" [ngClass]="{'selected': selectedIndex === 6}"
+                (click)="selectOption(6)"></i>
+        </a>
+
+    </div>
+</div>

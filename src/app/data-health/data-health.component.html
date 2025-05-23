@@ -1,0 +1,25 @@
+<div class="parent-container">
+    <div class="scrollable-content">
+        <div class="main-content">
+            <app-sensor-tab [activeSensor]="currentSensor" (sensorSelected)="onSensorSelected($event)"
+                (dateRangeChange)="onDateRangeChange($event)" (updateData)="onTabUpdate($event)">
+            </app-sensor-tab>
+
+            <div class="main-chart">
+                <app-main-chart-section [dateRange]="dateRange" [chartData]="chartData" [currentSensor]="currentSensor"
+                    [xAxisData]="xAxisData" [apiData]="apiData">
+                </app-main-chart-section>
+            </div>
+        </div>
+
+        <app-sensor-stats [activeSensor]="currentSensor" [selectedTabs]="selectedTabs" [apiData]="apiData">
+        </app-sensor-stats>
+
+        <div class="data-loss-chart">
+            <app-data-loss-chart [currentSensor]="currentSensor" [chartData]="chartData">
+            </app-data-loss-chart>
+        </div>
+
+        <app-sensor-status></app-sensor-status>
+    </div>
+</div>

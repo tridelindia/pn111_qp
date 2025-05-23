@@ -1,0 +1,163 @@
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { pass } from 'three/webgpu';
+import { WaveComponent } from "./wave/wave.component";
+import { QpBuoyComponent } from "./qp-buoy/qp-buoy.component";
+import { CurrentUser } from '../user-model/user-model.module';
+import { UserService } from '../users/service/users/user.service';
+ 
+@Component({
+    selector: 'app-authentication',
+    standalone:true,
+    imports: [HttpClientModule, CommonModule, FormsModule, WaveComponent, QpBuoyComponent],
+    templateUrl: './authentication.component.html',
+    styleUrl: './authentication.component.css',
+    providers: [AuthService]
+})
+export class AuthenticationComponent {
+  username!:string;
+  password!:string;
+  currentUser!: CurrentUser;
+  email!: string;
+ 
+  // Popup State Variables
+  showForgetPopup = false;
+  step = 1;
+ 
+  // Step 2
+  otpSent = false;
+  enteredOtp = '';
+ 
+  // Step 3
+  newPassword = '';
+  confirmPassword = '';
+ 
+ 
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+    private userService: UserService,
+    private toast:ToastrService
+  ){
+ 
+  }
+ 
+  login(event:Event){
+    event.preventDefault();
+    const credentials ={
+      username: this.username,
+      password: this.password
+    }
+    console.log(credentials);
+    try {
+      this.auth.login(credentials).subscribe(
+        (response) => {
+          console.log(response);
+          this.currentUser = response;
+          this.auth.CurrentUser = this.currentUser;
+          localStorage.setItem('loginTime', Date.now().toString());
+          localStorage.setItem('username', this.currentUser.name);
+          this.router.navigate(['/base']);
+          this.toast.success('Logged in Succesfully', 'Access Granted ');
+        },
+        (error) => {
+          console.log(error);
+          this.toast.error('Invalid Credentials', "Login Failed")
+ 
+        }
+       
+      )
+    } catch (error) {
+     
+    }
+  }
+ 
+  openPopup() {
+    this.showForgetPopup = true;
+    this.step = 1;
+    this.otpSent = false;
+    this.resetPopupFields();
+  }
+ 
+  closePopup() {
+    this.showForgetPopup = false;
+  }
+ 
+  resetPopupFields() {
+    this.username = '';
+    this.email = '';
+    this.enteredOtp = '';
+    this.newPassword = '';
+    this.confirmPassword = '';
+  }
+ 
+  // STEP 1: Verify User (simulate API)
+verifyUser() {
+  if (!this.username || !this.email) {
+    this.toast.error('Please enter both username and email');
+    return;
+  }
+ 
+  this.userService.checkUsername(this.username).subscribe({
+    next: (usernameRes) => {
+      if (!usernameRes.exists) {
+        this.toast.error('Username does not exist');
+        return;
+      }
+ 
+      this.userService.checkEmail(this.email).subscribe({
+        next: (emailRes) => {
+          if (!emailRes.exists) {
+            this.toast.error('Email does not exist');
+          } else {
+            this.toast.success('User Verified');
+            this.step = 2;
+          }
+        },
+        error: () => {
+          this.toast.error('Error checking email');
+        }
+      });
+    },
+    error: () => {
+      this.toast.error('Error checking username');
+    }
+  });
+}
+ 
+ 
+  // STEP 2: Send OTP
+  sendOTP() {
+    // Simulate sending OTP
+    this.otpSent = true;
+    this.toast.info('OTP Sent to email');
+  }
+ 
+  verifyOTP() {
+    if (this.enteredOtp === '123456') {
+      this.toast.success('OTP Verified');
+      this.step = 3;
+    } else {
+      this.toast.error('Invalid OTP');
+    }
+  }
+ 
+  // STEP 3: Change Password
+  submitNewPassword() {
+    if (this.newPassword !== this.confirmPassword) {
+      this.toast.error('Passwords do not match');
+      return;
+    }
+ 
+    // Call API to change password here
+    this.toast.success('Password Updated Successfully');
+    this.closePopup();
+  }
+ 
+  }
+ 

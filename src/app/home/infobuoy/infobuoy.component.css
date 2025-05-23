@@ -1,0 +1,320 @@
+.infobuoy-wrapper {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    height: 94%;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .infobuoy-wrapper {
+        flex-direction: column;
+    }
+
+    .main_station_name {
+        width: 80vw;
+        height: 60vh;
+        right: -10%;
+    }
+
+    .smallCircle {
+        width: 40vw;
+        height: 25vh;
+    }
+}
+
+
+
+.main_station_name {
+    width: 15rem;
+    height: 25rem;
+    background: rgba(255, 255, 255, 0.021);
+    backdrop-filter: blur(100px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 0, 0, 0.627);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.522);
+    border-radius: 15rem 0 0 15rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translateY(-50%);
+    overflow: hidden;
+}
+
+.main_station_name:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    transform: translateY(-50%) scale(1.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stationname {
+    width: 15rem;
+    height: 25rem;
+    border-radius: 15rem 0 0 15rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    position: relative;
+}
+
+.stationname.rotated {
+    transform: rotate(360deg);
+    transform-origin: right center;
+    transition: transform 1.5s ease;
+}
+
+.stationname::before,
+.stationname::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.stationname::before {
+    width: 100%;
+    top: 12%;
+    left: 0;
+    transform: rotate(58deg);
+}
+
+.stationname::after {
+    width: 70%;
+    top: 38%;
+    left: 0;
+    transform: rotate(20deg);
+}
+
+.stationname .lines {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.stationname .lines::before,
+.stationname .lines::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.stationname .lines::before {
+    width: 80%;
+    top: 62%;
+    left: 0;
+    transform: rotate(-20deg);
+}
+
+.stationname .lines::after {
+    width: 100%;
+    top: 88%;
+    left: 0;
+    transform: rotate(-58deg);
+}
+
+/* Common style for sections */
+.section {
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+}
+
+/* Section placements */
+.top-1 {
+    top: -3%;
+    left: 32%;
+    transform: rotate(80deg);
+}
+
+.top-1 .value {
+    position: absolute;
+    top: 0px;
+    left: 100px;
+    align-items: center;
+    justify-content: center;
+    /* line-height: 1.2; */
+}
+
+
+
+.top-2 {
+    top: 13%;
+    right: 12%;
+    transform: rotate(40deg);
+    /* line-height: 0px; */
+}
+
+/* .top-2 .value {
+    line-height: 1;
+} */
+
+.center-1 {
+    top: 43%;
+    right: 25%;
+    /* display: flex;
+    flex-direction: row; */
+    transform: rotate(0deg);
+}
+
+.center-1 .value {
+    position: absolute;
+    bottom: 15px;
+    left: 70px;
+}
+
+
+.bottom-1 {
+    top: 57%;
+    right: 14%;
+    transform: rotate(-45deg);
+}
+
+.bottom-1 .value {
+    position: absolute;
+    bottom: 10px;
+    left: 60px;
+    top: 20px;
+}
+
+.bottom-2 {
+    top: 87%;
+    left: 33%;
+    transform: rotate(-80deg);
+}
+
+.bottom-2 .value {
+    position: absolute;
+    bottom: 13px;
+    /* left: 120px; */
+
+}
+
+/* .bottom-2 p {
+    font-size: 22px;
+    position: relative;
+    bottom: 40px;
+    left: 20px;
+} */
+
+/* Small circle */
+.smallCircle {
+    position: absolute;
+    right: 2%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6.3rem;
+    height: 11rem;
+    background: rgba(255, 255, 255, 0.021);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid black;
+    border-radius: 10rem 0 0 10rem;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: top; */
+    align-items: end;
+    /* margin-bottom: 5px; */
+    z-index: 1;
+    font-weight: bold;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+.smallCircle:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    transform: translateY(-50%) scale(1.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.smallCircle .value {
+    margin-right: 2px;
+}
+
+.buoy-image {
+    width: 70px;
+    height: auto;
+    /* border-radius: 50%; */
+    margin: 15px 5px 2px 0px;
+    /* background-color: rgba(255, 255, 255, 0.848);
+    background: #4747f895;
+    background: linear-gradient(to right, #1CB5E0, #4747f895); */
+}
+
+.locationimg {
+    position: absolute;
+    height: 45px;
+    width: 45px;
+    right: 45px;
+    top: 8px;
+    /* margin-left: 2px;
+    margin-bottom: 5px; */
+}
+
+
+.driftimg {
+    position: absolute;
+    top: 20px;
+    right: 36px;
+    height: 45px;
+    width: 45px;
+}
+
+.battery {
+    position: absolute;
+    top: 25px;
+    right: 36px;
+    height: 45px;
+    width: 45px;
+}
+
+.temp {
+    position: absolute;
+    top: 10px;
+    right: 17px;
+    height: 45px;
+    width: 45px;
+}
+
+
+/* .info-item1 {
+    display: flex;
+    flex-direction: column;
+} */
+
+.color1 {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 55px;
+    right: 65px;
+    /* border-radius: 50%; */
+    /* background-color: white; */
+    /* margin-left: 5px; */
+}
+
+
+
+/* .buoy-marker-image {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.buoy-marker-style {
+    width: 40px;
+    height: auto;
+} */

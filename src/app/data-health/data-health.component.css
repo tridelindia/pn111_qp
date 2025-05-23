@@ -1,0 +1,36 @@
+.parent-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden;
+  }
+  
+  .fixed-header {
+    flex-shrink: 0; /* Prevent header from shrinking */
+    /* Add any header-specific styles here */
+  }
+  
+  .scrollable-content {
+    flex-grow: 1; /* Take remaining space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 16px; /* Optional padding */
+    
+    /* Custom scrollbar (optional) */
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+  
+  .main-content, .data-loss-chart {
+    margin-bottom: 24px; /* Space between sections */
+  }

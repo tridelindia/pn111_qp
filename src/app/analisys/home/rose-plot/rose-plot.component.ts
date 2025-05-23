@@ -1,0 +1,87 @@
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { PlotlyModule } from 'angular-plotly.js';
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PolarAxis } from '../home.component';
+import { math } from '@amcharts/amcharts5';
+
+PlotlyModule.plotlyjs = PlotlyJS;
+@Component({
+  selector: 'app-rose-plot',
+  imports: [PlotlyModule],
+  standalone:true,
+  templateUrl: './rose-plot.component.html',
+  styleUrl: './rose-plot.component.css'
+})
+export class RosePlotComponent implements OnInit{
+  @Input() polarAxis:PolarAxis[] = []
+  public graph:any;
+  @Input() id!:string;
+title!:string;
+  V_WIND:number[] = [];
+  DIR_WIND:number[] = []
+  ngOnInit(): void {
+
+    console.log("inside polar",this.polarAxis)
+      for (let index = 0; index < this.polarAxis.length; index++) {
+        const speed = parseFloat(this.polarAxis[index].speed)
+        this.V_WIND.push(speed)
+        this.DIR_WIND.push(parseFloat(this.polarAxis[index].direction));
+        
+      }
+      this.title = this.polarAxis[0].name.includes('wave')?'Wave':this.polarAxis[0].name.includes('current') ?'Current':this.polarAxis[0].name.includes('wind')?'Wind':'Polar'
+      this.setChart()
+  }
+
+  setChart() {
+    this.graph = {
+      data: [
+        {
+          type: 'scatterpolar',
+          r: this.V_WIND,
+          theta: this.DIR_WIND,
+          mode: 'markers',
+          marker: {
+            size: 10,
+            color: this.V_WIND,
+            colorscale: 'Plasma',
+            colorbar: {
+              title: 'Wind Speed',
+              x: 1.1
+            }
+          },
+          name: 'Wind Observations',
+          hovertemplate: 'Direction: %{theta}°<br>Speed: %{r} m/s<extra></extra>'
+        }
+      ],
+      layout: {
+        autosize: true,
+        responsive: true,
+        title: {
+          text: this.title,
+          font: {
+            family: 'Arial, sans-serif',
+            size: 24,
+            color: '#000000'
+          },
+          x: 0.01,
+          xanchor: 'left',
+          y: 0.95,
+          yanchor: 'top'
+        },
+        polar: {
+          radialaxis: {
+            visible: true,
+            range: [0, Math.max(...this.V_WIND) * 1.2]
+          },
+          angularaxis: {
+            rotation: 90,
+            direction: 'clockwise'
+          }
+        },
+        showlegend: false
+      }
+    };
+  }
+  
+  
+}

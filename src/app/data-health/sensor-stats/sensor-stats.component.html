@@ -1,0 +1,57 @@
+<div class="stats-card">
+    <div class="card-header">
+      <h3 class="card-title">Sensor Statistics</h3>
+      <p class="card-description">Averages and performance metrics</p>
+    </div>
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Search metrics..." 
+        class="search-input"
+      >
+    </div>
+    <div class="table-container" style="overflow-y: auto; max-height: 500px;">
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th (click)="onSort('name')" class="sortable">
+              Parameters {{getSortIcon('name')}}
+            </th>
+            <th (click)="onSort('average')" class="sortable">
+              Average Value {{getSortIcon('average')}}
+            </th>
+            <th (click)="onSort('percentage')" class="sortable">
+              Performance {{getSortIcon('percentage')}}
+            </th>
+            <th (click)="onSort('status')" class="sortable">
+              Status {{getSortIcon('status')}}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stat of filteredStats">
+            <td class="metric-name">{{stat.name}}</td>
+            <td class="metric-average">{{(stat.average * 100).toFixed(0)}}</td>
+            <td>
+              <div class="percentage-bar">
+                <div class="bar-fill" 
+                     [ngClass]="{
+                       'bg-green-500': stat.percentage >= 90,
+                       'bg-yellow-500': stat.percentage >= 70 && stat.percentage < 90,
+                       'bg-red-500': stat.percentage < 70
+                     }"
+                     [style.width.%]="stat.percentage"></div>
+                <span class="percentage-text">{{stat.percentage.toFixed(0)}}%</span>
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(stat.status)">
+                {{getStatusIcon(stat.status)}} {{stat.status | titlecase}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

@@ -1,0 +1,14 @@
+.chart-container {
+    width: 130px !important;
+    height: 130px !important; 
+    min-width: 130px;
+    min-height: 130px;
+    margin-top: 10px;
+
+
+    /* width: 50% !important;
+    height: 50% !important;
+    min-width: 50%;
+    min-height: 50%; */
+  }
+  

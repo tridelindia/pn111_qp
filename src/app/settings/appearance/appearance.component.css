@@ -1,0 +1,578 @@
+.divider{
+    height: 1px;
+    width: 85%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(10, 10, 10);
+
+}
+p{
+    font-size: 12px;
+}
+.righter1{
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+}
+.white{
+height: 30px;
+width: 30px;
+background-color: aliceblue;
+border-radius: 50%;
+position: relative;
+margin-left: 20px;
+}
+.white i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.black i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.blue i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.white_active{
+    border: 2px blue solid;
+}
+.black_active{
+    border: 2px blue solid;
+}
+.blue{
+    border: 2px blue solid;
+}
+.black{
+    height: 30px;
+    width: 30px;
+    background-color: black;
+    border-radius: 50%;
+    margin-left: 20px;
+    position: relative;
+}
+.blue{
+    height: 30px;
+    width: 30px;
+    background-color: blue;
+    border-radius: 50%;
+    position: relative;
+    margin-left: 20px;
+}
+.green{
+    height: 30px;
+    width: 30px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    position: relative;
+    margin-left: 20px;
+}
+.purple{
+    height: 30px;
+    width: 30px;
+    background-color: #9C27B0;
+    border-radius: 50%;
+    position: relative;
+    margin-left: 20px;
+}
+.lightBlue{
+    height: 30px;
+    width: 30px;
+    background: linear-gradient(90deg, #6fb4f9, #71b4f8);
+    border-radius: 50%;
+    position: relative;
+    margin-left: 20px;
+}
+.lightBlue i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.green i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.purple i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.green_active{
+    border: 2px blue solid;
+}
+.purple_active{
+    border: 2px blue solid;
+}
+img{
+    height: 100%;
+    width: 70%;
+}
+.current1{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 190px;
+    width: 200px;
+    /* background-color: azure; */
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+    
+}
+.current1_active{
+    border: 2px blue solid;
+}
+.current1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.current2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.wid_1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.wid_2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.wid_3 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.current2{
+    height: 210px;
+    width: 500px;
+    /* background-color: azure; */
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.current3{
+    height: 190px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: azure; */
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+
+
+
+.left_c_2{
+    /* background-color: rgb(26, 76, 119); */
+    height: 65%;
+    width: 35%;
+}
+.right_c_2{
+    height: 50%;
+    width: 30%;
+    /* background-color: antiquewhite; */
+}
+
+.right_c_22{
+    height: 100%;
+    width: 50%;
+    /* background-color: antiquewhite; */
+}
+
+
+
+
+.righter{
+    height: 100%;
+    width: 60%;
+    /* background-color: antiquewhite; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.wid_1, .wid_2, .wid_3{
+    height: 90%;
+    width: 32%;
+    background-color: var(--mainbg);
+    box-shadow: 2px 2px 6px rgb(193, 193, 193) ;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.battery1{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+.battery1_active{
+    border: 2px blue solid;
+}
+.battery1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.battery2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.battery3 i{
+    color: black;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.battery2{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+.battery3{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    margin-left: 10px;
+    position: relative;
+}
+
+.tide1{
+    height: 90px;
+    width: 200px;
+    border-radius: 10px;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.tide1_active{
+    border: 2px blue solid;
+}
+.tide1 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.tide2 i{
+    color: blue;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.tide3 i{
+    color: black;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.tide2{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    /* margin-left: 10px; */
+    position: relative;
+}
+.tide3{
+    height: 90px;
+    width: 200px;
+    background-color: azure;
+    border-radius: 10px;
+    /* margin-left: 10px; */
+    position: relative;
+}
+.image{
+    height: 150px;
+    width: 150px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/direction1.png);
+    background-size: cover;
+}
+.image2{
+    height: 150px;
+    width: 170px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/direction2.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+.image3{
+    height: 150px;
+    width: 150px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/direction3.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+
+.image4{
+    height: 150px;
+    width: 170px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/speed1.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+.image5{
+    height: 150px;
+    width: 170px;
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/speed2.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+.image6{
+    height: 150px;
+    width: 150px; 
+
+    /* background-color: aqua; */
+    background-image: url(../../../assets/widgets/speed3.png);
+    background-size: 100% 100%;
+    /* margin-right: 15px; */
+}
+
+img{
+    height: 180px;
+    width: 170px;
+    display: flex;
+    box-sizing: 100% 100%;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.settings-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.settings-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: fit-content;
+}
+
+/* .settings-container::-webkit-scrollbar {
+    display: none;
+}
+
+.settings-container {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+} */
+
+.section-header {
+    margin-bottom: 1.5rem;
+}
+
+.section-header h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.section-description {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.theme-options {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
+
+.widget-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.theme-option {
+    position: relative;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    min-width: 120px;
+    flex-shrink: 0;
+}
+
+.widget-option {
+    position: relative;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    height: 200px;
+}
+
+.theme-option:hover, .widget-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-option.active, .widget-option.active {
+    border-color: #007bff;
+    background: #f0f7ff;
+}
+
+.theme-preview {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    border: 2px solid #e9ecef;
+}
+
+.theme-name, .widget-name {
+    display: block;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #495057;
+    margin-top: 0.5rem;
+}
+
+.widget-preview {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.fa-circle-check {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: #007bff;
+    font-size: 1.2rem;
+}
+
+/* Theme colors */
+.bronze {
+    background-color: #CE8946;
+}
+
+.black {
+    background-color: #212529;
+}
+
+.blue {
+    background-color: #007bff;
+}
+
+.green {
+    background-color: #28a745;
+}
+
+.purple {
+    background-color: #6f42c1;
+}
+
+.orange {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+}
+
+.midnight {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+.rosegold {
+    background: linear-gradient(135deg, #e0bfb8, #e6c9c2, #f3e0dc);
+}
+
+/* Widget images */
+.image, .image2, .image3, .image4, .image5, .image6 {
+    height: 100%;
+    width: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.image {
+    background-image: url(../../../assets/widgets/direction1.png);
+}
+
+.image2 {
+    background-image: url(../../../assets/widgets/direction2.png);
+}
+
+.image3 {
+    background-image: url(../../../assets/widgets/direction3.png);
+}
+
+.image4 {
+    background-image: url(../../../assets/widgets/speed1.png);
+}
+
+.image5 {
+    background-image: url(../../../assets/widgets/speed2.png);
+}
+
+.image6 {
+    background-image: url(../../../assets/widgets/speed3.png);
+}

@@ -1,0 +1,45 @@
+<div class="status-card">
+  <div class="card-header">
+    <h3 class="card-title">Sensor Status</h3>
+    <p class="card-description">Last received data and connection status</p>
+  </div>
+
+  <div class="search-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      placeholder="Search parameters..." 
+      class="search-input"
+    >
+  </div>
+
+  <div class="table-container" style="overflow-y: auto; max-height: 500px;">
+    <table class="status-table">
+      <thead>
+        <tr>
+          <th (click)="onSort('name')" class="sortable">
+            Parameter {{getSortIcon('name')}}
+          </th>
+          <th (click)="onSort('lastReceived')" class="sortable">
+            Last Received {{getSortIcon('lastReceived')}}
+          </th>
+          <th (click)="onSort('isActive')" class="sortable">
+            Status {{getSortIcon('isActive')}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let status of filteredStatuses">
+          <td class="parameter-name">{{status.name}}</td>
+          <td class="last-received">{{status.lastReceived}}</td>
+          <td>
+            <div class="status-indicator" [ngClass]="{'active': status.isActive, 'inactive': !status.isActive}">
+              <div class="pulse"></div>
+              <span>{{status.isActive ? 'Active' : 'Inactive'}}</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="mainBar">
+    <div class="title" style="color: white; flex-grow: 1;">
+        <h3 style="color: white; margin-left: 10px;">TEMS
+        </h3>
+    </div>
+    <div class="selec_station" (click)="touggleDrop()" *ngIf="page === 1 || page === 7">
+        <img class="station_image" src="../../assets/buoyimg/buoy.png" alt="">
+        <p>{{selectedStation}}</p>
+        <i class="fa-solid fa-caret-down" *ngIf="!dropdownOpen" (click)="touggleDrop()"></i>
+        <i class="fa-solid fa-caret-up" *ngIf="dropdownOpen" (click)="touggleDrop()"></i>
+    </div>
+    <div class="stations" *ngIf="dropdownOpen">
+        <div class="list_of_station" *ngFor="let station of listStations"
+            [ngClass]="selectedStation === station.station_name ? 'list_of_station_active':'list_of_station'"
+            (click)="onSelect(station.station_name)">
+            <img src="../../assets/buoyimg/buoy.png" alt="">
+            <p>{{station.station_name}}</p>
+        </div>
+    </div>
+    <p style="margin-right: 20px;">{{isUtc ? 'UTC Time':'AST Time'}} : {{date}}</p>
+    <div class="toggle_button" (click)="onToggleChange()">
+        <p>UTC</p>
+        <div class="toggle_box"
+            [ngStyle]="{'align-items': isUtc ? 'start':'end','background-color': isUtc?'blue':'green'}">
+            <div class="tog"></div>
+        </div>
+        <p>AST</p>
+    </div>
+    <div class="user_session">
+        <img [src]="(currentUser.avatar || 'profile_default.png')" alt="User Avatar">
+
+        <div class="user_data">
+            <p>{{ currentUser.name }}</p>
+        </div>
+    </div>
+</div>
