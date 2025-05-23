@@ -13,6 +13,7 @@ import { debounceTime, distinctUntilChanged, delay } from 'rxjs/operators';
 import { SensorStatusComponent } from './sensor-status/sensor-status.component';
 import { environment } from '../../environments/environment';
 import { TopBarComponent } from '../top-bar/top-bar.component';
+import { GlobalDataService } from '../global-data/global-data.component';
 
 @Component({
   selector: 'app-data-health',
@@ -67,16 +68,31 @@ export class DataHealthComponent implements OnInit {
   loading = false;
   currentSensor = '';
   selectedTabs: string[] = [];
-  selectedStation: string = 'all';
+  selectedStation: string = '';
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private data: GlobalDataService
+  ) {
     this.updateSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(() => this.applyFilters());
+
+    this.data.stationId$.subscribe((stationId: string) => {
+      console.log('stationId', stationId);
+      if (stationId) {
+        this.onStationSelected(stationId);
+      }
+    });
   }
 
   ngOnInit(): void {
+    // Get initial station ID from the service
+    const initialStationId = this.data.getStationId();
+    if (initialStationId) {
+      this.selectedStation = initialStationId;
+    }
     this.loadChartData();
   }
 
@@ -99,11 +115,17 @@ export class DataHealthComponent implements OnInit {
   }
 
   private loadChartData(): void {
+    const formatForDB = (date: Date) => {
+      const pad = (num: number) => num.toString().padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ` +
+             `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    };
+
     const url = `${environment.apiUrl}/getHealthData`;
     const params = {
       station_id: this.selectedStation,
-      startDate: this.dateRange.from.toISOString(),
-      endDate: this.dateRange.to.toISOString()
+      startDate: formatForDB(this.dateRange.from),
+      endDate: formatForDB(this.dateRange.to)
     };
 
     this.loading = true;
@@ -212,7 +234,7 @@ export class DataHealthComponent implements OnInit {
     }
     const validData = data.filter(item => 
       item && 
-      item.timestamp && 
+      item.datetime && 
       item.dataPresent
     );
     if(validData.length === 0){
@@ -221,12 +243,14 @@ export class DataHealthComponent implements OnInit {
       return;
     }
 
-    const dates = validData.map(item => item.timestamp);
+    const dates = validData.map(item => item.datetime);
     this.xAxisData = dates.map(date => 
       new Date(date).toLocaleString('en-US', {
+        year: 'numeric',
         month: 'short',
         day: 'numeric',
-        hour: '2-digit'
+        hour: '2-digit',
+        minute: '2-digit',
       })
     );
 

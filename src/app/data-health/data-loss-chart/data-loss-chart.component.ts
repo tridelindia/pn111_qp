@@ -57,6 +57,9 @@ export class DataLossChartComponent implements OnInit, OnChanges {
               return label;
             }
           }
+        },
+        datalabels: {
+          display: false
         }
       },
       scales: {
@@ -91,10 +94,12 @@ export class DataLossChartComponent implements OnInit, OnChanges {
 
   private formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
       month: 'short', 
       day: 'numeric',
-      hour: '2-digit'
+      hour: '2-digit',
+      minute: '2-digit',
     });
   }
 

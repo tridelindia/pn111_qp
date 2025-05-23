@@ -4,11 +4,12 @@ import { GeneralComponent } from "./general/general.component";
 import { AppearanceComponent } from './appearance/appearance.component';
 import { StationComponent } from './station/station.component';
 import { SensorComponent } from "./sensor/sensor.component";
+import { NotificationComponent } from './notification/notification.component';
 
 @Component({
     selector: 'app-settings',
     standalone:true,
-    imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent, SensorComponent],
+    imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent, SensorComponent, NotificationComponent],
     templateUrl: './settings.component.html',
     styleUrl: './settings.component.css'
 })

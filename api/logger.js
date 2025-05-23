@@ -41,7 +41,8 @@ const getLogs = async (req, res) => {
           ($1::timestamp IS NULL OR 
            to_timestamp(a.timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') >= $1) AND
           ($2::timestamp IS NULL OR 
-           to_timestamp(a.timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') <= $2)
+           to_timestamp(a.timestamp, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') <= $2) AND
+          (a.code NOT LIKE 'E0%')
         ORDER BY timestamp DESC
       `;
 

@@ -1,5 +1,7 @@
 // global-data.service.ts
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
 export interface BuoyData {
   id?: number;
   station_id: string;
@@ -74,7 +76,24 @@ export interface BuoyData {
 export class GlobalDataService {
   selectedStation:any = {};
   index!:number;
-  isDashboardLoad:boolean = false
+  isDashboardLoad:boolean = false;
+  
+  private stationIdSubject = new BehaviorSubject<string>('');
+  stationId$ = this.stationIdSubject.asObservable();
+
+  setStationId(stationId: string) {
+    this.stationIdSubject.next(stationId);
+  }
+
+  getStationId(): string {
+    return this.stationIdSubject.value;
+  }
+
+  initializeStationId(stationId: string) {
+    if (!this.stationIdSubject.value) {
+      this.stationIdSubject.next(stationId);
+    }
+  }
 
   // onChangeDashboard(id:){}
 }

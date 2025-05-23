@@ -10,6 +10,7 @@ import { MessageModule } from 'primeng/message';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
+import { StatusCodesService } from '../../../../src/app/status-codes.service';
 
 interface LogEntry {
   timestamp: string;
@@ -40,7 +41,7 @@ interface User {
       DropdownModule,
       CalendarModule
     ],
-    providers: [LoggingService],
+    providers: [LoggingService, StatusCodesService],
     templateUrl: './userlog.component.html',
     styleUrl: './userlog.component.css'
 })
@@ -54,7 +55,10 @@ export class UserlogComponent {
   selectedUser: User | null = null;
   dateRange: Date[] = [new Date(new Date().setDate(new Date().getDate())), new Date()];
 
-  constructor(private logService: LoggingService) {}
+  constructor(
+    private logService: LoggingService,
+    private statusCodesService: StatusCodesService
+  ) {}
 
   ngOnInit(): void {
     this.loadLogs();
@@ -117,7 +121,15 @@ export class UserlogComponent {
   }
 
   formatDate(timestamp: string): string {
-    return new Date(timestamp).toLocaleString();
+    const date = new Date(timestamp);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  formatTime(timestamp: string): string {
+    return new Date(timestamp).toLocaleTimeString();
   }
 
   filterByDateRange(): void {
@@ -156,5 +168,10 @@ export class UserlogComponent {
         console.error(err);
       }
     });
+  }
+
+  getStatusDefinition(code: string | null): string {
+    if (!code) return '';
+    return this.statusCodesService.getStatusMessage(code);
   }
 }

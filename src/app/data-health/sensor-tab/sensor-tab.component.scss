@@ -3,9 +3,9 @@
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: relative;
-  z-index: 1;
   padding: 1rem;
   padding-top: 36px;
+  // z-index: 0;
 }
 
 .sensor-tabs-center {
@@ -137,6 +137,7 @@
 .date-range-selector {
   min-width: 228px;
   margin-left: auto;
+  margin-right: 10px;
 
   .apply-btn {
     background: #4CAF50;
@@ -151,6 +152,7 @@
     font-size: 14px;
     font-weight: 500;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-left: 12px;
 
     .pi {
       font-size: 1rem;
@@ -250,4 +252,8 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+::ng-deep .p-datepicker-panel {
+  z-index: 1;
 }

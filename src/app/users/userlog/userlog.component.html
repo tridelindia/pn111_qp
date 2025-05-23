@@ -5,7 +5,7 @@
                     [readonlyInput]="true" dateFormat="dd/mm/yy"
                     styleClass="custom-calendar">
         </p-calendar>
-        <div class="update-btn-container" style="margin-top: 310px; margin-left: 114px;">
+        <div class="update-btn-container">
           <p-button label="Update" icon="pi pi-refresh" (onClick)="filterByDateRange()" />
         </div>
       </div>
@@ -51,11 +51,11 @@
             <thead>
               <tr>
                 <th class="col-number">#</th>
-                <th class="col-timestamp">Timestamp</th>
+                <th class="col-timestamp">Date</th>
+                <th class="col-timestamp">Time</th>
                 <th class="col-user">User</th>
                 <th class="col-activity">Activity</th>
                 <th class="col-status">Code</th>
-                <th class="col-file">FilePath</th>
               </tr>
             </thead>
             <tbody>
@@ -67,6 +67,10 @@
                   <i class="pi pi-clock"></i>
                   <span> {{ formatDate(log.timestamp) }}</span>
                 </td>
+                <td class="col-timestamp">
+                  <i class="pi pi-clock"></i>
+                  <span> {{ formatTime(log.timestamp) }}</span>
+                </td>
                 <td class="col-user">
                   <i class="pi pi-user"></i>
                   <span> {{ log.userName }} - {{ log.userId }}</span>
@@ -76,10 +80,9 @@
                   <span> {{ log.message }}</span>
                 </td>
                 <td class="col-status">
-                  <span> {{ log.statusCode }}</span>
-                </td>
-                <td class="col-file">
-                  <span> {{ log.filePath }}</span>
+                  <span *ngIf="log.statusCode">
+                    <strong>{{ log.statusCode }}</strong> - {{ getStatusDefinition(log.statusCode) }}
+                  </span>
                 </td>
               </tr>
             </tbody>

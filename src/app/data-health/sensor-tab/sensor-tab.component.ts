@@ -71,28 +71,28 @@ export class SensorTabComponent {
         title: 'Wave',
         subTabs: [
           { value: '0', title: 'Wave Heading' },
-          { value: '1', title: 'Wave Height' },
-          { value: '2', title: 'Tzc' },
-          { value: '3', title: 'Tz' },
-          { value: '4', title: 'Tm02' },
+          { value: '1', title: 'Significant Wave Height (Hs)' },
+          { value: '2', title: 'Zero Crossing Period (Tzc)' },
+          { value: '3', title: 'Mean Zero Crossing Period (Tz)' },
+          { value: '4', title: 'Mean Wave Period (Tm02)' },
           { value: '5', title: 'Wave Direction' },
-          { value: '6', title: 'Wave Direction FW' },
+          { value: '6', title: 'Wave Direction (FW)' },
           { value: '7', title: 'Mean Wave Direction' },
-          { value: '8', title: 'Max Wave Height' },
-          { value: '9', title: 'Fourier Coefficient a1' },
-          { value: '10', title: 'Fourier Coefficient a2' },
-          { value: '11', title: 'Fourier Coefficient b1' },
-          { value: '12', title: 'Fourier Coefficient b2' },
-          { value: '13', title: 'Dominant Time Period FW' },
-          { value: '14', title: 'Havg' }
+          { value: '8', title: 'Maximum Wave Height (Hmax)' },
+          { value: '9', title: 'Fourier Coeff. A1' },
+          { value: '10', title: 'Fourier Coeff. A2' },
+          { value: '11', title: 'Fourier Coeff. B1' },
+          { value: '12', title: 'Fourier Coeff. B2' },
+          { value: '13', title: 'Dominant Period (FW)' },
+          { value: '14', title: 'Average Wave Height (Havg)' }
         ]
       },
       {
         value: 'current',
         title: 'Current',
         subTabs: [
-          { value: '15', title: 'Current Direction' },
-          { value: '16', title: 'Current Speed' }
+          { value: '15', title: 'Current Direction (Bin 1)' },
+          { value: '16', title: 'Current Speed (Bin 1)' },
         ]
       }
     ],
@@ -102,7 +102,7 @@ export class SensorTabComponent {
         title: 'Wind',
         subTabs: [
           { value: '17', title: 'Wind Speed' },
-          { value: '18', title: 'Wind Direction' },
+          { value: '18', title: 'Wind Direction (deg)' },
           { value: '19', title: 'Wind Gust' }
         ]
       },
@@ -110,10 +110,10 @@ export class SensorTabComponent {
         value: 'atmospheric',
         title: 'Atmospheric Conditions',
         subTabs: [
-          { value: '20', title: 'Temperature (Air)' },
-          { value: '21', title: 'Relative Humidity' },
-          { value: '22', title: 'Barometric Pressure' },
-          { value: '23', title: 'Rainfall' },
+          { value: '20', title: 'Air Temperature (°C)' },
+          { value: '21', title: 'Relative Humidity (%)' },
+          { value: '22', title: 'Barometric Pressure (hPa)' },
+          { value: '23', title: 'Rainfall (mm)' },
           { value: '24', title: 'Visibility' },
           { value: '25', title: 'Global Radiation' }
         ]
@@ -136,7 +136,7 @@ export class SensorTabComponent {
           { value: '29', title: 'Turbidity' },
           { value: '30', title: 'Conductivity' },
           { value: '31', title: 'Dissolved Oxygen' },
-          { value: '32', title: 'pH Level' },
+          { value: '32', title: 'pH' },
           { value: '33', title: 'Salinity' }
         ]
       },
@@ -145,7 +145,7 @@ export class SensorTabComponent {
         title: 'Biological/Optical Parameters',
         subTabs: [
           { value: '34', title: 'Chlorophyll-a' },
-          { value: '35', title: 'Water Temperature' },
+          { value: '35', title: 'Water Temperature (°C)' },
           { value: '36', title: 'Phycoerythrin' },
           { value: '37', title: 'Fluorescein Dye' }
         ]

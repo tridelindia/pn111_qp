@@ -5,10 +5,10 @@
             <p class="section-description">Choose your preferred theme for the application</p>
         </div>
         <div class="theme-options">
-            <div class="theme-option" [ngClass]="{'active': selectedColor === 'white'}" (click)="changeColor('white')">
-                <div class="theme-preview white"></div>
-                <span class="theme-name">Light</span>
-                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'white'"></i>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'Bronze'}" (click)="changeColor('bronze')">
+                <div class="theme-preview bronze"></div>
+                <span class="theme-name">Bronze</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'Bronze'"></i>
             </div>
             <div class="theme-option" [ngClass]="{'active': selectedColor === 'black'}" (click)="changeColor('black')">
                 <div class="theme-preview black"></div>
@@ -52,7 +52,7 @@
             <div class="theme-option" [ngClass]="{'active': selectedColor === 'lightBlue'}"
                 (click)="changeColor('lightBlue')">
                 <div class="theme-preview lightBlue"></div>
-                <span class="theme-name">Light Blue</span>
+                <span class="theme-name">Sky</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'lightBlue'"></i>
             </div>
         </div>

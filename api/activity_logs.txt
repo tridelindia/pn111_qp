@@ -1,3 +1,8 @@
-{"timestamp":"2025-05-03T10:34:09.304Z","userName":"Admin","activity":"New notification has been added.","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
-{"timestamp":"2025-05-03T10:34:11.691Z","userName":"Admin","activity":"Notification status has been updated.","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
-{"timestamp":"2025-05-03T10:34:12.333Z","userName":"Admin","activity":"Notification status has been updated.","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-05-22T03:34:09.304Z","userName":"Admin","activity":"New notification has been added.","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-05-22T03:34:11.691Z","userName":"Admin","activity":"Notification status has been updated.","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-05-22T03:34:12.333Z","userName":"Admin","activity":"Notification status has been updated.","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-05-22T04:23:56.448Z","userName":"Admin","activity":"Notification data has been updated.","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-05-22T04:24:13.283Z","userName":"Admin","activity":"New notification has been added.","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-05-22T05:56:37.392Z","userName":"Ganapathi","activity":"Notification status has been updated.","userId":10,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-05-22T06:34:35.180Z","userName":"Admin","activity":"Station has been updated.","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-22T06:39:28.919Z","userName":"Admin","activity":"Sensor has been updated.","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/Update"}

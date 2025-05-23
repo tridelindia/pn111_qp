@@ -719,26 +719,33 @@ const getSensorDataForHealth = async (req, res) => {
           return res.status(400).json({ error: 'Both startDate and endDate parameters are required' });
       }
 
+      const dateRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+      if (!dateRegex.test(startDate) || !dateRegex.test(endDate)) {
+          return res.status(400).json({ 
+              error: 'Dates must be in YYYY-MM-DD HH:MM:SS format' 
+          });
+      }
+      
       const start = new Date(startDate);
       const end = new Date(endDate);
       
       let query;
       let params;
 
-      if (station_id !== 'all') {
+      // if (station_id !== 'all') {
+      //     query = `
+      //         SELECT * FROM tb_buoy_${station_id.toLowerCase()}_measurements 
+      //     WHERE datetime >= $1 AND datetime <= $2 
+      //     AND station_id = $3 
+      //     ORDER BY datetime`;
+      //     params = [startDate, endDate, station_id];
+      // } else {
           query = `
-              SELECT * FROM tb_buoy_01_measurements 
-              WHERE timestamp >= $1 AND timestamp <= $2 
-              AND station_id = $3 
-              ORDER BY timestamp`;
-          params = [startDate, endDate, station_id];
-      } else {
-          query = `
-              SELECT * FROM tb_buoy_01_measurements 
-              WHERE timestamp >= $1 AND timestamp <= $2 
-              ORDER BY timestamp`;
+              SELECT * FROM tb_buoy_${station_id.toLowerCase()}_measurements 
+              WHERE datetime >= $1 AND datetime <= $2 
+              ORDER BY datetime`;
           params = [startDate, endDate];
-      }
+      // }
       const { rows } = await pool.query(query, params);
 
       console.log(`Found ${rows.length} records`);
@@ -769,70 +776,70 @@ const getSensorDataForHealth = async (req, res) => {
 
 async function processData(rows, startDate, endDate) {
   const parameterMappings = {
-      oceanography: {
-          wave: {
-              '0': 'heading',
-              '1': 'hs',
+    oceanography: {
+        wave: {
+              '0': 'wave_heading',
+              '1': 'wave_height',
               '2': 'tzc',
-              '3': 'dominanttimeperiod',
+              '3': 'tz',
               '4': 'tm02',
               '5': 'wave_direction',
-              '6': 'wave_directionfw',
+              '6': 'wave_direction_fw',
               '7': 'mean_wave_direction',
               '8': 'hmax',
               '9': 'fourier_coefficient_a1',
               '10': 'fourier_coefficient_a2',
               '11': 'fourier_coefficient_b1',
               '12': 'fourier_coefficient_b2',
-              '13': 'dominanttimeperiodfw',
-              '14': 'havq'
-          },
-          current: {
-              '15': 'cell_1_dir',
-              '16': 'cell_1_speed'
-          }
-      },
-      meteorology: {
-          wind: {
-              '17': 'avg_ws',
-              '18': 'avgwindr',
-              '19': 'windgust'
-          },
-          atmospheric: {
-              '20': 'air_temperature',
-              '21': 'relative_humidity',
-              '22': 'barometric_pressure',
-              '23': 'rainfall',
+              '13': 'dominant_time_period_fw',
+              '14': 'havg'
+        },
+        current: {
+              '15': 'current_direction_bin_1',
+              '16': 'current_speed_bin_1'
+        }
+    },
+    meteorology: {
+        wind: {
+              '17': 'wind_speed',
+              '18': 'wind_direction_deg',
+              '19': 'wind_gust'
+        },
+        atmospheric: {
+              '20': 'temperature_deg',
+              '21': 'rh_percent',
+              '22': 'bp_hpa',
+              '23': 'rain_mm',
               '24': 'visibility',
-              '25': 'solar_radiation'
-          }
-      },
-      water_quality: {
-          chemical: {
+              '25': 'global_radiation'
+        }
+    },
+    water_quality: {
+        chemical: {
               '26': 'pah',
               '27': 'oil_in_water',
               '28': 'bt'
-          },
-          physical: {
+        },
+        physical: {
               '29': 'turbidity',
               '30': 'conductivity',
               '31': 'dissolved_oxygen',
-              '32': 'ph_level',
+              '32': 'ph',
               '33': 'salinity'
-          },
-          biological: {
+        },
+        biological: {
               '34': 'chlorophyll_a',
-              '35': 'water_temp',
+              '35': 'water_temperature',
               '36': 'phycoerythrin',
               '37': 'fluorescein_dye'
-          }
-      }
+        }
+    }
   };
-
+  console.log('rows.length', rows.length);
   if (rows.length < 10) {
       const processedData = rows.map(row => {
           const healthData = {
-              timestamp: row.timestamp,
+              datetime: row.datetime,
               dataPresent: {}
           };
 
@@ -851,96 +858,96 @@ async function processData(rows, startDate, endDate) {
 
       return {
           data: processedData.sort((a, b) => 
-              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+              new Date(a.datetime).getTime() - new Date(b.datetime).getTime()
           ),
           parameters: parameterMappings,
           sensorTabs: {
-              oceanography: [
-                  {
-                      value: 'wave',
-                      title: 'Wave',
-                      subTabs: [
-                          { value: '0', title: 'Wave Heading' },
-                          { value: '1', title: 'Wave Height' },
-                          { value: '2', title: 'Tzc' },
-                          { value: '3', title: 'Tz' },
-                          { value: '4', title: 'Tm02' },
-                          { value: '5', title: 'Wave Direction' },
-                          { value: '6', title: 'Wave Direction FW' },
-                          { value: '7', title: 'Mean Wave Direction' },
-                          { value: '8', title: 'Max Wave Height' },
-                          { value: '9', title: 'Fourier Coefficient a1' },
-                          { value: '10', title: 'Fourier Coefficient a2' },
-                          { value: '11', title: 'Fourier Coefficient b1' },
-                          { value: '12', title: 'Fourier Coefficient b2' },
-                          { value: '13', title: 'Dominant Time Period FW' },
-                          { value: '14', title: 'Havg' }
-                      ]
-                  },
-                  {
-                      value: 'current',
-                      title: 'Current',
-                      subTabs: [
-                          { value: '15', title: 'Current Direction' },
-                          { value: '16', title: 'Current Speed' }
-                      ]
-                  }
-              ],
-              meteorology: [
-                  {
-                      value: 'wind',
-                      title: 'Wind',
-                      subTabs: [
-                          { value: '17', title: 'Wind Speed' },
-                          { value: '18', title: 'Wind Direction' },
-                          { value: '19', title: 'Wind Gust' }
-                      ]
-                  },
-                  {
-                      value: 'atmospheric',
-                      title: 'Atmospheric Conditions',
-                      subTabs: [
-                          { value: '20', title: 'Temperature (Air)' },
-                          { value: '21', title: 'Relative Humidity' },
-                          { value: '22', title: 'Barometric Pressure' },
-                          { value: '23', title: 'Rainfall' },
-                          { value: '24', title: 'Visibility' },
-                          { value: '25', title: 'Global Radiation' }
-                      ]
-                  }
-              ],
-              water_quality: [
-                  {
-                      value: 'chemical',
-                      title: 'Chemical Pollutants',
-                      subTabs: [
-                          { value: '26', title: 'PAH' },
-                          { value: '27', title: 'Oil in Water' },
-                          { value: '28', title: 'BT' }
-                      ]
-                  },
-                  {
-                      value: 'physical',
-                      title: 'Physical/Chemical Parameters',
-                      subTabs: [
-                          { value: '29', title: 'Turbidity' },
-                          { value: '30', title: 'Conductivity' },
-                          { value: '31', title: 'Dissolved Oxygen' },
-                          { value: '32', title: 'pH Level' },
-                          { value: '33', title: 'Salinity' }
-                      ]
-                  },
-                  {
-                      value: 'biological',
-                      title: 'Biological/Optical Parameters',
-                      subTabs: [
-                          { value: '34', title: 'Chlorophyll-a' },
-                          { value: '35', title: 'Water Temperature' },
-                          { value: '36', title: 'Phycoerythrin' },
-                          { value: '37', title: 'Fluorescein Dye' }
-                      ]
-                  }
-              ]
+            oceanography: [
+                {
+                    value: 'wave',
+                    title: 'Wave Parameters',
+                    subTabs: [
+                        { value: '0', title: 'Wave Heading' },
+                        { value: '1', title: 'Significant Wave Height (Hs)' },
+                        { value: '2', title: 'Zero Crossing Period (Tzc)' },
+                        { value: '3', title: 'Mean Zero Crossing Period (Tz)' },
+                        { value: '4', title: 'Mean Wave Period (Tm02)' },
+                        { value: '5', title: 'Wave Direction' },
+                        { value: '6', title: 'Wave Direction (FW)' },
+                        { value: '7', title: 'Mean Wave Direction' },
+                        { value: '8', title: 'Maximum Wave Height (Hmax)' },
+                        { value: '9', title: 'Fourier Coeff. A1' },
+                        { value: '10', title: 'Fourier Coeff. A2' },
+                        { value: '11', title: 'Fourier Coeff. B1' },
+                        { value: '12', title: 'Fourier Coeff. B2' },
+                        { value: '13', title: 'Dominant Period (FW)' },
+                        { value: '14', title: 'Average Wave Height (Havg)' }
+                    ]
+                },
+                {
+                    value: 'current',
+                    title: 'Current Profile',
+                    subTabs: [
+                        { value: '15', title: 'Current Direction (Bin 1)' },
+                        { value: '16', title: 'Current Speed (Bin 1)' },
+                    ]
+                }
+            ],
+            meteorology: [
+                {
+                    value: 'wind',
+                    title: 'Wind Measurements',
+                    subTabs: [
+                        { value: '17', title: 'Wind Speed' },
+                        { value: '18', title: 'Wind Direction (deg)' },
+                        { value: '19', title: 'Wind Gust' }
+                    ]
+                },
+                {
+                    value: 'atmospheric',
+                    title: 'Atmospheric Conditions',
+                    subTabs: [
+                        { value: '20', title: 'Air Temperature (°C)' },
+                        { value: '21', title: 'Relative Humidity (%)' },
+                        { value: '22', title: 'Barometric Pressure (hPa)' },
+                        { value: '23', title: 'Rainfall (mm)' },
+                        { value: '24', title: 'Visibility' },
+                        { value: '25', title: 'Global Radiation' }
+                    ]
+                }
+            ],
+            water_quality: [
+                {
+                    value: 'chemical',
+                    title: 'Chemical Parameters',
+                    subTabs: [
+                        { value: '26', title: 'PAH' },
+                        { value: '27', title: 'Oil in Water' },
+                        { value: '28', title: 'BT' }
+                    ]
+                },
+                {
+                    value: 'physical',
+                    title: 'Physical Parameters',
+                    subTabs: [
+                        { value: '29', title: 'Turbidity' },
+                        { value: '30', title: 'Conductivity' },
+                        { value: '31', title: 'Dissolved Oxygen' },
+                        { value: '32', title: 'pH' },
+                        { value: '33', title: 'Salinity' }
+                    ]
+                },
+                {
+                    value: 'biological',
+                    title: 'Biological Parameters',
+                    subTabs: [
+                        { value: '34', title: 'Chlorophyll-a' },
+                        { value: '35', title: 'Water Temperature (°C)' },
+                        { value: '36', title: 'Phycoerythrin' },
+                        { value: '37', title: 'Fluorescein Dye' }
+                    ]
+                }
+            ]
           },
           dateRange: {
               start: startDate.toISOString(),
@@ -949,162 +956,178 @@ async function processData(rows, startDate, endDate) {
       };
   }
 
-  const hourlyData = {};
-  const dayData = {};
+  const totalTimeSpan = endDate.getTime() - startDate.getTime();
   
-  const useDailyGroups = rows.length > 24;
+  // Determine number of output points (10-15)
+  const targetPointCount = Math.min(15, Math.max(10, Math.floor(rows.length / 2)));
   
+  // Create time windows
+  const windowSize = totalTimeSpan / targetPointCount;
+  const timeWindows = Array.from({length: targetPointCount}, (_, i) => ({
+    start: new Date(startDate.getTime() + i * windowSize),
+    end: new Date(startDate.getTime() + (i + 1) * windowSize),
+    records: []
+  }));
+
+  // Distribute records into time windows
   rows.forEach(row => {
-      const timestamp = new Date(row.timestamp);
-      let groupKey;
-      
-      if (useDailyGroups) {
-          groupKey = new Date(
-              timestamp.getFullYear(),
-              timestamp.getMonth(),
-              timestamp.getDate()
-          ).toISOString();
-      } else {
-          groupKey = new Date(
-              timestamp.getFullYear(),
-              timestamp.getMonth(),
-              timestamp.getDate(),
-              timestamp.getHours()
-          ).toISOString();
+    const rowTime = new Date(row.datetime).getTime();
+    for (const window of timeWindows) {
+      if (rowTime >= window.start.getTime() && rowTime < window.end.getTime()) {
+        window.records.push(row);
+        break;
       }
-
-      if (!hourlyData[groupKey]) {
-          hourlyData[groupKey] = {
-              timestamp: groupKey,
-              dataPresent: {},
-              count: 0
-          };
-      }
-      
-      hourlyData[groupKey].count++;
-
-      for (const [category, subCategories] of Object.entries(parameterMappings)) {
-          for (const [subCategory, params] of Object.entries(subCategories)) {
-              for (const [paramId, dbField] of Object.entries(params)) {
-                  const paramKey = `${category}.${subCategory}.${paramId}`;
-                  
-                  const value = row[dbField];
-                  const isPresent = (value !== null && value !== undefined && value !== '') ? 1 : 0;
-                  
-                  if (hourlyData[groupKey].dataPresent[paramKey] === undefined) {
-                      hourlyData[groupKey].dataPresent[paramKey] = 0;
-                  }
-                  
-                  hourlyData[groupKey].dataPresent[paramKey] += isPresent;
-              }
-          }
-      }
+    }
   });
 
-  const processedGroups = Object.values(hourlyData).map(group => {
-      const healthData = {
-          timestamp: group.timestamp,
-          dataPresent: {}
-      };
-
-      for (const [paramKey, presentCount] of Object.entries(group.dataPresent)) {
-          healthData.dataPresent[paramKey] = presentCount / group.count;
+  // Process each time window
+  const processedData = timeWindows.map(window => {
+    if (window.records.length === 0) {
+      // If no records in window, use midpoint datetime with all 0s
+      const avgDatetime = new Date(window.start.getTime() + windowSize/2).toISOString();
+      const emptyDataPresent = {};
+      
+      // Initialize all parameters as 0 (not present)
+      for (const [category, subCategories] of Object.entries(parameterMappings)) {
+        for (const [subCategory, params] of Object.entries(subCategories)) {
+          for (const [paramId] of Object.entries(params)) {
+            const paramKey = `${category}.${subCategory}.${paramId}`;
+            emptyDataPresent[paramKey] = 0;
+          }
+        }
       }
-      return healthData;
+      
+      return {
+        datetime: avgDatetime,
+        dataPresent: emptyDataPresent
+      };
+    }
+
+    // Calculate average datetime for the window
+    const avgTimestamp = window.records.reduce((sum, row) => {
+      return sum + new Date(row.datetime).getTime();
+    }, 0) / window.records.length;
+
+    const avgDatetime = new Date(avgTimestamp).toISOString();
+
+    // Calculate data presence for each parameter
+    const windowDataPresent = {};
+    
+    for (const [category, subCategories] of Object.entries(parameterMappings)) {
+      for (const [subCategory, params] of Object.entries(subCategories)) {
+        for (const [paramId, dbField] of Object.entries(params)) {
+          const paramKey = `${category}.${subCategory}.${paramId}`;
+          
+          // Count how many records in this window have this parameter
+          const presentCount = window.records.filter(row => {
+            const value = row[dbField];
+            return (value !== null && value !== undefined && value !== '');
+          }).length;
+          
+          // Store the ratio of present records
+          windowDataPresent[paramKey] = presentCount / window.records.length;
+        }
+      }
+    }
+
+    return {
+      datetime: avgDatetime,
+      dataPresent: windowDataPresent
+    };
   });
 
   return {
-      data: processedGroups.sort((a, b) => 
-          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      data: processedData.sort((a, b) => 
+          new Date(a.datetime).getTime() - new Date(b.datetime).getTime()
       ),
       parameters: parameterMappings,
       sensorTabs: {
-          oceanography: [
-              {
-                  value: 'wave',
-                  title: 'Wave',
-                  subTabs: [
-                      { value: '0', title: 'Wave Heading' },
-                      { value: '1', title: 'Wave Height' },
-                      { value: '2', title: 'Tzc' },
-                      { value: '3', title: 'Tz' },
-                      { value: '4', title: 'Tm02' },
-                      { value: '5', title: 'Wave Direction' },
-                      { value: '6', title: 'Wave Direction FW' },
-                      { value: '7', title: 'Mean Wave Direction' },
-                      { value: '8', title: 'Max Wave Height' },
-                      { value: '9', title: 'Fourier Coefficient a1' },
-                      { value: '10', title: 'Fourier Coefficient a2' },
-                      { value: '11', title: 'Fourier Coefficient b1' },
-                      { value: '12', title: 'Fourier Coefficient b2' },
-                      { value: '13', title: 'Dominant Time Period FW' },
-                      { value: '14', title: 'Havg' }
-                  ]
-              },
-              {
-                  value: 'current',
-                  title: 'Current',
-                  subTabs: [
-                      { value: '15', title: 'Current Direction' },
-                      { value: '16', title: 'Current Speed' }
-                  ]
-              }
-          ],
-          meteorology: [
-              {
-                  value: 'wind',
-                  title: 'Wind',
-                  subTabs: [
-                      { value: '17', title: 'Wind Speed' },
-                      { value: '18', title: 'Wind Direction' },
-                      { value: '19', title: 'Wind Gust' }
-                  ]
-              },
-              {
-                  value: 'atmospheric',
-                  title: 'Atmospheric Conditions',
-                  subTabs: [
-                      { value: '20', title: 'Temperature (Air)' },
-                      { value: '21', title: 'Relative Humidity' },
-                      { value: '22', title: 'Barometric Pressure' },
-                      { value: '23', title: 'Rainfall' },
-                      { value: '24', title: 'Visibility' },
-                      { value: '25', title: 'Global Radiation' }
-                  ]
-              }
-          ],
-          water_quality: [
-              {
-                  value: 'chemical',
-                  title: 'Chemical Pollutants',
-                  subTabs: [
-                      { value: '26', title: 'PAH' },
-                      { value: '27', title: 'Oil in Water' },
-                      { value: '28', title: 'BT' }
-                  ]
-              },
-              {
-                  value: 'physical',
-                  title: 'Physical/Chemical Parameters',
-                  subTabs: [
-                      { value: '29', title: 'Turbidity' },
-                      { value: '30', title: 'Conductivity' },
-                      { value: '31', title: 'Dissolved Oxygen' },
-                      { value: '32', title: 'pH Level' },
-                      { value: '33', title: 'Salinity' }
-                  ]
-              },
-              {
-                  value: 'biological',
-                  title: 'Biological/Optical Parameters',
-                  subTabs: [
-                      { value: '34', title: 'Chlorophyll-a' },
-                      { value: '35', title: 'Water Temperature' },
-                      { value: '36', title: 'Phycoerythrin' },
-                      { value: '37', title: 'Fluorescein Dye' }
-                  ]
-              }
-          ]
+        oceanography: [
+            {
+                value: 'wave',
+                title: 'Wave Parameters',
+                subTabs: [
+                    { value: '0', title: 'Wave Heading' },
+                    { value: '1', title: 'Significant Wave Height (Hs)' },
+                    { value: '2', title: 'Zero Crossing Period (Tzc)' },
+                    { value: '3', title: 'Mean Zero Crossing Period (Tz)' },
+                    { value: '4', title: 'Mean Wave Period (Tm02)' },
+                    { value: '5', title: 'Wave Direction' },
+                    { value: '6', title: 'Wave Direction (FW)' },
+                    { value: '7', title: 'Mean Wave Direction' },
+                    { value: '8', title: 'Maximum Wave Height (Hmax)' },
+                    { value: '9', title: 'Fourier Coeff. A1' },
+                    { value: '10', title: 'Fourier Coeff. A2' },
+                    { value: '11', title: 'Fourier Coeff. B1' },
+                    { value: '12', title: 'Fourier Coeff. B2' },
+                    { value: '13', title: 'Dominant Period (FW)' },
+                    { value: '14', title: 'Average Wave Height (Havg)' }
+                ]
+            },
+            {
+                value: 'current',
+                title: 'Current Profile',
+                subTabs: [
+                    { value: '15', title: 'Current Direction (Bin 1)' },
+                    { value: '16', title: 'Current Speed (Bin 1)' },
+                ]
+            }
+        ],
+        meteorology: [
+            {
+                value: 'wind',
+                title: 'Wind Measurements',
+                subTabs: [
+                    { value: '17', title: 'Wind Speed' },
+                    { value: '18', title: 'Wind Direction (deg)' },
+                    { value: '19', title: 'Wind Gust' }
+                ]
+            },
+            {
+                value: 'atmospheric',
+                title: 'Atmospheric Conditions',
+                subTabs: [
+                    { value: '20', title: 'Air Temperature (°C)' },
+                    { value: '21', title: 'Relative Humidity (%)' },
+                    { value: '22', title: 'Barometric Pressure (hPa)' },
+                    { value: '23', title: 'Rainfall (mm)' },
+                    { value: '24', title: 'Visibility' },
+                    { value: '25', title: 'Global Radiation' }
+                ]
+            }
+        ],
+        water_quality: [
+            {
+                value: 'chemical',
+                title: 'Chemical Parameters',
+                subTabs: [
+                    { value: '26', title: 'PAH' },
+                    { value: '27', title: 'Oil in Water' },
+                    { value: '28', title: 'BT' }
+                ]
+            },
+            {
+                value: 'physical',
+                title: 'Physical Parameters',
+                subTabs: [
+                    { value: '29', title: 'Turbidity' },
+                    { value: '30', title: 'Conductivity' },
+                    { value: '31', title: 'Dissolved Oxygen' },
+                    { value: '32', title: 'pH' },
+                    { value: '33', title: 'Salinity' }
+                ]
+            },
+            {
+                value: 'biological',
+                title: 'Biological Parameters',
+                subTabs: [
+                    { value: '34', title: 'Chlorophyll-a' },
+                    { value: '35', title: 'Water Temperature (°C)' },
+                    { value: '36', title: 'Phycoerythrin' },
+                    { value: '37', title: 'Fluorescein Dye' }
+                ]
+            }
+        ]
       },
       dateRange: {
           start: startDate.toISOString(),
@@ -1153,12 +1176,19 @@ function formatRangeLabel(start, end, totalPoints) {
 }
 
 const getLastSensorData = async (req, res) => {
+  const { station_id } = req.query;
+  if(!station_id){
+    return res.status(400).json({
+      success: false,
+      error: 'station_id is required'
+    });
+  }
   console.log('Received request for lastest sensor data');
   
   try {
       const query = `
-          SELECT * FROM tb_buoy_01_measurements 
-          ORDER BY timestamp DESC
+          SELECT * FROM tb_buoy_${station_id.toLowerCase()}_measurements 
+          ORDER BY datetime DESC
           LIMIT 1`;
           
       const { rows } = await pool.query(query);
@@ -1171,14 +1201,13 @@ const getLastSensorData = async (req, res) => {
       }
 
       const lastRow = rows[0];
-      console.log('Last record timestamp:', lastRow.timestamp);
 
       const processedData = processSingleRow(lastRow);
 
       res.json({
           success: true,
           data: processedData,
-          timestamp: lastRow.timestamp
+          datetime: lastRow.datetime
       });
   } catch (error) {
       console.error('Error fetching last sensor data:', error.message);
@@ -1191,68 +1220,68 @@ const getLastSensorData = async (req, res) => {
 
 function processSingleRow(row) {
   const parameterMappings = {
-      oceanography: {
-          wave: {
-              '0': 'heading',
-              '1': 'hs',
+    oceanography: {
+        wave: {
+              '0': 'wave_heading',
+              '1': 'wave_height',
               '2': 'tzc',
-              '3': 'dominanttimeperiod',
+              '3': 'tz',
               '4': 'tm02',
               '5': 'wave_direction',
-              '6': 'wave_directionfw',
+              '6': 'wave_direction_fw',
               '7': 'mean_wave_direction',
               '8': 'hmax',
               '9': 'fourier_coefficient_a1',
               '10': 'fourier_coefficient_a2',
               '11': 'fourier_coefficient_b1',
               '12': 'fourier_coefficient_b2',
-              '13': 'dominanttimeperiodfw',
-              '14': 'havq'
-          },
-          current: {
-              '15': 'cell_1_dir',
-              '16': 'cell_1_speed'
-          }
-      },
-      meteorology: {
-          wind: {
-              '17': 'avg_ws',
-              '18': 'avgwindr',
-              '19': 'windgust'
-          },
-          atmospheric: {
-              '20': 'air_temperature',
-              '21': 'relative_humidity',
-              '22': 'barometric_pressure',
-              '23': 'rainfall',
+              '13': 'dominant_time_period_fw',
+              '14': 'havg'
+        },
+        current: {
+              '15': 'current_direction_bin_1',
+              '16': 'current_speed_bin_1'
+        }
+    },
+    meteorology: {
+        wind: {
+              '17': 'wind_speed',
+              '18': 'wind_direction_deg',
+              '19': 'wind_gust'
+        },
+        atmospheric: {
+              '20': 'temperature_deg',
+              '21': 'rh_percent',
+              '22': 'bp_hpa',
+              '23': 'rain_mm',
               '24': 'visibility',
-              '25': 'solar_radiation'
-          }
-      },
-      water_quality: {
-          chemical: {
+              '25': 'global_radiation'
+        }
+    },
+    water_quality: {
+        chemical: {
               '26': 'pah',
               '27': 'oil_in_water',
               '28': 'bt'
-          },
-          physical: {
+        },
+        physical: {
               '29': 'turbidity',
               '30': 'conductivity',
               '31': 'dissolved_oxygen',
-              '32': 'ph_level',
+              '32': 'ph',
               '33': 'salinity'
-          },
-          biological: {
+        },
+        biological: {
               '34': 'chlorophyll_a',
-              '35': 'water_temp',
+              '35': 'water_temperature',
               '36': 'phycoerythrin',
               '37': 'fluorescein_dye'
-          }
-      }
+        }
+    }
   };
 
   const result = {
-      timestamp: row.timestamp,
+      datetime: row.datetime,
       dataPresent: {}
   };
 
@@ -1577,7 +1606,7 @@ try {
     error: 'Internal server error',
     details: error.message
   });
-}
+  }
 };
 
 const saveLogs = async (req, res) => {

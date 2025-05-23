@@ -215,3 +215,10 @@
     flex: 1;
     min-width: 0;
   }
+
+  .update-btn-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+  }

@@ -13,7 +13,7 @@
             <option value="3">Station 3</option>
         </select>
     </div> -->
-    <div class="selec_station" (click)="touggleDrop()" *ngIf="page === 1">
+    <div class="selec_station" (click)="touggleDrop()" *ngIf="page === 1 || page === 7">
 
         <img class="station_image" src="../../assets/buoyimg/buoy.png" alt="">
         <p>{{selectedStation}}</p>

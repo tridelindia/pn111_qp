@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { GlobalDataService } from '../../global-data/global-data.component';
+import { Subscription } from 'rxjs';
 
 interface SensorStatus {
   name: string;
@@ -19,22 +21,44 @@ type SortKey = keyof SensorStatus;
   templateUrl: './sensor-status.component.html',
   styleUrl: './sensor-status.component.css'
 })
-export class SensorStatusComponent implements OnInit {
+export class SensorStatusComponent implements OnInit, OnDestroy {
   sensorStatuses: SensorStatus[] = [];
   isLoading: boolean = true;
+  private stationSubscription: Subscription;
   
   searchTerm: string = '';
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit() {
-    this.fetchLastSensorData();
+  constructor(
+    private http: HttpClient,
+    private data: GlobalDataService
+  ) {
+    this.stationSubscription = this.data.stationId$.subscribe(stationId => {
+      if (stationId) {
+        this.fetchLastSensorData(stationId);
+      }
+    });
   }
 
-  private fetchLastSensorData() {
-    this.http.get('http://localhost:3000/api/getLastSensorData').subscribe({
+  ngOnInit() {
+    const initialStationId = this.data.getStationId();
+    if (initialStationId) {
+      this.fetchLastSensorData(initialStationId);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.stationSubscription) {
+      this.stationSubscription.unsubscribe();
+    }
+  }
+
+  private fetchLastSensorData(stationId: string) {
+    this.isLoading = true;
+    this.http.get('http://localhost:3000/api/getLastSensorData', {
+      params: { station_id: stationId }
+    }).subscribe({
       next: (data: any) => {
         this.processSensorData(data);
         this.isLoading = false;
@@ -49,65 +73,100 @@ export class SensorStatusComponent implements OnInit {
   private processSensorData(data: any) {
     const parameterMapping: { [key: string]: string } = {
       'oceanography.wave.0': 'Wave Heading',
-      'oceanography.wave.1': 'Wave Height',
-      'oceanography.wave.2': 'Tzc',
-      'oceanography.wave.3': 'Tz',
-      'oceanography.wave.4': 'Tm02',
+      'oceanography.wave.1': 'Significant Wave Height (Hs)',
+      'oceanography.wave.2': 'Zero Crossing Period (Tzc)',
+      'oceanography.wave.3': 'Mean Zero Crossing Period (Tz)',
+      'oceanography.wave.4': 'Mean Wave Period (Tm02)',
       'oceanography.wave.5': 'Wave Direction',
-      'oceanography.wave.6': 'Wave Direction FW',
+      'oceanography.wave.6': 'Wave Direction (FW)',
       'oceanography.wave.7': 'Mean Wave Direction',
-      'oceanography.wave.8': 'Max Wave Height',
-      'oceanography.wave.9': 'Fourier Coefficient a1',
-      'oceanography.wave.10': 'Fourier Coefficient a2',
-      'oceanography.wave.11': 'Fourier Coefficient b1',
-      'oceanography.wave.12': 'Fourier Coefficient b2',
-      'oceanography.wave.13': 'Dominant Time Period FW',
-      'oceanography.wave.14': 'Havg',
-      
-      'oceanography.current.15': 'Current Direction',
-      'oceanography.current.16': 'Current Speed',
-      
+      'oceanography.wave.8': 'Maximum Wave Height (Hmax)',
+      'oceanography.wave.9': 'Fourier Coeff. A1',
+      'oceanography.wave.10': 'Fourier Coeff. A2',
+      'oceanography.wave.11': 'Fourier Coeff. B1',
+      'oceanography.wave.12': 'Fourier Coeff. B2',
+      'oceanography.wave.13': 'Dominant Period (FW)',
+      'oceanography.wave.14': 'Average Wave Height (Havg)',
+      'oceanography.current.15': 'Current Direction (Bin 1)',
+      'oceanography.current.16': 'Current Speed (Bin 1)',
       'meteorology.wind.17': 'Wind Speed',
-      'meteorology.wind.18': 'Wind Direction',
+      'meteorology.wind.18': 'Wind Direction (deg)',
       'meteorology.wind.19': 'Wind Gust',
-      
-      'meteorology.atmospheric.20': 'Temperature (Air)',
-      'meteorology.atmospheric.21': 'Relative Humidity',
-      'meteorology.atmospheric.22': 'Barometric Pressure',
-      'meteorology.atmospheric.23': 'Rainfall',
+      'meteorology.atmospheric.20': 'Air Temperature (°C)',
+      'meteorology.atmospheric.21': 'Relative Humidity (%)',
+      'meteorology.atmospheric.22': 'Barometric Pressure (hPa)',
+      'meteorology.atmospheric.23': 'Rainfall (mm)',
       'meteorology.atmospheric.24': 'Visibility',
       'meteorology.atmospheric.25': 'Global Radiation',
-      
       'water_quality.chemical.26': 'PAH',
       'water_quality.chemical.27': 'Oil in Water',
       'water_quality.chemical.28': 'BT',
-      
       'water_quality.physical.29': 'Turbidity',
       'water_quality.physical.30': 'Conductivity',
       'water_quality.physical.31': 'Dissolved Oxygen',
-      'water_quality.physical.32': 'pH Level',
+      'water_quality.physical.32': 'pH',
       'water_quality.physical.33': 'Salinity',
-      
       'water_quality.biological.34': 'Chlorophyll-a',
-      'water_quality.biological.35': 'Water Temperature',
+      'water_quality.biological.35': 'Water Temperature (°C)',
       'water_quality.biological.36': 'Phycoerythrin',
       'water_quality.biological.37': 'Fluorescein Dye'
     };
 
-    this.sensorStatuses = Object.entries(data.data.dataPresent).map(([key, value]: [string, any]) => {
-      const currentTime = new Date();
-      const lastReceivedTime = new Date(data.timestamp);
-      const timeDiff = currentTime.getTime() - lastReceivedTime.getTime();
-      const isActive = timeDiff < 15 * 60 * 1000 && value !== 0;
+    const currentTime = new Date();
+    const lastReceivedTime = new Date(data.datetime);
+    const timeDiff = currentTime.getTime() - lastReceivedTime.getTime();
 
-      const displayName = parameterMapping[key] || this.formatRawParameterName(key);
+    type CategoryType = 'oceanography' | 'meteorology' | 'water_quality';
+    type CategoryStatus = {
+      isActive: boolean;
+      lastReceived: string;
+    };
 
-      return {
-        name: displayName,
-        lastReceived: lastReceivedTime.toLocaleString(),
-        isActive: isActive
-      };
+    const formatDateTime = (date: Date): string => {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+      return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    };
+    
+    const categoryStatuses: Record<CategoryType, CategoryStatus> = {
+      oceanography: { 
+        isActive: true, 
+        lastReceived: formatDateTime(lastReceivedTime) 
+      },
+      meteorology: { 
+        isActive: true, 
+        lastReceived: formatDateTime(lastReceivedTime) 
+      },
+      water_quality: { 
+        isActive: true, 
+        lastReceived: formatDateTime(lastReceivedTime) 
+      }
+    };
+
+    // Check each parameter and update category status
+    Object.entries(data.data.dataPresent).forEach(([key, value]: [string, any]) => {
+      const category = key.split('.')[0] as CategoryType;
+      const isParameterActive = timeDiff < 15 * 60 * 1000 && value !== 0;
+      
+      if (category in categoryStatuses) {
+        // If any parameter is inactive, mark the whole category as inactive
+        if (!isParameterActive) {
+          categoryStatuses[category].isActive = false;
+        }
+      }
     });
+
+    // Convert to array format
+    this.sensorStatuses = Object.entries(categoryStatuses).map(([category, status]) => ({
+      name: category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      lastReceived: status.lastReceived,
+      isActive: status.isActive
+    }));
   }
 
   private formatRawParameterName(key: string): string {

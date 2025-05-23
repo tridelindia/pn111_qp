@@ -23,17 +23,13 @@ p{
     --basebg: #FFFFFF;
     --icons:#000000;
     --highlighttext: green;
-
+    --background-color: linear-gradient(90deg, #6fb4f9, #71b4f8);  /* Soft sky blue */
+    --secondary-color: #4D8FDC;   /* Deeper blue */
+    --highlight-color: #FF6B6B;   /* Coral (vibrant accent) */
+    --font-color: #2E2E2E;        /* Dark text */
+    --icon-color: #2E2E2E;        /* Dark icons */
 }
-[data-theme='blue-dark']{
 
-}
-[data-theme='light']{
-
-}
-[data-theme='blue-light']{
-
-}
 [data-theme='dark']
 * {
     font-family: "Parkinsans", serif;
@@ -212,3 +208,76 @@ p{
     font-style: italic;
   }
   
+  /* Themes colors */
+
+  [data-theme='bronze'] {
+    --background-color: #CE8946;  /* Your warm bronze-peach (unchanged) */
+    --secondary-color: #8C4A2F;   /* Rich terracotta (earthier than rusty copper) */
+    --highlight-color: #D4A017;   /* Muted gold (softer than #E6B800 for better UI) */
+    --font-color: #2E2E2E;        /* Near-black (better contrast for body text) */
+    --icon-color: #FFFFFF;        /* White (for clarity on bronze) */
+  }
+
+  [data-theme='black'] {
+    --background-color: #212529;  /* Dark slate */
+    --secondary-color: #343A40;   /* Slightly lighter dark gray */
+    --highlight-color: #4DABF7;   /* Soft blue (for contrast) */
+    --font-color: #F8F9FA;        /* Light gray (readable on dark) */
+    --icon-color: #E9ECEF;        /* Off-white icons */
+  }
+
+  [data-theme='blue'] {
+    --background-color: #007BFF;  /* Bootstrap blue */
+    --secondary-color: #0056B3;   /* Darker blue */
+    --highlight-color: #FFD43B;   /* Yellow (vibrant contrast) */
+    --font-color: #FFFFFF;        /* White text */
+    --icon-color: #FFFFFF;        /* White icons */
+  }
+
+  [data-theme='green'] {
+    --background-color: #28A745;  /* Bootstrap green */
+    --secondary-color: #1E7E34;   /* Darker green */
+    --highlight-color: #FFC107;   /* Gold (accent) */
+    --font-color: #FFFFFF;        /* White text */
+    --icon-color: #FFFFFF;        /* White icons */
+  }
+
+  [data-theme='purple'] {
+    --background-color: #6F42C1;  /* Bootstrap purple */
+    --secondary-color: #563D7C;  /* Deep purple */
+    --highlight-color: #FF9F1C;   /* Orange (warm contrast) */
+    --font-color: #FFFFFF;        /* White text */
+    --icon-color: #FFFFFF;        /* White icons */
+  }
+
+  [data-theme='orange'] {
+    --background-color: linear-gradient(135deg, #FF7E5F, #FEB47B);  /* Sunset */
+    --secondary-color: #CC5C3F;   /* Burnt orange */
+    --highlight-color: #5F27CD;   /* Purple (bold contrast) */
+    --font-color: #2E2E2E;        /* Dark text (readable on gradient) */
+    --icon-color: #2E2E2E;        /* Dark icons */
+  }
+
+  [data-theme='midnight'] {
+    --background-color: linear-gradient(135deg, #0F2027, #203A43, #2C5364);  /* Night sky */
+    --secondary-color: #1A2E35;   /* Dark teal */
+    --highlight-color: #FFA94D;   /* Soft orange (accent) */
+    --font-color: #E9ECEF;        /* Light text */
+    --icon-color: #E9ECEF;        /* Light icons */
+  }
+
+  [data-theme='rosegold'] {
+    --background-color: linear-gradient(135deg, #E0BFB8, #E6C9C2, #F3E0DC);  /* Blush */
+    --secondary-color: #C4A6A6;   /* Muted rose */
+    --highlight-color: #9C6B8E;   /* Dusty purple (subtle accent) */
+    --font-color: #4A3A3A;        /* Dark brown (readable on light) */
+    --icon-color: #4A3A3A;        /* Dark icons */
+  }
+
+  [data-theme='lightBlue'] {
+    --background-color: linear-gradient(90deg, #6fb4f9, #71b4f8);  /* Soft sky blue */
+    --secondary-color: #4D8FDC;   /* Deeper blue */
+    --highlight-color: #FF6B6B;   /* Coral (vibrant accent) */
+    --font-color: #2E2E2E;        /* Dark text */
+    --icon-color: #2E2E2E;        /* Dark icons */
+  }

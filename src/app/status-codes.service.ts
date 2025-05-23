@@ -25,7 +25,12 @@ export class StatusCodesService {
     // User Codes
     'U001': 'New User Added',
     'U002': 'User Data is Updated',
-    'U003': 'User is Deleted'
+    'U003': 'User is Deleted',
+
+    // Sensor Codes
+    'SE001': 'Sensor is Added',
+    'SE002': 'Sensor is Updated',
+    'SE003': 'Sensor is Deleted',
   };
 
   getStatusMessage(code: string): string {

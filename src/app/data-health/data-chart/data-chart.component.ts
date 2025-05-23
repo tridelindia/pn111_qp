@@ -3,6 +3,8 @@ import { DateRange, ChartData } from '../../models/dashboard.models';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ChartModule } from 'primeng/chart';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-main-chart-section',
@@ -37,7 +39,11 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
         return result;
       }
     },
-    legend: { data: [] },
+    legend: { 
+      data: [],
+      orient: 'horizontal',
+      top: 'middle'
+    },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
@@ -53,13 +59,22 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     },
     yAxis: {
       type: 'value',
+      min: function(value: any) {
+        return Math.floor(value.min * 0.9);
+      },
+      max: 100,
+      interval: 8,
+      splitNumber: 4,
       axisLabel: { 
         color: '#6b7280',
         formatter: function(value: number) {
           return Math.round(value);
         }
       },
-      splitLine: { lineStyle: { color: '#f3f4f6' } }
+      splitLine: { 
+        lineStyle: { color: '#f3f4f6' },
+        show: true
+      }
     },
     series: []
   };
@@ -148,7 +163,11 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
 
     this.waveChartOptions = {
       ...this.waveChartOptions,
-      legend: { data: series.map(s => s.name) },
+      legend: { 
+        data: series.map(s => s.name),
+        orient: 'horizontal',
+        right: 10,
+      },
       xAxis: {
         ...this.waveChartOptions.xAxis,
         data: this.xAxisData.length ? this.xAxisData : ['No data available']
@@ -190,6 +209,8 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
   chartHealthOptions: any;
 
   constructor() {
+    // Register the datalabels plugin
+    Chart.register(ChartDataLabels);
     this.initChartOptions();
   }
 
@@ -201,26 +222,18 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     
     if (!this.chartHealthData) {
       this.chartHealthData = {
-        labels: ['Wave', 'Current', 'Wind', 'Atmospheric', 'Chemical', 'Physical', 'Biological'],
+        labels: ['Oceanography', 'Meteorology', 'Water Quality'],
         datasets: [{
-          data: [0, 0, 0, 0, 0, 0, 0],
+          data: [0, 0, 0],
           backgroundColor: [
-            '#42A5F5',
-            '#66BB6A',
-            '#FFA726',
-            '#26C6DA',
-            '#EC407A',
-            '#7E57C2',
-            '#8D6E63'
+            '#3B82F6',
+            '#10B981',
+            '#F59E0B'
           ],
           borderColor: [
-            '#42A5F5',
-            '#66BB6A',
-            '#FFA726',
-            '#26C6DA',
-            '#EC407A',
-            '#7E57C2',
-            '#8D6E63'
+            '#3B82F6',
+            '#10B981',
+            '#F59E0B'
           ],
           borderWidth: 2,
           label: 'Data Health'
@@ -231,32 +244,23 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     this.chartHealthOptions = {
       plugins: {
         legend: {
-          display: true
+          display: true,
+          position: 'top',
+          orient: 'horizontal',
+          top: 'middle'
         },
-        tooltip: {
-          callbacks: {
-            label: function(context: any) {
-              return `${context.label}: ${Math.round(context.raw)}%`;
-            }
-          }
+        datalabels: {
+          display: false
         }
       },
       scales: {
         r: {
           beginAtZero: true,
           max: 100,
-          ticks: {
-            stepSize: 20,
-            color: textColor,
-            backdropColor: 'transparent',
-            callback: function(value: number) {
-              return Math.round(value);
-            }
-          },
           grid: {
             color: grayColor,
             circular: true,
-            lineWidth: 1
+            lineWidth: 2
           },
           angleLines: {
             color: grayColor,
@@ -280,35 +284,28 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
   }
 
   private updateHealthChartData(tabScores: any) {
+    // Calculate averages for main categories
+    const oceanographyScore = (tabScores.wave + tabScores.current) / 2;
+    const meteorologyScore = (tabScores.wind + tabScores.atmospheric) / 2;
+    const waterQualityScore = (tabScores.chemical + tabScores.physical + tabScores.biological) / 3;
+
     this.chartHealthData = {
-      labels: ['Wave', 'Current', 'Wind', 'Atmospheric', 'Chemical', 'Physical', 'Biological'],
+      labels: ['Oceanography', 'Meteorology', 'Water Quality'],
       datasets: [{
         data: [
-          Math.round(tabScores.wave || 0),
-          Math.round(tabScores.current || 0),
-          Math.round(tabScores.wind || 0),
-          Math.round(tabScores.atmospheric || 0),
-          Math.round(tabScores.chemical || 0),
-          Math.round(tabScores.physical || 0),
-          Math.round(tabScores.biological || 0)
+          Math.round(oceanographyScore || 0),
+          Math.round(meteorologyScore || 0),
+          Math.round(waterQualityScore || 0)
         ],
         backgroundColor: [
-          '#42A5F5',
-          '#66BB6A',
-          '#FFA726',
-          '#26C6DA',
-          '#EC407A',
-          '#7E57C2',
-          '#8D6E63'
+          '#3B82F6',
+          '#10B981',
+          '#F59E0B'
         ],
         borderColor: [
-          '#42A5F5',
-          '#66BB6A',
-          '#FFA726',
-          '#26C6DA',
-          '#EC407A',
-          '#7E57C2',
-          '#8D6E63'
+          '#3B82F6',
+          '#10B981',
+          '#F59E0B'
         ],
         borderWidth: 2,
         label: 'Data Health'

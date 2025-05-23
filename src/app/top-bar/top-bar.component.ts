@@ -33,7 +33,9 @@ export class TopBarComponent implements OnInit{
         this.data.selectedStation = name;
         const idset = this.listStations.filter(item=> item.station_name == name);
         console.log("id",idset);
-        this.layout.selectedStationId = idset[0].station_id
+        const stationId = idset[0].station_id;
+        this.layout.selectedStationId = stationId;
+        this.data.setStationId(stationId);
         console.log("id_station","one",this.layout.selectedStationId)
         if(this.layout.selectedStationId !== null){
             setTimeout(() => {
@@ -64,8 +66,9 @@ export class TopBarComponent implements OnInit{
                     this.listStations = response
                 }
                 this.selectedStation = response[0].station_name;
-                    console.log("response topbar",response, this.listStations[0].station_name);
-                this.layout.selectedStationId = this.listStations[0].station_id
+                console.log("response topbar",response, this.listStations[0].station_name);
+                this.layout.selectedStationId = this.listStations[0].station_id;
+                this.data.initializeStationId(this.listStations[0].station_id);
                 console.log("id_station","one",this.layout.selectedStationId)
                 setTimeout(() => {
                     this.layout.isDashboardLoading = false;
@@ -74,7 +77,6 @@ export class TopBarComponent implements OnInit{
                 (error: any) => {
                     console.log(error);
                     }
-
         )
     }
 

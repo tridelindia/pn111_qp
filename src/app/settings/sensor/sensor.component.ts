@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { text } from 'express';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { LoggingService } from '../../users/service/users/logging.service';
+
 interface Sensors{
   id: number;
   timestamp:string;
@@ -19,7 +21,8 @@ interface Sensors{
   imports: [RadialGaugeComponent, CommonModule, FormsModule, HttpClientModule],
   standalone:true,
   templateUrl: './sensor.component.html',
-  styleUrl: './sensor.component.css'
+  styleUrl: './sensor.component.css',
+  providers: [LoggingService]
 })
 export class SensorComponent implements OnInit{
   selectedSensor:string = 'ocean';
@@ -44,7 +47,8 @@ export class SensorComponent implements OnInit{
 
 
   constructor(
-    private http:HttpClient
+    private http:HttpClient,
+    private loggingService: LoggingService
   ){}
   ngOnInit(): void {
     const stat = this.saveData()
@@ -85,6 +89,21 @@ export class SensorComponent implements OnInit{
       (response:any) => {
         console.log(response);
         this.saveData();
+        // Add log
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (currentUserStr) {
+          const currentUser = JSON.parse(currentUserStr);
+          this.loggingService.addLog(
+            currentUser.username,
+            `Sensor has been updated.`, 
+            currentUser.id,
+            'SE002',
+            'sensor.component.ts/Update'
+          ).subscribe({
+            next: () => console.log('Activity logged successfully'),
+            error: (err) => console.error('Failed to log activity', err)
+          });
+        }
         },
         (error) => {
           console.error(error);

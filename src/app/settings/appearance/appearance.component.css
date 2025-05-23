@@ -86,7 +86,7 @@ margin-left: 20px;
 .lightBlue{
     height: 30px;
     width: 30px;
-    background-color: #78aef4;
+    background: linear-gradient(90deg, #6fb4f9, #71b4f8);
     border-radius: 50%;
     position: relative;
     margin-left: 20px;
@@ -433,7 +433,7 @@ img{
 .theme-options {
     display: flex;
     flex-wrap: nowrap;
-    gap: 3rem;
+    gap: 9rem;
     margin-top: 1rem;
     overflow-x: auto;
     padding-bottom: 1rem;
@@ -512,9 +512,8 @@ img{
 }
 
 /* Theme colors */
-.white {
-    background-color: #ffffff;
-    border: 1px solid #e9ecef;
+.bronze {
+    background-color: #CE8946;
 }
 
 .black {
