@@ -21,10 +21,10 @@
             <th (click)="onSort('average')" class="sortable">
               Average Value {{getSortIcon('average')}}
             </th>
-            <th (click)="onSort('percentage')" class="sortable">
+            <th (click)="onSort('percentage')" class="sortable" style="text-align: center;">
               Performance {{getSortIcon('percentage')}}
             </th>
-            <th (click)="onSort('status')" class="sortable">
+            <th (click)="onSort('status')" class="sortable" style="text-align: center;">
               Status {{getSortIcon('status')}}
             </th>
           </tr>
@@ -45,7 +45,7 @@
                 <span class="percentage-text">{{stat.percentage.toFixed(0)}}%</span>
               </div>
             </td>
-            <td>
+            <td style="text-align: center;">
               <span class="status-badge" [ngClass]="getStatusClass(stat.status)">
                 {{getStatusIcon(stat.status)}} {{stat.status | titlecase}}
               </span>

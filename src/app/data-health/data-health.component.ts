@@ -13,7 +13,7 @@ import { debounceTime, distinctUntilChanged, delay } from 'rxjs/operators';
 import { SensorStatusComponent } from './sensor-status/sensor-status.component';
 import { environment } from '../../environments/environment';
 import { TopBarComponent } from '../top-bar/top-bar.component';
-import { GlobalDataService } from '../global-data/global-data.component';
+import { LayoutComponent } from '../layout/layout.component';
 
 @Component({
   selector: 'app-data-health',
@@ -72,28 +72,17 @@ export class DataHealthComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private data: GlobalDataService
+    private layout:LayoutComponent
   ) {
     this.updateSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(() => this.applyFilters());
-
-    this.data.stationId$.subscribe((stationId: string) => {
-      console.log('stationId', stationId);
-      if (stationId) {
-        this.onStationSelected(stationId);
-      }
-    });
   }
 
   ngOnInit(): void {
-    // Get initial station ID from the service
-    const initialStationId = this.data.getStationId();
-    if (initialStationId) {
-      this.selectedStation = initialStationId;
-    }
-    this.loadChartData();
+    const station_Id =this.layout.selectedStationId;
+    this.onStationSelected(station_Id);
   }
 
   onDateRangeChange(newRange: { from: Date | null; to: Date | null }): void {

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { GlobalDataService } from '../../global-data/global-data.component';
 import { Subscription } from 'rxjs';
+import { LayoutComponent } from '../../layout/layout.component';
 
 interface SensorStatus {
   name: string;
@@ -29,10 +30,12 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
   searchTerm: string = '';
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
-
+  selectedStation: string = '';
+  
   constructor(
     private http: HttpClient,
-    private data: GlobalDataService
+    private data: GlobalDataService,
+    private layout:LayoutComponent
   ) {
     this.stationSubscription = this.data.stationId$.subscribe(stationId => {
       if (stationId) {
@@ -42,16 +45,19 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const initialStationId = this.data.getStationId();
-    if (initialStationId) {
-      this.fetchLastSensorData(initialStationId);
-    }
+    const station_Id =this.layout.selectedStationId;
+    this.onStationSelected(station_Id);
   }
 
   ngOnDestroy() {
     if (this.stationSubscription) {
       this.stationSubscription.unsubscribe();
     }
+  }
+
+  onStationSelected(stationId: string) {
+    this.selectedStation = stationId;
+    this.fetchLastSensorData(stationId);
   }
 
   private fetchLastSensorData(stationId: string) {
@@ -123,14 +129,20 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
     };
 
     const formatDateTime = (date: Date): string => {
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthName = months[date.getMonth()];
+      const day = date.getDate();
       const year = date.getFullYear();
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
     
-      return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+    
+      return `${monthName} ${day}, ${year}, ${hours}:${minutes} ${ampm}`;
     };
     
     const categoryStatuses: Record<CategoryType, CategoryStatus> = {

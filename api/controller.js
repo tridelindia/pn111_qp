@@ -821,21 +821,11 @@ const getSensorDataForHealth = async (req, res) => {
       
       let query;
       let params;
-
-      // if (station_id !== 'all') {
-      //     query = `
-      //         SELECT * FROM tb_buoy_${station_id.toLowerCase()}_measurements 
-      //     WHERE datetime >= $1 AND datetime <= $2 
-      //     AND station_id = $3 
-      //     ORDER BY datetime`;
-      //     params = [startDate, endDate, station_id];
-      // } else {
-          query = `
-              SELECT * FROM tb_buoy_${station_id.toLowerCase()}_measurements 
-              WHERE datetime >= $1 AND datetime <= $2 
-              ORDER BY datetime`;
-          params = [startDate, endDate];
-      // }
+      query = `
+          SELECT * FROM tb_buoy_${station_id.toLowerCase()}_measurements 
+          WHERE datetime >= $1 AND datetime <= $2 
+          ORDER BY datetime`;
+      params = [startDate, endDate];
       const { rows } = await pool.query(query, params);
 
       console.log(`Found ${rows.length} records`);
@@ -1555,7 +1545,7 @@ const getAllNotifications = async (req, res) => {
 
 const checkAndTriggerNotifications = async (req, res) => {
 try {
-  const { station_id } = req.params || req.body || req.query;
+  const station_id = req.params.station_id || req.body.station_id || req.query.station_id;
   
   if (!station_id) {
     return res.status(400).json({
@@ -1564,23 +1554,23 @@ try {
     });
   }
 
-  const sensorConfigs = await pool.query(
-    `SELECT * FROM tb_sensor_config 
-     WHERE notification = 'enable'`,
-    []
+  const stationConfigs = await pool.query(
+    `SELECT * FROM tb_stations_config 
+     WHERE station_id = $1 AND status = 'active'`,
+    [station_id]
   );
 
-  if (sensorConfigs.rows.length === 0) {
+  if (stationConfigs.rows.length === 0) {
     return res.status(200).json({
       success: true,
-      message: 'No sensor configurations with enabled notifications'
+      message: 'No station configurations with enabled notifications'
     });
   }
 
   const measurements = await pool.query(
-    `SELECT * FROM tb_buoy_01_measurements
+    `SELECT * FROM tb_buoy_${station_id.toLowerCase()}_measurements
      WHERE station_id = $1
-     ORDER BY timestamp DESC
+     ORDER BY datetime DESC
      LIMIT 1`,
     [station_id]
   );
@@ -1594,8 +1584,8 @@ try {
 
   const notifications = await pool.query(
     `SELECT * FROM tb_event_notifications
-     WHERE station_id = $1 AND enabled = true`,
-    [station_id]
+     WHERE $1 = ANY(station_id) AND enabled = $2`,
+    [station_id, 'true']
   );
 
   if (notifications.rows.length === 0) {
@@ -1605,88 +1595,125 @@ try {
     });
   }
 
-  const latestData = measurements.rows[0];
-  const notificationsSent = [];
-
-  for (const config of sensorConfigs.rows) {
-    const paramName = config.param_name;
-    if (!paramName || !latestData[paramName]) continue;
-
-    const currentValue = latestData[paramName];
-    const userEmail = notifications.rows[0]?.user_email;
-
-    let alert = null;
-    if (currentValue >= config.danger) {
-      alert = { level: 'danger', threshold: config.danger };
-    } else if (currentValue >= config.warning) {
-      alert = { level: 'warning', threshold: config.warning };
-    }
-
-    if (alert && userEmail) {
-      try {
-        const subject = `${alert.level.toUpperCase()} ALERT: ${paramName} at ${station_id}`;
-        const message = `Parameter ${paramName} value ${currentValue} exceeded ${alert.level} threshold (${alert.threshold})`;
-      // send mail
-        await sendEmail(userEmail, subject, message);
-        
-      // send WhatsApp message
-      //   const phoneNumber = notifications.rows[0]?.user_phone_number;
-      //   if (phoneNumber) {
-      //     const currentDate = new Date().toLocaleDateString('en-GB');
-      //     const currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-          
-      //     const whatsappMessage = {
-      //       phone: phoneNumber,
-      //       template: 'HXb5b62575e6e4ff6129ad7c8efe1f983e',
-      //       vars: {
-      //         "1": currentDate,
-      //         "2": currentTime
-      //       }
-      //     };
-
-      //     const whatsappResult = await whatsappSender.sendMessage(
-      //       whatsappMessage.phone,
-      //       whatsappMessage.template,
-      //       whatsappMessage.vars
-      //     );
-
-      //     console.log(whatsappResult.success ? 'WhatsApp Success' : 'WhatsApp Failed', phoneNumber);
-      //   }
-
-      //   send SMS
-      // sendSMS(notifications.rows[0]?.user_phone_number, 'Station 01 has very low temperature.')
-      // .then(sid => console.log('Message SID:', sid))
-      // .catch(error => console.error('Failed to send message:', error));
-        
-        notificationsSent.push({
-          station_id,
-          parameter: paramName,
-          value: currentValue,
-          threshold: alert.threshold,
-          level: alert.level,
-          email: userEmail,
-          status: 'sent',
-          timestamp: new Date().toISOString()
-        });
-      } catch (error) {
-        notificationsSent.push({
-          station_id,
-          parameter: paramName,
-          status: 'failed',
-          error: error.message
-        });
+  const haversineDistanceAndDirection = function(loc1 = [0, 0], loc2 = [0, 0]) {
+    const toRadians = (degree) => degree * (Math.PI / 180);
+    const toDegrees = (radian) => radian * (180 / Math.PI);
+ 
+    const R = 6371e3; // Radius of Earth in meters
+    const φ1 = toRadians(loc1[1]);
+    const φ2 = toRadians(loc2[1]);
+    const Δφ = toRadians(loc2[1] - loc1[1]);
+    const Δλ = toRadians(loc2[0] - loc1[0]);
+ 
+    // Haversine formula to calculate distance
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in meters
+ 
+    // Calculate the initial bearing (direction) in radians
+    const x = Math.sin(Δλ) * Math.cos(φ2);
+    const y =
+      Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+    let bearing = Math.atan2(x, y);
+ 
+    // Convert bearing from radians to degrees
+    bearing = toDegrees(bearing);
+ 
+    // Normalize the bearing to be between 0 and 360 degrees
+    bearing = (bearing + 360) % 360;
+ 
+    // Map bearing to cardinal direction
+    const directions = [
+      { min: 0, max: 22.5, direction: 'N' },
+      { min: 22.5, max: 67.5, direction: 'NE' },
+      { min: 67.5, max: 112.5, direction: 'E' },
+      { min: 112.5, max: 157.5, direction: 'SE' },
+      { min: 157.5, max: 202.5, direction: 'S' },
+      { min: 202.5, max: 247.5, direction: 'SW' },
+      { min: 247.5, max: 292.5, direction: 'W' },
+      { min: 292.5, max: 337.5, direction: 'NW' },
+      { min: 337.5, max: 360, direction: 'N' },
+    ];
+ 
+    let direction = 'N'; // Default value
+    for (const dir of directions) {
+      if (bearing >= dir.min && bearing < dir.max) {
+        direction = dir.direction;
+        break;
       }
     }
+ 
+    return { distance, direction };
   }
 
-  res.status(200).json({
+  const { distance, direction } = haversineDistanceAndDirection([stationConfigs.rows[0].lat_dd, stationConfigs.rows[0].lon_dd], [measurements.rows[0].lat, measurements.rows[0].lon]);
+
+  if(distance > stationConfigs.rows[0].danger){
+    for(let i = 0; i < notifications.rows.length; i++){
+      const emailSubject = `🚨 URGENT: BUOY DRIFT ALERT – ${stationConfigs.rows[0].station_name}`;
+      const emailBody = `
+Dear Team,
+
+ALERT – BUOY DRIFT DETECTED
+
+Please take immediate action regarding the following buoy drift incident reported by the TEMS system:
+
+Station Name: ${stationConfigs.rows[0].station_name}
+
+Drifted Distance: ${distance.toFixed(2)} meters
+
+Drifted Direction: ${direction}
+
+Current Position: ${measurements.rows[0].lat}, ${measurements.rows[0].lon}
+
+Time of Detection: ${new Date().toISOString()}
+
+Kindly investigate the situation at the earliest and initiate necessary corrective measures.
+
+Best regards,
+TEMS Monitoring System
+      `;
+      await sendEmail(notifications.rows[i].user_email, emailSubject, emailBody);
+    }
+  } else if(distance > stationConfigs.rows[0].warning){
+    for(let i = 0; i < notifications.rows.length; i++){
+      const emailSubject = `⚠️ WARNING: BUOY DRIFT ALERT – ${stationConfigs.rows[0].station_name}`;
+      const emailBody = `
+Dear Team,
+
+WARNING – BUOY DRIFT DETECTED
+
+Please be advised of the following buoy drift incident reported by the TEMS system:
+
+Station Name: ${stationConfigs.rows[0].station_name}
+
+Drifted Distance: ${distance.toFixed(2)} meters
+
+Drifted Direction: ${direction}
+
+Current Position: ${measurements.rows[0].lat}, ${measurements.rows[0].lon}
+
+Time of Detection: ${new Date().toISOString()}
+
+Please monitor the situation and take appropriate action if necessary.
+
+Best regards,
+TEMS Monitoring System
+      `;
+      await sendEmail(notifications.rows[i].user_email, emailSubject, emailBody);
+    }
+  } else{
+    return res.status(204).json({
+      success: true,
+      message: `No notifications sent for station ${station_id}`
+    });
+  }
+
+  return res.status(200).json({
     success: true,
-    station_id,
-    notifications_sent: notificationsSent.length,
-    details: notificationsSent,
-    message: notificationsSent.length > 0 
-      ? 'Alerts processed successfully' 
-      : 'No thresholds exceeded'
+    message: `Notifications sent for station ${station_id}`
   });
 
 } catch (error) {

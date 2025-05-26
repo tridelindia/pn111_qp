@@ -6,10 +6,10 @@ import { Injectable } from '@angular/core';
 export class StatusCodesService {
   private readonly statusMap: { [code: string]: string } = {
     // Notification Codes
-    'N001': 'Notification is Added',
-    'N002': 'Notification is Updated',
-    'N003': 'Notification is Deleted',
-    'N004': 'Notification Status Changed',
+    'N001': 'Notification Add',
+    'N002': 'Notification Update',
+    'N003': 'Notification Delete',
+    'N004': 'Notification Status Change',
     
     // Error Codes
     'E001': 'Info',
@@ -18,20 +18,20 @@ export class StatusCodesService {
     'E004': 'Cron Error',
     
     // Station Codes
-    'S001': 'Station is Added',
-    'S002': 'Station is Updated',
-    'S003': 'Station is Deleted',
+    'S001': 'Station Add',
+    'S002': 'Station Update',
+    'S003': 'Station Delete',
     
     // User Codes
-    'U001': 'New User Added',
-    'U002': 'User Data is Updated',
-    'U003': 'User is Deleted',
-
+    'U001': 'User Add',
+    'U002': 'User Update',
+    'U003': 'User Delete',
+  
     // Sensor Codes
-    'SE001': 'Sensor is Added',
-    'SE002': 'Sensor is Updated',
-    'SE003': 'Sensor is Deleted',
-  };
+    'SE001': 'Sensor Add',
+    'SE002': 'Sensor Update',
+    'SE003': 'Sensor Delete',
+  };  
 
   getStatusMessage(code: string): string {
     return this.statusMap[code] || `Unknown status code: ${code}`;
