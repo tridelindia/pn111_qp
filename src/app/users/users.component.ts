@@ -176,6 +176,22 @@ export class UsersComponent{
     });
   }
  
+  isUsernameValid(): boolean {
+  return /^[a-zA-Z0-9]+$/.test(this.currentUser.username);
+}
+ 
+isEmailFormatValid(): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.currentUser.email);
+}
+ 
+isPasswordValid(): boolean {
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,15}$/.test(this.currentUser.password ?? '');
+}
+ 
+passwordTouched: boolean = false;
+usernameTouched: boolean = false;
+emailTouched: boolean = false;
+ 
   onUsernameInput(username: string): void {
     this.usernameInput$.next(username);
   }

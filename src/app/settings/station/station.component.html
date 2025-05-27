@@ -16,7 +16,7 @@
                         <div>
                             <h2>{{item.buoy_name}}</h2>
                             <div class="sensor_namesss">
-                                <p>{{item.buoy_sensors}}</p>
+                                <p>{{item.buoy_sensors.join(' ')}}</p>
                             </div>
 
                         </div>
@@ -188,15 +188,15 @@
                     </div>
                     <!-- <img [src]="selectedstation.buoy_image" alt=""> -->
                     <p>{{selectedstation.buoy_id}}</p>
-                    <h5>Thresholds</h5>
+                    <h5>Threshold</h5>
 
                     <div class="threasholds">
                         <div class="warning_field">
-                            <p>Warning Threshold</p>
+                            <p>Warning Circle</p>
                             <input type="number" [value]="selectedstation.buoy_warning" readonly>
                         </div>
                         <div class="danger_field">
-                            <p>Danger Threshold</p>
+                            <p>Danger Circle</p>
                             <input type="number" [value]="selectedstation.buoy_danger" readonly>
                         </div>
                     </div>
@@ -307,15 +307,15 @@
                         </div>
 
                     </div> -->
-                    <h5>Thresholds</h5>
+                    <h5>Threshold</h5>
 
                     <div class="threasholds">
                         <div class="warning_field">
-                            <p>Warning Threshold</p>
+                            <p>Warning Circle</p>
                             <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_warning">
                         </div>
                         <div class="danger_field">
-                            <p>Danger Threshold</p>
+                            <p>Danger Circle</p>
                             <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_danger">
                         </div>
                     </div>
@@ -401,15 +401,14 @@
                     <input type="text" [(ngModel)]="buoy_name">
                     <p>Station ID</p>
                     <input type="text" [(ngModel)]="buoy_id">
-                    <h5>Thresholds</h5>
-
+                    <h5>Threshold</h5>
                     <div class="threasholds">
                         <div class="warning_field">
-                            <p>Warning Threshold</p>
+                            <p>Warning Circle</p>
                             <input style="width: 80%;" type="number" [(ngModel)]="buoy_warning">
                         </div>
                         <div class="danger_field">
-                            <p>Danger Threshold</p>
+                            <p>Danger Circle</p>
                             <input style="width: 80%;" type="number" [(ngModel)]="buoy_danger">
                         </div>
                     </div>

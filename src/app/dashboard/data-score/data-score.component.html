@@ -1,7 +1,11 @@
 <div class="data_score_main">
     <div class="title_data">
-        <h3>Data Quality Score <br><span> past 7 days</span></h3>
-        <div class="sensor_list">
+
+        <h3>
+            {{isChecked? 'Sun Shine Hours':'Data Availability'}} <br>
+            <span> {{isChecked ?"Past 4 days" :"Past 7 days"}}</span>
+        </h3>
+        <div class="sensor_list" *ngIf="!isChecked">
             <div class="svg_icon_bor" (click)="onSensorChange('ocean')" data-tooltip="oceanography"
                 [ngClass]="{'svg_icon_bor_active': selectedSensor === 'ocean'}">
                 <svg height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -78,6 +82,7 @@
             </div>
 
         </div>
+        <p-toggleswitch [(ngModel)]="isChecked" />
         <!-- <div class="score">
             {{overallScore}} avg
 
@@ -95,8 +100,8 @@
     </div>
 
     <div class="score_tab">
-
-        <div class="score_bars" *ngIf="data_score">
+        <app-sun-shine [sunshineData]="sunShineData" *ngIf="sunShineData.length !==0 && isChecked"></app-sun-shine>
+        <div class="score_bars" *ngIf="data_score && !isChecked">
             <div class="bar_item" *ngFor="let dayData of data_score">
                 <div class="bar">
                     <div class="bar_fill"

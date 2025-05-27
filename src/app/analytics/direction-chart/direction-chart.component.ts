@@ -45,7 +45,7 @@ export class DirectionChartComponent implements OnInit{
       tooltip: {
         trigger: 'axis',
         formatter: (params: any) => {
-          return `${echarts.format.formatTime('yyyy-MM-dd hh:mm:ss', params[0].value[0])}<br/>Direction: ${params[0].value[1]}°`;
+          return `${echarts.format.formatTime('dd-MM-yyyy hh:mm:ss', params[0].value[0])}<br/>Direction: ${params[0].value[1]}°`;
         }
       },
       legend:{
@@ -59,7 +59,7 @@ export class DirectionChartComponent implements OnInit{
         type: 'time',
         axisLabel: {
           formatter: (value: any) => {
-            return echarts.format.formatTime('yyyy-MM-dd\nhh:mm:ss', value);
+            return echarts.format.formatTime('dd-MM-yyyy\nhh:mm:ss', value);
           }
         }
       },

@@ -140,6 +140,7 @@ export class DashboardComponent implements OnInit{
   danger:number = 0;
   buoyLocation:[number, number]= [0,0];
   db_img:string= '';
+  ststionID!:string;
 toggleMapon(){
   this.map.destroyMap();
   this.stationConfiglist = []
@@ -176,6 +177,7 @@ changeimage(){
 
     ngOnInit(): void {
       this.changeimage();
+      this.ststionID = this.layout.selectedStationId
 this.map.destroyMap()
         console.log("sensorssss", this.sensorsss)
 
@@ -216,8 +218,7 @@ this.map.destroyMap()
         (response: any) => {
           this.sensorConfig = response;
 
-          console.log("Sensor==", response);
-           // Initialize empty objects
+      console.log("Sensor==", response);
       this.oceanSensorUnit = {} as OceansensorsUnit;
       this.MetUnit = {} as MetSensorUnit;
       this.WaterSensorUnit = {} as WatSensorunit;

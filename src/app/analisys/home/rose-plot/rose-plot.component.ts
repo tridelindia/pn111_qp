@@ -36,14 +36,16 @@ title!:string;
     this.graph = {
       data: [
         {
-          type: 'scatterpolar',
+          type: 'barpolar',
           r: this.V_WIND,
           theta: this.DIR_WIND,
           mode: 'markers',
+          width: Array(this.V_WIND.length).fill(15),
           marker: {
-            size: 10,
+            // size: 100,
             color: this.V_WIND,
-            colorscale: 'Plasma',
+            colorscale: 'Viridis',
+            opacity: 0.8,
             colorbar: {
               title: 'Wind Speed',
               x: 1.1
@@ -60,8 +62,9 @@ title!:string;
           text: this.title,
           font: {
             family: 'Arial, sans-serif',
-            size: 24,
-            color: '#000000'
+            size: 20,
+            weight:'bold',
+            color: '#4b4b4b'
           },
           x: 0.01,
           xanchor: 'left',

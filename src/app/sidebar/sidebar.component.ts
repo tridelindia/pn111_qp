@@ -31,30 +31,28 @@ constructor(private lay:LayoutComponent, private data:GlobalDataService, private
   permissions: { [key: string]: string[] } = {};
   
   ngOnInit(): void {
-      this.selectOption(0);
-
-       
-  const permString = localStorage.getItem('permissions');
-  let parsedPermissions: any;
- 
-  try {
-    parsedPermissions = JSON.parse(permString || '{}');
-  } catch (err) {
-    console.error('Error parsing permissions from localStorage', err);
-    parsedPermissions = {};
-  }
- 
-  if (typeof parsedPermissions !== 'object' || parsedPermissions === null || Array.isArray(parsedPermissions)) {
-    console.warn('Parsed permissions is not a valid object. Resetting.');
-    parsedPermissions = {};
-  }
- 
-  this.permissions = parsedPermissions;
-  console.log('Final permissions:', this.permissions);
+      this.selectOption(2);
+      const permString = localStorage.getItem('permissions');
+      let parsedPermissions: any;
+    
+      try {
+        parsedPermissions = JSON.parse(permString || '{}');
+      } catch (err) {
+        console.error('Error parsing permissions from localStorage', err);
+        parsedPermissions = {};
+      }
+    
+      if (typeof parsedPermissions !== 'object' || parsedPermissions === null || Array.isArray(parsedPermissions)) {
+        console.warn('Parsed permissions is not a valid object. Resetting.');
+        parsedPermissions = {};
+      }
+    
+      this.permissions = parsedPermissions;
+      console.log('Final permissions:', this.permissions);
   }
   logout() {
-    this.auth.logout();
-    this.toast.success('Logged out successfully');
+      this.auth.logout();
+      this.toast.success('Logged out successfully');
   }
  
 

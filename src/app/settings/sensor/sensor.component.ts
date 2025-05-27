@@ -47,7 +47,7 @@ export class SensorComponent implements OnInit{
     private http:HttpClient
   ){}
   ngOnInit(): void {
-    const stat = this.saveData()
+   this.saveData()
 
   }
   
@@ -55,7 +55,7 @@ export class SensorComponent implements OnInit{
     try {
       this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response:any) => {
-          console.log(response);
+          console.log("api",response);
           this.sampleData = response;
           this.tableData = this.sampleData.filter(item => item.name === 'oceanography');
           console.log(this.tableData);
@@ -85,11 +85,11 @@ export class SensorComponent implements OnInit{
       (response:any) => {
         console.log(response);
         this.saveData();
-        },
+      },
         (error) => {
           console.error(error);
-          }
-          )
+      }
+    )
   }
 
   onUnitSelect(unit:string){

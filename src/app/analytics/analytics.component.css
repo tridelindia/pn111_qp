@@ -305,9 +305,13 @@ label{
 .Submit_button{
     height: 30px;
     width: 150px;
-    background-color: var(--basebg);
+    background-color: rgb(80, 148, 230);
     border-radius: 10px;
     border: none;
+    color: white;
+    align-self: center;
+    margin-top: 30px;
+
 }
 .example-viewport {
     height: 400%; /* or any height you need */
@@ -551,6 +555,7 @@ p-multiselect{
     justify-content: center;
     align-items: center;
     margin: 1px;
+    cursor: pointer;
     /* color: white; */
 }
 .picker_active{
