@@ -3,6 +3,7 @@ import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserlogComponent } from "./userlog/userlog.component";
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Role } from './models/role.model';
 import { RoleService } from './service/roles/role.service';
 import { User } from './models/user.model';
@@ -44,7 +45,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 })
 export class UsersComponent{
  
-  constructor(private roleService: RoleService, private userService: UserService, private designationService: DesignationsService) { }
+  constructor(private roleService: RoleService, private userService: UserService, private designationService: DesignationsService, private toast: ToastrService) { }
  
   // ngOnInit() {
   //   this.loadRoles();
@@ -119,7 +120,7 @@ export class UsersComponent{
  
     // Prevent deletion of Admin
     if (userToDelete?.is_admin) {
-      alert("Admin cannot be deleted.");
+      this.toast.info("Admin cannot be deleted.");
       return;
     }
  

@@ -7,6 +7,8 @@ import { ReportComponent } from './report/report.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { UsersComponent } from './users/users.component';
 import { SettingsComponent } from './settings/settings.component';
+import { AuthGuard } from './services/auth.guard';
+import { permissionGuard } from './services/auth.guard.spec';
 
 export const routes: Routes = [
     {
@@ -21,30 +23,44 @@ export const routes: Routes = [
     {
         path: 'base',
         component: LayoutComponent,
+        canActivate: [AuthGuard],
         children:[
             {
                 path:'home',
-                component: HomeComponent
+                component: HomeComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Home', action: 'read'}
+ 
             },
             {
                 path:'dashboard',
-                component:DashboardComponent
+                component:DashboardComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Dashboard', action: 'read'}
             },
             {
                 path:'reports',
-                component:ReportComponent
+                component:ReportComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Reports', action: 'read'}
             },
             {
                 path:'analytics',
-                component:AnalyticsComponent
+                component:AnalyticsComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Analytics', action: 'read'}
             },
             {
                 path:'users',
-                component:UsersComponent
+                component:UsersComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'User Management', action: 'read'}
             },
             {
                 path:'settings',
-                component:SettingsComponent
+                component:SettingsComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Settings', action: 'read'}
             }
             
         ]

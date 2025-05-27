@@ -20,6 +20,7 @@ import { forkJoin } from 'rxjs';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ToastrService } from 'ngx-toastr';
 import { ToastModule } from 'primeng/toast';
+import { LayoutComponent } from '../layout/layout.component';
 
 interface param{
   param_name:string;
@@ -422,8 +423,9 @@ this.isSelectParams = false;
     }
   }
 
-
+isMeteriology:boolean=true;
   ngOnInit(): void {
+    this.isMeteriology = this.layout.sensors.includes('meteorology');
     this.polarNumber = 0;
     this.isCurrentPolar = false;
     this.isPolarLoading = true;
@@ -467,7 +469,8 @@ this.isSelectParams = false;
     private http:HttpClient,
     private data:GlobalDataService,
     private reportService:ReportService,
-    private toast:ToastrService
+    private toast:ToastrService,
+    private layout:LayoutComponent
   ){}
 
 
@@ -554,6 +557,7 @@ singleStationchange(){
 
   fetchSensors(){
     this.listparams = [];
+    this.isPolarLoading = true;
     this.filteredparams = [];
     this.selectedParams = [];
 this.selectedparam = '';
@@ -978,6 +982,8 @@ this.selectedMultiStationParam = '';
       this.PolarAxis = [];
       this.PolarAxis2 = [];
       this.isLoadingCurrentPolar = true;
+      this.isPolarLoading = true;
+
       console.log("polar values", val, val2, val3, val4)
       for (let index = 0; index < this.buoyData.length; index++) {
         this.PolarAxis.push({

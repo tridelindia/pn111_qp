@@ -173,7 +173,11 @@ font-size: 16px;
 color: rgb(255, 255, 255);
 }
  
-.input-container:focus-within .input-icon {
+.input-container:focus-within .input-icon{
+color: black;
+}
+
+.input-container:focus-within .toggle-password3{
 color: black;
 }
  
@@ -191,6 +195,7 @@ font-size: 14px;
 margin-bottom: 5px;
 color: rgb(255, 255, 255);
 text-align: left;
+margin-left: 15px;
 }
  
 .input-box {
@@ -400,4 +405,54 @@ color: #000000;
   color: black;
 }
  
- 
+.toggle-password{
+  position: absolute;
+  top: 44%;
+  right: 12%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  padding: 0;
+}
+.form-login{
+    width: 86%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.toggle-password2{
+  position: absolute;
+  top: 66%;
+  right: 12%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  padding: 0;
+}
+
+.toggle-password3{
+  position: absolute;
+  top: 50%;
+  right: 9%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  padding: 0;
+}
+.input-group:focus-within .toggle-password{
+color: black;
+}
+
+.input-group:focus-within .toggle-password2{
+color: black;
+}

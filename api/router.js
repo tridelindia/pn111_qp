@@ -8,7 +8,8 @@ const { getStationConfig, getAllSensorData, getAllSensorDatabyStation,getSensorD
     updateNotification,
     updateNotificationStatus,
     saveLogs,
-    updateRole
+    updateRole,
+    resetPassword
  } = require('./controller')
  const { addLogs, getLogs } = require('./logger');
 const router = express.Router();
@@ -41,6 +42,7 @@ router.get('/users', fetchUser);
 router.post('/users', addUser);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
+router.post('/users/resetPassword', resetPassword);
 
 router.get('/getHealthData', getSensorDataForHealth);
 router.get('/getLastSensorData', getLastSensorData);

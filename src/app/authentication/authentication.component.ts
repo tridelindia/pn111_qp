@@ -27,6 +27,7 @@ export class AuthenticationComponent {
  
   // Popup State Variables
   showForgetPopup = false;
+  showPassword:boolean = false;
   step = 1;
  
   // Step 2
@@ -45,6 +46,10 @@ export class AuthenticationComponent {
     private toast:ToastrService
   ){
  
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
  
   login(event:Event){
@@ -99,6 +104,7 @@ export class AuthenticationComponent {
   // STEP 1: Verify User (simulate API)
 verifyUser() {
   if (!this.username || !this.email) {
+    console.log(this.username, this.email);
     this.toast.error('Please enter both username and email');
     return;
   }
@@ -116,7 +122,7 @@ verifyUser() {
             this.toast.error('Email does not exist');
           } else {
             this.toast.success('User Verified');
-            this.step = 2;
+            this.step = 3;
           }
         },
         error: () => {
@@ -132,32 +138,48 @@ verifyUser() {
  
  
   // STEP 2: Send OTP
-  sendOTP() {
-    // Simulate sending OTP
-    this.otpSent = true;
-    this.toast.info('OTP Sent to email');
-  }
+  // sendOTP() {
+  //   // Simulate sending OTP
+  //   this.otpSent = true;
+  //   this.toast.info('OTP Sent to email');
+  // }
  
-  verifyOTP() {
-    if (this.enteredOtp === '123456') {
-      this.toast.success('OTP Verified');
-      this.step = 3;
-    } else {
-      this.toast.error('Invalid OTP');
-    }
-  }
+  // verifyOTP() {
+  //   if (this.enteredOtp === '123456') {
+  //     this.toast.success('OTP Verified');
+  //     this.step = 3;
+  //   } else {
+  //     this.toast.error('Invalid OTP');
+  //   }
+  // }
  
   // STEP 3: Change Password
-  submitNewPassword() {
-    if (this.newPassword !== this.confirmPassword) {
-      this.toast.error('Passwords do not match');
-      return;
+submitNewPassword() {
+  const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])[A-Za-z\d\S]{8,15}$/;
+ 
+  if (!passwordPattern.test(this.newPassword)) {
+    this.toast.error('Password must be 8-15 characters, include 1 uppercase letter, 1 number, and 1 special character.');
+    return;
+  }
+ 
+  if (this.newPassword !== this.confirmPassword) {
+    this.toast.error('Passwords do not match');
+    return;
+  }
+ 
+  this.auth.resetPassword(this.username, this.email, this.newPassword).subscribe({
+    next: () => {
+      this.toast.success('Password Updated Successfully');
+      this.closePopup();
+    },
+    error: (err) => {
+      this.toast.error('Failed to update password');
+      console.error(err);
     }
+  });
+}
  
-    // Call API to change password here
-    this.toast.success('Password Updated Successfully');
-    this.closePopup();
-  }
  
   }
+ 
  

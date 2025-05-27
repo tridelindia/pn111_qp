@@ -210,7 +210,7 @@
                         </div>
                         <p>Oceanography</p>
                     </div>
-                    <div class="sensor_item" (click)="onSelectSensor('meteriology')">
+                    <div *ngIf="isMeteriology" class="sensor_item" (click)="onSelectSensor('meteriology')">
                         <div class="toggle">
                             <div class="toggle_fill"
                                 [ngClass]="selectedSensor === 'meteriology'?'toggle_fill_active':'toggle_fill'"></div>

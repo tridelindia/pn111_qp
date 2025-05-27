@@ -724,6 +724,38 @@ const updateRole = async (req, res) => {
     res.status(204).send();
   }
 
+    const resetPassword = async (req, res) => {
+  const { username, email, newPassword } = req.body;
+  console.log('Received reset request for:', username);
+ 
+  try {
+    // Step 1: Check if user exists with matching email
+    const userResult = await pool.query(
+      'SELECT * FROM tb_users WHERE username = $1 AND email = $2',
+      [username, email]
+    );
+ 
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found with provided username and email' });
+    }
+ 
+    // Step 2: Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+ 
+    // Step 3: Update password
+    await pool.query(
+      'UPDATE tb_users SET password = $1 WHERE username = $2 AND email = $3',
+      [hashedPassword, username, email]
+    );
+ 
+    console.log(`Password updated for user ${username}`);
+    return res.status(200).json({ message: 'Password updated successfully' });
+ 
+  } catch (err) {
+    console.error('Error resetting password:', err.message);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
   const fetchDesignation = async (req, res) => {
     try {
@@ -1795,6 +1827,7 @@ module.exports = {
     addUser,
     updateUser,
     deleteUser,
+    resetPassword,
     addRole,
     fetchRole,
     updateRole,

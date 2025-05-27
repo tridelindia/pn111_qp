@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DesignationsService {
  
-  private baseUrl = 'http://localhost:30003000/api/designations';
+  private baseUrl = 'http://localhost:3000/api/designations';
  
   constructor(private http: HttpClient) {}
  

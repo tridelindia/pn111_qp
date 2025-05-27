@@ -4,13 +4,13 @@ import { Observable, tap } from 'rxjs';
 import { User } from '../models/user.model';
 import { CurrentUser } from '../user-model/user-model.module';
 import { Router } from '@angular/router';
-
+ 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  
+ 
+ 
   CurrentUser!: CurrentUser;
  
   private apiUrl = 'http://localhost:3000/api/users/';
@@ -41,6 +41,14 @@ export class AuthService {
     return !!localStorage.getItem('loginTime') && !!localStorage.getItem('username');
   }
  
+  resetPassword(username: string, email: string, newPassword: string) {
+  return this.http.post(`${this.apiUrl}resetPassword`, {
+    username,
+    email,
+    newPassword
+  });
+}
+ 
   logout(): void {
     localStorage.removeItem('loginTime');
     localStorage.removeItem('username');
@@ -50,3 +58,5 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 }
+ 
+ 

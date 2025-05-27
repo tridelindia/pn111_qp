@@ -6,19 +6,23 @@
         <!-- STEP 1: Verify Username + Email -->
         <div *ngIf="step === 1">
             <h2>Forget Password</h2>
-            <div class="input-group">
-                <label>Username</label>
-                <input type="text" [(ngModel)]="username" class="modal-input" />
-            </div>
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" [(ngModel)]="email" class="modal-input" />
-            </div>
-            <button class="popup-btn" (click)="verifyUser()">Verify</button>
+            <form (submit)="verifyUser()">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" [(ngModel)]="username" placeholder="Enter Username" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" [(ngModel)]="email" placeholder="Enter Password" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                </div>
+                <button type="submit" class="popup-btn">Verify</button>
+            </form>
         </div>
 
         <!-- STEP 2: OTP Verification -->
-        <div *ngIf="step === 2">
+        <!-- <div *ngIf="step === 2">
             <h2>OTP Verification</h2>
             <button class="popup-btn" (click)="sendOTP()" [disabled]="otpSent">Send OTP</button>
             <div class="input-group" *ngIf="otpSent">
@@ -26,20 +30,32 @@
                 <input type="text" [(ngModel)]="enteredOtp" class="modal-input" />
             </div>
             <button class="popup-btn" style="align-self:center;" (click)="verifyOTP()">Verify OTP</button>
-        </div>
+        </div> -->
 
         <!-- STEP 3: Reset Password -->
         <div *ngIf="step === 3">
             <h2>Reset Password</h2>
-            <div class="input-group">
-                <label>New Password</label>
-                <input type="password" [(ngModel)]="newPassword" class="modal-input" />
-            </div>
-            <div class="input-group">
-                <label>Confirm Password</label>
-                <input type="password" [(ngModel)]="confirmPassword" class="modal-input" />
-            </div>
-            <button class="popup-btn" (click)="submitNewPassword()">Submit</button>
+            <form (submit)="submitNewPassword()">
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input [type]=" showPassword ? 'text' : 'password' " [(ngModel)]="newPassword"
+                        placeholder="Enter New Password" name="newPassword" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                    <button type="button" (click)="togglePassword()" class="toggle-password">
+                        <i [class]="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
+                    </button>
+                </div>
+                <div class="input-group">
+                    <label>Confirm Password</label>
+                    <input [type]=" showPassword ? 'text' : 'password' " [(ngModel)]="confirmPassword"
+                        placeholder="Confirm New Password" name="confirmnewPassword" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                    <button type="button" (click)="togglePassword()" class="toggle-password2">
+                        <i [class]="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
+                    </button>
+                </div>
+                <button type="submit" class="popup-btn">Submit</button>
+            </form>
         </div>
     </div>
 </div>
@@ -78,30 +94,34 @@
         <p>QATAR LUSAIL</p>
 
         <!-- Username Input -->
-        <!-- <form (ngSubmit)="login($event)"> -->
-        <div class="input-group">
-            <label for="username">Username</label>
-            <div class="input-container">
-                <input type="text" id="username" placeholder="Enter your username" class="input-box" required
-                    [(ngModel)]="username" [ngModelOptions]="{standalone: true}" required>
-                <i class="fa-solid fa-user input-icon"></i>
+        <form (submit)="login($event)" class="form-login">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <div class="input-container">
+                    <input type="text" id="username" placeholder="Enter your username" class="input-box" required
+                        [(ngModel)]="username" [ngModelOptions]="{standalone: true}" required>
+                    <i class="fa-solid fa-user input-icon"></i>
+                </div>
             </div>
-        </div>
 
-        <!-- Password Input -->
-        <div class="input-group">
-            <label for="password">Password</label>
-            <div class="input-container">
-                <input type="password" id="password" placeholder="Enter your password" class="input-box" required
-                    [(ngModel)]="password" [ngModelOptions]="{standalone: true}" required>
-                <i class="fa fa-unlock-keyhole input-icon"></i>
+            <!-- Password Input -->
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="input-container">
+                    <input [type]=" showPassword ? 'text' : 'password' " id="password" placeholder="Enter your password"
+                        class="input-box" required [(ngModel)]="password" [ngModelOptions]="{standalone: true}"
+                        required>
+                    <i class="fa fa-unlock-keyhole input-icon"></i>
+                    <button type="button" (click)="togglePassword()" class="toggle-password3">
+                        <i [class]="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <a class="forget-pass" (click)="openPopup()">Forget Password</a>
+            <a class="forget-pass" (click)="openPopup()">Forget Password</a>
 
-        <button type="submit" class="login-btn" (click)="login($event)">Login</button>
-        <!-- </form> -->
+            <button type="submit" class="login-btn">Login</button>
+        </form>
     </div>
     <!-- </div> -->
 </div>
