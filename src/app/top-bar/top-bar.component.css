@@ -42,6 +42,9 @@
   width: 20px;
   height: 20px;
 }
+h1, h2, h3, h4, h5, h6, p, span, small{
+  color: var(--font-color);
+}
 /* end dorpdown */
 .mainBar{
     height: 5.5%;
@@ -51,7 +54,7 @@
     background-color: #1050cd;
     /* background-color:var(--basebg); */
     background: rgb(10,97,184);
-    background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+    background: var(--background-color);
     /* border-radius: 5px; */
     display: flex;
     flex-direction: row;

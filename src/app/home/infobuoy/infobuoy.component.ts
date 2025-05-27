@@ -8,10 +8,14 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { BuoyService } from '../infobuoy/buoy.service';
-import { StationConfigs } from '../homeService/stationconfig.service';
+import {
+  StationConfigs,
+  StationconfigService,
+} from '../homeService/stationconfig.service';
 import { BuoyMeasurement } from '../../report/report.service';
 import { CommonModule } from '@angular/common';
- 
+import { SensorModel } from '../../models/station.model';
+
 @Component({
   selector: 'app-infobuoy',
   imports: [CommonModule],
@@ -20,6 +24,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './infobuoy.component.css',
 })
 export class InfobuoyComponent implements OnInit {
+  paramUnits: SensorModel[] = [];
+
   @Input() buoyData!: StationConfigs;
   @Input() buoySensor!: BuoyMeasurement;
   // @Input() buoyName!: string;
@@ -31,12 +37,22 @@ export class InfobuoyComponent implements OnInit {
   // @Input() temp!: string;
   @Input() drift!: string;
   // @Input() battery!: number;
- 
+
   @Input() params: { name: string; value: string }[] = [];
- 
+
   private buoyClickedSubscription: Subscription = new Subscription();
- 
+
+  constructor(
+    private renderer: Renderer2,
+    private el: ElementRef,
+    private paramUnitsService: StationconfigService
+  ) {}
+
   ngOnInit(): void {
+    this.paramUnitsService.getSensorConfig().subscribe((paramUnits) => {
+      this.paramUnits = paramUnits;
+      console.log('Sensor Config units: ', this.paramUnits);
+    });
     // this.buoyClickedSubscription = this.buoyService.buoyClicked$.subscribe(
     //   (buoyName) => {
     //     console.log(buoyName, this.buoyName);
@@ -48,11 +64,11 @@ export class InfobuoyComponent implements OnInit {
       this.rotateStation();
     }, 100);
   }
- 
+
   ngOnDestroy(): void {
     this.buoyClickedSubscription.unsubscribe();
   }
- 
+
   rotateStation() {
     const stationnameElement =
       this.el.nativeElement.querySelector('.stationname');
@@ -62,13 +78,14 @@ export class InfobuoyComponent implements OnInit {
       this.renderer.addClass(stationnameElement, 'rotated');
     }
   }
- 
-  constructor(
-    private renderer: Renderer2,
-    private el: ElementRef,
-    private buoyService: BuoyService
-  ) {}
- 
+
+  getUnit(name: string): string {
+    const paramConfig = this.paramUnits?.find(
+      (param: any) => param.param_name === name
+    );
+    return paramConfig?.unit ? ` ${paramConfig.unit}` : '';
+  }
+
   getImageForParam(name: string): string {
     switch (name) {
       case 'battery':
@@ -102,8 +119,8 @@ export class InfobuoyComponent implements OnInit {
       case 'fourier_coefficient_a2':
       case 'fourier_coefficient_b2':
         return 'assets/svg/fourier.svg';
-        case 'havg':
-          return 'assets/svg/maxwaveheight.svg'
+      case 'havg':
+        return 'assets/svg/maxwaveheight.svg';
       case 'dominant_time_period_fw':
         return 'assets/home/domp.png';
       case 'water_temperature':
@@ -134,7 +151,7 @@ export class InfobuoyComponent implements OnInit {
         return 'assets/svg/radiation.svg';
       case 'rain_mm':
         return 'assets/svg/rainfall.svg';
- 
+
       // Current speed bins
       case 'current_speed_bin_1':
       case 'current_speed_bin_2':
@@ -147,7 +164,7 @@ export class InfobuoyComponent implements OnInit {
       case 'current_speed_bin_9':
       case 'current_speed_bin_10':
         return 'assets/svg/speed.svg';
- 
+
       // Current direction bins
       case 'current_direction_bin_1':
       case 'current_direction_bin_2':
@@ -160,12 +177,12 @@ export class InfobuoyComponent implements OnInit {
       case 'current_direction_bin_9':
       case 'current_direction_bin_10':
         return 'assets/svg/direction.svg';
- 
+
       default:
         return 'assets/home/waveHeading.png';
     }
   }
- 
+
   getLabelPrefix(name: string): string {
     switch (name) {
       case 'battery':
@@ -177,7 +194,7 @@ export class InfobuoyComponent implements OnInit {
       case 'lon':
         return 'Longitude';
       case 'wind_speed':
-        return 'Wind\nSpeed';
+        return `Wind\nSpeed`;
       case 'wind_direction_deg':
         return 'Wind\nDirection';
       case 'wind_gust':
@@ -254,7 +271,7 @@ export class InfobuoyComponent implements OnInit {
         return 'NMEA';
       case 'samplenumber':
         return 'Sample';
- 
+
       // Current speed bins
       case 'current_speed_bin_1':
       case 'current_speed_bin_2':
@@ -267,7 +284,7 @@ export class InfobuoyComponent implements OnInit {
       case 'current_speed_bin_9':
       case 'current_speed_bin_10':
         return 'Current\nSpeed';
- 
+
       // Current direction bins
       case 'current_direction_bin_1':
       case 'current_direction_bin_2':
@@ -280,17 +297,17 @@ export class InfobuoyComponent implements OnInit {
       case 'current_direction_bin_9':
       case 'current_direction_bin_10':
         return 'Current\nDirection';
- 
+
       default:
         return '';
     }
   }
- 
+
   getSectionClass(index: number): string {
     const map = ['top-1', 'top-2', 'center-1', 'bottom-1', 'bottom-2'];
     return map[index] || 'default-section';
   }
- 
+
   getImageClass(index: number): string {
     switch (index) {
       case 0:
@@ -308,5 +325,3 @@ export class InfobuoyComponent implements OnInit {
     }
   }
 }
- 
- 

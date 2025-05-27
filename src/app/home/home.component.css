@@ -2,7 +2,7 @@ main {
   display: flex;
   flex-grow: 1;
 }
- 
+
 .map-container {
   flex-grow: 1;
   width: 100%;
@@ -10,13 +10,28 @@ main {
   border-radius: 15px;
   position: relative;
 }
- 
+
 .map {
   width: 100%;
   height: 100%;
 }
- 
- 
+
+/* .tooltip {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #333;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 12px;
+  color: #000;
+  display: none;
+  z-index: 1000;
+} */
+
+
+
 .floating-image1 {
   position: fixed;
   bottom: 22px;
@@ -26,8 +41,9 @@ main {
   z-index: 1;
   border: 2px solid black;
   border-radius: 10px;
+  cursor: pointer;
 }
- 
+
 .floating-image2 {
   position: fixed;
   bottom: 22px;
@@ -37,8 +53,9 @@ main {
   z-index: 1;
   border: 2px solid black;
   border-radius: 10px;
+  cursor: pointer;
 }
- 
+
 .floating-image3 {
   position: fixed;
   bottom: 22px;
@@ -48,9 +65,10 @@ main {
   z-index: 1;
   border: 2px solid black;
   border-radius: 10px;
- 
+  cursor: pointer;
+
 }
- 
+
 .floating-image4 {
   position: fixed;
   bottom: 22px;
@@ -60,8 +78,9 @@ main {
   z-index: 1;
   border: 2px solid black;
   border-radius: 10px;
+  cursor: pointer;
 }
- 
+
 .floating-image5 {
   position: fixed;
   bottom: 22px;
@@ -71,8 +90,9 @@ main {
   z-index: 1;
   border: 2px solid black;
   border-radius: 10px;
+  cursor: pointer;
 }
- 
+
 .floating-image6 {
   position: fixed;
   bottom: 22px;
@@ -82,8 +102,9 @@ main {
   z-index: 1;
   border: 2px solid black;
   border-radius: 10px;
+  cursor: pointer;
 }
- 
+
 .powered {
   position: fixed;
   bottom: 0px;
@@ -97,7 +118,7 @@ main {
   align-items: center;
   justify-content: center;
 }
- 
+
 .image {
   height: 100%;
   width: 23px;
@@ -105,11 +126,11 @@ main {
   background-size: cover;
   margin-right: 10px;
 }
- 
+
 span {
   font-size: 12px;
 }
- 
+
 .bouy1 {
   position: fixed;
   /* bottom: 0px; */
@@ -126,13 +147,13 @@ span {
   animation: blinker 2s linear infinite;
   border-radius: 10px;
 }
- 
+
 @keyframes blinker {
   50% {
     opacity: 0.4;
   }
 }
- 
+
 .bouy2 {
   position: fixed;
   /* bottom: 0px; */
@@ -149,7 +170,7 @@ span {
   justify-content: center;
   animation: blinker 2s linear infinite;
 }
- 
+
 .check {
   position: fixed;
   /* bottom: 0px; */
@@ -165,7 +186,7 @@ span {
   align-items: center;
   justify-content: center;
 }
- 
+
 input {
   height: 20px;
   width: 20px;
@@ -174,23 +195,23 @@ input {
   border-radius: 10px;
   background-color: #ee4c4cd0;
 }
- 
- 
+
+
 .text-warning {
   color: orange;
 }
- 
+
 .text-danger {
   color: red;
 }
- 
+
 .text-success {
   color: green;
 }
- 
- 
- 
- 
+
+
+
+
 .expand-button {
   position: absolute;
   top: 15px;
@@ -208,11 +229,11 @@ input {
   cursor: pointer;
   transition: transform 0.3s ease;
 }
- 
+
 .expand-button:hover {
   transform: scale(1.2);
 }
- 
+
 .expand-space {
   position: absolute;
   /* padding-top: 50px; */
@@ -225,12 +246,12 @@ input {
   display: none;
   overflow: hidden;
 }
- 
- 
+
+
 .expanded+.expand-space {
   /* display: block; */
 }
- 
+
 .expand-rectangle {
   width: 95%;
   height: 14%;
@@ -239,7 +260,7 @@ input {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 0, 0, 0.627);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.522); */
- 
+
   background: rgba(255, 255, 255, 0.021);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -252,25 +273,25 @@ input {
   flex-direction: row;
   align-items: center;
   /* justify-content: space-evenly; */
-  gap: 38px;
+  /* gap: 10px; */
   cursor: pointer;
   position: relative;
   transition: transform 0.3s ease;
 }
- 
+
 .expand-rectangle:hover {
   transform: scale(1.05);
 }
- 
+
 .info-row {
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
- 
+
 }
- 
+
 .profile-img {
   margin-bottom: 30px;
   width: 60px;
@@ -279,63 +300,63 @@ input {
   /* margin-right: 20px; */
   /* background-color: lightblue; */
 }
- 
+
 .info-column {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
- 
+
 .locationimg {
   height: 40px;
   width: 30px;
 }
- 
- 
- 
+
+
+
 .info-item {
   /* margin-bottom: 5px; */
   /* color: white; */
 }
- 
+
 /* .label {
   font-weight: lighter;
   color: white;
 } */
- 
+
 .value {
   margin: 0px 5px;
   /* color: white; */
   font-weight: bold;
   font-size: medium;
 }
- 
- 
+
+
 #ol-map.expanded+.expand-space {
   display: block;
 }
- 
+
 .expand-space {
   display: none;
   /* other styles */
 }
- 
- 
- 
- 
- 
+
+
+
+
+
 .status-indicator {
   display: flex;
   align-items: center;
   gap: 5px;
 }
- 
+
 .status-indicator .pulse {
   width: 20px;
   height: 20px;
   border-radius: 50%;
 }
- 
+
 .status-indicator.active .pulse {
   background-color: #10b981;
   /* Bright Green */
@@ -343,7 +364,7 @@ input {
   box-shadow: 0 0 10px 4px #10b981;
   /* Glow effect for stronger color */
 }
- 
+
 .status-indicator.inactive .pulse {
   background-color: #ef4444;
   /* Bright Red */
@@ -351,32 +372,83 @@ input {
   box-shadow: 0 0 10px 4px #ef4444;
   /* Glow effect for stronger color */
 }
- 
+
 @keyframes activePulse {
- 
+
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
     /* Increase opacity for stronger color */
   }
- 
+
   50% {
     box-shadow: 0 0 0 7px rgba(16, 185, 129, 0.4);
     /* Increase size for thicker glow */
   }
 }
- 
+
 @keyframes inactivePulse {
- 
+
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
     /* Increase opacity for stronger color */
   }
- 
+
   50% {
     box-shadow: 0 0 0 7px rgba(239, 68, 68, 0.4);
     /* Increase size for thicker glow */
   }
 }
- 
+
+
+
+.toast-container {
+  position: absolute;
+  top: 10px;
+  right: 50px;
+  z-index: 1000;
+}
+
+.drift-toast {
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  /* animation: blink 6s linear infinite; */
+}
+
+.text-success {
+  background-color: #d4edda;
+  /* color: #155724; */
+  color: black;
+}
+
+.text-warning {
+  background-color: #fff3cd;
+  /* color: #856404; */
+  color: black;
+}
+
+.text-danger {
+  background-color: #f8d7da;
+  /* color: #721c24; */
+  color: black;
+}
+
+@keyframes blink {
+
+  0%,
+  30% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  60%,
+  100% {
+    opacity: 1;
+  }
+}

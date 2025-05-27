@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SensorModel } from '../../models/station.model';
 
 export interface StationConfigs {
   id: number;
@@ -48,5 +49,9 @@ export class StationconfigService {
 
   getHomeConfig(): Observable<HomeConfig[]> {
     return this.http.get<HomeConfig[]>(`${this.apiUrl}getHomeConfig`);
+  }
+
+  getSensorConfig(): Observable<SensorModel[]> {
+    return this.http.get<SensorModel[]>(`${this.apiUrl}getSensorConfig`);
   }
 }

@@ -171,11 +171,20 @@ listImage:string[]=['../../assets/avatars/live4.jpeg', '../../assets/avatars/liv
 changeimage(){
   setInterval(() => {
     const randomIndex = Math.floor(Math.random() * this.listImage.length);
-    this.db_img = this.listImage[randomIndex];
+    this.db_img = this.listImage[1];
   }, 1000);
 }
-
+fromDate!:string;
+toDate!:string;
     ngOnInit(): void {
+          const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date();
+    endDate.setHours(23, 59, 0, 0);
+
+    this.fromDate = startDate.toISOString();
+    this.toDate = endDate.toISOString();
       this.changeimage();
       this.ststionID = this.layout.selectedStationId
 this.map.destroyMap()
@@ -259,7 +268,7 @@ this.map.destroyMap()
     
     fetchSensors() {
       this.BuoyData = [];
-      const params = new HttpParams().set('fromDate', '2025-01-01T00:00:42.000Z').set('toDate', '2025-05-31T23:59:00.000Z').set('stationId', this.layout.selectedStationId);
+      const params = new HttpParams().set('fromDate', this.fromDate).set('toDate',this.toDate).set('stationId', this.layout.selectedStationId);
       this.http.get('http://localhost:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
         (response: any) => {
           this.BuoyData = response;

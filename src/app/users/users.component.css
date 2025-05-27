@@ -92,7 +92,7 @@ nav button:hover {
 }
 
 nav button.active {
-  background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+  background-color: var(--highlight-color);
   color: rgb(0, 0, 0);
   font-weight: bold;
   border-radius: 50px;
@@ -122,7 +122,7 @@ nav button.active {
 }
 
 .new-user-btn {
-  background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+  background: var(--highlight-color);
   color: white;
   border: none;
   padding: 10px 16px;
@@ -425,7 +425,7 @@ nav button.active {
 }
 
 .save-button {
-  background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+  background:var(--highlight-color);
   color: white;
   border: none;
   padding: 12px 18px;
@@ -713,7 +713,7 @@ nav button.active {
 }
 
 .add-button {
-  background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+  background: var(--highlight-color);
   color: white;
   border: none;
   height: 35px;

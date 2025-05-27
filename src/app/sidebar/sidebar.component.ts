@@ -31,7 +31,7 @@ constructor(private lay:LayoutComponent, private data:GlobalDataService, private
   permissions: { [key: string]: string[] } = {};
   
   ngOnInit(): void {
-      this.selectOption(2);
+      this.selectOption(1);
       const permString = localStorage.getItem('permissions');
       let parsedPermissions: any;
     

@@ -15,9 +15,9 @@
                     <span class="value">
 
                         <p style="white-space: pre-line"> {{ getLabelPrefix(param.name) }}</p>
+                        <div class="valueunit"> {{ param.value }}{{ getUnit(param.name) }}</div>
 
 
-                        {{ param.value }}
                     </span>
                     <!-- <div [innerHTML]="getIcon(name)"></div> -->
                     <img [ngClass]="getImageClass(i)" [src]="getImageForParam(param.name)" [alt]="param.name" />

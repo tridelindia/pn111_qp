@@ -61,8 +61,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
+    font-size: 0.8rem;
+    /* font-weight: bold; */
     position: relative;
+}
+
+.valueunit {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: rgb(4, 4, 58);
 }
 
 .stationname.rotated {

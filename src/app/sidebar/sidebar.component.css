@@ -4,13 +4,13 @@
     width: 3%;
     margin-top: 50px;
     /* background-color: var(--basebg); */
-    background: rgb(10,97,184);
-    background: linear-gradient(90deg, rgb(111, 180, 249) 0%, rgb(113, 180, 248) 100%);
+    /* background: rgb(10,97,184); */
+    background: var(--background-color);
      
     color: var(--icons);
     position: fixed;
     border-radius: 5px;
-    background-color: var(--mainbg);  border-radius: 10px;
+   border-radius: 10px;
   backdrop-filter: blur(10px); /* Glass effect */
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */

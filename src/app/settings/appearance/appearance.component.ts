@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,10 +15,23 @@ export class AppearanceComponent implements OnInit {
   selectedbattery: string = 'battery1';
   selectedColor: string = 'white';
 
+
+
+  constructor(private renderer: Renderer2){}
+
   ngOnInit(): void {
     this.loadPreferences();
-  }
 
+  const theme = localStorage.getItem('theme');
+// chartFont = theme!;
+//   this.theme = theme!;
+  this.onChangeTheme(theme!);
+} 
+ onChangeTheme(theme:string){
+    this.renderer.setAttribute(document.documentElement, 'data-theme', theme);
+    localStorage.setItem('theme', theme);
+   const data = window.dispatchEvent(new Event('storage'));
+  }
   private loadPreferences(): void {
     const savedColor = localStorage.getItem('selectedColor');
     if (savedColor) {
@@ -53,6 +66,7 @@ export class AppearanceComponent implements OnInit {
   changeColor(name: string): void {
     this.selectedColor = name;
     this.savePreference('selectedColor', name);
+    this.renderer.setAttribute(document.documentElement, 'data-theme', name);
   }
 
   changeCurrentspeed(name: string): void {

@@ -9,6 +9,8 @@
             </svg>
         </button>
         <div id="ol-map" class="map"></div>
+        <!-- <div id="tooltip" class="tooltip"></div> -->
+
         <div class="expand-space">
             <div class="expand-rectangle" *ngFor="let buoy of buoys">
                 <div class="info-row">
@@ -26,10 +28,10 @@
                     </div>
                     <div class="info-column">
                         <div class="info-item">
-                            <span class="value">{{buoy.lat}}°</span>
+                            <span class="value">{{buoy.lat}}°N</span>
                         </div>
                         <div class="info-item">
-                            <span class="value">{{buoy.long}}°</span>
+                            <span class="value">{{buoy.long}}°E</span>
                         </div>
                     </div>
                 </div>
@@ -49,27 +51,35 @@
 
 
                 <div class="info-row" style="white-space: pre-line;">
-                    <span class="value">Drifted {{buoy.drift}}</span>
+                    <span class="value">{{buoy.drift}}</span>
                     <img class="locationimg" src="../../assets/home/buoy-unscreen.gif" alt="drift">
                 </div>
             </div>
         </div>
+        <div class="toast-container" *ngIf="currentToast">
+            <div [ngClass]="toastClass" class="drift-toast">
+                {{ currentToast }}
+            </div>
+        </div>
+
     </div>
 
     <!-- <div id="ol-map" class="map-container"></div> -->
 
     <img src="../../assets/home/one.png" alt="Floating Image 1" class="floating-image1"
-        (click)="mapChange('OpenCycleMap')">
+        (click)="mapChange('OpenCycleMap')" pTooltip="OpenCycle Map" tooltipPosition="top">
     <img src="../../assets/home/four.png" alt="Floating Image 2" class="floating-image2"
-        (click)="mapChange('Transport')">
-    <img src="../../assets/home/six.png" alt="Floating Image 3" class="floating-image3"
-        (click)="mapChange('Landscape')">
-    <img src="../../assets/home/five.png" alt="Floating Image 4" class="floating-image4"
-        (click)="mapChange('Outdoors')">
+        (click)="mapChange('Transport')" pTooltip="Voyager Map" tooltipPosition="top">
+    <img src="../../assets/home/six.png" alt="Floating Image 3" class="floating-image3" (click)="mapChange('Landscape')"
+        pTooltip="Dark Map" tooltipPosition="top">
+    <img src="../../assets/home/five.png" alt="Floating Image 4" class="floating-image4" (click)="mapChange('Outdoors')"
+        pTooltip="Light Map" tooltipPosition="top">
     <img src="../../assets/home/two.png" alt="Floating Image 5" class="floating-image5"
-        (click)="mapChange('TransportDark')">
+        (click)="mapChange('TransportDark')" pTooltip="Alidade Satellite Map" tooltipPosition="top">
     <img src="../../assets/home/thre.png" alt="Floating Image 6" class="floating-image6"
-        (click)="mapChange('Spinal Map')">
+        (click)="mapChange('Spinal Map')" pTooltip="World Imagery Map" tooltipPosition="top">
+
+
 
 
     <!-- <app-infobuoy [buoyData]="selectedBuoyData" [buoySensor]="selectedParamData" *ngIf="buoyTapped"
@@ -77,7 +87,10 @@
         [markerImg]="getSelectedMarkerImg()"></app-infobuoy> -->
 
     <app-infobuoy [buoyData]="selectedBuoyData" [buoySensor]="selectedParamData" [params]="infoBuoyDataSet"
-        *ngIf="buoyTapped" [markerImg]="getSelectedMarkerImg()"></app-infobuoy>
+        *ngIf="buoyTapped"
+        [markerImg]="getSelectedMarkerImg(selectedBuoyData?.status, getDriftType(selectedBuoyData?.station_name))">
+    </app-infobuoy>
+
 
     <div class="powered">
         <div class="image"></div>

@@ -7,6 +7,7 @@ import { XYZ } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import { getDistance } from 'ol/sphere';
 import { Fill, Icon, Stroke, Style, Text } from 'ol/style';
+import Overlay from 'ol/Overlay';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ import { Fill, Icon, Stroke, Style, Text } from 'ol/style';
 export class MapService {
   public map!: Map;
   private vectorLayer!: VectorLayer;
+  private tooltipOverlay!: Overlay;
 
   initializeMap(
     targetId: string,
@@ -52,19 +54,43 @@ export class MapService {
       target: targetId,
     });
 
+    // Tooltip element from DOM
+    const tooltipElement = document.createElement('div');
+    tooltipElement.className = 'tooltip';
+    tooltipElement.style.position = 'absolute';
+    tooltipElement.style.backgroundColor = 'white';
+    tooltipElement.style.padding = '4px 8px';
+    tooltipElement.style.border = '1px solid black';
+    tooltipElement.style.borderRadius = '4px';
+    tooltipElement.style.whiteSpace = 'nowrap';
+    tooltipElement.style.pointerEvents = 'none';
+    tooltipElement.style.display = 'none'; // hide initially
+
+    this.tooltipOverlay = new Overlay({
+      element: tooltipElement,
+      offset: [10, 0],
+      positioning: 'bottom-left',
+    });
+
+    this.map.addOverlay(this.tooltipOverlay);
+
+    // Hover event
     this.map.getViewport().addEventListener('pointermove', (event) => {
-      const pixel = this.map!.getEventPixel(event);
+      const pixel = this.map.getEventPixel(event);
+      const feature = this.map.forEachFeatureAtPixel(pixel, (feat) => feat);
 
-      // Reset cursor by default
-      this.map!.getTargetElement().style.cursor = '';
+      if (feature && feature.get('stationId')) {
+        tooltipElement.style.display = 'block';
+        tooltipElement.innerHTML = `${feature.get('stationId')}`;
 
-      // Check if a feature exists at the pixel where the pointer is hovering
-      this.map!.forEachFeatureAtPixel(pixel, (feature) => {
-        if (feature instanceof Feature && feature.get('name')) {
-          // 'name' or any unique property of marker
-          this.map!.getTargetElement().style.cursor = 'pointer';
-        }
-      });
+        const coordinate = this.map.getEventCoordinate(event);
+        this.tooltipOverlay.setPosition(coordinate);
+        this.map.getTargetElement().style.cursor = 'pointer';
+      } else {
+        tooltipElement.style.display = 'none';
+        this.tooltipOverlay.setPosition(undefined);
+        this.map.getTargetElement().style.cursor = '';
+      }
     });
   }
 
@@ -88,25 +114,32 @@ export class MapService {
     }
   }
 
-  addMarker(coordinate: [number, number], name: string, img: string): void {
+  addMarker(
+    coordinate: [number, number],
+    name: string,
+    stationId: string,
+    img: string
+  ): void {
     const vectorSource = this.vectorLayer.getSource() as VectorSource;
 
     const markerStyle = new Style({
       image: new Icon({
         src: img,
         scale: 0.06,
-      }),
+        imgSize: [0.01, 0.01],
+      } as any),
       text: new Text({
         font: '15px jost',
         text: name,
-        offsetY: -50,
+        offsetY: -20,
         fill: new Fill({ color: '#000' }),
-        stroke: new Stroke({ color: '#fff', width: 3 }),
+        stroke: new Stroke({ color: '#fff', width: 2 }),
       }),
     });
 
     const marker = new Feature({
       name,
+      stationId,
       geometry: new Point(coordinate),
     });
     marker.setStyle(markerStyle);
@@ -131,19 +164,22 @@ export class MapService {
   checkBuoyRange(
     markerCoords: [number, number],
     center: [number, number],
-    drange: number,
     wrange: number,
+    drange: number,
     buoyName: string
   ): string {
     // const formatDis = this.formatDistance(drange);
     const getDis = getDistance(center, markerCoords);
-    if (getDis > wrange && getDis < drange) {
-      return `${buoyName} Crossed Out of Warning Range`;
+    if (getDis <= wrange) {
+      return 'Inrange';
+    } else if (getDis > wrange && getDis <= drange) {
+      return 'Warning Range';
     } else if (getDis > drange) {
-      return `${buoyName} Crossed Out of Danger Range`;
+      return 'Danger Range';
     } else {
-      return `${buoyName} is within  km from the center`;
+      return 'No Range';
     }
+    console.log('sadsdadasdasd', getDis);
   }
   // formatDistance(distance: number) {
   //   return distance.toFixed(14);

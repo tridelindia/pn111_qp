@@ -139,7 +139,7 @@
     height: 8px;
     width: 8px;
     border-radius: 50%;
-    background-color: blue;
+    background-color: var(--highlight-color);
 }
 
 
@@ -305,7 +305,7 @@ label{
 .Submit_button{
     height: 30px;
     width: 150px;
-    background-color: rgb(80, 148, 230);
+    background-color: var(--highlight-color);
     border-radius: 10px;
     border: none;
     color: white;
@@ -392,7 +392,7 @@ label{
     justify-content: center;
     align-items: center;
     color: white;
-    background-color: rgb(104, 172, 244);
+    background-color: var(--highlight-color);
 }
 
 
@@ -561,7 +561,7 @@ p-multiselect{
 .picker_active{
     height: 80%;
     width: 30%;
-    background-color: rgb(104, 172, 244);
+    background-color: var(--highlight-color);
     border-radius: 15px;
     display: flex;
     justify-content: center;

@@ -39,8 +39,7 @@
                         <div class="filter">
                             <p-multiselect display="chip" [options]="dynaColumns" optionLabel="header"
                                 [(ngModel)]="selectedColumns" placeholder="Select Columns" [maxSelectedLabels]="7"
-                                styleClass="w-full md:w-80" showHeader="false" selectedItemsLabel="{0} columns selected"
-                                [filter]="true" />
+                                showHeader="true" selectedItemsLabel="{0} Columns selected" [filter]="true" />
                         </div>
                     </div>
 
@@ -103,7 +102,7 @@
                         Timestamp <p-sortIcon field="timestamp"></p-sortIcon>
                     </th>
                     <th pSortableColumn="datetime" class="centered-cell">
-                        DateTime <p-sortIcon field="datetime"></p-sortIcon>
+                        Date and Time <p-sortIcon field="datetime"></p-sortIcon>
                     </th>
                     <th pSortableColumn="battery" class="centered-cell">
                         Battery <p-sortIcon field="battery"></p-sortIcon>
@@ -134,19 +133,20 @@
                         <span [innerHTML]="highlightSearchText((rowData['station_id']))"></span>
                     </td>
                     <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['timestamp']))"></span>
+                        <span [innerHTML]="highlightSearchText((rowData['timestampFormatted']))"></span>
+
                     </td>
                     <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['datetime']))"></span>
+                        <span [innerHTML]="highlightSearchText((rowData['datetimeFormatted']))"></span>
                     </td>
                     <td class="centered-cell">
                         <span [innerHTML]="highlightSearchText((rowData['battery']))"></span>
                     </td>
                     <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['lat']))"></span>
+                        <span [innerHTML]="highlightSearchText((rowData['lat']) + ' N')"></span>
                     </td>
                     <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['lon']))"></span>
+                        <span [innerHTML]="highlightSearchText((rowData['lon']) + ' E')"></span>
                     </td>
                     <td *ngFor="let col of columns" class="centered-cell">
                         <span [innerHTML]="col.field === 'timestamp' || col.field === 'datatim'
