@@ -1,23 +1,38 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LayoutComponent } from '../../layout/layout.component';
+import { SunShineComponent } from "../sun-shine/sun-shine.component";
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { FormsModule } from '@angular/forms';
 
+export interface RadiationEntry {
+  datetime: string; // ISO string
+  global: number;
+}
+
+export interface DailySunshine {
+  date: string; // e.g. 2025-01-01
+  sunshineHours: number;
+  hourly: { [key: string]: number }; // "06:00": radiation value
+}
 @Component({
     selector: 'app-data-score',
-    imports: [CommonModule, HttpClientModule],
+    imports: [CommonModule, HttpClientModule, SunShineComponent, ToggleSwitchModule, FormsModule],
     standalone:true,
     templateUrl: './data-score.component.html',
     styleUrl: './data-score.component.css'
 })
 export class DataScoreComponent {
+  isChecked:boolean = true;
 last7Days: { day: string, date: string, value: number, percentage: number }[] = [];
   overallScore:number = 0;
+  @Input() stationId!:string;
   // overallScore: number = 0;
   isNoWaterQuality:boolean=false;
   selectedSensor: string = "ocean";
   constructor(private http:HttpClient, private layout:LayoutComponent){}
-
+  sunShineData!:DailySunshine[];
   ngOnInit() {
     this.isNoWaterQuality = this.layout.sensors.includes('water_quality');
     this.updateData()
@@ -90,14 +105,17 @@ getpercentage(val:number, sensor:string):number{
 
   fetchSensorData() {
   const params = new HttpParams()
-    .set('fromDate', '2025-02-01T00:00:42.000Z')
+    .set('fromDate', '2025-01-01T00:00:42.000Z')
     .set('toDate', '2025-05-31T23:59:00.000Z')
-    .set('stationId', 'qp001');
+    .set('stationId', this.stationId);
   const apiUrl = 'http://localhost:3000/api/getSensorDataByStationAndDate';
 
   this.http.get<any[]>(apiUrl, { params }).subscribe(data => {
     console.log("API data received:", data);
     let data_values:any = []
+   const  sunshineData: DailySunshine[] = this.calculateSunshine(data);
+   this.sunShineData = sunshineData;
+   console.log("sunshineData",sunshineData)
     for (let index = 0; index < this.last7Days.length; index++) {
       const day = data.filter(item=>  item.datetime.includes(this.last7Days[index].date));
     console.log("day 1", this.last7Days[index], day);
@@ -157,4 +175,46 @@ getpercentage(val:number, sensor:string):number{
   });
 }
 
+
+
+
+
+calculateSunshine(data: RadiationEntry[], threshold = 120): DailySunshine[] {
+  const dailyMap: { [key: string]: DailySunshine } = {};
+
+  // Step 1: Find the last 4 unique dates (in descending order)
+  const allDates = [...new Set(data.map(entry => entry.datetime.split('T')[0]))].sort().reverse();
+  const last4Dates = new Set(allDates.slice(0, 4));
+
+  data.forEach(entry => {
+    const d = new Date(entry.datetime);
+    const dateStr = d.toISOString().split('T')[0]; // YYYY-MM-DD
+    const timeStr = d.toTimeString().slice(0, 5);   // HH:MM
+
+    // Filter only last 4 days
+    if (!last4Dates.has(dateStr)) return;
+
+    // Initialize daily entry
+    if (!dailyMap[dateStr]) {
+      dailyMap[dateStr] = {
+        date: dateStr,
+        sunshineHours: 0,
+        hourly: {}
+      };
+    }
+
+    // Count sunny interval
+    if (entry.global > threshold) {
+      dailyMap[dateStr].sunshineHours += 10 / 60; // 10 minutes = 1/6 hour
+    }
+
+    // Save specific time's radiation
+    if (['00:00', '06:00', '12:00', '18:00'].includes(timeStr)) {
+      dailyMap[dateStr].hourly[timeStr] = entry.global;
+    }
+  });
+
+  // Return in ascending date order
+  return Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
+}
 }

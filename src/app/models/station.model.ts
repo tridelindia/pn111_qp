@@ -70,12 +70,12 @@ export interface BuoyMeasurement {
 
 export interface SensorModel{
 
-danger:string;
+danger:number;
 id:number;
 name:string;
 notification:string;
 param_name:string;
 timestamp:string;
 unit:string;
-warning:string;
+warning:number;
 }

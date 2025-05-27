@@ -18,6 +18,8 @@ import { DirectionChartComponent } from "./direction-chart/direction-chart.compo
 import { ReportService } from '../report/report.service';
 import { forkJoin } from 'rxjs';
 import { DatePickerModule } from 'primeng/datepicker';
+import { ToastrService } from 'ngx-toastr';
+import { ToastModule } from 'primeng/toast';
 
 interface param{
   param_name:string;
@@ -57,7 +59,7 @@ export interface PolarAxis {
 @Component({
   selector: 'app-analytics',
   standalone:true,
-  imports: [CommonModule, HttpClientModule,DatePickerModule, FormsModule, ScrollingModule, TestChartComponent, Chart2Component, WindChartComponent, ScatterComponent, MultiSelectModule, FormsModule, MultiAxisComponent, SingleAxisComponent, ScatterAxisComponent, RosePlotComponent, FormsModule, DirectionChartComponent],
+  imports: [CommonModule, HttpClientModule,DatePickerModule,ToastModule, FormsModule, ScrollingModule, TestChartComponent, Chart2Component, WindChartComponent, ScatterComponent, MultiSelectModule, FormsModule, MultiAxisComponent, SingleAxisComponent, ScatterAxisComponent, RosePlotComponent, FormsModule, DirectionChartComponent],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.css'
 })
@@ -72,10 +74,10 @@ export class AnalyticsComponent implements OnInit{
   numberr:number = 4;
   isSelectParams:boolean = false;
   selectedPlot:string = 'line';
-  isLoad:boolean = false;
   scatData:scatData[] = []
   Buoy:BuoyData[]=[];
 
+  isLoad:boolean = false;
 
   isPolar:boolean = false;
   items = Array.from({ length: 1000 }, (_, i) => `Item #${i}`);
@@ -140,7 +142,7 @@ pickerState:string = 'date';
     const selectedParam =  this.selectedMultiStationParam.toLowerCase(); // e.g., "wave_heading"
   
     const requests = this.selectedStation.map(stationId =>
-      this.reportService.getAllSensorDatabyStation(stationId)
+      this.reportService.getAllstationData(stationId, '2025-01-01T00:00:00.000Z', '2025-01-14T23:59:00.000Z')
     );
   
     forkJoin(requests).subscribe(
@@ -175,70 +177,85 @@ pickerState:string = 'date';
     );
   }
   count:number = 0
-
+isSubmitButton(){
+      this.polarNumber = 0;
+    this.isCurrentPolar = false;
+    this.isPolarLoading = true;
+    this.isLoadingCurrentPolar = true;
+  this.isTest();
+  setTimeout(() => {
+    this.isTest();
+  }, 150);
+}
   isTest(){
-      this.isLoad = true;
-      console.log("selected Stations", this.selectedStation)
-      this.changetiMultiStationView();
-      if(this.isSingleView){
-        this.fetchSensorData()
-      }
-      // if(this.count !== 0){
-        setTimeout(() => {
-          this.numberr = this.selectedParams.length;
-          console.log(this.numberr)
-          const stringList: string[] = [];
-          for (let index = 0; index < this.selectedParams.length; index++) {
-            stringList.push(
-              this.selectedParams[index].param_name
-            )
-          } 
-          
-          const word1 = "_direction";
-          const word2 = "_height";
-          
-          // Find if any string contains either of the two words
-          const matchedStrings = stringList.filter(str =>
-            str.toLowerCase().includes(word1.toLowerCase()) ||
-            str.toLowerCase().includes(word2.toLowerCase())
-          );
-          const matchFound = stringList.some(str =>
-            str.toLowerCase().includes(word1.toLowerCase()) ||
-            str.toLowerCase().includes(word2.toLowerCase())
-          );
-          
-          console.log("match",matchedStrings);
-          if(matchFound){
-            console.log(matchedStrings.length);
-            this.selectedParams = [];
-            for(let i=0; i<matchedStrings.length; i++){
+setTimeout(() => {
   
-              const filter = this.listparams.filter(item=> item.param_name === matchedStrings[i])
-              this.selectedParams.push(
-                filter[i]
-              )
-              // this.selectedParams = this.listparams.filter(item=> item.param_name === matchedStrings[1])
-            }
-            this.numberr = 2;
-            this.isPolar = true;
-            
-          }else{
-            
-            this.isPolar = false;
-          }
-          this.isLoad = false;
-          }, 100);
-      // }
+  this.isLoad = true;
+  console.log("selected Stations", this.selectedStation)
+  this.changetiMultiStationView();
+  if(this.isSingleView){
+    this.fetchSensorData()
+    // this.onPlotSelect(event, this.selectedPlot)
+  }
+
+  // if(this.count !== 0){
+  //   setTimeout(() => {
+  //     this.numberr = this.selectedParams.length;
+  //     console.log(this.numberr)
+  //     const stringList: string[] = [];
+  //     for (let index = 0; index < this.selectedParams.length; index++) {
+  //       stringList.push(
+  //         this.selectedParams[index].param_name
+  //       )
+  //     } 
       
+  //     const word1 = "_direction";
+  //     const word2 = "_height";
+      
+  //     // Find if any string contains either of the two words
+  //     const matchedStrings = stringList.filter(str =>
+  //       str.toLowerCase().includes(word1.toLowerCase()) ||
+  //       str.toLowerCase().includes(word2.toLowerCase())
+  //     );
+  //     const matchFound = stringList.some(str =>
+  //       str.toLowerCase().includes(word1.toLowerCase()) ||
+  //       str.toLowerCase().includes(word2.toLowerCase())
+  //     );
+      
+  //     console.log("match",matchedStrings);
+  //     if(matchFound){
+  //       console.log(matchedStrings.length);
+  //       this.selectedParams = [];
+  //       for(let i=0; i<matchedStrings.length; i++){
 
-        const startDate= new Date(this.selectedDate[0]);
-        startDate.setHours(0,0,0,0);
+  //         const filter = this.listparams.filter(item=> item.param_name === matchedStrings[i])
+  //         this.selectedParams.push(
+  //           filter[i]
+  //         )
+  //         // this.selectedParams = this.listparams.filter(item=> item.param_name === matchedStrings[1])
+  //       }
+  //       this.numberr = 2;
+  //       this.isPolar = true;
+        
+  //     }else{
+        
+  //       this.isPolar = false;
+  //     }
+  //     this.isLoad = false;
+   
+  //     }, 100);
+  // // }
+  
 
-        const endDate = new Date(this.selectedDate[1]);
-        endDate.setHours(23,59,0,0);
-        // console.log("date", this.selectedDate, startDate.toLocaleString(), endDate.toISOString())
-        this.count = this.count +1;
+  //   const startDate= new Date(this.selectedDate[0]);
+  //   startDate.setHours(0,0,0,0);
 
+  //   const endDate = new Date(this.selectedDate[1]);
+  //   endDate.setHours(23,59,0,0);
+  //   // console.log("date", this.selectedDate, startDate.toLocaleString(), endDate.toISOString())
+  //   this.count = this.count +1;
+  //   this.singleStation = this.singleStation
+}, 100);
   }
 
   isViewChange(value:string){
@@ -250,14 +267,99 @@ pickerState:string = 'date';
       this.isSingleView = false;
       this.selectedMultiStationParam = this.filteredparams[0].param_name
       this.changetiMultiStationView()
-
     }
   }
+  fromDate!: string;
+toDate!: string;
 
+onDatePicked() {
+  if (!this.selectedDate) return;
 
-  onDatePicked(){
+  if (this.pickerState === 'date' && Array.isArray(this.selectedDate)) {
+    // For date range
+    const startDate = new Date(this.selectedDate[0]);
+    startDate.setHours(0, 0, 0, 0);
 
+    const endDate = new Date(this.selectedDate[1]);
+    endDate.setHours(23, 59, 0, 0);
+
+    this.fromDate = startDate.toISOString();
+    this.toDate = endDate.toISOString();
   }
+
+  else if (this.pickerState === 'week') {
+    const selected = new Date(this.selectedDate);
+    const dayOfWeek = selected.getDay(); // Sunday = 0
+    const start = new Date(selected);
+    start.setDate(selected.getDate() - dayOfWeek);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    end.setHours(23, 59, 0, 0);
+
+    this.fromDate = start.toISOString();
+    this.toDate = end.toISOString();
+  }
+
+  else if (this.pickerState === 'month') {
+    const selected = new Date(this.selectedDate);
+    const start = new Date(selected.getFullYear(), selected.getMonth(), 1, 0, 0, 0, 0);
+    const end = new Date(selected.getFullYear(), selected.getMonth() + 1, 0, 23, 59, 0, 0);
+
+    this.fromDate = start.toISOString();
+    this.toDate = end.toISOString();
+  }
+
+  else if (this.pickerState === 'year') {
+    const selected = new Date(this.selectedDate);
+    const start = new Date(selected.getFullYear(), 0, 1, 0, 0, 0, 0);
+    const end = new Date(selected.getFullYear(), 11, 31, 23, 59, 0, 0);
+
+    this.fromDate = start.toISOString();
+    this.toDate = end.toISOString();
+  }
+
+    // console.log("date", this.selectedDate)
+    // console.log("date1",new Date(this.selectedDate[0]))
+    console.log("week", this.fromDate, this.toDate);
+    const date = new Date(this.selectedDate[0]);
+    const date2 = new Date(this.selectedDate[1]); 
+
+    console.log("date", date.toISOString(), date2.toISOString())
+  }
+  getFullWeek(selected: Date): Date[] {
+  const selectedDate = new Date(selected);
+  const dayOfWeek = selectedDate.getDay(); // 0 (Sun) to 6 (Sat)
+  
+  const weekStart = new Date(selectedDate);
+  weekStart.setDate(selectedDate.getDate() - dayOfWeek); // Go to Sunday
+
+  const fullWeek: Date[] = [];
+
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(weekStart);
+    day.setDate(weekStart.getDate() + i);
+    fullWeek.push(day);
+  }
+
+  return fullWeek;
+}
+
+getWeekBounds(selected: Date): { sunday: string, saturday: string } {
+  const selectedDate = new Date(selected);
+  const dayOfWeek = selectedDate.getDay(); // 0 (Sun) to 6 (Sat)
+
+  const sundayy = new Date(selectedDate);
+  sundayy.setDate(selectedDate.getDate() - dayOfWeek);
+
+  const saturdayy= new Date(sundayy);
+  saturdayy.setDate(sundayy.getDate() + 6);
+  const saturday = saturdayy.toISOString();
+  const sunday = sundayy.toISOString();
+
+  return { sunday, saturday };
+}
 
   onParamChange(event: Event, item: param) {
     const checked = (event.target as HTMLInputElement).checked;
@@ -326,6 +428,15 @@ this.isSelectParams = false;
     this.isCurrentPolar = false;
     this.isPolarLoading = true;
     this.isLoadingCurrentPolar = true;
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date();
+    endDate.setHours(23, 59, 0, 0);
+
+    this.fromDate = startDate.toISOString();
+    this.toDate = endDate.toISOString();
+    
      this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
             (response: any) => {
                 // console.log(response);
@@ -355,17 +466,23 @@ this.isSelectParams = false;
   constructor(
     private http:HttpClient,
     private data:GlobalDataService,
-    private reportService:ReportService
+    private reportService:ReportService,
+    private toast:ToastrService
   ){}
 
 
-  onPlotSelect(event:Event){
+  onPlotSelect(event:Event, val?:string){
     this.isLoad = true;
     this.isSingleLoad = true;
     this.isMultiLoading = true;
     setTimeout(() => {
+      let selectedValue:string;
+      if(val){
+        selectedValue = val
+      }else{
+       selectedValue = (event.target as HTMLSelectElement).value;
+      }
       
-      const selectedValue = (event.target as HTMLSelectElement).value;
     // console.log(selectedValue);
     this.selectedPlot = selectedValue;
     this.isLoad = false;
@@ -376,57 +493,76 @@ this.isSelectParams = false;
 
 singleStationchange(){
   const selectedStationn = this.stations.filter(item=> item.name == this.singleStation);
-  // console.log("changes station", selectedStationn);
+  console.log("changes station", selectedStationn);
   this.selectedStation.push(selectedStationn[0].stationId);
+
 }
   fetchSensorData(){
-    const id = this.stations.filter(item=> item.name === this.selectedparam)
-    this.fetchSensors()
-    const toDate = '2025-02-30T23:59:00.000Z'
-    const fromDate = '2025-02-01T00:00:42.000Z'
-    const dates = {
-      fromDate: fromDate,
-      toDate: toDate
+    const id = this.stations.filter(item=> item.name === this.singleStation)
+    
+    console.log("station id issss", id);
+    if (!this.selectedDate) {
+      this.toast.warning("please select date range")
+    }else{
+      this.fetchSensors()
+//  const toDate = '2025-04-01T23:59:00.000Z'
+//     const fromDate = '2025-04-01T00:00:42.000Z'
+//     const dates = {
+//       fromDate: fromDate,
+//       toDate: toDate
+//     }
+//     //console.log("selected Station ID===",  this.stations[0].stationId )
+//    const params = new HttpParams()
+//     .set('fromDate',fromDate)
+//     .set('toDate',toDate)
+//     .set('station_id', id[0].stationId);
+//     console.log("params", params);
+//     this.http.get('http://localhost:3000/api/getSensorDataByDate', {params} ).subscribe(
+//       (response: any) => {
+//         this.Buoy = response;
+//         //console.log("buoy",this.Buoy, this.filteredparams);
+//         this.buoyData = response
+//         if (this.buoyData.length < 0) {
+//           this.selectedparam = this.filteredparams[0].param_name
+//           this.selectedScactterX =  this.filteredparams[1].param_name;
+//           this.selectedScatterY =  this.filteredparams[2].param_name;
+//           this.selectedMultix1 =  this.filteredparams[1].param_name;
+//           this.selectedMultix2 =  this.filteredparams[2].param_name;
+//           //console.log("==============================================")
+//           this.selectedMultiStationParam = this.filteredparams[0].param_name
+//           //console.log("selected station param====",this.filteredparams, this.selectedMultiStationParam)
+//           //console.log("==============================================")
+//         this.isSingleLoad = true;
+//           this.isScatterLoading = true;
+//           this.isMultiLoading = true;
+//           setTimeout(() => {
+//             this.assignSingleAxis(this.selectedparam);
+//             this.assignScatterAxis(this.selectedScactterX, this.selectedScatterY)
+//             this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2);
+
+//           }, 100);  
+//           this.fetchData()
+//         }
+//         },
+//         (error: any) => {
+//           console.log(error);
+//           }
+//     )
     }
-    //console.log("selected Station ID===",  this.stations[0].stationId )
-   const params = new HttpParams()
-    .set('fromDate',fromDate)
-    .set('toDate',toDate)
-    .set('station_id', this.selectedStation[0]);
-    this.http.get('http://localhost:3000/api/getSensorDataByDate', {params} ).subscribe(
-      (response: any) => {
-        this.Buoy = response;
-        //console.log("buoy",this.Buoy, this.filteredparams);
-        this.buoyData = response
-        if (this.buoyData.length < 0) {
-          this.selectedparam = this.filteredparams[0].param_name
-          this.selectedScactterX =  this.filteredparams[1].param_name;
-          this.selectedScatterY =  this.filteredparams[2].param_name;
-          this.selectedMultix1 =  this.filteredparams[1].param_name;
-          this.selectedMultix2 =  this.filteredparams[2].param_name;
-          //console.log("==============================================")
-          this.selectedMultiStationParam = this.filteredparams[0].param_name
-          //console.log("selected station param====",this.filteredparams, this.selectedMultiStationParam)
-          //console.log("==============================================")
-        this.isSingleLoad = true;
-          this.isScatterLoading = true;
-          this.isMultiLoading = true;
-          setTimeout(() => {
-            this.assignSingleAxis(this.selectedparam);
-            this.assignScatterAxis(this.selectedScactterX, this.selectedScatterY)
-            this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2)
-          }, 100);  
-          // this.fetchData()
-        }
-        },
-        (error: any) => {
-          console.log(error);
-          }
-    )
+   
   }
 
   fetchSensors(){
     this.listparams = [];
+    this.filteredparams = [];
+    this.selectedParams = [];
+this.selectedparam = '';
+this.selectedScactterX = '';
+this.selectedScatterY = '';
+this.selectedMultix1 = '';
+this.selectedMultix2 = '';
+this.selectedMultiStationParam = '';
+
     this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
       (response:any) => {
         //console.log(response);
@@ -442,16 +578,11 @@ singleStationchange(){
             )            
           }, 100)
           this.selectedparam = this.filteredparams[0].param_name
-          this.singleStation = this.stations[0].name;
           this.selectedScactterX =  this.filteredparams[1].param_name;
           this.selectedScatterY =  this.filteredparams[2].param_name;
           this.selectedMultix1 =  this.filteredparams[1].param_name;
           this.selectedMultix2 =  this.filteredparams[2].param_name;
-          //console.log("==============================================")
           this.selectedMultiStationParam = this.filteredparams[0].param_name
-          //console.log("selected station param====",this.filteredparams, this.selectedMultiStationParam)
-          //console.log("==============================================")
-          //console.log(this.selectedScactterX, this.selectedScatterY)
           this.isSingleLoad = true;
           this.isScatterLoading = true;
           this.isMultiLoading = true;
@@ -752,12 +883,12 @@ singleStationchange(){
       //console.log("selected station ID", this.singleStation)
       const filter = this.stations.filter(item=> item.name.includes(this.singleStation));
       //console.log("filter ====== ", filter[0].stationId)
-      const toDate = '2025-05-31T23:59:00.000Z'
-      const fromDate = '2025-03-01T00:00:42.000Z'
+      const toDate = '2025-04-01T23:59:00.000Z'
+      const fromDate = '2025-04-01T00:00:42.000Z'
       const params = new HttpParams()
-      .set('fromDate',fromDate)
-      .set('toDate',toDate)
-      .set('station_id', this.selectedStation[0]);
+      .set('fromDate',this.fromDate)
+      .set('toDate',this.toDate)
+      .set('station_id', filter[0].stationId);
       this.http.get('http://localhost:3000/api/getSensorDataByDate', {params}).subscribe(
         (data:any) => {
           console.log("buoys data === ",data);
@@ -799,6 +930,7 @@ singleStationchange(){
         ////console.log(this.selectedScactterX, this.selectedScatterY)
         this.isSingleLoad = true;
         this.isScatterLoading = true;
+        this.isSingledirection= true;
         this.isMultiLoading = true;
         setTimeout(() => {
           
@@ -915,6 +1047,7 @@ singleStationchange(){
   
       console.log("Scatter",this.scatterAxis)
       this.isMultiLoading = false;
+
   }
 
 

@@ -90,7 +90,7 @@ const getSensorDataByDate = async (req, res) => {
   // const id = station_id.tolo
   try {
     const result = await pool.query(
-      `SELECT * FROM tb_buoy_qp001_measurements
+      `SELECT * FROM tb_buoy_${station_id}_measurements
          WHERE timestamp BETWEEN $1 AND $2 ORDER BY id ASC`,
       [fromDate, toDate]
     );

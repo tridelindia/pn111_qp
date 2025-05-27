@@ -17,7 +17,7 @@ import { BillingComponent } from './billing/billing.component';
 export class SettingsComponent implements OnInit{
   time = new Date;
   currentTime?:string;
-activeOption:number = 1;
+activeOption:number = 2;
 changeOption(index:number){
   this.activeOption = index
 }

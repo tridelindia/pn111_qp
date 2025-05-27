@@ -5,7 +5,7 @@
                 <i class="fa-solid fa-users header-icon"></i>
                 <div>
                     <h2>User Management</h2>
-                    <p class="description">Manage team access and permissions</p>
+                    <p class="description">Manage Team Access and Permissions</p>
                 </div>
             </div>
         </div>
@@ -64,8 +64,8 @@
                     <div class="column">{{ user.role }}</div>
                     <div class="column">{{ user.designation }}</div>
                     <div class="column">
-                        UTC: {{ user.created | date:'yyyy-MM-dd HH:mm:ss' }} (+3)<br />
-                        AST: {{ user.created | date:'yyyy-MM-dd HH:mm:ss':'UTC+8:30' }}
+                        UTC: {{ user.created | date:'dd-MM-yyyy HH:mm:ss' }}<br />
+                        AST: {{ user.created | date:'dd-MM-yyyy HH:mm:ss':'UTC+8:30' }} (+3)
                     </div>
                     <div class="column actions">
                         <div class="icon-container">
@@ -126,38 +126,14 @@
 
                 <div class="">
                     <form (submit)="saveUser()">
-                        <!-- Name & Username -->
+                        <!-- Name & Role -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label><i class="fa-solid fa-user"></i> Full Name</label>
                                 <input type="text" [(ngModel)]="currentUser.name" name="name"
                                     placeholder="Enter full name" required />
                             </div>
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-id-badge"></i> Username</label>
-                                <!-- <input type="text" [(ngModel)]="currentUser.username" name="username"
-                                    placeholder="Enter username" required /> -->
 
-                                <input type="text" [(ngModel)]="currentUser.username" name="username"
-                                    placeholder="Enter username" required
-                                    (input)="onUsernameInput(currentUser.username)" />
-                                <div *ngIf="usernameTaken" class="validation-error">Username is already taken.</div>
-                            </div>
-                        </div>
-
-                        <!-- Email & Role -->
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-envelope"></i> Email Address</label>
-                                <!-- <input type="email" [(ngModel)]="currentUser.email" [disabled]="isEditingAdmin"
-                                    name="email" placeholder="Enter email address" required /> -->
-
-                                <input type="email" [(ngModel)]="currentUser.email" [disabled]="isEditingAdmin"
-                                    name="email" placeholder="Enter email address" required
-                                    (input)="onEmailInput(currentUser.email)" />
-                                <div *ngIf="emailTaken" class="validation-error">Email is already in use.</div>
-
-                            </div>
                             <div class="form-group">
                                 <label><i class="fa-solid fa-user-tag"></i> Role</label>
                                 <div class="custom-select" [class.disabled]="isEditingAdmin"
@@ -181,7 +157,64 @@
                             </div>
                         </div>
 
-                        <!-- Designation & Password -->
+                        <!-- Username & Password -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="col">
+                                    <label><i class="fa-solid fa-id-badge"></i> Username</label>
+                                    <!-- <input type="text" [(ngModel)]="currentUser.username" name="username"
+                                    placeholder="Enter username" required /> -->
+
+                                    <input type="text" [(ngModel)]="currentUser.username" name="username"
+                                        placeholder="Enter username" required
+                                        (input)="onUsernameInput(currentUser.username)"
+                                        (input)="usernameTouched = true" />
+                                </div>
+                                <div *ngIf="usernameTouched && !isUsernameValid()" class="validation-error">Only letters
+                                    and numbers allowed.</div>
+                                <div *ngIf="usernameTaken" class="validation-error">Username is already taken.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col">
+                                    <label><i class="fa-solid fa-lock"></i> Password</label>
+                                    <input type="password" [(ngModel)]="currentUser.password" name="password"
+                                        placeholder="Enter password" required (input)="passwordTouched = true" />
+                                </div>
+                                <div *ngIf="passwordTouched && !isPasswordValid()" class="validation-error">
+                                    Password must be 8-15 characters, with at least one uppercase letter, one number,
+                                    and one special character.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email & Confirm Password -->
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <div class="col">
+                                    <label><i class="fa-solid fa-envelope"></i> Email Address</label>
+                                    <!-- <input type="email" [(ngModel)]="currentUser.email" [disabled]="isEditingAdmin"
+                                    name="email" placeholder="Enter email address" required /> -->
+
+                                    <input type="email" [(ngModel)]="currentUser.email" [disabled]="isEditingAdmin"
+                                        name="email" placeholder="Enter email address" required
+                                        (input)="onEmailInput(currentUser.email)" (input)="emailTouched = true" />
+                                </div>
+                                <div *ngIf="emailTouched && !isEmailFormatValid()" class="validation-error">Invalid
+                                    email format.</div>
+                                <div *ngIf="emailTaken" class="validation-error">Email is already in use.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-lock"></i> Confirm Password</label>
+                                <input type="password" [(ngModel)]="currentUser.confirmPassword" name="confirmPassword"
+                                    placeholder="Confirm password" required />
+                            </div>
+
+                        </div>
+
+                        <!-- Designation Avatar -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label><i class="fa-solid fa-briefcase"></i> Designation</label>
@@ -204,21 +237,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-lock"></i> Password</label>
-                                <input type="password" [(ngModel)]="currentUser.password" name="password"
-                                    placeholder="Enter password" required />
-                            </div>
-                        </div>
-
-                        <!-- Confirm Password -->
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-lock"></i> Confirm Password</label>
-                                <input type="password" [(ngModel)]="currentUser.confirmPassword" name="confirmPassword"
-                                    placeholder="Confirm password" required />
                             </div>
 
                             <div class="form-group">
@@ -259,7 +277,7 @@
                             <p>{{ role.description }}</p>
                         </div>
                         <div class="Column role-actions">
-                            <p>Access:</p>
+                            <p>Access</p>
                             <div class="permissions">
                                 <!-- <div class="tooltip-icon" *ngFor="let permission of role.permissions">
                                   <i class="fa-solid" [ngClass]="permissionIcons[permission]"></i>

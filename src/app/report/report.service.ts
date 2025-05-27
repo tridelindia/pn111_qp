@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
  
@@ -95,11 +95,21 @@ export class ReportService {
   }
  
   getAllSensorDatabyStation(stationId: string): Observable<BuoyMeasurement[]> {
+    
     return this.http.get<BuoyMeasurement[]>(
       `${this.apiUrl}getAllSensorDatabyStation/${stationId}`
     );
   }
  
+   getAllstationData(stationId: string, fromDate:string, ToDate:string): Observable<BuoyMeasurement[]> {
+    const params = new HttpParams()
+    .set('fromDate',fromDate)
+    .set('toDate',ToDate)
+    .set('station_id', stationId);
+    return this.http.get<BuoyMeasurement[]>(
+      `${this.apiUrl}getSensorDataByDate`,{params}
+    );
+  }
   getMetrologicalData(): Observable<Metrological[]> {
     return this.http.get<Metrological[]>(`${this.apiUrl}getMetrologicalData`);
   }

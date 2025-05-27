@@ -116,8 +116,7 @@
                             <app-rose-plot id="polar2" [polarAxis]="PolarAxis" *ngIf="!isPolarLoading"></app-rose-plot>
                         </div>
                     </div>
-                    <!-- <div class="
-                     five"></div> -->
+
                 </cdk-virtual-scroll-viewport>
                 <!-- <app-test-chart [plotType]="selectedPlot" *ngIf="!isLoad && !isPolar" [length]="1"
                     [params]="[selectedParams[0]]"></app-test-chart> -->
@@ -165,15 +164,13 @@
             <div class="options_container">
                 <div class="single" [ngClass]="isSingleView ? 'single_active':'single'"
                     (click)="isViewChange('single')">
-                    <p>Single view</p>
+                    <p>Single View</p>
                 </div>
                 <div class="single" [ngClass]="!isSingleView ? 'single_active':'single'"
                     (click)="isViewChange('compare')">
-                    <p>Compare view</p>
+                    <p>Compare View</p>
                 </div>
             </div>
-
-
             <div class="selectPlot">
                 <p class="tit">Select Station</p>
                 <p-multiselect [options]="stations" [(ngModel)]="selectedStation" name="stationId" optionLabel="name"
@@ -218,7 +215,7 @@
                             <div class="toggle_fill"
                                 [ngClass]="selectedSensor === 'meteriology'?'toggle_fill_active':'toggle_fill'"></div>
                         </div>
-                        <p>Meteriology</p>
+                        <p>Meteorology</p>
                     </div>
                 </div>
                 <div class="split_sensors">
@@ -235,7 +232,7 @@
                             <div class="toggle_fill"
                                 [ngClass]="selectedSensor === 'microFlu'?'toggle_fill_active':'toggle_fill'"></div>
                         </div>
-                        <p>MicroFLu</p>
+                        <p>Oil in Water</p>
                     </div>
                 </div>
 
@@ -265,7 +262,8 @@
                 </div>
                 <p-datepicker [(ngModel)]="selectedDate" [showIcon]="true"
                     [selectionMode]="pickerState === 'date'? 'range':'single'"
-                    [view]="pickerState === 'date' || pickerState === 'week'? 'date' : pickerState === 'month'? 'month': 'year'"></p-datepicker>
+                    [view]="pickerState === 'date' || pickerState === 'week'? 'date' : pickerState === 'month'? 'month': 'year'"
+                    (onClose)="onDatePicked()"></p-datepicker>
             </div>
 
 
@@ -290,7 +288,7 @@
 
                 </select>
             </div>
-            <button class="Submit_button" (click)="isTest()">test</button>
+            <button class="Submit_button" (click)="isSingleView?fetchSensors(): isSubmitButton()">Submit</button>
         </div>
         <div class="param_lists" *ngIf="isSelectParams">
             <i class="fa fa-arrow-left" (click)="onParamSelection('back')"></i>

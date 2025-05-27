@@ -437,4 +437,12 @@ this.http.post('http://localhost:3000/api/editStation', updatingStation).subscri
       }
       )
  }
+ parseAndJoin(sensors: string): string {
+  try {
+    return JSON.parse(sensors).join('   '); // 3 spaces between items
+  } catch {
+    return sensors;
+  }
+}
+
 }

@@ -30,9 +30,9 @@
                             <!-- <th>Sensor</th> -->
                             <th>Name</th>
                             <th>Unit</th>
-                            <th>Warning</th>
-                            <th>Danger</th>
-                            <th>Notification</th>
+                            <th>Minimum</th>
+                            <th>Maximum</th>
+                            <!-- <th>Notification</th> -->
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -44,22 +44,25 @@
                         <tr *ngFor="let item of tableData; let i = index">
                             <!-- <td>{{ i + 1 }}</td> -->
                             <!-- <td>{{ item.sensor }}</td> -->
-                            <td>
+                            <td *ngIf="item.param_name !== 'wave_heading'">
                                 {{ item?.param_name }}
 
                             </td>
-                            <td>{{ item!.unit }}</td>
-                            <td>{{ item!.warning !== null ? item!.warning : '—' }}</td>
-                            <td>{{ item!.danger !== null ? item!.danger : '—' }}</td>
-                            <td>
+                            <td *ngIf="item.param_name !== 'wave_heading'">{{ item!.unit }}</td>
+                            <td *ngIf="item.param_name !== 'wave_heading'">{{ item!.warning !== null ? item!.warning :
+                                '—' }}</td>
+                            <td *ngIf="item.param_name !== 'wave_heading'">{{ item!.danger !== null ? item!.danger : '—'
+                                }}</td>
+                            <!-- <td *ngIf="item.param_name !== 'wave_heading'">
                                 <span class="badge" [ngClass]="{
                     'bg-success': item!.notification === 'enabled',
                     'bg-secondary': item!.notification === 'disabled'
                   }">
                                     {{ item!.notification }}
                                 </span>
-                            </td>
-                            <td><i class="fa fa-edit" style="color: rgb(109, 109, 245);" (click)="onEdit(item)"></i>
+                            </td> -->
+                            <td *ngIf="item.param_name !== 'wave_heading'"><i class="fa fa-edit"
+                                    style="color: rgb(109, 109, 245);" (click)="onEdit(item)"></i>
                             </td>
                         </tr>
                     </tbody>
@@ -76,7 +79,7 @@
         <p style="font-weight: 500;">{{editData.param_name}}</p>
         <!-- <input type="text" placeholder="Enter name"> -->
 
-        <p>unit</p>
+        <p>Unit</p>
         <input *ngIf="!isMulti" type="text" placeholder="Enter unit" [(ngModel)]="editData.unit">
 
         <div class="multi" *ngIf="isMulti">
@@ -85,11 +88,11 @@
                 <p>{{i}}</p>
             </div>
         </div>
-        <p>Warning</p>
-        <input type="text" placeholder="Enter warning" [(ngModel)]="editData.warning">
-        <p>Danger</p>
-        <input type="text" placeholder="Enter danger" [(ngModel)]="editData.danger">
-        <p>Notification</p>
+        <p>Minimum</p>
+        <input type="text" placeholder="Enter Minimum" [(ngModel)]="editData.warning">
+        <p>Maximum</p>
+        <input type="text" placeholder="Enter Maximum" [(ngModel)]="editData.danger">
+        <!-- <p>Notification</p>
         <div class="toggle_pint">
             <p></p>
             <div class="toggle" [ngClass]="{'toggledms': mainToggle}"
@@ -97,7 +100,7 @@
                 <div class="t_button"></div>
             </div>
             <p style="margin-left: -5px;">{{mainToggle ? 'Enabled':'Disabled'}}</p>
-        </div>
+        </div> -->
         <div class="but">
 
             <button (click)="Update()">Update</button>
