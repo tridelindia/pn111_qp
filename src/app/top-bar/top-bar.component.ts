@@ -61,6 +61,12 @@ export class TopBarComponent implements OnInit{
         const stationId = idset[0].station_id;
         this.layout.selectedStationId = stationId;
         this.data.setStationId(stationId);
+        this.data.stationId$.subscribe((stationId: string) => {
+            console.log('stationId', stationId);
+            if (stationId) {
+            //   this.onStationSelected(stationId);
+            }
+          });
         console.log("id",idset);
         setTimeout(() => {
             this.layout.sensors = idset[0].sensors

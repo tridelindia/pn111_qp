@@ -16,34 +16,32 @@
     <p-table [value]="filteredNotifications" stripedRows [scrollable]="true" scrollHeight="calc(100vh - 180px)">
       <ng-template pTemplate="header">
         <tr>
-          <th>Station ID</th>
-          <th>Station Name</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th style="text-align: center;">Station ID</th>
+          <th style="text-align: center;">Station Name</th>
+          <th style="text-align: center;">Name</th>
+          <th style="text-align: center;">Email</th>
+          <th style="text-align: center;">Phone</th>
+          <th style="text-align: center;">Status</th>
+          <th style="text-align: center;">Actions</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-notification>
         <tr>
-          <td>{{ notification.station_id }}</td>
-          <td>{{ notification.station_name }}</td>
-          <td>{{ notification.user_name }}</td>
-          <td>{{ notification.user_email }}</td>
-          <td>{{ notification.user_phone_number }}</td>
-          <td>
-            <div class="toggle-container">
-              <label class="toggle-switch">
-                  <input 
-                      type="checkbox" 
-                      [checked]="notification.enabled === 'true'"
-                      (change)="toggleNotificationStatus(notification)">
-                  <span class="slider round"></span>
-              </label>
-          </div>
+          <td style="text-align: center;">{{ notification.station_id.join(', ') }}</td>
+          <td style="text-align: center;">{{ notification.station_name.join(', ') }}</td>
+          <td style="text-align: center;">{{ notification.user_name }}</td>
+          <td style="text-align: center;">{{ notification.user_email }}</td>
+          <td style="text-align: center;">{{ notification.user_phone_number }}</td>
+          <td style="text-align: center;">
+            <label class="toggle-switch">
+                <input 
+                    type="checkbox" 
+                    [checked]="notification.enabled === 'true'"
+                    (change)="toggleNotificationStatus(notification)">
+                <span class="slider round"></span>
+            </label>
           </td>
-          <td>
+          <td style="text-align: center;">
             <button class="delete-btn" (click)="deleteNotification(notification.id)">
               <i class="fa-solid fa-trash-can"></i>
             </button>
@@ -92,7 +90,7 @@
           <label for="user_phone_number" class="font-semibold w-24">Phone</label>
           <div class="flex gap-2 flex-auto">
             <p-dropdown [options]="countryCodes" [(ngModel)]="newNotification.country_code" name="country_code" 
-              optionLabel="name" optionValue="code" [style]="{'width': '120px'}" appendTo="body">
+              optionLabel="code" optionValue="code" [style]="{'width': '120px'}" appendTo="body">
             </p-dropdown>
             <span class="p-input-icon-left flex-auto">
               <input type="tel" pInputText id="user_phone_number" [(ngModel)]="newNotification.user_phone_number" name="user_phone_number" class="w-full">

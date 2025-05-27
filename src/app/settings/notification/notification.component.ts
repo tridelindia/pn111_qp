@@ -208,7 +208,7 @@ export class NotificationComponent implements OnInit {
             const currentUser = JSON.parse(currentUserStr);
             this.loggingService.addLog(
               currentUser.username,
-              `New notification has been added.`, 
+              `New notification`, 
               currentUser.id,
               'N001',
               'notification.component.ts/addNotification'
@@ -242,7 +242,7 @@ export class NotificationComponent implements OnInit {
             const currentUser = JSON.parse(currentUserStr);
             this.loggingService.addLog(
               currentUser.username,
-              `Notification has been deleted.`, 
+              `Notification delete`, 
               currentUser.id,
               'N003',
               'notification.component.ts/deleteNotification'
@@ -291,7 +291,7 @@ export class NotificationComponent implements OnInit {
           const currentUser = JSON.parse(currentUserStr);
           this.loggingService.addLog(
             currentUser.username,
-            `Notification status has been updated.`, 
+            `Notification status update`, 
             currentUser.id,
             'N004',
             'notification.component.ts/toggleNotificationStatus'
@@ -370,7 +370,7 @@ export class NotificationComponent implements OnInit {
           const currentUser = JSON.parse(currentUserStr);
           this.loggingService.addLog(
             currentUser.username,
-            `Notification data has been updated.`, 
+            `Notification data update`, 
             currentUser.id,
             'N002',
             'notification.component.ts/updateNotification'

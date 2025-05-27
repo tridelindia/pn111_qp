@@ -51,11 +51,11 @@
             <thead>
               <tr>
                 <th class="col-number">#</th>
-                <th class="col-timestamp">Date</th>
-                <th class="col-timestamp">Time</th>
-                <th class="col-user">User</th>
-                <th class="col-activity">Activity</th>
-                <th class="col-status">Code</th>
+                <th class="col-timestamp" style="text-align: center;">Date</th>
+                <th class="col-timestamp" style="text-align: center;">Time</th>
+                <th class="col-user" style="text-align: center;">User</th>
+                <th class="col-activity" style="text-align: center;">Activity</th>
+                <th class="col-status" style="text-align: center;">Code</th>
               </tr>
             </thead>
             <tbody>
@@ -63,23 +63,23 @@
                 <td class="col-number">
                   <span>{{ i + 1 }}</span>
                 </td>
-                <td class="col-timestamp">
+                <td class="col-timestamp" style="text-align: center;">
                   <i class="pi pi-clock"></i>
                   <span> {{ formatDate(log.timestamp) }}</span>
                 </td>
-                <td class="col-timestamp">
+                <td class="col-timestamp" style="text-align: center;">
                   <i class="pi pi-clock"></i>
                   <span> {{ formatTime(log.timestamp) }}</span>
                 </td>
-                <td class="col-user">
+                <td class="col-user" style="text-align: center;">
                   <i class="pi pi-user"></i>
                   <span> {{ log.userName }} - {{ log.userId }}</span>
                 </td>
-                <td class="col-activity">
+                <td class="col-activity"  style="text-align: center;">
                   <i class="pi pi-file"></i>
                   <span> {{ log.message }}</span>
                 </td>
-                <td class="col-status">
+                <td class="col-status"  style="text-align: center;">
                   <span *ngIf="log.statusCode">
                     <strong>{{ log.statusCode }}</strong> - {{ getStatusDefinition(log.statusCode) }}
                   </span>

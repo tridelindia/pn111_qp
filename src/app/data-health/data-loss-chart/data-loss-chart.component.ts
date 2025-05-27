@@ -65,10 +65,10 @@ export class DataLossChartComponent implements OnInit, OnChanges {
       scales: {
         x: {
           min: 0,
-          max: 50,
+          max: 20,
           ticks: {
             color: textColor,
-            stepSize: 10,
+            stepSize: 5,
             callback: (value: any) => `${value}%`
           },
           grid: {

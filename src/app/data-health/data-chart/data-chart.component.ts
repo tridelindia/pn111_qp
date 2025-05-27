@@ -3,8 +3,6 @@ import { DateRange, ChartData } from '../../models/dashboard.models';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ChartModule } from 'primeng/chart';
-// import {ChartDataLabels} from 'chartjs-plugin-datalabels';
-import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-main-chart-section',
@@ -49,6 +47,14 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
       type: 'category',
       boundaryGap: false,
       data: [],
+      name: 'Date & Time',
+      nameLocation: 'middle',
+      nameGap: 35,
+      nameTextStyle: {
+        color: '#6b7280',
+        fontSize: 12,
+        fontWeight: 'bold'
+      },
       axisLabel: { 
         color: '#6b7280', 
         rotate: 30,
@@ -59,6 +65,14 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     },
     yAxis: {
       type: 'value',
+      name: 'Score (%)',
+      nameLocation: 'middle',
+      nameGap: 35,
+      nameTextStyle: {
+        color: '#6b7280',
+        fontSize: 12,
+        fontWeight: 'bold'
+      },
       min: function(value: any) {
         return Math.floor(value.min * 0.9);
       },
@@ -209,8 +223,6 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
   chartHealthOptions: any;
 
   constructor() {
-    // Register the datalabels plugin
-    // Chart.register(ChartDataLabels);
     this.initChartOptions();
   }
 
@@ -250,7 +262,14 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
           top: 'middle'
         },
         datalabels: {
-          display: false
+          display: false,
+          backgroundColor: 'transparent',
+          z: 1,
+          stepSize: 20,
+          color: textColor,
+          font: {
+            size: 12
+          }
         }
       },
       scales: {
@@ -265,6 +284,17 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
           angleLines: {
             color: grayColor,
             lineWidth: 1
+          },
+          ticks: {
+            display: true,
+            backdropColor: 'transparent',
+            showLabelBackdrop: false,
+            z: 1,
+            stepSize: 20,
+            color: textColor,
+            font: {
+              size: 12
+            }
           },
           pointLabels: {
             color: textColor,
