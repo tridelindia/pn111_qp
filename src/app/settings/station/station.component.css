@@ -100,11 +100,10 @@
 
 .action_title button{
     height: 30px;
-    background-color: rgb(40, 107, 243);
+    background-color: var(--highlight-color);
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    color: white;
     margin-right: 45px;
 }
 
@@ -596,9 +595,8 @@
     width: 30%;
     border-radius: 10px;
     border: none;
-    background-color: #3737dbc1;
+    background-color: var(--highlight-color);
     margin-right: 5px;
-    color: white;
 }
 
 .actions .check{

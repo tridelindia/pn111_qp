@@ -144,7 +144,7 @@
   }
   
   th {
-    background-color: #f9fafb;
+    background-color: var(--secondary-color);
     color: var(--text-color-secondary);
     font-weight: 600;
     font-size: 0.9rem;
@@ -223,4 +223,10 @@
     margin: 1rem 0;
         margin-top: 100%;
 
+  }
+
+  .update-btn-container ::ng-deep .p-button{
+    background: var(--highlight-color);
+    border-color: var(--highlight-color);
+    color: var(--font-color);
   }

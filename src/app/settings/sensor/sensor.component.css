@@ -153,9 +153,13 @@
   }
   
   .bg-success {
-    background-color: #28a745;
+    background-color: var(--highlight-color);
   }
-  
+
+  ::ng-deep .ocean_selected[_ngcontent-ng-c3185949564]{
+    background-color: var(--highlight-color);
+  }
+
   .bg-secondary {
     background-color: #6c757d;
   }
@@ -275,7 +279,7 @@ button{
     padding-left: 20px;
     padding-right: 20px;
     border-radius: 5px;
-    background-color: rgb(40, 107, 243);
+    background-color: var(--highlight-color);
     border: none;
     margin-top: 50px;
     color: white;
@@ -310,5 +314,5 @@ button{
     box-shadow: 1px 1px 5px grey;
 }
 .item_active{
-    background-color:darkcyan;
+    background-color: var(--highlight-color);
 }

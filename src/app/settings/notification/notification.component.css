@@ -423,3 +423,9 @@ input:checked + .slider:before {
   font-weight: bold;
   color: var(--text-color);
 }
+
+::ng-deep .p-button {
+  background-color: var(--highlight-color) !important;
+  color: var(--font-color) !important;
+  border: 1px solid var(--highlight-color) !important;
+}

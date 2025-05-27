@@ -516,8 +516,8 @@ img{
     background-color: #CE8946;
 }
 
-.black {
-    background-color: #212529;
+.gold {
+    background-color: #FFE566;
 }
 
 .blue {
@@ -536,8 +536,8 @@ img{
     background: linear-gradient(135deg, #ff7e5f, #feb47b);
 }
 
-.midnight {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+.pink {
+    background-color: #FF9BD2;
 }
 
 .rosegold {

@@ -48,7 +48,7 @@
   }
 
   &.active {
-    background-color: rgb(111, 180, 249, 0.4);
+    background-color: var(--highlight-color);
     font-weight: bold;
   }
 }
@@ -140,7 +140,7 @@
   margin-right: 10px;
 
   .apply-btn {
-    background: #4CAF50;
+    background: var(--highlight-color);
     color: white;
     border: none;
     border-radius: 20px;
@@ -164,12 +164,12 @@
     }
 
     &:hover {
-      background: #3d8b40;
+      background: var(--secondary-color);
       box-shadow: 0 3px 6px rgba(0,0,0,0.15);
     }
 
     &:active {
-      background: #2d682f;
+      background: var(--secondary-color);
       transform: translateY(1px);
     }
 
