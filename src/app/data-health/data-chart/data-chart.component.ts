@@ -26,7 +26,7 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
 
   private chartInstance: any;
   private isInitialized = false;
-  station_Id: string;
+  hasMeteorology = false;
 
   waveChartOptions: any = {
     tooltip: { 
@@ -171,13 +171,11 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
   }
 
   private initChartOptions(): void {
-    const series = [];
-    const shouldShowMeteorology = this.station_Id !== 'ST001' && this.station_Id !== 'ST002';
-    
+    const series = [];    
     if (!this.currentSensor) {
       series.push(
         this.createSeries('Oceanography', '#3B82F6', this.chartData?.oceanography || []),
-        ...(shouldShowMeteorology ? [this.createSeries('Meteorology', '#10B981', this.chartData?.meteorology || [])] : []),
+        ...(this.hasMeteorology ? [this.createSeries('Meteorology', '#10B981', this.chartData?.meteorology || [])] : []),
         this.createSeries('Water Quality', '#F59E0B', this.chartData?.waterQuality || [])
       );
     } else {
@@ -186,7 +184,7 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
           series.push(this.createSeries('Oceanography', '#3B82F6', this.chartData?.oceanography || []));
           break;
         case 'meteorology':
-          if (shouldShowMeteorology) {
+          if (this.hasMeteorology) {
             series.push(this.createSeries('Meteorology', '#10B981', this.chartData?.meteorology || []));
           }
           break;
@@ -247,7 +245,7 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     private layout:LayoutComponent
   ) {
     this.initChartOptions();
-    this.station_Id = this.layout.selectedStationId;
+    this.hasMeteorology = this.layout.sensors.includes('meteorology');
   }
 
   initChart() {
@@ -342,18 +340,16 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     const oceanographyScore = (tabScores.wave + tabScores.current) / 2;
     const meteorologyScore = (tabScores.wind + tabScores.atmospheric) / 2;
     const waterQualityScore = (tabScores.chemical + tabScores.physical + tabScores.biological) / 3;
-
-    const shouldShowMeteorology = this.station_Id !== 'ST001' && this.station_Id !== 'ST002';
     
-    const labels = ['Oceanography', ...(shouldShowMeteorology ? ['Meteorology'] : []), 'Water Quality'];
+    const labels = ['Oceanography', ...(this.hasMeteorology ? ['Meteorology'] : []), 'Water Quality'];
     const data = [
       Math.round(oceanographyScore || 0),
-      ...(shouldShowMeteorology ? [Math.round(meteorologyScore || 0)] : []),
+      ...(this.hasMeteorology ? [Math.round(meteorologyScore || 0)] : []),
       Math.round(waterQualityScore || 0)
     ];
     const colors = [
       '#3B82F6',
-      ...(shouldShowMeteorology ? ['#10B981'] : []),
+      ...(this.hasMeteorology ? ['#10B981'] : []),
       '#F59E0B'
     ];
 

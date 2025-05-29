@@ -31,6 +31,7 @@ export class SensorStatsComponent implements OnChanges {
   searchTerm: string = '';
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
+  hasMeteorology = false;
 
   stats: SensorStat[] = [];
 
@@ -44,6 +45,7 @@ export class SensorStatsComponent implements OnChanges {
     private layout:LayoutComponent
   ) { 
     this.station_Id = this.layout.selectedStationId;
+    this.hasMeteorology = this.layout.sensors.includes('meteorology');
   }
 
   private updateStatsFromApiData(): void {
@@ -99,11 +101,9 @@ export class SensorStatsComponent implements OnChanges {
       return;
     }
 
-    const shouldHideMeteorology = this.station_Id === 'ST001' || this.station_Id === 'ST002';
-
     this.stats = Object.entries(latestData.dataPresent)
       .filter(([key]) => {
-        if (shouldHideMeteorology && (key.startsWith('meteorology.wind.') || key.startsWith('meteorology.atmospheric.'))) {
+        if (!this.hasMeteorology && (key.startsWith('meteorology.wind.') || key.startsWith('meteorology.atmospheric.'))) {
           return false;
         }
         return parameterMapping[key];

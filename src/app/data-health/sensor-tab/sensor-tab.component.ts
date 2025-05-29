@@ -58,12 +58,12 @@ export class SensorTabComponent {
   dateRange: Date[] = [new Date(new Date().setDate(new Date().getDate() - 1)), new Date()];
   hourFormat: string = '24';
   selectedTabs: { [key: string]: string[] } = {};
-  station_Id: string;
+  hasMeteorology = false;
 
   constructor(
     private layout:LayoutComponent
   ) { 
-    this.station_Id = this.layout.selectedStationId;
+    this.hasMeteorology = this.layout.sensors.includes('meteorology');
   }
   
   sensors: Sensor[] = [
@@ -166,7 +166,7 @@ export class SensorTabComponent {
   }
 
   get filteredSensors(): Sensor[] {
-    if (this.station_Id === 'ST001' || this.station_Id === 'ST002') {
+    if (!this.hasMeteorology) {
       return this.sensors.filter(sensor => sensor.id !== 'meteorology');
     }
     return this.sensors;

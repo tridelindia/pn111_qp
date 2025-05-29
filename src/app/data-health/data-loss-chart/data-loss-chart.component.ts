@@ -14,7 +14,7 @@ import { LayoutComponent } from '../../layout/layout.component';
 export class DataLossChartComponent implements OnInit, OnChanges {
   @Input() currentSensor: string | null = null;
   @Input() chartData?: ChartData;
-  station_Id: string;
+  hasMeteorology = false;
   data: any = {
     labels: [],
     datasets: []
@@ -24,7 +24,7 @@ export class DataLossChartComponent implements OnInit, OnChanges {
   constructor(
     private layout:LayoutComponent
   ) { 
-    this.station_Id = this.layout.selectedStationId;
+    this.hasMeteorology = this.layout.sensors.includes('meteorology');
   }
 
   ngOnInit() {
@@ -127,7 +127,7 @@ export class DataLossChartComponent implements OnInit, OnChanges {
       dates.push(...this.chartData.dates.map(date => this.formatDate(date)));
     }
 
-    if (this.station_Id === 'ST001' || this.station_Id === 'ST002') {
+    if (!this.hasMeteorology) {
       if (this.chartData?.oceanography) {
         newDatasets.push({
           label: 'Oceanography Data Loss',

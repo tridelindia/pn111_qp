@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { GlobalDataService } from '../../global-data/global-data.component';
-import { Subscription } from 'rxjs';
 import { LayoutComponent } from '../../layout/layout.component';
 
 interface SensorStatus {
@@ -22,39 +20,28 @@ type SortKey = keyof SensorStatus;
   templateUrl: './sensor-status.component.html',
   styleUrl: './sensor-status.component.css'
 })
-export class SensorStatusComponent implements OnInit, OnDestroy {
+export class SensorStatusComponent implements OnInit {
   sensorStatuses: SensorStatus[] = [];
   isLoading: boolean = true;
-  private stationSubscription: Subscription;
   
   searchTerm: string = '';
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
   selectedStation: string = '';
   station_Id: string = '';
+  hasMeteorology = false;
   
   constructor(
     private http: HttpClient,
-    private data: GlobalDataService,
     private layout:LayoutComponent
   ) {
-    this.stationSubscription = this.data.stationId$.subscribe(stationId => {
-      if (stationId) {
-        this.station_Id = stationId;
-        this.fetchLastSensorData(stationId);
-      }
-    });
+    this.station_Id = this.layout.selectedStationId;
+    this.hasMeteorology = this.layout.sensors.includes('meteorology');
   }
 
   ngOnInit() {
     this.station_Id = this.layout.selectedStationId;
     this.onStationSelected(this.station_Id);
-  }
-
-  ngOnDestroy() {
-    if (this.stationSubscription) {
-      this.stationSubscription.unsubscribe();
-    }
   }
 
   onStationSelected(stationId: string) {
@@ -173,7 +160,7 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
     // Convert to array format (after conditionally removing 'meteorology')
     const filteredCategories = Object.entries(categoryStatuses)
       .filter(([category]) => {
-        if (this.station_Id === 'ST001' || this.station_Id === 'ST002') {
+        if (!this.hasMeteorology) {
           return category !== 'meteorology';
         }
         return true;
