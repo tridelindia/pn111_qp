@@ -39,7 +39,7 @@ import { LayoutComponent } from '../layout/layout.component';
   ]
 })
 export class DataHealthComponent implements OnInit {
-  private apiUrl = 'http://localhost:3000/api/';
+  private apiUrl = 'http://192.168.0.147:3000/api/';
   private updateSubject = new Subject<void>();
   private rawData: any[] = [];
 

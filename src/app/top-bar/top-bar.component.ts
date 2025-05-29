@@ -116,7 +116,7 @@ export class TopBarComponent implements OnInit{
     }
 
     getStation(){
-        this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
+        this.http.get('http://192.168.0.147:3000/api/getStationConfig').subscribe(
             (response: any) => {
                 console.log( "Stations",response);
                 for (let index = 0; index < response.length; index++) {

@@ -66,6 +66,8 @@ export class HomeComponent implements OnInit {
   livelocationbuoys: [number, number][] = [];
   stationNames: string[] = [];
   centerBuoys: [number, number][] = [];
+  buoyDranges: number[] = [];
+  buoyWRanges: number[] = [];
   imageMarkers: string[] = [];
   buoyRanges: string[] = [];
 
@@ -120,6 +122,15 @@ export class HomeComponent implements OnInit {
     private infobuoy: InfobuoyComponent,
     private reportService: ReportService
   ) {}
+
+    formatDateTime(date: Date): string {
+    // Convert to 'yyyy-MM-dd HH:mm:ss' or whatever your backend expects, in IST
+    const offset = date.getTimezoneOffset() * 60000;
+    const localDate = new Date(date.getTime() - offset);
+    return localDate.toISOString().slice(0, 19).replace('T', ' ');
+  }
+ 
+
   ngOnInit(): void {
     this.stationConfig.getHomeConfig().subscribe((homeConfig) => {
       this.fetchedparams2 = homeConfig;
@@ -170,7 +181,7 @@ export class HomeComponent implements OnInit {
                 cord,
                 this.fetchedBuoys[index].station_name,
                 this.fetchedBuoys[index].station_id,
-                (this as any)[`imageMarker${index + 1}`]
+                this.imageMarkers[index]
               );
             }, 1000);
           }
@@ -194,6 +205,9 @@ export class HomeComponent implements OnInit {
               const wrange = (this as any)[`buoy${index + 1}wrange`];
               const drange = (this as any)[`buoy${index + 1}drange`];
 
+              this.buoyDranges[index] = drange;
+              this.buoyWRanges[index] = wrange;
+
               let driftStatus = '';
               let driftClass = '';
               let driftType = '';
@@ -203,11 +217,11 @@ export class HomeComponent implements OnInit {
                 driftClass = 'text-success';
                 driftType = 'within';
               } else if (driftDistance > wrange && driftDistance <= drange) {
-                driftStatus = `Crossed out of warning range`;
+                driftStatus = `Across the\nwarning range`;
                 driftClass = 'text-warning';
                 driftType = 'warning';
               } else {
-                driftStatus = `Crossed out of danger range`;
+                driftStatus = `Across the\ndanger range`;
                 driftClass = 'text-danger';
                 driftType = 'danger';
               }
@@ -370,9 +384,24 @@ export class HomeComponent implements OnInit {
     this.centerBuoys = [];
     this.imageMarkers = [];
 
-    configs.slice(0, 5).forEach((config, index) => {
+        configs.slice(0, configs.length).forEach((config, index) => {
       this.stationNames[index] = config.station_name;
-      this.centerBuoys[index] = assignLocation(config);
+      const assignedLoc = assignLocation(config);
+ 
+      if (
+        !assignedLoc ||
+        !Array.isArray(assignedLoc) ||
+        assignedLoc.length !== 2 ||
+        assignedLoc.some((coord) => isNaN(coord))
+      ) {
+        console.warn(
+          `Invalid coordinates for station ${config.station_name}, skipping.`
+        );
+        return;
+      }
+ 
+      this.centerBuoys[index] = assignedLoc;
+ 
       const driftEntry = this.buoyDrifts.find(
         (d) => d.name === config.station_name
       );
@@ -448,9 +477,19 @@ export class HomeComponent implements OnInit {
 
       console.log('Adding circles for each buoy...');
       for (let index = 0; index < this.fetchedBuoys.length; index++) {
-        const center = (this as any)[`centerbuoy${index + 1}`];
-        const drange = (this as any)[`buoy${index + 1}drange`];
-        const wrange = (this as any)[`buoy${index + 1}wrange`];
+         const center = this.centerBuoys[index];
+        const drange = this.buoyDranges[index]; // Make sure you have arrays for these ranges
+        const wrange = this.buoyWRanges[index];
+ 
+        if (!center || !Array.isArray(center) || center.length !== 2) {
+          console.warn(
+            `Center coordinates for buoy ${
+              index + 1
+            } are missing or invalid. Skipping.`
+          );
+          continue;
+        }
+ 
 
         console.log(`Buoy ${index + 1}: center =`, center);
         console.log(`Adding danger range circle (red):`, drange);
@@ -477,8 +516,18 @@ export class HomeComponent implements OnInit {
               this.selectedBuoyData
             );
 
+            const now = new Date();
+            const fromDate = this.formatDateTime(
+              new Date(now.setHours(0, 0, 0, 0))
+            ); // start of the day
+            const toDate = this.formatDateTime(new Date());
+ 
             this.reportService
-              .getAllSensorDatabyStation(this.selectedBuoyData.station_id)
+              .getSensorDataByStationAndDate(
+                this.selectedBuoyData.station_id,
+                fromDate,
+                toDate
+              )
               .subscribe((report) => {
                 // const data = report;
                 // console.log('report', data);

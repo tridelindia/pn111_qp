@@ -430,6 +430,7 @@ generateAllPermissionOptions() {
  
  
 addRole() {
+  
   const parsedPermissions: { [page: string]: string[] } = {};
  
   if (this.newRole.flatPermissions) {

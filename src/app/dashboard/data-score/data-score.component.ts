@@ -108,7 +108,7 @@ getpercentage(val:number, sensor:string):number{
     .set('fromDate', '2025-01-01T00:00:42.000Z')
     .set('toDate', '2025-05-31T23:59:00.000Z')
     .set('stationId', this.stationId);
-  const apiUrl = 'http://localhost:3000/api/getSensorDataByStationAndDate';
+  const apiUrl = 'http://192.168.0.147:3000/api/getSensorDataByStationAndDate';
 
   this.http.get<any[]>(apiUrl, { params }).subscribe(data => {
     console.log("API data received:", data);

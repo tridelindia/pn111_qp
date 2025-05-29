@@ -26,7 +26,7 @@ export interface StationConfigs {
   providedIn: 'root',
 })
 export class StationconfigService {
-  private apiUrl = 'http://localhost:3000/api/';
+  private apiUrl = 'http://192.168.0.147:3000/api/';
 
   constructor(private http: HttpClient) {}
 

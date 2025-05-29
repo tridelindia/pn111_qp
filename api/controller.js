@@ -250,7 +250,7 @@ const addStation = async (req, res) => {
                 cam_img TEXT,
                 lat NUMERIC(10,6),
                 lon NUMERIC(10,6),
-                windspeed NUMERIC(5,2),
+                wind_speed NUMERIC(5,2),
                 wind_direction_deg NUMERIC(5,2),
                 temperature_deg NUMERIC(5,2),
                 rh_percent NUMERIC(5,2),

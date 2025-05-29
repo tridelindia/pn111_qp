@@ -15,7 +15,7 @@ import {
 import { BuoyMeasurement } from '../../report/report.service';
 import { CommonModule } from '@angular/common';
 import { SensorModel } from '../../models/station.model';
-
+ 
 @Component({
   selector: 'app-infobuoy',
   imports: [CommonModule],
@@ -25,7 +25,7 @@ import { SensorModel } from '../../models/station.model';
 })
 export class InfobuoyComponent implements OnInit {
   paramUnits: SensorModel[] = [];
-
+ 
   @Input() buoyData!: StationConfigs;
   @Input() buoySensor!: BuoyMeasurement;
   // @Input() buoyName!: string;
@@ -37,17 +37,17 @@ export class InfobuoyComponent implements OnInit {
   // @Input() temp!: string;
   @Input() drift!: string;
   // @Input() battery!: number;
-
+ 
   @Input() params: { name: string; value: string }[] = [];
-
+ 
   private buoyClickedSubscription: Subscription = new Subscription();
-
+ 
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
     private paramUnitsService: StationconfigService
   ) {}
-
+ 
   ngOnInit(): void {
     this.paramUnitsService.getSensorConfig().subscribe((paramUnits) => {
       this.paramUnits = paramUnits;
@@ -64,11 +64,11 @@ export class InfobuoyComponent implements OnInit {
       this.rotateStation();
     }, 100);
   }
-
+ 
   ngOnDestroy(): void {
     this.buoyClickedSubscription.unsubscribe();
   }
-
+ 
   rotateStation() {
     const stationnameElement =
       this.el.nativeElement.querySelector('.stationname');
@@ -78,36 +78,47 @@ export class InfobuoyComponent implements OnInit {
       this.renderer.addClass(stationnameElement, 'rotated');
     }
   }
-
+ 
   getUnit(name: string): string {
     const paramConfig = this.paramUnits?.find(
       (param: any) => param.param_name === name
     );
     return paramConfig?.unit ? ` ${paramConfig.unit}` : '';
   }
-
+ 
   getImageForParam(name: string): string {
     switch (name) {
       case 'battery':
         return 'assets/home/battery.png';
-      case 'temperature_deg':
-        return 'assets/svg/temperature.svg';
       case 'wind_speed':
         return 'assets/svg/windspeed.svg';
       case 'wind_direction_deg':
         return 'assets/home/winddire.png';
       case 'wind_gust':
         return 'assets/svg/windgust.svg';
+      case 'temperature_deg':
+        return 'assets/svg/temperature.svg';
       case 'rh_percent':
         return 'assets/svg/humidity.svg';
       case 'bp_hpa':
         return 'assets/svg/bp.svg';
+      case 'rain_mm':
+        return 'assets/svg/rainfall.svg';
       case 'visibility':
         return 'assets/svg/visibility.svg';
+      case 'global_radiation':
+        return 'assets/svg/radiation.svg';
+ 
       case 'wave_heading':
         return 'assets/home/waveHeading.png';
       case 'wave_height':
         return 'assets/home/hs.png';
+      case 'tzc':
+        return 'assets/home/tzc.png';
+      case 'tz':
+        return 'assets/svg/tz.svg';
+      case 'tm02':
+        return 'assets/home/tzc.png';
       case 'mean_wave_direction':
       case 'wave_direction':
       case 'wave_direction_fw':
@@ -123,10 +134,11 @@ export class InfobuoyComponent implements OnInit {
         return 'assets/svg/maxwaveheight.svg';
       case 'dominant_time_period_fw':
         return 'assets/home/domp.png';
-      case 'water_temperature':
-        return 'assets/home/wtemp.png';
+ 
       case 'turbidity':
         return 'assets/svg/turbidity.svg';
+      case 'water_temperature':
+        return 'assets/home/wtemp.png';
       case 'ph':
         return 'assets/svg/ph.svg';
       case 'conductivity':
@@ -147,11 +159,7 @@ export class InfobuoyComponent implements OnInit {
         return 'assets/svg/oilinwater.svg';
       case 'bt':
         return 'assets/svg/bt.svg';
-      case 'global_radiation':
-        return 'assets/svg/radiation.svg';
-      case 'rain_mm':
-        return 'assets/svg/rainfall.svg';
-
+ 
       // Current speed bins
       case 'current_speed_bin_1':
       case 'current_speed_bin_2':
@@ -164,7 +172,7 @@ export class InfobuoyComponent implements OnInit {
       case 'current_speed_bin_9':
       case 'current_speed_bin_10':
         return 'assets/svg/speed.svg';
-
+ 
       // Current direction bins
       case 'current_direction_bin_1':
       case 'current_direction_bin_2':
@@ -177,12 +185,12 @@ export class InfobuoyComponent implements OnInit {
       case 'current_direction_bin_9':
       case 'current_direction_bin_10':
         return 'assets/svg/direction.svg';
-
+ 
       default:
         return 'assets/home/waveHeading.png';
     }
   }
-
+ 
   getLabelPrefix(name: string): string {
     switch (name) {
       case 'battery':
@@ -200,27 +208,28 @@ export class InfobuoyComponent implements OnInit {
       case 'wind_gust':
         return 'Wind\nGust';
       case 'temperature_deg':
-        return 'Temperature';
+        return 'Air\nTemperature';
       case 'rh_percent':
         return 'Relative\nHumidity';
       case 'bp_hpa':
         return 'Barometric\nPressure';
       case 'global_radiation':
-        return 'Solar\nRadiation';
+        return 'Radiation';
       case 'rain_mm':
         return 'Rainfall';
       case 'visibility':
         return 'Visibility';
+ 
       case 'wave_heading':
         return 'Wave\nHeading';
       case 'wave_height':
         return 'Wave\nHeight';
       case 'tzc':
-        return 'TZC';
+        return 'Peak Wave\nPeriod';
       case 'tz':
-        return 'TimeZone';
+        return 'Zero-crossing\nPeriod';
       case 'tm02':
-        return 'Tm02';
+        return 'Average Wave\nPeriod';
       case 'wave_direction':
         return 'Wave\nDirection';
       case 'wave_direction_fw':
@@ -241,12 +250,13 @@ export class InfobuoyComponent implements OnInit {
         return 'Average\nWave\nHeight';
       case 'dominant_time_period_fw':
         return 'Dominant\nPeriod FW';
+ 
       case 'turbidity':
         return 'Turbidity';
       case 'water_temperature':
-        return 'Water\nTemp';
+        return 'Water\nTemperature';
       case 'ph':
-        return 'pH';
+        return 'potential\nof Hydrogen';
       case 'conductivity':
         return 'Conductivity';
       case 'dissolved_oxygen':
@@ -262,16 +272,10 @@ export class InfobuoyComponent implements OnInit {
       case 'pah':
         return 'PAH';
       case 'oil_in_water':
-        return 'Oil\nin Water';
+        return 'Oil in\nWater';
       case 'bt':
-        return 'BT';
-      case 'motion':
-        return 'Motion';
-      case 'nmea':
-        return 'NMEA';
-      case 'samplenumber':
-        return 'Sample';
-
+        return 'Bottom\nTemperature';
+ 
       // Current speed bins
       case 'current_speed_bin_1':
       case 'current_speed_bin_2':
@@ -284,7 +288,7 @@ export class InfobuoyComponent implements OnInit {
       case 'current_speed_bin_9':
       case 'current_speed_bin_10':
         return 'Current\nSpeed';
-
+ 
       // Current direction bins
       case 'current_direction_bin_1':
       case 'current_direction_bin_2':
@@ -297,17 +301,17 @@ export class InfobuoyComponent implements OnInit {
       case 'current_direction_bin_9':
       case 'current_direction_bin_10':
         return 'Current\nDirection';
-
+ 
       default:
         return '';
     }
   }
-
+ 
   getSectionClass(index: number): string {
     const map = ['top-1', 'top-2', 'center-1', 'bottom-1', 'bottom-2'];
     return map[index] || 'default-section';
   }
-
+ 
   getImageClass(index: number): string {
     switch (index) {
       case 0:
@@ -325,3 +329,5 @@ export class InfobuoyComponent implements OnInit {
     }
   }
 }
+ 
+ 

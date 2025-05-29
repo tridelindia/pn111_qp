@@ -410,7 +410,7 @@ this.isSelectParams = false;
 
 isMeteriology:boolean=true;
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/api/getBin').subscribe(
+    this.http.get('http://192.168.0.147:3000/api/getBin').subscribe(
         (response:any)=>{
           console.log("binsss", response)
          this.Bins = response
@@ -430,7 +430,7 @@ isMeteriology:boolean=true;
     this.fromDate = startDate.toISOString();
     this.toDate = endDate.toISOString();
     
-     this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
+     this.http.get('http://192.168.0.147:3000/api/getStationConfig').subscribe(
             (response: any) => {
                 // console.log(response);
                 for (let index = 0; index < response.length; index++) {
@@ -511,7 +511,7 @@ singleStationchange(){
 //     .set('toDate',toDate)
 //     .set('station_id', id[0].stationId);
 //     console.log("params", params);
-//     this.http.get('http://localhost:3000/api/getSensorDataByDate', {params} ).subscribe(
+//     this.http.get('http://192.168.0.147:3000/api/getSensorDataByDate', {params} ).subscribe(
 //       (response: any) => {
 //         this.Buoy = response;
 //         //console.log("buoy",this.Buoy, this.filteredparams);
@@ -558,7 +558,7 @@ this.selectedMultix1 = '';
 this.selectedMultix2 = '';
 this.selectedMultiStationParam = '';
 
-    this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+    this.http.get('http://192.168.0.147:3000/api/getSensorConfig').subscribe(
       (response:any) => {
         //console.log(response);
           this.listparams = response;
@@ -885,7 +885,7 @@ this.selectedMultiStationParam = '';
       .set('fromDate',this.fromDate)
       .set('toDate',this.toDate)
       .set('station_id', filter[0].stationId);
-      this.http.get('http://localhost:3000/api/getSensorDataByDate', {params}).subscribe(
+      this.http.get('http://192.168.0.147:3000/api/getSensorDataByDate', {params}).subscribe(
         (data:any) => {
           console.log("buoys data === ",data);
           this.buoyData =data
@@ -900,7 +900,7 @@ this.selectedMultiStationParam = '';
     }
   
   fetchSensor(){
-    // this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+    // this.http.get('http://192.168.0.147:3000/api/getSensorConfig').subscribe(
     //   (response:any)=>{
     //     console.log("sensor",response)
     //     this.sensorData = response

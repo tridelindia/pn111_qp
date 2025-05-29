@@ -62,7 +62,7 @@ export class ReportComponent implements OnInit {
   selectedOption: string = 'sensorData';
   options = [
     { label: 'All Sensors', value: 'sensorData', icon: 'fa fas-database' },
-    { label: 'Metrological', value: 'metrological', icon: 'pi pi-cloud' },
+    { label: 'Meteorology', value: 'metrological', icon: 'pi pi-cloud' },
     { label: 'Oceanographic', value: 'oceanographic', icon: 'pi pi-globe' },
     { label: 'WaterQuality', value: 'waterQuality', icon: 'pi pi-umbrella' },
   ];
@@ -260,20 +260,21 @@ export class ReportComponent implements OnInit {
   onOptionChange(): void {
     if (this.selectedOption === 'sensorData') {
       this.dynaColumns = [
-        { field: 'wind_speed', header: 'Wind Speed', unit: 'knots' },
+        { field: 'wind_speed', header: 'Wind Speed', unit: 'm/s' },
         { field: 'wind_direction_deg', header: 'Wind Direction', unit: '°' },
-        { field: 'wind_gust', header: 'Wind Gust', unit: 'knots' },
-        { field: 'temperature_deg', header: 'Temperature', unit: '°C' },
+        { field: 'wind_gust', header: 'Wind Gust', unit: 'm/s' },
+        { field: 'temperature_deg', header: 'Air Temperature', unit: '°C' },
         { field: 'rh_percent', header: 'Relative Humidity', unit: '%' },
         { field: 'bp_hpa', header: 'Barometric Pressure', unit: 'hPa' },
-        { field: 'global_radiation', header: 'Radiation', unit: '' },
         { field: 'rain_mm', header: 'Rainfall', unit: 'mm' },
-        { field: 'visibility', header: 'Visibility', unit: 'nm' },
+        { field: 'visibility', header: 'Visibility', unit: 'km' },
+        { field: 'global_radiation', header: 'Radiation', unit: 'W/m²' },
+ 
         { field: 'wave_heading', header: 'Wave Heading', unit: '°' },
         { field: 'wave_height', header: 'Wave Height', unit: 'm' },
-        { field: 'tzc', header: 'Tzc', unit: 's' },
-        { field: 'tz', header: 'Tz', unit: 's' },
-        { field: 'tm02', header: 'Tm02', unit: 's' },
+        { field: 'tzc', header: 'Peak Wave Period', unit: 's' },
+        { field: 'tz', header: 'Zero Crossing Period', unit: 's' },
+        { field: 'tm02', header: 'Average Wave Period', unit: 's' },
         { field: 'wave_direction', header: 'Wave Direction', unit: '°' },
         {
           field: 'wave_direction_fw',
@@ -311,24 +312,26 @@ export class ReportComponent implements OnInit {
           header: 'Dominant Time Period FW',
           unit: 's',
         },
-        { field: 'havg', header: 'Havg', unit: 'm' },
-        { field: 'turbidity', header: 'Turbidity', unit: '' },
+        { field: 'havg', header: 'Average Wave Height', unit: 'm' },
+ 
+        { field: 'turbidity', header: 'Turbidity', unit: 'NTU' },
         { field: 'water_temperature', header: 'Water Temperature', unit: '°C' },
-        { field: 'ph', header: 'pH Level', unit: '' },
+        { field: 'ph', header: 'Potential of Hydrogen', unit: 'pH' },
         { field: 'conductivity', header: 'Conductivity', unit: 'µS/cm' },
         { field: 'dissolved_oxygen', header: 'Dissolved Oxygen', unit: 'mg/L' },
         { field: 'salinity', header: 'Salinity', unit: 'ppt' },
         {
           field: 'chlorophyll_a',
           header: 'Chlorophyll-a',
-          unit: '',
+          unit: 'µg/L',
         },
-        { field: 'phycoerythrin', header: 'Phycoerythrin', unit: '' },
-        { field: 'fluorescein_dye', header: 'Fluorescein Dye', unit: '' },
-        { field: 'pah', header: 'PAH', unit: '' },
-        { field: 'oil_in_water', header: 'Oil in Water', unit: '' },
-        { field: 'bt', header: 'BT', unit: '°C' },
+        { field: 'phycoerythrin', header: 'Phycoerythrin', unit: 'µg/L' },
+        { field: 'fluorescein_dye', header: 'Fluorescein Dye', unit: 'ppb' },
+        { field: 'pah', header: 'PAH', unit: 'ppb' },
+        { field: 'oil_in_water', header: 'Oil in Water', unit: 'ppb' },
+        { field: 'bt', header: 'Bottom Temperature', unit: '°C' },
       ];
+ 
 
       // Add current bins (1–10)
       for (let i = 1; i <= 4; i++) {
