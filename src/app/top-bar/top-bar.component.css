@@ -211,7 +211,7 @@ select option{
 .stations{
   position: absolute;
   top: 50px;
-  right: 16%;
+  right: 25%;
   z-index: 1;
   height: auto;
   border-radius: 15px;

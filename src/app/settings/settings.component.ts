@@ -4,20 +4,19 @@ import { GeneralComponent } from "./general/general.component";
 import { AppearanceComponent } from './appearance/appearance.component';
 import { StationComponent } from './station/station.component';
 import { SensorComponent } from "./sensor/sensor.component";
-import { NotificationComponent } from './notification/notification.component';
 import { BillingComponent } from './billing/billing.component';
 
 @Component({
     selector: 'app-settings',
     standalone:true,
-    imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent, SensorComponent, NotificationComponent, BillingComponent],
+    imports: [CommonModule, GeneralComponent, AppearanceComponent, StationComponent, SensorComponent, BillingComponent],
     templateUrl: './settings.component.html',
     styleUrl: './settings.component.css'
 })
 export class SettingsComponent implements OnInit{
   time = new Date;
   currentTime?:string;
-activeOption:number = 2;
+activeOption:number = 1;
 changeOption(index:number){
   this.activeOption = index
 }

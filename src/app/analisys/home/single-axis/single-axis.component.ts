@@ -3,6 +3,8 @@ import * as echarts from 'echarts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import { singleAxis } from '../home.component';
 import { Legend } from '@amcharts/amcharts5';
+import { AxisLabel } from '@amcharts/amcharts5/xy';
+import { GlobalDataService } from '../../../global-data/global-data.component';
 
 @Component({
   selector: 'app-single-axis',
@@ -22,8 +24,11 @@ export class SingleAxisComponent implements OnInit {
   option: any;
   xData: number[] = []; // Store timestamps for x-axis
   yData: number[] = []; // Store values for y-axis
-
+  unit:string='';
+constructor(private data:GlobalDataService){}
   ngOnInit(): void {
+    // const u = this.data.SensorConfigs.filter(item=> item.param_name === this.singleAxis[0].name);
+    // this.unit = u[0].unit
 
     const seriesData = this.singleAxis.map(item => [
       new Date(item.DateTime).getTime(),
@@ -55,7 +60,12 @@ export class SingleAxisComponent implements OnInit {
       },
       xAxis: {
         type: 'time',
+        name:"Date Time",
+        nameGap:45,
+        nameLocation: 'middle',
         axisLabel: {
+          // fontSize: 18,
+    fontWeight: 'bold',
           formatter: (value: any) => {
             return echarts.format.formatTime('dd-MM-yyyy\nhh:mm:ss', value);
           }
@@ -63,15 +73,19 @@ export class SingleAxisComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
-        name: this.singleAxis[0]?.name || '',
+        name: `${this.singleAxis[0]?.name} (${this.unit})` || '',
         nameLocation: 'middle',
-        nameGap: 30
+        nameGap: 30,
+        axisLabel:{
+        fontWeight: 'bold',
+        }
       },
       series: [
         {
           data: seriesData,
           type: this.plotType,
-          smooth: true
+          smooth: true,
+          fontWeight: 'bold',
         }
       ],
       dataZoom: [
@@ -82,7 +96,9 @@ export class SingleAxisComponent implements OnInit {
         {
           type: 'slider',
           xAxisIndex: [0],
-          handleSize: '8%'
+          handleSize: '3%',
+          bottom:15,
+          height:20
         }
       ]
     };

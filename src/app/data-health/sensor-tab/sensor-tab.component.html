@@ -3,7 +3,7 @@
     <div class="sensor-tabs-center">
       <div class="sensor-tabs">
         <div 
-          *ngFor="let sensor of sensors" 
+          *ngFor="let sensor of filteredSensors" 
           class="sensor-tab" 
           [ngClass]="{
             'active': activeSensor === sensor.id,

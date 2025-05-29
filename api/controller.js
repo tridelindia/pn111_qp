@@ -149,6 +149,25 @@ const getHomeConfig = async (req, res) => {
     console.error('Error fetching HomeConfig data:', error.message);
   }
 }
+
+const UpdateHomeConfig = async (req, res) => {
+  const { station_id, param1, param2, param3, param4, param5 } = req.body;
+ 
+  try {
+    const result = await pool.query(
+      `UPDATE public.tb_home_config
+       SET param1 = $1, param2 = $2, param3 = $3, param4 = $4, param5 = $5
+       WHERE station_id = $6`,
+      [param1, param2, param3, param4, param5, station_id]
+    );
+ 
+    res.status(200).json({ message: 'Update successful' });
+  } catch (err) {
+    console.error('Update error:', err);
+    res.status(500).json({ error: 'Update failed' });
+  }
+};
+ 
  
  
 
@@ -336,7 +355,11 @@ const addStation = async (req, res) => {
 
         const result = await client.query(insertQuery, insertValues);
         console.log('Station added:', result.rows[0]);
-
+        await client.query(
+              `INSERT INTO tb_home_config (station_id, station_name, param1, param2, param3, param4, param5)
+          VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+              [buoy_id, buoy_name, 'wind_speed', 'wind_direction_deg', 'wind_gust', 'temperature_deg', 'rh_percent']
+            );
         // Create sensor parameter tables
         for (const [sensor, schema] of Object.entries(tableSchemas)) {
             const tableName =
@@ -1810,6 +1833,55 @@ const saveLogs = async (req, res) => {
   }
 };
 
+
+
+const updateBins = async (req, res) => {
+  const { bins } = req.body;
+  // bins = [{ id: 1, value: 'New Value 1' }, { id: 2, value: 'New Value 2' }, ...]
+
+  if (!Array.isArray(bins) || bins.length === 0) {
+    return res.status(400).json({ error: 'Invalid bins array' });
+  }
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    for (const bin of bins) {
+      await client.query(
+        `UPDATE tb_bins SET value = $1 WHERE id = $2`,
+        [bin.value, bin.id]
+      );
+    }
+
+    await client.query('COMMIT');
+    res.status(200).json({ message: 'Bins updated successfully' });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('Error updating bins:', err);
+    res.status(500).json({ error: 'Update failed' });
+  } finally {
+    client.release();
+  }
+};
+
+
+const getBins = async (req, res) => {
+  console.log('Received request to binData');
+ 
+  try {
+    const result = await pool.query('SELECT * FROM tb_bins ORDER BY id ASC');
+    ;
+    console.log('Query successful:', result.rows);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching Bins data:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
 module.exports = {
   getStationConfig,
   getAllSensorData,
@@ -1818,6 +1890,7 @@ module.exports = {
   getSensorDataByStationAndDate,
   getMetrologicalData,
   getHomeConfig,
+  UpdateHomeConfig,
     addStation,
     editStation,
     insertSensorConfigs,
@@ -1845,6 +1918,8 @@ module.exports = {
     deleteNotification,
     updateNotification,
     updateNotificationStatus,
-    saveLogs
+    saveLogs,
+    updateBins,
+    getBins
 
 }

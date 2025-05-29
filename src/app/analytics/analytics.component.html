@@ -12,7 +12,8 @@
                     </select>
                 </div>
             </div>
-            <app-test-chart id="compare" [plotType]="selectedPlot" *ngIf="!isLoad" [length]="selectedParams.length"
+            <app-test-chart id="compare" [plotType]="selectedPlot" [stations]="stations"
+                [selectedStation]="selectedStation" *ngIf="!isLoad" [length]="selectedParams.length"
                 [title]="selectedMultiStationParam" [params]="multiStationData"></app-test-chart>
             <!-- <app-wind-chart *ngIf="isPolar"></app-wind-chart> -->
         </div>
@@ -37,7 +38,7 @@
                                 <select name="Parameters" id="parameters" [(ngModel)]="selectedBin"
                                     (change)="changewithBin()" [disabled]="false">
                                     <option *ngFor="let param of Bins" [value]="param.name">
-                                        {{ param.name }}
+                                        {{ param.value }}
                                     </option>
                                 </select>
                             </div>
@@ -96,6 +97,7 @@
                         <app-scatter-axis [scatterAxis]="scatterAxis" *ngIf="!isScatterLoading"></app-scatter-axis>
                     </div>
                     <div class="fout_split" *ngIf="isPolar">
+                        <h3 class="ramp">Polar Plot</h3>
                         <div class="four" [ngStyle]="{ 'width': polarNumber === 2 ? '50%' : '100%' }">
                             <div class="dropDowns">
 
@@ -104,7 +106,7 @@
                                     <select name="Parameters" id="parameters" [(ngModel)]="selectedBinPolar"
                                         [disabled]="false" (change)="changePOlarCurrentBin()">
                                         <option *ngFor="let param of Bins" [value]="param.name">
-                                            {{ param.name }}
+                                            {{ param.value }}
                                         </option>
                                     </select>
                                 </div>
@@ -263,7 +265,7 @@
                 <p-datepicker [(ngModel)]="selectedDate" [showIcon]="true"
                     [selectionMode]="pickerState === 'date'? 'range':'single'"
                     [view]="pickerState === 'date' || pickerState === 'week'? 'date' : pickerState === 'month'? 'month': 'year'"
-                    (onClose)="onDatePicked()"></p-datepicker>
+                    (onClose)="onDatePicked()" dateFormat="dd-mm-yy"></p-datepicker>
             </div>
 
 

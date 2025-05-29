@@ -69,6 +69,7 @@ export class DataHealthComponent implements OnInit {
   currentSensor = '';
   selectedTabs: string[] = [];
   selectedStation: string = '';
+  hasMeteorology = false;
 
   constructor(
     private http: HttpClient,
@@ -82,6 +83,7 @@ export class DataHealthComponent implements OnInit {
 
   ngOnInit(): void {
     const station_Id =this.layout.selectedStationId;
+    this.hasMeteorology = this.layout.sensors.includes('meteorology');
     this.onStationSelected(station_Id);
   }
 

@@ -64,8 +64,7 @@
                     <div class="column">{{ user.role }}</div>
                     <div class="column">{{ user.designation }}</div>
                     <div class="column">
-                        UTC: {{ user.created | date:'dd-MM-yyyy HH:mm:ss' }}<br />
-                        AST: {{ user.created | date:'dd-MM-yyyy HH:mm:ss':'UTC+8:30' }} (+3)
+                        Time: {{ user.created | date:'dd-MM-yyyy HH:mm:ss':'UTC+8:30' }}
                     </div>
                     <div class="column actions">
                         <div class="icon-container">

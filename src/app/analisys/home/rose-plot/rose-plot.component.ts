@@ -66,10 +66,10 @@ title!:string;
             weight:'bold',
             color: '#4b4b4b'
           },
-          x: 0.01,
-          xanchor: 'left',
-          y: 0.95,
-          yanchor: 'top'
+          x: 1.2,
+          xanchor: 'right',
+          y:3,
+          yanchor: 'bottom'
         },
         polar: {
           radialaxis: {

@@ -188,8 +188,7 @@
                     </div>
                     <!-- <img [src]="selectedstation.buoy_image" alt=""> -->
                     <p>{{selectedstation.buoy_id}}</p>
-                    <h5>Threshold</h5>
-
+                    <h5>Watch Circle</h5>
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Circle</p>
@@ -205,7 +204,6 @@
                     <p>{{selectedstation.geo_format}}
                         {{selectedstation.geo_format ==='DD'? '(Decimal Decimal)':'(DegreeMinutes Seconds)'}}</p>
                     <h5>Coordinates</h5>
-
                     <div class="threasholds" *ngIf="selectedstation.geo_format==='DD'">
                         <div class="warning_field">
                             <p>Latitude</p>
@@ -307,7 +305,7 @@
                         </div>
 
                     </div> -->
-                    <h5>Threshold</h5>
+                    <h5>Watch Circle</h5>
 
                     <div class="threasholds">
                         <div class="warning_field">
@@ -331,7 +329,7 @@
                         <p style="margin-left: -5px;">DMS</p>
                     </div>
                     <!-- <p>DD (Degree Decimal)</p> -->
-                    <h5>Coordinates</h5>
+                    <!-- <h5>Coordinates</h5> -->
 
                     <div class="threasholds" *ngIf="!mainToggle">
                         <div class="warning_field">
@@ -401,7 +399,7 @@
                     <input type="text" [(ngModel)]="buoy_name">
                     <p>Station ID</p>
                     <input type="text" [(ngModel)]="buoy_id">
-                    <h5>Threshold</h5>
+                    <h5>Watch Cirlce</h5>
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Circle</p>
@@ -423,7 +421,7 @@
                         <p style="margin-left: -5px;">DMS</p>
                     </div>
                     <!-- <p>DD (Degree Decimal)</p> -->
-                    <h5>Coordinates</h5>
+                    <!-- <h5>Coordinates</h5> -->
 
                     <div class="threasholds" *ngIf="!mainToggle">
                         <div class="warning_field">

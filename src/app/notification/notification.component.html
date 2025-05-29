@@ -3,7 +3,7 @@
   
   <div class="header">
     <h2>Notification Management</h2>
-    <p-button label="Add" icon="fa-solid fa-plus" (click)="showAddDialog()"></p-button>
+    <p-button *ngIf="hasNotificationPermission('write')" label="Add" icon="fa-solid fa-plus" (click)="showAddDialog()"></p-button>
   </div>
 
   <div class="search-container mb-3">
@@ -16,23 +16,23 @@
     <p-table [value]="filteredNotifications" stripedRows [scrollable]="true" scrollHeight="calc(100vh - 180px)">
       <ng-template pTemplate="header">
         <tr>
-          <th style="text-align: center;">Station ID</th>
-          <th style="text-align: center;">Station Name</th>
-          <th style="text-align: center;">Name</th>
-          <th style="text-align: center;">Email</th>
-          <th style="text-align: center;">Phone</th>
-          <th style="text-align: center;">Status</th>
-          <th style="text-align: center;">Actions</th>
+          <th>Station ID</th>
+          <th >Station Name</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th *ngIf="hasNotificationPermission('write')">Status</th>
+          <th *ngIf="hasNotificationPermission('write')">Actions</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-notification>
         <tr>
-          <td style="text-align: center;">{{ notification.station_id.join(', ') }}</td>
-          <td style="text-align: center;">{{ notification.station_name.join(', ') }}</td>
-          <td style="text-align: center;">{{ notification.user_name }}</td>
-          <td style="text-align: center;">{{ notification.user_email }}</td>
-          <td style="text-align: center;">{{ notification.user_phone_number }}</td>
-          <td style="text-align: center;">
+          <td>{{ notification.station_id.join(', ') }}</td>
+          <td>{{ notification.station_name.join(', ') }}</td>
+          <td>{{ notification.user_name }}</td>
+          <td>{{ notification.user_email }}</td>
+          <td>{{ notification.user_phone_number }}</td>
+          <td *ngIf="hasNotificationPermission('write')">
             <label class="toggle-switch">
                 <input 
                     type="checkbox" 
@@ -41,11 +41,11 @@
                 <span class="slider round"></span>
             </label>
           </td>
-          <td style="text-align: center;">
-            <button class="delete-btn" (click)="deleteNotification(notification.id)">
+          <td style="text-align: center;" *ngIf="hasNotificationPermission('write')">
+            <button class="delete-btn" *ngIf="hasNotificationPermission('execute')" (click)="deleteNotification(notification.id)">
               <i class="fa-solid fa-trash-can"></i>
             </button>
-            <i class="fa-solid fa-pen-to-square" style="cursor: pointer;" (click)="showEditDialog(notification)"></i>
+            <i class="fa-solid fa-pen-to-square" *ngIf="hasNotificationPermission('write')" style="cursor: pointer;" (click)="showEditDialog(notification)"></i>
           </td>
         </tr>
       </ng-template>
@@ -67,7 +67,8 @@
           <span class="p-input-icon-left flex-auto">
             <p-multiselect [options]="stations" [(ngModel)]="newNotification.station_id" name="station_id" 
               optionLabel="station_name" optionValue="station_id" placeholder="Select Stations" class="w-full md:w-56" required
-              [showToggleAll]="true" [showClear]="true" (onChange)="onStationChange($event)">
+              [showToggleAll]="true" [showClear]="true" (onChange)="onStationChange($event)"
+              [filter]="true">
             </p-multiselect>
           </span>
         </div>
@@ -121,7 +122,8 @@
           <span class="p-input-icon-left flex-auto">
             <p-multiselect [options]="stations" [(ngModel)]="newNotification.station_id" name="station_id" 
               optionLabel="station_name" optionValue="station_id" placeholder="Select Stations" class="w-full md:w-56" required
-              [showToggleAll]="true" [showClear]="true" (onChange)="onStationChange($event)">
+              [showToggleAll]="true" [showClear]="true" (onChange)="onStationChange($event)"
+              [filter]="true">
             </p-multiselect>
           </span>
         </div>

@@ -9,6 +9,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
+import { LayoutComponent } from '../../layout/layout.component';
 
 interface Sensor {
   id: string;
@@ -57,7 +58,14 @@ export class SensorTabComponent {
   dateRange: Date[] = [new Date(new Date().setDate(new Date().getDate() - 1)), new Date()];
   hourFormat: string = '24';
   selectedTabs: { [key: string]: string[] } = {};
+  station_Id: string;
 
+  constructor(
+    private layout:LayoutComponent
+  ) { 
+    this.station_Id = this.layout.selectedStationId;
+  }
+  
   sensors: Sensor[] = [
     { id: 'oceanography', name: 'Oceanography', icon: '🌊' },
     { id: 'meteorology', name: 'Meteorology', icon: '🌤️' },
@@ -155,6 +163,13 @@ export class SensorTabComponent {
 
   get currentTabs(): Tab[] {
     return this.sensorTabs[this.activeSensor] || [];
+  }
+
+  get filteredSensors(): Sensor[] {
+    if (this.station_Id === 'ST001' || this.station_Id === 'ST002') {
+      return this.sensors.filter(sensor => sensor.id !== 'meteorology');
+    }
+    return this.sensors;
   }
 
   selectSensor(sensorId: string) {

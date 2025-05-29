@@ -25,7 +25,7 @@ export class TopBarComponent implements OnInit{
     selectedStation:string = 'Station 1';
     listStations:Station[]=[];
     currentUser!: CurrentUser;
-    isUtc:boolean = false;
+    isUtc:boolean = true;
     date:string = ''
 
     onToggleChange(){

@@ -7,7 +7,7 @@
             <i class="fa-solid fa-square-poll-vertical" [ngClass]="{'selected': selectedIndex === 1}"
                 (click)="selectOption(1)"></i>
         </a>
-        <a *ngIf="permissions['Analysis']?.includes('read')" routerLink="/analytics">
+        <a *ngIf="permissions['Analysis']?.includes('read')" routerLink="/analytics" title="analytics">
             <i class="fa-solid fa-chart-line" [ngClass]="{'selected': selectedIndex === 2}"
                 (click)="selectOption(2)"></i>
         </a>
@@ -24,8 +24,8 @@
         </a>
         <i class="fa-solid fa-heart-pulse" [ngClass]="{'selected': selectedIndex === 7}" (click)="selectOption(7)"
             title="Data Health"></i>
-        <!-- <i class="fa-solid fa-envelope" [ngClass]="{'selected': selectedIndex === 8}" (click)="selectOption(8)"
-            title="Notification Management"></i> -->
+        <i class="fa-solid fa-envelope" [ngClass]="{'selected': selectedIndex === 8}" (click)="selectOption(8)"
+            title="Notification Management"></i>
         <a (click)="logout()" title="Logout">
             <i class="fa-solid fa-right-from-bracket" [ngClass]="{'selected': selectedIndex === 6}"
                 (click)="selectOption(6)"></i>

@@ -37,7 +37,7 @@ export class SunShineComponent implements OnInit {
         dataPoints.push(entry.hourly[time] ?? 0);
         // Add sun/moon markers
         if (time === '06:00') {
-          markPointData.push({ coord: [label, entry.hourly[time]], symbol: 'image://assets/image/mooon.png' });
+          markPointData.push({ coord: [label, entry.hourly[time]], symbol: 'image://assets/image/moon.png' });
         }
         if (time === '12:00') {
           markPointData.push({ coord: [label, entry.hourly[time]], symbol: 'image://assets/image/sun.png' });

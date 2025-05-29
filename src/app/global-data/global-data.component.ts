@@ -1,6 +1,7 @@
 // global-data.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SensorModel } from '../models/station.model';
 export interface BuoyData {
   id?: number;
   station_id: string;
@@ -75,7 +76,8 @@ export interface BuoyData {
 export class GlobalDataService {
   selectedStation:any = {};
   index!:number;
-  isDashboardLoad:boolean = false
+  isDashboardLoad:boolean = false;
+  SensorConfigs:SensorModel[]=[];
 
   // onChangeDashboard(id:){}
   private stationIdSubject = new BehaviorSubject<string>('');

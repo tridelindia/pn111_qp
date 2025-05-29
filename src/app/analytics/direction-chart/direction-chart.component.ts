@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { singleAxis } from '../analytics.component';
 import * as echarts from 'echarts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
+import { AxisLabel } from '@amcharts/amcharts5/xy';
+import { GlobalDataService } from '../../global-data/global-data.component';
 
 @Component({
   selector: 'app-direction-chart',
@@ -17,24 +19,29 @@ import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 })
 export class DirectionChartComponent implements OnInit{
   @Input() singleAxis: singleAxis[] = [];
+  unit!:string;
   @Input() plotType!:string;
   option: any;
   xData: number[] = []; // Store timestamps for x-axis
   yData: number[] = []; // Store values for y-axis
    arrowSvg = 'path://M0,-10 L5,0 L2,0 L2,10 L-2,10 L-2,0 L-5,0 Z';
 
-
+constructor(private data:GlobalDataService){}
   ngOnInit(): void {
-
+    const u = this.data.SensorConfigs.filter(item=> item.param_name === this.singleAxis[0].name);
+    this.unit = u[0].unit
     const seriesData = this.singleAxis.map(item => [
       new Date(item.DateTime).getTime(),
       parseFloat(item.value)
     ]);
+    
+    
 
-    console.log("seriesData:", seriesData); // Debug
+    console.log("seriesData:", this.unit); // Debug
 
     this.setChartOptions(seriesData as [number, number][]);
     // this.setChartOptions();
+
   }
 
   setChartOptions(seriesData: [number, number][]) {
@@ -57,7 +64,11 @@ export class DirectionChartComponent implements OnInit{
       
       xAxis: {
         type: 'time',
+        name:"Date Time",
+        nameLocation:'middle',
+        nameGap:45,
         axisLabel: {
+          fontWeight:'bold',
           formatter: (value: any) => {
             return echarts.format.formatTime('dd-MM-yyyy\nhh:mm:ss', value);
           }
@@ -65,9 +76,13 @@ export class DirectionChartComponent implements OnInit{
       },
       yAxis: {
         type: 'value',
-        name: this.singleAxis[0]?.name || 'Direction (°)',
+        name: `${this.singleAxis[0]?.name}  (${this.unit})` || 'Direction (°)',
         nameLocation: 'middle',
-        nameGap: 30
+        nameGap: 30,
+        axisLabel:{
+
+          fontWeight:'bold'
+        }
       },
       series: [
         {
@@ -99,7 +114,9 @@ export class DirectionChartComponent implements OnInit{
         {
           type: 'slider',
           xAxisIndex: [0],
-          handleSize: '8%'
+          handleSize: '3%',
+          bottom:15,
+          height:20
         }
       ]
     };

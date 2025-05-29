@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-battery',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './battery.component.html',
   styleUrl: './battery.component.css'
 })
@@ -24,6 +25,7 @@ export class BatteryComponent implements OnInit, OnChanges {
   }
 }
 
+constructor(private cdr: ChangeDetectorRef) {}
 
   private updateValues() {
   const maxVoltage = 12.4;
@@ -31,9 +33,12 @@ export class BatteryComponent implements OnInit, OnChanges {
 
   const voltagePercentage = Math.round((voltage / maxVoltage) * 100);
   this.percentage = voltagePercentage;
+  console.log("percentage is battery",this.percentage)
 
   this.calculateOffset();
   this.batteryColor = this.getColor();
+    this.cdr.detectChanges();
+
 }
 
 
@@ -43,10 +48,10 @@ export class BatteryComponent implements OnInit, OnChanges {
     console.log(`Stroke Dashoffset calculated: ${this.strokeDashoffset}`);
   }
 
-  private getColor(): string {
+ getColor(): string {
     if (this.percentage >= 75) return '#01A437'; // Green
     if (this.percentage >= 50) return '#F1C40F'; // Yellow
-    if (this.percentage >= 25) return '#E67E22'; // Orange
+    if (this.percentage >= 25) return '#E74C3C'; // Orange
     return '#E74C3C'; // Red
   }
 }

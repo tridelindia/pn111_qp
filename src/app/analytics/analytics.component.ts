@@ -86,22 +86,7 @@ export class AnalyticsComponent implements OnInit{
 
   isCurrent:boolean= false;
   selectedBin!:string;
-  Bins:any[] = [{
-    name:'profile1',
-    id:'001'
-  }, 
-  {
-    name:'profile2',
-    id:'002'
-  }, 
-  {
-    name:'profile3',
-    id:'003'
-  }, 
-  {
-    name:'profile4',
-    id:'004'
-  }, ];
+  Bins:any[] = [];
 
   singleStation!:string;
   parametres:string[]=[];
@@ -425,6 +410,12 @@ this.isSelectParams = false;
 
 isMeteriology:boolean=true;
   ngOnInit(): void {
+    this.http.get('http://localhost:3000/api/getBin').subscribe(
+        (response:any)=>{
+          console.log("binsss", response)
+         this.Bins = response
+        }
+      )
     this.isMeteriology = this.layout.sensors.includes('meteorology');
     this.polarNumber = 0;
     this.isCurrentPolar = false;
@@ -571,6 +562,7 @@ this.selectedMultiStationParam = '';
       (response:any) => {
         //console.log(response);
           this.listparams = response;
+          this.data.SensorConfigs = response
           //console.log("params",this.listparams.length)
           this.filteredparams = this.listparams.filter(item => item.name === 'oceanography');
           setTimeout(() => {

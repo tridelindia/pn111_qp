@@ -32,9 +32,6 @@
         <!-- <div [ngClass]="activeOption ===4 ? 'option_active': 'option'" (click)="changeOption(4)">
             <h5>Billing</h5>
         </div> -->
-        <div [ngClass]="activeOption ===5 ? 'option_active': 'option'" (click)="changeOption(5)">
-            <h5>Notifications</h5>
-        </div>
 
 
     </div>
@@ -50,8 +47,6 @@
         <app-sensor></app-sensor>
         }@else if (activeOption ===3) {
         <app-appearance style="width: 100%;"></app-appearance>
-        }@else if (activeOption === 5) {
-        <app-notification style="width: 100%;"></app-notification>
         }@else if (activeOption ===4) {
         <app-billing style="width:100%"></app-billing>
         }

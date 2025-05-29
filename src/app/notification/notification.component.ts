@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
@@ -21,7 +21,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
-import { LoggingService } from '../../users/service/users/logging.service';
+import { LoggingService } from '../users/service/users/logging.service';
 
 interface Notification {
   id: number;
@@ -35,8 +35,11 @@ interface Notification {
 }
 
 interface Station {
+  id: number;
   station_id: string;
   station_name: string;
+  warning: string;
+  danger: string;
 }
 
 @Component({
@@ -208,7 +211,7 @@ export class NotificationComponent implements OnInit {
             const currentUser = JSON.parse(currentUserStr);
             this.loggingService.addLog(
               currentUser.username,
-              `New notification`, 
+              `New notification has been added`, 
               currentUser.id,
               'N001',
               'notification.component.ts/addNotification'
@@ -242,7 +245,7 @@ export class NotificationComponent implements OnInit {
             const currentUser = JSON.parse(currentUserStr);
             this.loggingService.addLog(
               currentUser.username,
-              `Notification delete`, 
+              `Notification has been deleted`, 
               currentUser.id,
               'N003',
               'notification.component.ts/deleteNotification'
@@ -261,16 +264,18 @@ export class NotificationComponent implements OnInit {
   }
 
   getStation(){
-    this.http.get('http://192.168.0.104.104:3000/api/getStationConfig').subscribe(
+    this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
         (response: any) => {
-            console.log( "Stations",response);
-            for (let index = 0; index < response.length; index++) {
-                this.stations = response
+            console.log("Stations loaded:", response);
+            this.stations = response;
+            if (this.displayEditDialog) {
+              this.updateSelectedStations();
             }
-          },
-          (error: any) => {
-              console.log(error);
-          }
+        },
+        (error: any) => {
+            console.error('Error fetching stations:', error);
+            this.stations = [];
+        }
     )
   }
 
@@ -291,7 +296,7 @@ export class NotificationComponent implements OnInit {
           const currentUser = JSON.parse(currentUserStr);
           this.loggingService.addLog(
             currentUser.username,
-            `Notification status update`, 
+            `Notification status has been updated`, 
             currentUser.id,
             'N004',
             'notification.component.ts/toggleNotificationStatus'
@@ -314,10 +319,13 @@ export class NotificationComponent implements OnInit {
   }
 
   onStationChange(event: any) {
-    if (event.value && event.value.length > 0) {
+    console.log('Station change event:', event);
+    if (event && event.value) {
       const selectedStations = this.stations.filter(station => event.value.includes(station.station_id));
       this.newNotification.station_id = event.value;
       this.newNotification.station_name = selectedStations.map(station => station.station_name);
+      console.log('Selected stations:', selectedStations);
+      console.log('Updated newNotification:', this.newNotification);
     } else {
       this.newNotification.station_id = [];
       this.newNotification.station_name = [];
@@ -325,10 +333,54 @@ export class NotificationComponent implements OnInit {
   }
 
   showEditDialog(notification: Notification) {
+    // First ensure stations are loaded
+    if (this.stations.length === 0) {
+      this.getStation();
+    }
+
     this.selectedNotification = { ...notification };
     this.newNotification = { ...notification };
+    
+    // Ensure station_id and station_name are arrays
+    if (!Array.isArray(this.newNotification.station_id)) {
+      this.newNotification.station_id = [this.newNotification.station_id as unknown as string];
+    }
+    if (!Array.isArray(this.newNotification.station_name)) {
+      this.newNotification.station_name = [this.newNotification.station_name as unknown as string];
+    }
+
+    // Wait for stations to be loaded if needed
+    if (this.stations.length === 0) {
+      const checkStations = setInterval(() => {
+        if (this.stations.length > 0) {
+          clearInterval(checkStations);
+          this.updateSelectedStations();
+        }
+      }, 100);
+    } else {
+      this.updateSelectedStations();
+    }
+
+    console.log('Edit dialog - newNotification:', this.newNotification);
     this.displayEditDialog = true;
     this.clearMessages();
+  }
+
+  private updateSelectedStations() {
+    // Find the selected station objects from the stations array
+    const selectedStations = this.stations.filter(station => 
+      this.newNotification.station_id?.includes(station.station_id)
+    );
+    
+    console.log('Available stations:', this.stations);
+    console.log('Current station_id:', this.newNotification.station_id);
+    console.log('Selected stations:', selectedStations);
+
+    // Update the newNotification with the selected stations
+    if (selectedStations.length > 0) {
+      this.newNotification.station_id = selectedStations.map(station => station.station_id);
+      this.newNotification.station_name = selectedStations.map(station => station.station_name);
+    }
   }
 
   hideEditDialog() {
@@ -370,7 +422,7 @@ export class NotificationComponent implements OnInit {
           const currentUser = JSON.parse(currentUserStr);
           this.loggingService.addLog(
             currentUser.username,
-            `Notification data update`, 
+            `Notification data has been updated`, 
             currentUser.id,
             'N002',
             'notification.component.ts/updateNotification'
@@ -385,5 +437,19 @@ export class NotificationComponent implements OnInit {
         console.error('Error updating notification:', error);
       }
     });
+  }
+
+  hasNotificationPermission(permission: string): boolean {
+    const permissionsStr = localStorage.getItem('permissions');
+    if (!permissionsStr) return false;
+    
+    try {
+      const permissions = JSON.parse(permissionsStr);
+      const notificationPermissions = permissions['Notification'];
+      return notificationPermissions && notificationPermissions.includes(permission);
+    } catch (e) {
+      console.error('Error parsing permissions', e);
+      return false;
+    }
   }
 }

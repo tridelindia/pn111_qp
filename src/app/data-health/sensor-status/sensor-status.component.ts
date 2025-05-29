@@ -31,6 +31,7 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
   selectedStation: string = '';
+  station_Id: string = '';
   
   constructor(
     private http: HttpClient,
@@ -39,14 +40,15 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
   ) {
     this.stationSubscription = this.data.stationId$.subscribe(stationId => {
       if (stationId) {
+        this.station_Id = stationId;
         this.fetchLastSensorData(stationId);
       }
     });
   }
 
   ngOnInit() {
-    const station_Id =this.layout.selectedStationId;
-    this.onStationSelected(station_Id);
+    this.station_Id = this.layout.selectedStationId;
+    this.onStationSelected(this.station_Id);
   }
 
   ngOnDestroy() {
@@ -128,22 +130,17 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
       lastReceived: string;
     };
 
-    const formatDateTime = (date: Date): string => {
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const monthName = months[date.getMonth()];
-      const day = date.getDate();
+    const formatDateTime = (value: Date): string => {
+      if (!value) return '';
+      const date = new Date(value);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const year = date.getFullYear();
-    
-      let hours = date.getHours();
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-    
-      return `${monthName} ${day}, ${year}, ${hours}:${minutes} ${ampm}`;
-    };
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const seconds = date.getSeconds().toString().padStart(2, '0');
+      return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
     
     const categoryStatuses: Record<CategoryType, CategoryStatus> = {
       oceanography: { 
@@ -173,23 +170,20 @@ export class SensorStatusComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Convert to array format
-    this.sensorStatuses = Object.entries(categoryStatuses).map(([category, status]) => ({
+    // Convert to array format (after conditionally removing 'meteorology')
+    const filteredCategories = Object.entries(categoryStatuses)
+      .filter(([category]) => {
+        if (this.station_Id === 'ST001' || this.station_Id === 'ST002') {
+          return category !== 'meteorology';
+        }
+        return true;
+      });
+
+    this.sensorStatuses = filteredCategories.map(([category, status]) => ({
       name: category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
       lastReceived: status.lastReceived,
       isActive: status.isActive
     }));
-  }
-
-  private formatRawParameterName(key: string): string {
-    const parts = key.split('.');
-    if (parts.length < 3) return key;
-
-    const category = parts[0].replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    const type = parts[1].replace(/\b\w/g, l => l.toUpperCase());
-    const id = parts[2];
-
-    return `${category} ${type} ${id}`;
   }
 
   get filteredStatuses(): SensorStatus[] {

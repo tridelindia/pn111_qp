@@ -3,6 +3,7 @@ import { DateRange, ChartData } from '../../models/dashboard.models';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ChartModule } from 'primeng/chart';
+import { LayoutComponent } from '../../layout/layout.component';
 
 @Component({
   selector: 'app-main-chart-section',
@@ -25,12 +26,21 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
 
   private chartInstance: any;
   private isInitialized = false;
+  station_Id: string;
 
   waveChartOptions: any = {
     tooltip: { 
       trigger: 'axis',
       formatter: function(params: any) {
-        let result = params[0].axisValue + '<br/>';
+        if (!params || !params[0]) return '';
+        const date = new Date(params[0].axisValue);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        let result = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}<br/>`;
         params.forEach((param: any) => {
           result += `${param.seriesName}: ${Math.round(param.value)}%<br/>`;
         });
@@ -42,14 +52,14 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
       orient: 'horizontal',
       top: 'middle'
     },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    grid: { left: '4%', right: '2%', bottom: '1%', containLabel: true },
     xAxis: {
       type: 'category',
       boundaryGap: false,
       data: [],
-      name: 'Date & Time',
+      // name: 'Date & Time',
       nameLocation: 'middle',
-      nameGap: 35,
+      nameGap: 30,
       nameTextStyle: {
         color: '#6b7280',
         fontSize: 12,
@@ -57,9 +67,17 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
       },
       axisLabel: { 
         color: '#6b7280', 
-        rotate: 30,
+        // rotate: 30,
         formatter: (value: string) => {
-          return value.length > 10 ? value.substring(0, 10) + '...' : value;
+          if (!value) return '';
+          const date = new Date(value);
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = (date.getMonth() + 1).toString().padStart(2, '0');
+          const year = date.getFullYear();
+          const hours = date.getHours().toString().padStart(2, '0');
+          const minutes = date.getMinutes().toString().padStart(2, '0');
+          const seconds = date.getSeconds().toString().padStart(2, '0');
+          return `${day}-${month}-${year} \n${hours}:${minutes}:${seconds}`;
         }
       }
     },
@@ -154,11 +172,12 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
 
   private initChartOptions(): void {
     const series = [];
+    const shouldShowMeteorology = this.station_Id !== 'ST001' && this.station_Id !== 'ST002';
     
     if (!this.currentSensor) {
       series.push(
         this.createSeries('Oceanography', '#3B82F6', this.chartData?.oceanography || []),
-        this.createSeries('Meteorology', '#10B981', this.chartData?.meteorology || []),
+        ...(shouldShowMeteorology ? [this.createSeries('Meteorology', '#10B981', this.chartData?.meteorology || [])] : []),
         this.createSeries('Water Quality', '#F59E0B', this.chartData?.waterQuality || [])
       );
     } else {
@@ -167,7 +186,9 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
           series.push(this.createSeries('Oceanography', '#3B82F6', this.chartData?.oceanography || []));
           break;
         case 'meteorology':
-          series.push(this.createSeries('Meteorology', '#10B981', this.chartData?.meteorology || []));
+          if (shouldShowMeteorology) {
+            series.push(this.createSeries('Meteorology', '#10B981', this.chartData?.meteorology || []));
+          }
           break;
         case 'water_quality':
           series.push(this.createSeries('Water Quality', '#F59E0B', this.chartData?.waterQuality || []));
@@ -222,8 +243,11 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
   chartHealthData: any;
   chartHealthOptions: any;
 
-  constructor() {
+  constructor(
+    private layout:LayoutComponent
+  ) {
     this.initChartOptions();
+    this.station_Id = this.layout.selectedStationId;
   }
 
   initChart() {
@@ -319,24 +343,26 @@ export class MainChartSectionComponent implements OnChanges, OnDestroy  {
     const meteorologyScore = (tabScores.wind + tabScores.atmospheric) / 2;
     const waterQualityScore = (tabScores.chemical + tabScores.physical + tabScores.biological) / 3;
 
+    const shouldShowMeteorology = this.station_Id !== 'ST001' && this.station_Id !== 'ST002';
+    
+    const labels = ['Oceanography', ...(shouldShowMeteorology ? ['Meteorology'] : []), 'Water Quality'];
+    const data = [
+      Math.round(oceanographyScore || 0),
+      ...(shouldShowMeteorology ? [Math.round(meteorologyScore || 0)] : []),
+      Math.round(waterQualityScore || 0)
+    ];
+    const colors = [
+      '#3B82F6',
+      ...(shouldShowMeteorology ? ['#10B981'] : []),
+      '#F59E0B'
+    ];
+
     this.chartHealthData = {
-      labels: ['Oceanography', 'Meteorology', 'Water Quality'],
+      labels: labels,
       datasets: [{
-        data: [
-          Math.round(oceanographyScore || 0),
-          Math.round(meteorologyScore || 0),
-          Math.round(waterQualityScore || 0)
-        ],
-        backgroundColor: [
-          '#3B82F6',
-          '#10B981',
-          '#F59E0B'
-        ],
-        borderColor: [
-          '#3B82F6',
-          '#10B981',
-          '#F59E0B'
-        ],
+        data: data,
+        backgroundColor: colors,
+        borderColor: colors,
         borderWidth: 2,
         label: 'Data Health'
       }]

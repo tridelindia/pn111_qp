@@ -15,7 +15,7 @@
       <div class="header">
         <div class="title-section">
           <h1>Activity Log</h1>
-          <p class="subtitle">Track and monitor user activities</p>
+          <p class="subtitle">Track and Monitor User Activities</p>
         </div>
         <div class="controls">
           <!-- <p-button icon="pi pi-refresh" (onClick)="loadLogs()" 
@@ -53,9 +53,9 @@
                 <th class="col-number">#</th>
                 <th class="col-timestamp" style="text-align: center;">Date</th>
                 <th class="col-timestamp" style="text-align: center;">Time</th>
-                <th class="col-user" style="text-align: center;">User</th>
-                <th class="col-activity" style="text-align: center;">Activity</th>
-                <th class="col-status" style="text-align: center;">Code</th>
+                <th class="col-user">User</th>
+                <th class="col-activity">Activity</th>
+                <th class="col-status">Code</th>
               </tr>
             </thead>
             <tbody>
@@ -71,15 +71,15 @@
                   <i class="pi pi-clock"></i>
                   <span> {{ formatTime(log.timestamp) }}</span>
                 </td>
-                <td class="col-user" style="text-align: center;">
+                <td class="col-user">
                   <i class="pi pi-user"></i>
                   <span> {{ log.userName }} - {{ log.userId }}</span>
                 </td>
-                <td class="col-activity"  style="text-align: center;">
+                <td class="col-activity">
                   <i class="pi pi-file"></i>
                   <span> {{ log.message }}</span>
                 </td>
-                <td class="col-status"  style="text-align: center;">
+                <td class="col-status">
                   <span *ngIf="log.statusCode">
                     <strong>{{ log.statusCode }}</strong> - {{ getStatusDefinition(log.statusCode) }}
                   </span>

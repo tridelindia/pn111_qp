@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as echarts from 'echarts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import { ScatterAxis } from '../home.component';
+import { GlobalDataService } from '../../../global-data/global-data.component';
 @Component({
   selector: 'app-scatter-axis',
   imports: [NgxEchartsModule],
@@ -19,7 +20,14 @@ export class ScatterAxisComponent implements OnInit{
   @Input() scatterAxis:ScatterAxis[] = []
 
   axisData:[number, number][] = []
-ngOnInit(): void {
+  unitx:string='';
+  unitY:string='';
+constructor(private data:GlobalDataService){}
+  ngOnInit(): void {
+    const u = this.data.SensorConfigs.filter(item=> item.param_name === this.scatterAxis[0].name1);
+    this.unitx = u[0].unit
+    const u1 = this.data.SensorConfigs.filter(item=> item.param_name === this.scatterAxis[0].name2);
+    this.unitY = u1[0].unit
     for (let index = 0; index < this.scatterAxis.length; index++) {
         this.axisData.push([
           parseFloat(this.scatterAxis[index].value1),
@@ -44,14 +52,20 @@ ngOnInit(): void {
         }
       },
       xAxis: {
-        name:this.scatterAxis[0].name1,
+        name:`${this.scatterAxis[0].name1} (${this.unitx})`,
         nameLocation:'middle',
-        nameGap:30
+        nameGap:40,
+         axisLabel:{
+          fontWeight:'bold'
+        }
       },
       yAxis: {
-        name:this.scatterAxis[0].name2,
+        name:`${this.scatterAxis[0].name2} (${this.unitY})`,
         nameLocation:'middle',
-        nameGap:30
+        nameGap:30,
+         axisLabel:{
+          fontWeight:'bold'
+        }
       },
       legend: {
         data: [legendName], // This name must match `series.name`

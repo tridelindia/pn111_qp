@@ -2,7 +2,7 @@
     margin: 0px;
     height: 100vh;
     width: 3%;
-    margin-top: 50px;
+    /* margin-top: 50px; */
     /* background-color: var(--basebg); */
     /* background: rgb(10,97,184); */
     background: var(--background-color);
@@ -42,9 +42,9 @@
     flex-direction: column;
     font-size: 15px;
     cursor: pointer;
-    color: white;
+    color: var(--font-color);
 }
 .navigators i.selected {
     background-color: rgba(155, 155, 155, 0.5); /* Background color for selected option */
-    color: rgb(255, 255, 255); /* Change text color for visibility */
+    color: var(--font-color); /* Change text color for visibility */
   }

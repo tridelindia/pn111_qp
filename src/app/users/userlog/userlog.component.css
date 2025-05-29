@@ -194,6 +194,8 @@
     border-radius: 0.75rem;
     padding: 1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
   }
   
   .calendar-container {
@@ -217,16 +219,19 @@
   }
 
   .update-btn-container{
+    margin-top: 20rem;
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 1rem 0;
-        margin-top: 100%;
-
   }
 
   .update-btn-container ::ng-deep .p-button{
     background: var(--highlight-color);
     border-color: var(--highlight-color);
+    color: var(--font-color);
+  }
+
+  .update-btn-container ::ng-deep .p-button:hover{
+    background: var(--highlight-color);
+    border-color: var(--secondary-color);
     color: var(--font-color);
   }

@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as echarts from 'echarts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 
+interface Station{
+  stationId: string; name: string;
+}
 @Component({
   selector: 'app-test-chart',
   standalone: true,
@@ -20,6 +23,8 @@ export class TestChartComponent implements OnInit {
   @Input() plotType: string = 'line';
   @Input() length!: number;
   @Input() title!: string;
+  @Input() stations:Station[]=[]
+  @Input() selectedStation!:string[];
   @Input() params!: {
     param_name: string;
     values: { [key: string]: string[] };
@@ -31,13 +36,18 @@ export class TestChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateSeries();
+    console.log(this.selectedStation);
   }
-
+names:string[]=[];
   generateSeries(): void {
+  this.names = this.selectedStation.map(id => {
+  const match = this.stations.find(station => station.stationId === id);
+  return match ? match.name : '';
+});
     this.series = [];
     const keys = Object.keys(this.params.values); // e.g., ['v1', 'v2']
     
-    const legendNames = keys.map((k, i) => `Station ${i + 1}`);
+    const legendNames = this.names;
 
     keys.forEach((key, index) => {
       const color = this.getColor(index);

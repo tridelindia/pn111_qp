@@ -24,7 +24,7 @@ export interface DailySunshine {
     styleUrl: './data-score.component.css'
 })
 export class DataScoreComponent {
-  isChecked:boolean = true;
+  isChecked:boolean = false;
 last7Days: { day: string, date: string, value: number, percentage: number }[] = [];
   overallScore:number = 0;
   @Input() stationId!:string;

@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LayoutComponent } from '../../layout/layout.component';
 
 type StatusType = 'satisfactory' | 'marginal' | 'unsatisfactory';
 
@@ -26,7 +27,7 @@ export class SensorStatsComponent implements OnChanges {
   @Input() activeSensor: string = 'sensor1';
   @Input() selectedTabs: string[] = [];
   @Input() apiData: any = null;
-
+  station_Id: string;
   searchTerm: string = '';
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
@@ -37,6 +38,12 @@ export class SensorStatsComponent implements OnChanges {
     if (changes['apiData'] && this.apiData) {
       this.updateStatsFromApiData();
     }
+  }
+
+  constructor(
+    private layout:LayoutComponent
+  ) { 
+    this.station_Id = this.layout.selectedStationId;
   }
 
   private updateStatsFromApiData(): void {
@@ -91,8 +98,16 @@ export class SensorStatsComponent implements OnChanges {
       this.stats = [];
       return;
     }
+
+    const shouldHideMeteorology = this.station_Id === 'ST001' || this.station_Id === 'ST002';
+
     this.stats = Object.entries(latestData.dataPresent)
-      .filter(([key]) => parameterMapping[key])
+      .filter(([key]) => {
+        if (shouldHideMeteorology && (key.startsWith('meteorology.wind.') || key.startsWith('meteorology.atmospheric.'))) {
+          return false;
+        }
+        return parameterMapping[key];
+      })
       .map(([key, value]) => {
         const mapping = parameterMapping[key];
         const average = this.calculateAverage(key);

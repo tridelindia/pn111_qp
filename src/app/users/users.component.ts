@@ -135,7 +135,7 @@ export class UsersComponent{
  
   loadUsers() {
     this.userService.getUsers().subscribe(users => {
-      this.users = users;
+      this.users = users.filter((users) => users.username !== 'tridelrecover');
     });
   }
  
@@ -507,7 +507,7 @@ generateTooltip(page: string, actions: string[]): string {
 deleteRole(roleName: string) {
  
   if (roleName === "Admin"){
-    alert("Role Admin cannot be deleted");
+    this.toast.info("Role Admin cannot be deleted");
     return;
   }
  
@@ -586,8 +586,13 @@ addDesignation() {
  
 // Delete designation from DB
 deleteDesignation(designation: any) {
+
+    if (designation.title === "Admin"){
+    this.toast.info("Designation Admin cannot be deleted");
+    return;
+  }
  
-  const confirmDesDelete = confirm(`Are you sure you want to deleteis designation ?`);
+  const confirmDesDelete = confirm(`Are you sure you want to delete this designation ?`);
   if (confirmDesDelete) {
   this.designationService.deleteDesignation(designation.id).subscribe(
     () => {

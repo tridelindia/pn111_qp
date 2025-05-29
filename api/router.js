@@ -9,7 +9,10 @@ const { getStationConfig, getAllSensorData, getAllSensorDatabyStation,getSensorD
     updateNotificationStatus,
     saveLogs,
     updateRole,
-    resetPassword
+    resetPassword,
+    UpdateHomeConfig,
+    updateBins,
+    getBins
  } = require('./controller')
  const { addLogs, getLogs } = require('./logger');
 const router = express.Router();
@@ -26,6 +29,9 @@ router.post('/editStation', editStation);
 router.post('/savesensorconfig', insertSensorConfigs);
 router.get('/getSensorConfig', getSensorConfig);
 router.post('/updateSensor', updateSensorConfig);
+router.put('/updateHomeconfig', UpdateHomeConfig);
+router.post('/updatebinss', updateBins);
+router.get('/getBin', getBins);
 
 
 // userManagement

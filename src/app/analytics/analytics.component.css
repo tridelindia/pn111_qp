@@ -359,6 +359,16 @@ label{
     flex-direction: row;
     justify-content:space-between;
     align-items: center;
+    position: relative;
+}
+.ramp{
+    position: absolute;
+    top: 2px;
+    left: 10px;
+    z-index: 1;
+    font-size: 20;
+    font-weight:'600';
+    color:#464646;
 }
 .three{
 

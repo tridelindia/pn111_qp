@@ -174,9 +174,16 @@ changeimage(){
     this.db_img = this.listImage[1];
   }, 1000);
 }
+Bins :any[]=[];
 fromDate!:string;
 toDate!:string;
     ngOnInit(): void {
+      this.http.get('http://localhost:3000/api/getBin').subscribe(
+        (response:any)=>{
+          console.log("binsss", response)
+         this.Bins = response
+        }
+      )
           const startDate = new Date();
     startDate.setHours(0, 0, 0, 0);
 

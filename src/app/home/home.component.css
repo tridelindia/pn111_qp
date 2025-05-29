@@ -419,19 +419,34 @@ input {
 }
 
 .text-success {
-  background-color: #d4edda;
+  background: rgba(255, 255, 255, 0.021);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.171);
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   /* color: #155724; */
   color: black;
 }
 
 .text-warning {
-  background-color: #fff3cd;
+  background: rgba(255, 255, 255, 0.021);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.171);
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   /* color: #856404; */
   color: black;
 }
 
 .text-danger {
-  background-color: #f8d7da;
+  background: rgba(255, 255, 255, 0.021);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.171);
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   /* color: #721c24; */
   color: black;
 }

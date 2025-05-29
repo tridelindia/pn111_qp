@@ -1022,7 +1022,7 @@ backdrop-filter: blur(8px);
 }
 
 .water_items_main {
-  background-color: white;
+  background-color: var(--basebg);
   /* background: #eef4fb; */
   /* background: linear-gradient(to right, #7dd4ef, #b0e5f5); */
   border-radius: 10px;
@@ -1370,6 +1370,23 @@ border-radius: 10px;
   align-items: center;
   justify-content: space-evenly;
 
+}
+
+.water_items_main {
+  background-color: var(--basebg);
+  /* background: #eef4fb; */
+  /* background: linear-gradient(to right, #7dd4ef, #b0e5f5); */
+  border-radius: 10px;
+  /* box-shadow: 2px 2px 3px  rgb(192, 191, 191) solid; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 10px; */
+  height: 31%;
+  margin-bottom: 4px;
+  margin-right: 4px;
+  /* min-height: 120px; Adjust height as needed */
 }
 .wat_item1 h3{
       margin: 0;

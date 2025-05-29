@@ -3,6 +3,8 @@ import { MapService } from './map.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { LoggingService } from '../../users/service/users/logging.service';
+
 interface BuoyDetails{
   buoy_id: string;
   buoy_name: string;
@@ -51,7 +53,8 @@ interface AddBuoyDetails{
     standalone:true,
     imports: [CommonModule, HttpClientModule, FormsModule],
     templateUrl: './station.component.html',
-    styleUrl: './station.component.css'
+    styleUrl: './station.component.css',
+    providers: [LoggingService]
 })
 export class StationComponent implements OnInit{
   section?:number = 2;
@@ -280,7 +283,8 @@ export class StationComponent implements OnInit{
 
   constructor(
     private http: HttpClient,
-    private map:MapService
+    private map:MapService,
+    private loggingService: LoggingService
   ){}
   ngOnInit(): void {
     this.getStation();
@@ -385,7 +389,21 @@ export class StationComponent implements OnInit{
   this.http.post('http://localhost:3000/api/addStation', this.addStationData).subscribe(
     (response) => {
       console.log(response);  
-      this.getStation()
+      this.getStation();
+      const currentUserStr = localStorage.getItem('currentUser');
+        if (currentUserStr) {
+          const currentUser = JSON.parse(currentUserStr);
+          this.loggingService.addLog(
+            currentUser.username,
+            `New station has been added`, 
+            currentUser.id,
+            'S001',
+            'station.component.ts/createStation'
+          ).subscribe({
+            next: () => console.log('Activity logged successfully'),
+            error: (err) => console.error('Failed to log activity', err)
+          });
+        }
       },
       (error) => {
         console.error(error);
@@ -430,7 +448,21 @@ console.log("update data", updatingStation);
 this.http.post('http://localhost:3000/api/editStation', updatingStation).subscribe(
   (response) => {
     console.log(response);
-    this.getStation()
+    this.getStation();
+    const currentUserStr = localStorage.getItem('currentUser');
+      if (currentUserStr) {
+        const currentUser = JSON.parse(currentUserStr);
+        this.loggingService.addLog(
+          currentUser.username,
+          `Station has been updated`, 
+          currentUser.id,
+          'S002',
+          'station.component.ts/updateStation'
+        ).subscribe({
+          next: () => console.log('Activity logged successfully'),
+          error: (err) => console.error('Failed to log activity', err)
+        });
+      }
     },
     (error) => {
       console.error(error);

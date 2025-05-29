@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as echarts from 'echarts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import { MultiAxis } from '../home.component';
+import { GlobalDataService } from '../../../global-data/global-data.component';
 @Component({
   selector: 'app-multi-axis',
   imports: [NgxEchartsModule],
@@ -22,8 +23,15 @@ export class MultiAxisComponent implements OnInit{
 
 xAxisData:number[] = [];
 yAxisData: number[] = [];
-Dates:string[] = []
+Dates:string[] = [];
+unitx:string='';
+unitY:string='';
+constructor(private data:GlobalDataService){}
   ngOnInit(): void {
+    const u = this.data.SensorConfigs.filter(item=> item.param_name === this.MultiAxis[0].name1);
+    this.unitx = u[0].unit
+    const u1 = this.data.SensorConfigs.filter(item=> item.param_name === this.MultiAxis[0].name2);
+    this.unitY = u1[0].unit
       // for (let index = 0; index < this.MultiAxis.length; index++) {
       //   const date = new Date(this.MultiAxis[index].timestamps).getTime();
       //   this.xAxisData.push(parseFloat(this.MultiAxis[index].value1))
@@ -63,8 +71,11 @@ Dates:string[] = []
         type: 'time',
         name:'DateTime',
         data: this.Dates,
-        nameGap:30,
-        nameLocation:'middle'
+        nameGap:40,
+        nameLocation:'middle',
+        axisLabel:{
+          fontWeight:'bold'
+        }
       },
       legend: {
         data: [`${this.MultiAxis[0].name1} Data`, `${this.MultiAxis[0].name2} Data`], // This name must match `series.name`
@@ -74,10 +85,14 @@ Dates:string[] = []
       yAxis: [
         {
           type: 'value',
-          name: this.MultiAxis[0].name2,
+          name: `${this.MultiAxis[0].name2} (${this.unitY})`,
           nameLocation:'middle',
           nameGap: 40,
           position: 'left',
+          axisLabel:{
+
+          fontWeight:'bold'
+        },
           axisLine: {
             show: true
           },
@@ -90,10 +105,14 @@ Dates:string[] = []
         },
         {
           type: 'value',
-          name: this.MultiAxis[0].name1,
+          name: `${this.MultiAxis[0].name1} (${this.unitx})`,
           nameLocation:'middle',
           nameGap: 40,
           position: 'right',
+          axisLabel:{
+
+          fontWeight:'bold'
+        },
           axisLine: {
             show: true
           },
