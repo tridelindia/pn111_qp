@@ -8,7 +8,7 @@ import { Role } from '../../models/role.model';
 })
 export class RoleService {
  
-  private baseUrl = 'http://192.168.0.147:3000/api/roles';
+  private baseUrl = 'http://localhost:3000/api/roles';
  
   constructor(private http: HttpClient) { }
  

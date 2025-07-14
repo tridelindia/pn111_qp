@@ -66,6 +66,7 @@ p{
  
     [data-theme='bronze'] {
       --background-color: #CE8946;  /* Your warm bronze-peach (unchanged) */
+      --menu-color:#CE8946;
       --secondary-color: #dca58f;   /* Rich terracotta (earthier than rusty copper) */
       --highlight-color: #D4A017;   /* Muted gold (softer than #E6B800 for better UI) */
       --font-color: #FFFFFF;        /* Near-black (better contrast for body text) */
@@ -74,6 +75,7 @@ p{
  
     [data-theme='gold'] {
       --background-color: #FFE566;  /* Dark slate */
+      --menu-color:#FFE566;
       --secondary-color: #FFFAE5;   /* Slightly lighter dark gray */
       --highlight-color: #fbe36d;   /* Example: Deep orange for better contrast */
       --font-color: #333333;        /* Example: Dark text for readability */
@@ -82,6 +84,7 @@ p{
  
     [data-theme='blue'] {
       --background-color: #007BFF;  /* Bootstrap blue */
+      --menu-color:#007BFF;
       --secondary-color: #a2ccfa;   /* Darker blue */
       --highlight-color: #4a85e2;   /* Yellow (vibrant contrast) */
       --font-color: #FFFFFF;        /* White text */
@@ -90,6 +93,7 @@ p{
  
     [data-theme='green'] {
       --background-color: #28A745;  /* Bootstrap green */
+      --menu-color:#28A745;
       --secondary-color: #c2f3cd;   /* Darker green */
       --highlight-color: #50ab65;   /* Gold (accent) */
       --font-color: #FFFFFF;        /* White text */
@@ -98,6 +102,7 @@ p{
  
     [data-theme='purple'] {
       --background-color: #6F42C1;  /* Bootstrap purple */
+      --menu-color:#6F42C1;
       --secondary-color: #aa88de;  /* Deep purple */
       --highlight-color: hsl(266, 84%, 75%);   /* Orange (warm contrast) */
       --font-color: #FFFFFF;        /* White text */
@@ -106,6 +111,7 @@ p{
  
     [data-theme='orange'] {
       --background-color: linear-gradient(135deg, #FF7E5F, #FEB47B);  /* Sunset */
+      --menu-color:#FEB47B;
       --secondary-color: #fcc2b3;   /* Burnt orange */
       --highlight-color: #FEB47B;
       --font-color: #2E2E2E;        /* Dark text (readable on gradient) */
@@ -114,6 +120,7 @@ p{
  
     [data-theme='pink'] {
       --background-color: #FF9BD2;  /* Soft bright pink */
+      --menu-color:#FF9BD2;
       --secondary-color: #FFD6EC;   /* Light pink for contrast */
       --highlight-color: #edb8d4;   /* Deep purple for bold contrast */
       --font-color: #000000;        /* Dark charcoal for readability */
@@ -122,6 +129,7 @@ p{
  
     [data-theme='rosegold'] {
       --background-color: linear-gradient(135deg, #E0BFB8, #E6C9C2, #F3E0DC);  /* Blush */
+      --menu-color:#E8CDC5;
       --secondary-color: #d6b3b3af;   /* Muted rose */
       --highlight-color: #9C6B8E;   /* Dusty purple (subtle accent) */
       --font-color: #000000;        /* Dark brown (readable on light) */
@@ -130,6 +138,7 @@ p{
  
     [data-theme='lightBlue'] {
       --background-color: linear-gradient(90deg, #6fb4f9, #71b4f8);  /* Soft sky blue */
+      --menu-color:#70b4f9;
       --secondary-color: #c7dffb;   /* Deeper blue */
       --highlight-color: #5cacf6;   /* Coral (vibrant accent) */
       --font-color: #2E2E2E;        /* Dark text */

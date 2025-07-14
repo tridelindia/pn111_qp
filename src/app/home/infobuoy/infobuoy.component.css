@@ -130,9 +130,9 @@
     width: 100%;
     top: 88%;
     left: 0;
-    transform: rotate(-58deg);
+    transform: rotate(-58deg); 
 }
- 
+
 /* Common style for sections */
 .section {
     position: absolute;
@@ -199,18 +199,18 @@
     position: absolute;
     bottom: 10px;
     left: 60px;
-    top: 20px;
+    top: 15px;
 }
  
 .bottom-2 {
-    top: 71%;
+    top: 73%;
     left: 15%;
     transform: rotate(22deg);
 }
  
 .bottom-2 .value {
     position: absolute;
-    bottom: -15px;
+    bottom: -10px;
     /* left: 120px; */
 }
  
@@ -317,8 +317,28 @@
     /* margin-left: 5px; */
 }
  
- 
- 
+  .white-text {
+
+color: white !important;
+}
+.white_line{
+    border: 2px solid white
+}
+ .small_white{
+        border: 2px solid white;
+ }
+ .small{
+    color: white;
+ }
+.stationname.white_line::before,
+.stationname.white_line::after {
+    background-color: white; /* or your desired color */
+}
+
+.stationname.white_line .lines::before,
+.stationname.white_line .lines::after {
+    background-color: white; /* or your desired color */
+}
 /* .buoy-marker-image {
     display: flex;
     justify-content: center;

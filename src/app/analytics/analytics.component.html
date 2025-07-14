@@ -180,7 +180,7 @@
                     [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView">
                 </p-multiselect>
                 <select name="Stations" id="" [(ngModel)]="singleStation" *ngIf="isSingleView"
-                    (change)="singleStationchange()">
+                    (onChange)="singleStationchange()">
                     <option value="" *ngFor="let station of stations" [value]="station.name">{{station.name}}</option>
                 </select>
             </div>
@@ -201,7 +201,7 @@
 
 
 
-            <div class="sensors">
+            <!-- <div class="sensors">
                 <p>Select Sensor Group</p>
                 <div class="split_sensors">
 
@@ -238,7 +238,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> -->
 
 
 
@@ -291,7 +291,46 @@
                 </select>
             </div>
             <button class="Submit_button" (click)="isSingleView?fetchSensors(): isSubmitButton()">Submit</button>
+                        <div class="sensors">
+                <p>Select Sensor Group</p>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('oceanography')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'oceanography'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Oceanography</p>
+                    </div>
+                    <div *ngIf="isMeteriology" class="sensor_item" (click)="onSelectSensor('meteriology')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'meteriology'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Meteorology</p>
+                    </div>
+                </div>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('waterQuality')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'waterQuality'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Water Quality</p>
+                    </div>
+                    <div class="sensor_item" (click)="onSelectSensor('microFlu')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'microFlu'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Oil in Water</p>
+                    </div>
+                </div>
+
+            </div>
         </div>
+        
         <div class="param_lists" *ngIf="isSelectParams">
             <i class="fa fa-arrow-left" (click)="onParamSelection('back')"></i>
             <h3>Select parameters</h3>

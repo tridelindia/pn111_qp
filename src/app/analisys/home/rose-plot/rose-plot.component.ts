@@ -12,21 +12,21 @@ PlotlyModule.plotlyjs = PlotlyJS;
   templateUrl: './rose-plot.component.html',
   styleUrl: './rose-plot.component.css'
 })
+
 export class RosePlotComponent implements OnInit{
   @Input() polarAxis:PolarAxis[] = []
   public graph:any;
   @Input() id!:string;
-title!:string;
+  title!:string;
   V_WIND:number[] = [];
-  DIR_WIND:number[] = []
-  ngOnInit(): void {
+  DIR_WIND:number[] = [];
 
+  ngOnInit(): void {
     console.log("inside polar",this.polarAxis)
       for (let index = 0; index < this.polarAxis.length; index++) {
         const speed = parseFloat(this.polarAxis[index].speed)
         this.V_WIND.push(speed)
         this.DIR_WIND.push(parseFloat(this.polarAxis[index].direction));
-        
       }
       this.title = this.polarAxis[0].name.includes('wave')?'Wave':this.polarAxis[0].name.includes('current') ?'Current':this.polarAxis[0].name.includes('wind')?'Wind':'Polar'
       this.setChart()
@@ -85,6 +85,4 @@ title!:string;
       }
     };
   }
-  
-  
 }

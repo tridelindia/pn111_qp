@@ -150,7 +150,7 @@ export class StationComponent implements OnInit{
 
 
   getStation(){
-    this.http.get('http://192.168.0.147:3000/api/getStationConfig').subscribe(
+    this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
       (response: any) => {
         console.log(response);
         
@@ -386,7 +386,7 @@ export class StationComponent implements OnInit{
 
     this.addStationData = newStation
   console.log("ID", this.buoy_id)
-  this.http.post('http://192.168.0.147:3000/api/addStation', this.addStationData).subscribe(
+  this.http.post('http://localhost:3000/api/addStation', this.addStationData).subscribe(
     (response) => {
       console.log(response);  
       this.getStation();
@@ -445,7 +445,7 @@ const updatingStation = {
 
 console.log("update data", updatingStation);
 
-this.http.post('http://192.168.0.147:3000/api/editStation', updatingStation).subscribe(
+this.http.post('http://localhost:3000/api/editStation', updatingStation).subscribe(
   (response) => {
     console.log(response);
     this.getStation();

@@ -1,21 +1,21 @@
-<div class="infobuoy-wrapper ">
+<div class="infobuoy-wrapper" [ngClass]="{ 'white_line': isWhiteTheme }">
     <!-- <button class="button" id="rotateButton">click</button> -->
-    <div class="smallCircle">
+    <div class="smallCircle" [ngClass]="{ 'small_white': isWhiteTheme }">
         <!-- <img src="../../assets/home/buoy.png" alt="Buoy Image" class="buoy-image"> -->
         <img [src]="markerImg" alt="Buoy Marker" class="buoy-image" />
-        <span class="value">{{buoyData.station_name}}</span>
+        <span class="value" [ngClass]="{ 'small': isWhiteTheme }">{{buoyData.station_name}}</span>
     </div>
 
-    <div class="main_station_name">
-        <div class="stationname">
+    <div class="main_station_name"[ngClass]="{ 'white_line': isWhiteTheme }">
+        <div class="stationname"[ngClass]="{ 'white_line': isWhiteTheme }">
             <div class="lines"></div>
 
             <div class="section" *ngFor="let param of params; let i = index" [ngClass]="getSectionClass(i)">
                 <div class="info-item">
                     <span class="value">
 
-                        <p style="white-space: pre-line"> {{ getLabelPrefix(param.name) }}</p>
-                        <div class="valueunit"> {{ param.value }}{{ getUnit(param.name) }}</div>
+                        <p [ngClass]="{ 'white-text': isWhiteTheme }"style="white-space: pre-line"> {{ getLabelPrefix(param.name) }}</p>
+                        <div  *ngIf="buoystatus !== 'false'" class="valueunit"[ngClass]="{ 'white-text': isWhiteTheme }"> {{ param.value }}{{ getUnit(param.name) }}</div>
 
 
                     </span>

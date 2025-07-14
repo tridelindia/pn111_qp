@@ -18,3 +18,65 @@
 {"timestamp":"2025-05-29T05:52:49.900Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-05-29T05:52:50.229Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-05-29T06:14:12.347Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-06-02T11:25:39.260Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T11:27:43.400Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T11:27:45.510Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T13:23:39.704Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-06-02T13:33:31.809Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T13:34:32.341Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T13:34:56.745Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T13:36:30.159Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T13:37:08.301Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T13:37:25.598Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-02T13:44:08.651Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-06-02T13:44:11.170Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-06-02T13:44:18.550Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-06-02T13:44:22.864Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-06-02T13:44:37.991Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-06-02T13:44:48.230Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-06-02T13:44:48.780Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-06-03T04:29:04.742Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-03T04:31:06.906Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-03T04:31:50.465Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-03T04:32:10.199Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-03T04:32:28.110Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-03T04:47:13.629Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-03T05:45:01.748Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-06-03T05:45:16.420Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-06-03T05:45:52.012Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-06-06T07:42:32.618Z","userName":"Admin","activity":"New station has been added","userId":1,"statusCode":"S001","filePath":"station.component.ts/createStation"}
+{"timestamp":"2025-06-06T07:46:17.352Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T07:46:29.416Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T07:46:29.756Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T07:46:29.951Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T07:46:30.280Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T07:46:43.715Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T07:59:07.729Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:23:30.729Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:23:31.416Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:24:01.896Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:24:37.732Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:24:38.286Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:24:40.306Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:24:46.048Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-06T09:25:02.532Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-09T08:12:51.533Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-06-09T08:13:31.556Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-06-09T08:16:37.988Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-06-09T08:16:39.142Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-06-09T08:16:48.679Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-06-09T10:05:56.847Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-06-09T10:06:54.699Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-06-09T10:06:55.589Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-06-09T10:06:57.021Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-06-09T10:07:00.135Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-06-09T10:08:28.710Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-06-09T10:09:24.792Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-06-09T10:10:02.533Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-06-13T11:14:46.830Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-13T11:14:48.979Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-13T11:15:46.073Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-13T11:15:47.477Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-06-13T11:15:53.041Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-07-14T04:38:29.929Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-07-14T04:41:37.293Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}

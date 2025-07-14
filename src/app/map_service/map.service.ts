@@ -15,6 +15,7 @@ import VectorLayer from 'ol/layer/Vector';
 })
 export class MapService {
   private map: Map | undefined;
+
   private vectorLayer: VectorLayer;  // Initialize this variable properly
   traveledPath: [number, number][] = [
     // fromLonLat([72.808716, 18.999682]) as [number, number],

@@ -25,6 +25,8 @@ import { SensorModel } from '../models/station.model';
   providers: [InfobuoyComponent, StationconfigService, ReportService],
 })
 export class HomeComponent implements OnInit {
+  selectedMap: string = ''; // Add this property
+  buoystatus='true';
   mapInitialized = false;
   map!: Map | undefined;
 
@@ -84,7 +86,9 @@ export class HomeComponent implements OnInit {
   private mapTarget = 'ol-map';
   mapUrl = 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
 
-  mapChange(name: String) {
+  mapChange(name: string) {
+    this.selectedMap = name;
+
     switch (name) {
       case 'OpenCycleMap':
         this.mapUrl = 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
@@ -134,7 +138,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.stationConfig.getHomeConfig().subscribe((homeConfig) => {
       this.fetchedparams2 = homeConfig;
-      console.log('Home Circle selected params : ', this.fetchedparams2);
+      console.log('Home Circle selected params : ', this.fetchedparams2, homeConfig);
     });
 
     // this.stationConfig.getSensorConfig().subscribe((sensorConfig) => {
@@ -307,6 +311,7 @@ export class HomeComponent implements OnInit {
           });
 
           console.log('Extend Buoy Data: ', this.buoys);
+          // this.buoystatus=this.buoys.status;
         }
       });
 
@@ -588,7 +593,11 @@ export class HomeComponent implements OnInit {
     driftType: string | undefined
   ): string {
     if (status !== 'active') {
+      this.buoystatus='false'
       return '../../assets/home/buoy_offline.png';
+    }else{
+      this.buoystatus='true'
+
     }
 
     if (driftType === 'danger') {

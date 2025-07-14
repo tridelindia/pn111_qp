@@ -234,6 +234,8 @@ select option{
 
 .list_of_station p{
   margin-left: 10px;
+  color: black;
+font-size: large;
 }
 .list_of_station{
   height: 40px;
@@ -254,7 +256,7 @@ select option{
   cursor: pointer;
 }
 .list_of_station_active{
-  background-color: rgb(167, 188, 244);
+  background-color: var(--menu-color);
 }
 .list_of_station:hover{
   box-shadow: 1px 2px 5px rgba(196, 195, 195, 0.516);

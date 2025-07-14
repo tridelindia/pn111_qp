@@ -295,7 +295,11 @@ input {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  /* color: white; */
+}
+.white-text {
 
+color: white;
 }
 
 .profile-img {

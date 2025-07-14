@@ -68,6 +68,7 @@ export class AnalyticsComponent implements OnInit{
   selectedSensor:string = 'oceanography';
   listparams:param[] = [];
   stations:Station[] = [];
+  ssstations:any[]=[]
   selectedStation!:string[];
   filteredparams:param[]=[];
   selectedParams:param[]=[];
@@ -128,7 +129,7 @@ pickerState:string = 'date';
     const selectedParam =  this.selectedMultiStationParam.toLowerCase(); // e.g., "wave_heading"
   
     const requests = this.selectedStation.map(stationId =>
-      this.reportService.getAllstationData(stationId, '2025-01-01T00:00:00.000Z', '2025-01-14T23:59:00.000Z')
+      this.reportService.getAllstationData(stationId, this.fromDate, this.toDate)
     );
   
     forkJoin(requests).subscribe(
@@ -245,6 +246,14 @@ setTimeout(() => {
   }
 
   isViewChange(value:string){
+      const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date();
+    endDate.setHours(23, 59, 0, 0);
+
+    this.fromDate = startDate.toISOString();
+    this.toDate = endDate.toISOString();
     // console.log("testing",this.isLoad, this.isPolar)
     if(value == 'single'){
       this.selectedMultiStationParam = this.filteredparams[0].param_name
@@ -410,7 +419,7 @@ this.isSelectParams = false;
 
 isMeteriology:boolean=true;
   ngOnInit(): void {
-    this.http.get('http://192.168.0.147:3000/api/getBin').subscribe(
+    this.http.get('http://localhost:3000/api/getBin').subscribe(
         (response:any)=>{
           console.log("binsss", response)
          this.Bins = response
@@ -430,9 +439,10 @@ isMeteriology:boolean=true;
     this.fromDate = startDate.toISOString();
     this.toDate = endDate.toISOString();
     
-     this.http.get('http://192.168.0.147:3000/api/getStationConfig').subscribe(
+     this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
             (response: any) => {
-                // console.log(response);
+              this.ssstations = response
+              console.log("stationsssss==============",this.ssstations);
                 for (let index = 0; index < response.length; index++) {
                     this.stations.push({
                       stationId: response[index].station_id,
@@ -487,7 +497,9 @@ isMeteriology:boolean=true;
 
 singleStationchange(){
   const selectedStationn = this.stations.filter(item=> item.name == this.singleStation);
-  console.log("changes station", selectedStationn);
+  const sstat = this.ssstations.filter(item=> item.name === this.singleStation)
+  this.isMeteriology = sstat[0].sensors.includes('meteorology');
+  console.log("changes station", selectedStationn, sstat);
   this.selectedStation.push(selectedStationn[0].stationId);
 
 }
@@ -511,7 +523,7 @@ singleStationchange(){
 //     .set('toDate',toDate)
 //     .set('station_id', id[0].stationId);
 //     console.log("params", params);
-//     this.http.get('http://192.168.0.147:3000/api/getSensorDataByDate', {params} ).subscribe(
+//     this.http.get('http://localhost:3000/api/getSensorDataByDate', {params} ).subscribe(
 //       (response: any) => {
 //         this.Buoy = response;
 //         //console.log("buoy",this.Buoy, this.filteredparams);
@@ -558,7 +570,7 @@ this.selectedMultix1 = '';
 this.selectedMultix2 = '';
 this.selectedMultiStationParam = '';
 
-    this.http.get('http://192.168.0.147:3000/api/getSensorConfig').subscribe(
+    this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
       (response:any) => {
         //console.log(response);
           this.listparams = response;
@@ -590,7 +602,7 @@ this.selectedMultiStationParam = '';
         
           //console.log("paramets:", this.parametres)
             
-            
+              
             // this.isTest();
             this.isLoad= true;
             setTimeout(() => {
@@ -814,6 +826,7 @@ this.selectedMultiStationParam = '';
 
 
   changewithBin(){
+    console.log(this.selectedBin);
     switch (this.selectedBin) {
       case 'profile1':
         this.selectedparam = this.selectedparam.includes('speed') ? 'current_speed_bin_1' : 'current_direction_bin_1';
@@ -855,6 +868,7 @@ this.selectedMultiStationParam = '';
       default:
         break;
     }
+    console.log("param",this.selectedparam)
   }
   
   changeScatterOne(){
@@ -878,6 +892,9 @@ this.selectedMultiStationParam = '';
     fetchData(){   
       //console.log("selected station ID", this.singleStation)
       const filter = this.stations.filter(item=> item.name.includes(this.singleStation));
+      const sstat = this.ssstations.filter(item=> item.station_name === this.singleStation)
+              console.log("is met", sstat, this.singleStation, this.ssstations)
+  this.isMeteriology = sstat[0].sensors.includes('meteorology');
       //console.log("filter ====== ", filter[0].stationId)
       const toDate = '2025-04-01T23:59:00.000Z'
       const fromDate = '2025-04-01T00:00:42.000Z'
@@ -885,7 +902,7 @@ this.selectedMultiStationParam = '';
       .set('fromDate',this.fromDate)
       .set('toDate',this.toDate)
       .set('station_id', filter[0].stationId);
-      this.http.get('http://192.168.0.147:3000/api/getSensorDataByDate', {params}).subscribe(
+      this.http.get('http://localhost:3000/api/getSensorDataByDate', {params}).subscribe(
         (data:any) => {
           console.log("buoys data === ",data);
           this.buoyData =data
@@ -900,7 +917,7 @@ this.selectedMultiStationParam = '';
     }
   
   fetchSensor(){
-    // this.http.get('http://192.168.0.147:3000/api/getSensorConfig').subscribe(
+    // this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
     //   (response:any)=>{
     //     console.log("sensor",response)
     //     this.sensorData = response
@@ -960,8 +977,8 @@ this.selectedMultiStationParam = '';
           this.isSingleLoad = false;
           if(this.selectedparam.includes('direction') || this.selectedparam.includes('heading')){
 
-            this.isSingledirection = false,
-            this.isSingleLoad = true
+            this.isSingledirection = true,
+            this.isSingleLoad = false
           }
           if(this.selectedparam.includes('current_speed')){
             this.selectedparam = 'current_speed'

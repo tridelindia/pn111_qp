@@ -1,7 +1,7 @@
 <main>
 
     <div class="map-container">
-        <button (click)="expandMap($event)" class="expand-button">
+        <button (click)="expandMap($event)" class="expand-button"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
                 <path fill-rule="evenodd"
@@ -13,7 +13,7 @@
 
         <div class="expand-space">
             <div class="expand-rectangle" *ngFor="let buoy of buoys">
-                <div class="info-row">
+                <div class="info-row"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <div class="value">{{ buoy.name }}</div>
                     <img src={{buoy.image}} alt="Profile" class="profile-img" />
                     <!-- <img src="../../assets/home/buoy.png" alt="Profile" class="profile-img"> -->
@@ -22,7 +22,7 @@
                 </div> -->
                 </div>
 
-                <div class="info-row">
+                <div class="info-row"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <div class="info-item">
                         <img class="locationimg" src="../../assets/svg/ts-map-pin.svg" alt="location">
                     </div>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                <div class="info-row">
+                <div class="info-row"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <!-- <span class="value">{{buoy.status}}</span>
                     <img class="active"
                         [src]="buoy.status === 'Online' ? '../../../../assets/home/active.png' : '../../../../assets/home/inactive.jpg'"
@@ -50,7 +50,7 @@
                 </div>
 
 
-                <div class="info-row" style="white-space: pre-line;">
+                <div class="info-row" style="white-space: pre-line;"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <span class="value">{{buoy.drift}}</span>
                     <img class="locationimg" src="../../assets/home/buoy-unscreen.gif" alt="drift">
                 </div>
@@ -87,7 +87,7 @@
         [status]="getSelectedMarker()" [statusImg]="getSelectedStatusImg()" [drift]="getSelectedDrift()"
         [markerImg]="getSelectedMarkerImg()"></app-infobuoy> -->
 
-    <app-infobuoy [buoyData]="selectedBuoyData" [buoySensor]="selectedParamData" [params]="infoBuoyDataSet"
+    <app-infobuoy [buoyData]="selectedBuoyData"[selectedMap]="selectedMap" [buoySensor]="selectedParamData" [buoystatus]="buoystatus" [params]="infoBuoyDataSet"
         *ngIf="buoyTapped"
         [markerImg]="getSelectedMarkerImg(selectedBuoyData?.status, getDriftType(selectedBuoyData?.station_name))">
     </app-infobuoy>

@@ -20,6 +20,9 @@ export class AppearanceComponent implements OnInit {
   constructor(private renderer: Renderer2){}
 
   ngOnInit(): void {
+    localStorage.setItem("selectedCurrentspeed", "speed1");
+    localStorage.setItem("selectedCurrentdir", "direction1");
+
     this.loadPreferences();
 
   const theme = localStorage.getItem('theme');
@@ -27,6 +30,7 @@ export class AppearanceComponent implements OnInit {
 //   this.theme = theme!;
   this.onChangeTheme(theme!);
 } 
+
  onChangeTheme(theme:string){
     this.renderer.setAttribute(document.documentElement, 'data-theme', theme);
     localStorage.setItem('theme', theme);

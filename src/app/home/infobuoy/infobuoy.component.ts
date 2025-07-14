@@ -25,12 +25,15 @@ import { SensorModel } from '../../models/station.model';
 })
 export class InfobuoyComponent implements OnInit {
   paramUnits: SensorModel[] = [];
- 
+ // child.component.ts
+@Input() selectedMap!: string;
+
   @Input() buoyData!: StationConfigs;
   @Input() buoySensor!: BuoyMeasurement;
   // @Input() buoyName!: string;
   // @Input() latitude!: number;
   // @Input() longitude!: number;
+  @Input() buoystatus!:string;
   @Input() markerImg!: string;
   @Input() status!: string;
   @Input() statusImg!: string;
@@ -64,7 +67,10 @@ export class InfobuoyComponent implements OnInit {
       this.rotateStation();
     }, 100);
   }
- 
+ get isWhiteTheme(): boolean {
+  return ['Spinal Map', 'TransportDark', 'Landscape'].includes(this.selectedMap);
+}
+
   ngOnDestroy(): void {
     this.buoyClickedSubscription.unsubscribe();
   }

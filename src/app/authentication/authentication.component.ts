@@ -67,6 +67,8 @@ export class AuthenticationComponent {
           this.auth.CurrentUser = this.currentUser;
           localStorage.setItem('loginTime', Date.now().toString());
           localStorage.setItem('username', this.currentUser.name);
+          localStorage.setItem("selectedCurrentspeed", "speed1");
+          localStorage.setItem("selectedCurrentdir", "direction1");
           this.router.navigate(['/base']);
           this.toast.success('Logged in Succesfully', 'Access Granted ');
         },

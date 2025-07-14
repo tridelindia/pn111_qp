@@ -1,7 +1,7 @@
 .home{
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 98%;
     flex-direction: column;
     position: relative;
   /* color: #C7D2E2; */
@@ -185,7 +185,7 @@ select option{
 
 
 .sections{
-    height: 100%;
+    height: 95%;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -612,7 +612,7 @@ right: 0;
   /* meteriological  */
 
   .mid{
-    height: 94%;
+    height: 100%;
     width: 60%;
     margin: 5px;
     margin-left: 6px;

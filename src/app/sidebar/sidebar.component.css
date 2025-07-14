@@ -20,7 +20,7 @@
 .navigators{
     height: 60%;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 55px;
     /* padding-top: 10px; */
     display: flex;
     flex-direction: column;
@@ -43,8 +43,11 @@
     font-size: 15px;
     cursor: pointer;
     color: var(--font-color);
+    color: white;
 }
 .navigators i.selected {
     background-color: rgba(155, 155, 155, 0.5); /* Background color for selected option */
     color: var(--font-color); /* Change text color for visibility */
+    color: white;
+
   }

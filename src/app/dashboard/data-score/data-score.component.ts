@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 export interface RadiationEntry {
   datetime: string; // ISO string
-  global: number;
+  global_radiation: number;
 }
 
 export interface DailySunshine {
@@ -105,10 +105,10 @@ getpercentage(val:number, sensor:string):number{
 
   fetchSensorData() {
   const params = new HttpParams()
-    .set('fromDate', '2025-01-01T00:00:42.000Z')
-    .set('toDate', '2025-05-31T23:59:00.000Z')
+    .set('fromDate', '2025-05-20T00:00:42.000Z')
+    .set('toDate', '2025-06-07T23:59:00.000Z')
     .set('stationId', this.stationId);
-  const apiUrl = 'http://192.168.0.147:3000/api/getSensorDataByStationAndDate';
+  const apiUrl = 'http://localhost:3000/api/getSensorDataByStationAndDate';
 
   this.http.get<any[]>(apiUrl, { params }).subscribe(data => {
     console.log("API data received:", data);
@@ -204,13 +204,13 @@ calculateSunshine(data: RadiationEntry[], threshold = 120): DailySunshine[] {
     }
 
     // Count sunny interval
-    if (entry.global > threshold) {
+    if (entry.global_radiation > threshold) {
       dailyMap[dateStr].sunshineHours += 10 / 60; // 10 minutes = 1/6 hour
     }
 
     // Save specific time's radiation
     if (['00:00', '06:00', '12:00', '18:00'].includes(timeStr)) {
-      dailyMap[dateStr].hourly[timeStr] = entry.global;
+      dailyMap[dateStr].hourly[timeStr] = entry.global_radiation;
     }
   });
 

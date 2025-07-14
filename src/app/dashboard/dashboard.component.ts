@@ -148,7 +148,7 @@ toggleMapon(){
     (response:any)=>{
       this.stationConfiglist = response;
       const selectedStation = this.stationConfiglist.filter(item=> item.station_id === this.layout.selectedStationId);
-      console.log(selectedStation);
+      //console.log(selectedStation);
       this.warning = parseFloat(selectedStation[0].warning);
       this.danger = parseFloat(selectedStation[0].danger);
       if(this.warning !==0 && this.danger !==0){
@@ -171,16 +171,16 @@ listImage:string[]=['../../assets/avatars/live4.jpeg', '../../assets/avatars/liv
 changeimage(){
   setInterval(() => {
     const randomIndex = Math.floor(Math.random() * this.listImage.length);
-    this.db_img = this.listImage[1];
+    this.db_img = this.listImage[randomIndex];
   }, 1000);
 }
 Bins :any[]=[];
 fromDate!:string;
 toDate!:string;
     ngOnInit(): void {
-      this.http.get('http://192.168.0.147:3000/api/getBin').subscribe(
+      this.http.get('http://localhost:3000/api/getBin').subscribe(
         (response:any)=>{
-          console.log("binsss", response)
+          //console.log("binsss", response)
          this.Bins = response
         }
       )
@@ -195,11 +195,11 @@ toDate!:string;
       this.changeimage();
       this.ststionID = this.layout.selectedStationId
 this.map.destroyMap()
-        console.log("sensorssss", this.sensorsss)
+        //console.log("sensorssss", this.sensorsss)
 
      this.current_speed_widget= localStorage.getItem('selectedCurrentspeed') ?? '';
      this.current_direction_widget = localStorage.getItem('selectedCurrentdir') ?? '';
-      console.log("id_station", this.layout.selectedStationId)
+      //console.log("id_station", this.layout.selectedStationId)
       this.fetchSensorCofig();
       this.fetchSensors();
 
@@ -214,7 +214,7 @@ this.map.destroyMap()
     (response:any)=>{
       this.stationConfiglist = response;
       const selectedStation = this.stationConfiglist.filter(item=> item.station_id === this.layout.selectedStationId);
-      console.log("sssssss",selectedStation);
+      //console.log("sssssss",selectedStation);
       this.warning = parseFloat(selectedStation[0].warning);
       this.danger = parseFloat(selectedStation[0].danger);
       if(this.warning !==0 && this.danger !==0){
@@ -230,11 +230,11 @@ this.map.destroyMap()
  
     
     fetchSensorCofig() {
-      this.http.get('http://192.168.0.147:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           this.sensorConfig = response;
 
-      console.log("Sensor==", response);
+      //console.log("Sensor==", response);
       this.oceanSensorUnit = {} as OceansensorsUnit;
       this.MetUnit = {} as MetSensorUnit;
       this.WaterSensorUnit = {} as WatSensorunit;
@@ -262,10 +262,10 @@ this.map.destroyMap()
       });
       
 
-      console.log("Ocean Units:", this.oceanSensorUnit);
-      console.log("Meteorology Units:", this.MetUnit);
-      console.log("Water Quality Units:", this.WaterSensorUnit);
-      console.log("Microflu Units:", this.microUnit);
+      //console.log("Ocean Units:", this.oceanSensorUnit);
+      //console.log("Meteorology Units:", this.MetUnit);
+      //console.log("Water Quality Units:", this.WaterSensorUnit);
+      //console.log("Microflu Units:", this.microUnit);
 
           this.checkDataLoaded();
         },
@@ -276,15 +276,15 @@ this.map.destroyMap()
     fetchSensors() {
       this.BuoyData = [];
       const params = new HttpParams().set('fromDate', this.fromDate).set('toDate',this.toDate).set('stationId', this.layout.selectedStationId);
-      this.http.get('http://192.168.0.147:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
+      this.http.get('http://localhost:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
         (response: any) => {
           this.BuoyData = response;
           this.checkDataLoaded();
-          console.log("bins 2:", this.BuoyData[0]);
+          //console.log("bins 2:", this.BuoyData[0]);
           const bins = this.BuoyData[0];
 
           this.buoyLocation = [this.BuoyData[0].lat, this.BuoyData[0].lon];
-          console.log("location==", this.buoyLocation)
+          //console.log("location==", this.buoyLocation)
           const currentData = Object.keys(bins)
               .filter(key =>
                 key.toLowerCase().includes('current_speed') || key.toLowerCase().includes('current_direction')
@@ -294,7 +294,7 @@ this.map.destroyMap()
                 value: (bins as any)[key]
               }));
 
-          console.log("bins",currentData);
+          //console.log("bins",currentData);
           for (let index = 0; index < currentData.length; index++) {
             // const element = array[index];
             const dir = parseFloat(currentData[index].value)
@@ -313,6 +313,7 @@ this.map.destroyMap()
 
 for (let i = 0; i < this.binData.length; i += 2) {
   const speedBin = this.binData[i];
+  console.log("spww",speedBin)
   const directionBin = this.binData[i + 1];
 
   this.pairedBins.push({
@@ -322,8 +323,9 @@ for (let i = 0; i < this.binData.length; i += 2) {
     directionLabel: directionBin.name,
     directionText: directionBin.direction
   });
+  console.log("pairs",this.pairedBins)
 }
-          console.log("bins 3===", this.binData)
+          //console.log("bins 3===", this.binData)
         },
         error => console.error('Error fetching sensors:', error)
       );
@@ -362,7 +364,7 @@ for (let i = 0; i < this.binData.length; i += 2) {
             chunk++;
             setTimeout(processChunk, 0); // Allow the browser to process UI events
           }
-          // console.log("Valid Data:", this.validData);
+          // //console.log("Valid Data:", this.validData);
         };
     
         processChunk();
@@ -370,7 +372,7 @@ for (let i = 0; i < this.binData.length; i += 2) {
     }
     
     mapInit(){
-      console.log("map init");
+      //console.log("map init");
       const mapContainer = document.getElementById('ol-map');
       this.map.createMap(
         mapContainer!,
