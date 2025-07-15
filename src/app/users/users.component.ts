@@ -266,6 +266,24 @@ export class UsersComponent {
       return;
     }
 
+  // Username Format Validation
+  if (!this.isUsernameValid()) {
+    this.toast.error('Only letters and numbers are allowed in the username.');
+    return;
+  }
+
+  // Email Format Validation
+  if (!this.isEmailFormatValid()) {
+    this.toast.error('Please enter a valid email address.');
+    return;
+  }
+
+  // Password Strength Validation
+  if (!this.isEditing && !this.isPasswordValid()) {
+    this.toast.error('Password must be 8-15 characters, contain uppercase, lowercase, number, and special character.');
+    return;
+  }
+
     if (this.usernameTaken) {
       this.toast.error('Username is already taken.');
       return;

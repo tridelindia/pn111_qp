@@ -80,3 +80,43 @@
 {"timestamp":"2025-06-13T11:15:53.041Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-07-14T04:38:29.929Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-07-14T04:41:37.293Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-07-15T05:23:29.194Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:23:37.459Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:23:54.353Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:24:04.520Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:24:17.722Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:24:36.813Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T05:24:39.901Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T05:24:42.742Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T05:24:45.424Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T05:24:48.229Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T05:34:08.061Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:37:42.885Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T05:38:32.899Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:38:35.809Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-07-15T05:38:36.694Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-07-15T05:41:53.027Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T05:42:05.020Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T05:45:47.289Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T05:47:05.019Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T06:56:14.943Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T07:24:37.209Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T07:24:44.956Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T07:26:29.366Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T07:26:39.140Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-07-15T08:53:41.516Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T08:58:55.492Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T08:59:09.664Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:08:39.061Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:08:50.160Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:08:58.823Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:09:08.622Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:09:31.588Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:11:48.166Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T09:12:50.344Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:13:31.235Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:14:54.532Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-07-15T09:15:28.706Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-07-15T09:15:46.812Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-07-15T09:15:48.019Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-07-15T09:15:54.310Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}

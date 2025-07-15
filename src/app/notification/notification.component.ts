@@ -22,6 +22,7 @@ import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { LoggingService } from '../users/service/users/logging.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Notification {
   id: number;
@@ -120,7 +121,7 @@ export class NotificationComponent implements OnInit {
     { code: '+993', name: 'Turkmenistan' },
   ];
 
-  constructor(private http: HttpClient, private loggingService: LoggingService) {}
+  constructor(private http: HttpClient, private loggingService: LoggingService, private toast: ToastrService) {}
 
   ngOnInit() {
     this.getStation();
@@ -188,6 +189,39 @@ export class NotificationComponent implements OnInit {
   }
 
   addNotification() {
+
+  const { station_id, user_name, user_email, user_phone_number, country_code } = this.newNotification;
+
+  // Trim all input values
+  const name = user_name?.trim();
+  const email = user_email?.trim();
+  const phone = user_phone_number?.trim();
+
+  // Reset messages
+  this.errorMessage = '';
+  this.successMessage = '';
+
+  // Validate required fields
+  if (!station_id || !name || !email || !phone || !country_code) {
+    this.errorMessage = 'All fields are required';
+    return;
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    this.errorMessage = 'Please enter a valid email address';
+    return;
+  }
+
+  // Validate phone number
+  const phoneRegex = /^[0-9]{10}$/;
+  if (!phoneRegex.test(phone)) {
+    this.errorMessage = 'Phone number must be exactly 10 digits and numeric';
+    return;
+  }
+
+
     console.log(this.newNotification);
     if (!this.newNotification.station_id || !this.newNotification.station_name || !this.newNotification.user_email || !this.newNotification.user_name) {
       this.errorMessage = 'Station, Name, and Email are required';
@@ -203,6 +237,7 @@ export class NotificationComponent implements OnInit {
       next: (response: any) => {
         if (response.success) {
           this.successMessage = 'Notification added successfully';
+          this.toast.success('Notification for a New User added Successfully');
           this.hideAddDialog();
           this.loadNotifications();
           // Add log
@@ -255,6 +290,7 @@ export class NotificationComponent implements OnInit {
             });
           }
         }
+        this.toast.success("Notification Deleted Successfully")
       },
       error: (error) => {
         this.errorMessage = 'Failed to delete notification';
@@ -333,6 +369,10 @@ export class NotificationComponent implements OnInit {
   }
 
   showEditDialog(notification: Notification) {
+    if (!confirm('Are you sure you want to edit this notification?')) {
+      return;
+    }
+
     // First ensure stations are loaded
     if (this.stations.length === 0) {
       this.getStation();
@@ -399,6 +439,42 @@ export class NotificationComponent implements OnInit {
   }
 
   updateNotification() {
+     // Reset messages
+  this.errorMessage = '';
+  this.successMessage = '';
+
+  const {
+    station_id,
+    station_name,
+    user_name,
+    user_email,
+    user_phone_number
+  } = this.newNotification;
+
+  const name = String(user_name || '').trim();
+  const email = String(user_email || '').trim();
+  const phone = String(user_phone_number || '').trim();
+
+  // Check if all required fields are filled
+  if (!station_id || !station_name || !name || !email || !phone) {
+    this.errorMessage = 'All fields are required.';
+    return;
+  }
+
+  // Email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    this.errorMessage = 'Please enter a valid email address.';
+    return;
+  }
+
+  // Phone number validation (10 digits and numeric only)
+  const phoneRegex = /^[0-9]{15}$/;
+  if (!phoneRegex.test(phone)) {
+    this.errorMessage = 'Phone number must be exactly 15 digits.';
+    return;
+  }
+
     if (!this.newNotification.station_id || !this.newNotification.station_name || !this.newNotification.user_email || !this.newNotification.user_name) {
       this.errorMessage = 'Station, Name, and Email are required';
       return;
@@ -431,6 +507,7 @@ export class NotificationComponent implements OnInit {
             error: (err) => console.error('Failed to log activity', err)
           });
         }
+        this.toast.success('Notification Updated Successfully')
       },
       error: (error) => {
         this.errorMessage = 'Failed to update notification';

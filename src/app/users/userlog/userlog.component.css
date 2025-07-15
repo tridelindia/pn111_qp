@@ -227,12 +227,14 @@
     background: var(--highlight-color);
     border-color: var(--highlight-color-shadow);
     color: var(--font-color);
+    border-radius: 15px;
   }
 
   .update-btn-container ::ng-deep .p-button:hover{
-    background: var(--highlight-color);
+    /* background: var(--highlight-color);
     border-color: var(--secondary-color-shadow);
-    color: var(--font-color);
+    color: var(--font-color); */
+    font-weight: bold;
   }
 
   ::ng-deep .p-datepicker-panel {
@@ -256,4 +258,13 @@
 
   ::ng-deep .p-datepicker-year-selected {
     background: var(--highlight-color-shadow) !important;
+  }
+
+  ::ng-deep .p-button-label {
+    font-weight: normal;
+    transition: 0.3s;
+  }
+
+  ::ng-deep .p-button-label:hover {
+    font-weight: bold;
   }

@@ -2,19 +2,20 @@
   padding: 1rem;
   height: calc(100vh - 60px);
   overflow-y: auto;
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
 }
 
 .header {
   display: flex;
   justify-content: space-between;
+  border-radius: 15px;
   align-items: center;
   margin-bottom: 1.5rem;
   position: sticky;
   top: 0;
   z-index: 1;
   background-color: #f8f9fa;
-  padding: 1rem 0;
+  padding: 1rem;
 }
 
 h2 {
@@ -214,7 +215,7 @@ tr:hover {
   /* Table styling */
   .p-datatable {
     .p-datatable-wrapper {
-      border-radius: 8px;
+      border-radius: 15px;
     }
 
     .p-datatable-header {
@@ -243,8 +244,8 @@ tr:hover {
 
   /* Card styling */
   .p-card {
-    background: white;
-    border-radius: 8px;
+    background: white !important;
+    border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
@@ -276,6 +277,8 @@ tr:hover {
 /* Utility classes */
 .w-full {
   width: 100%;
+  margin-bottom: 1.5rem;
+  border-radius: 15px;
 }
 
 .w-24 {
@@ -288,6 +291,8 @@ tr:hover {
 
 .flex-auto {
   flex: 1 1 auto;
+  margin-top: 20px;
+  padding: -5px;
 }
 
 .flex-column {
@@ -296,6 +301,7 @@ tr:hover {
 
 .items-center {
   align-items: center;
+  margin-top: -20px;
 }
 
 .justify-end {
@@ -426,6 +432,223 @@ input:checked + .slider:before {
 
 ::ng-deep .p-button {
   background-color: var(--highlight-color) !important;
+  border-radius: 15px !important;
   color: var(--font-color) !important;
   border: 1px solid var(--highlight-color) !important;
+}
+
+::ng-deep .p-multiselect:not(.p-disable).p-focus {
+  border-color: var(--highlight-color) !important;
+}
+
+::ng-deep .p-inputtext:enabled:focus {
+  border: 1px solid var(--highlight-color) !important;
+}
+
+::ng-deep .p-multiselect {
+  width: 100%;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 15px !important;
+  border: 1px solid #ddd !important;
+  padding: 5px;
+  /* background-color: #ffffff; */
+  background: white !important;
+  box-shadow: 0 2px 4px rgba(168, 168, 168, 0.1);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+::ng-deep .p-multiselect-custom.p-multiselect:hover {
+  border: 1px solid var(--highlight-color);
+  box-shadow: 0px 4px 10px var(--highlight-color-shadow);
+}
+
+::ng-deep .p-multiselect.p-multiselect:focus {
+  border: 1px solid var(--highlight-color);
+  box-shadow: 0px 4px 10px var(--highlight-color-shadow);
+  transform: scale(1.02);
+}
+
+::ng-deep .p-multiselect .p-multiselect-label {
+  max-height: 65px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding-right: 24px;
+  color: black;
+  /* space for dropdown icon */
+}
+
+/* Dropdown panel */
+::ng-deep .p-multiselect-panel {
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 35px !important;
+  z-index: 1000 !important;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Each dropdown option */
+::ng-deep .p-multiselect-item {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: white;
+}
+
+::ng-deep .p-multiselect-overlay {
+  background: white !important;
+  border-radius: 15px !important;
+  border: 1px solid #ddd !important;
+}
+
+::ng-deep .p-multiselect-option {
+  color: black !important;
+}
+
+::ng-deep .p-inputtext {
+  color: black !important;
+  background-color: white !important;
+  border-radius: 15px !important;
+  border: 1px solid #ddd !important;
+}
+
+::ng-deep .p-multiselect-option:not(.p-multiselect-option-selected):not(.p-disabled).p-focus{
+  background: #f1f5f9 !important;
+}
+
+::ng-deep .p-multiselect-option.p-multiselect-option-selected.p-focus {
+  background: var(--highlight-color-shadow) !important;
+}
+
+::ng-deep .p-multiselect-option.p-multiselect-option-selected {
+  background: var(--highlight-color-shadow) !important;
+}
+
+::ng-deep .p-checkbox-input {
+border-radius: 15px !important;
+background-color: #f1f5f9 !important;
+}
+
+::ng-deep .p-checkbox-box {
+  background-color: white !important ;
+  border: 1px solid #ddd !important;
+}
+
+::ng-deep .p-checkbox-checked .p-checkbox-box {
+  border-color: var(--highlight-color) !important;
+  background-color: var(--highlight-color) !important;
+}
+
+::ng-deep .p-chip {
+  background-color: var(--highlight-color) !important;
+}
+
+::ng-deep .p-multiselect .p-multiselect-overlay::-webkit-scrollbar{
+  height: 0px !important;
+  width: 0px !important;
+}
+
+::ng-deep .p-dialog {
+  background-color: white !important;
+  color: black !important;
+  border-radius: 15px !important;
+}
+
+::ng-deep .p-select {
+  height: 40px !important;
+  margin-top: 20px !important;
+  border-radius: 15px !important;
+  background-color: white !important;
+  color: black !important;
+  border: solid 1px #ddd !important;
+}
+
+::ng-deep .p-select-label {
+  color: black !important;
+}
+
+::ng-deep .p-select-overlay{
+  background-color: white !important;
+  width: 105px;
+  border-radius: 15px;
+  border: solid 1px #ddd;
+}
+
+::ng-deep .p-select-list{
+  background-color: white !important;
+  width: 105px;
+  border-radius: 15px;
+  border: solid 1px #ddd;
+}
+
+::ng-deep .p-select-option {
+  color: black !important;
+}
+
+::ng-deep .p-select-option.p-select-option-selected.p-focus{
+  background-color: var(--highlight-color-shadow) !important;
+  border-radius: 15px !important;
+}
+
+::ng-deep .p-select-option.p-select-option-selected{
+  background-color: var(--highlight-color-shadow) !important;
+  border-radius: 15px !important;
+}
+
+::ng-deep .p-select-option:not(.p-select-option-selected):not(.p-disabled).p-focus {
+  background-color: white !important;
+  border-radius: 15px !important;
+}
+
+::ng-deep .p-card {
+  background: white !important;
+  border-radius: 15px !important;
+}
+
+::ng-deep .p-datatable-tbody > tr > td {
+    background: white !important;
+    border-color: #e2e8f0 !important;
+    color: black !important;
+}
+
+::ng-deep .p-datatable-thead > tr > th {
+    background: white !important;
+    border-color: #e2e8f0 !important;
+    color: black !important;
+  }
+
+.fa-pen-to-square:before{
+  color:#0d6efd;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 3px 6px;
+  font-size: 12px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 120%;
+  /* Adjust position above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 9999;
+}
+
+ .tooltip-container:hover .tooltip-text{
+  visibility: visible;
+  opacity: 1;
 }

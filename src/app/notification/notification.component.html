@@ -42,10 +42,16 @@
             </label>
           </td>
           <td style="text-align: center;" *ngIf="hasNotificationPermission('write')">
-            <button class="delete-btn" *ngIf="hasNotificationPermission('execute')" (click)="deleteNotification(notification.id)">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-            <i class="fa-solid fa-pen-to-square" *ngIf="hasNotificationPermission('write')" style="cursor: pointer;" (click)="showEditDialog(notification)"></i>
+            <div class="tooltip-container" *ngIf="hasNotificationPermission('execute')">
+              <button class="delete-btn" (click)="deleteNotification(notification.id)">
+                <i class="fa-solid fa-trash-can"></i>
+                <span class="tooltip-text">Delete User</span>
+              </button>
+            </div>
+            <div class="tooltip-container" *ngIf="hasNotificationPermission('write')">
+              <i class="fa-solid fa-pen-to-square" style="cursor: pointer;" (click)="showEditDialog(notification)"></i>
+              <span class="tooltip-text">Edit User</span>
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -83,7 +89,7 @@
         <div class="flex items-center gap-3">
           <label for="user_email" class="font-semibold w-24">Email</label>
           <span class="p-input-icon-left flex-auto">
-            <input type="email" pInputText id="user_email" [(ngModel)]="newNotification.user_email" name="user_email" class="w-full" required>
+            <input type="email" pInputText id="user_email" [(ngModel)]="newNotification.user_email" name="user_email" class="w-full" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
           </span>
         </div>
 
@@ -94,7 +100,7 @@
               optionLabel="code" optionValue="code" [style]="{'width': '120px'}" appendTo="body">
             </p-dropdown>
             <span class="p-input-icon-left flex-auto">
-              <input type="tel" pInputText id="user_phone_number" [(ngModel)]="newNotification.user_phone_number" name="user_phone_number" class="w-full">
+              <input type="tel" pInputText id="user_phone_number" [(ngModel)]="newNotification.user_phone_number" name="user_phone_number" class="w-full" required pattern="^[0-9]{10}$" maxlength="10">
             </span>
           </div>
         </div>
@@ -138,7 +144,7 @@
         <div class="flex items-center gap-3">
           <label for="user_email" class="font-semibold w-24">Email</label>
           <span class="p-input-icon-left flex-auto">
-            <input type="email" pInputText id="user_email" [(ngModel)]="newNotification.user_email" name="user_email" class="w-full" required>
+            <input type="email" pInputText id="user_email" [(ngModel)]="newNotification.user_email" name="user_email" class="w-full" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
           </span>
         </div>
 
@@ -146,7 +152,7 @@
           <label for="user_phone_number" class="font-semibold w-24">Phone</label>
           <div class="flex gap-2 flex-auto">
             <span class="p-input-icon-left flex-auto">
-              <input type="tel" pInputText id="user_phone_number" [(ngModel)]="newNotification.user_phone_number" name="user_phone_number" class="w-full">
+              <input type="tel" pInputText id="user_phone_number" [(ngModel)]="newNotification.user_phone_number" name="user_phone_number" class="w-full" required pattern="^[0-9]{15}$" maxlength="15">
             </span>
           </div>
         </div>
