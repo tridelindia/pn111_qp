@@ -295,13 +295,15 @@
                                 <div class="permissions-icons" *ngIf="role.permissions">
                                     <div class="page-icon-tooltip"
                                         *ngFor="let entry of objectEntries(role.permissions)">
-                                        <i class="fa-solid"
-                                            [ngClass]="permissionIcons[entry[0]] || 'fa-circle-question'"></i>
-                                        <div class="tooltip-text2">
-                                            <strong>{{ entry[0] }}</strong><br />
-                                            <ng-container *ngFor="let action of entry[1]">
-                                                • {{ action }}<br />
-                                            </ng-container>
+                                        <div class="tooltip-wrapper">
+                                            <i class="fa-solid"
+                                                [ngClass]="permissionIcons[entry[0]] || 'fa-circle-question'"></i>
+                                            <div class="tooltip-text2">
+                                                <strong>{{ entry[0] }}</strong><br />
+                                                <ng-container *ngFor="let action of entry[1]">
+                                                    • {{ action }}<br />
+                                                </ng-container>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -146,9 +146,6 @@ export class UsersComponent {
       });
       this.toast.success(`User deleted successfully!`);
     }
-    else {
-      this.toast.error(`Error occured while deleting!`);
-    }
   }
 
 
@@ -594,9 +591,6 @@ export class UsersComponent {
       });
       this.toast.success(`Role deleted successfully!`);
     }
-    else {
-      this.toast.error(`Error occured while deleting!`);
-    }
   }
 
   editRole(role: any) {
@@ -693,9 +687,6 @@ export class UsersComponent {
         }
       );
       this.toast.success(`Designation deleted successfully!`);
-    }
-    else {
-      this.toast.error(`Error occured while deleting!`);
     }
   }
 

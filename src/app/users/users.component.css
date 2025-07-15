@@ -1018,7 +1018,6 @@ background-color: #f1f5f9 !important;
 
 
 .page-icon-tooltip {
-  position: relative;
   display: inline-block;
   margin-right: 10px;
   font-size: 1.3rem;
@@ -1026,7 +1025,12 @@ background-color: #f1f5f9 !important;
   cursor: pointer;
 }
 
-.page-icon-tooltip:hover {
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-wrapper:hover {
   color: #007bff;
 }
 
@@ -1040,7 +1044,6 @@ background-color: #f1f5f9 !important;
   border-radius: 5px;
   position: absolute;
   bottom: 120%;
-  /* position above icon */
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
@@ -1049,7 +1052,7 @@ background-color: #f1f5f9 !important;
   z-index: 10;
 }
 
-.page-icon-tooltip:hover .tooltip-text2 {
+.tooltip-wrapper:hover .tooltip-text2 {
   visibility: visible;
   opacity: 1;
 }
@@ -1058,7 +1061,6 @@ background-color: #f1f5f9 !important;
   content: "";
   position: absolute;
   top: 100%;
-  /* bottom of tooltip */
   left: 50%;
   margin-left: -5px;
   border-width: 5px;

@@ -233,13 +233,11 @@ color: #000000;
  
 /* Remember Me checkbox */
 .forget-pass {
-width: 60%;
-text-align: left;
 color: white;
 margin-bottom: 10px;
 font-size: 14px;
 display: flex;
-align-items: center;
+align-items: left;
 cursor: pointer;
 }
  
