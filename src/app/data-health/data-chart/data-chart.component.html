@@ -1,0 +1,26 @@
+<div class="parent-card">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Data Health Chart</h3>
+        </div>
+        <div class="card-content">
+          <div echarts 
+              [options]="waveChartOptions" 
+              (chartInit)="onChartInit($event)"
+              class="chart-container">
+          </div>
+          <span class="date-time-label" style="display: flex; justify-content: center; font-size: 14px; color: #6b7280; font-weight: bold; margin-top: 10px;">Date & Time</span>
+        </div>
+    </div>
+    <div class="health-card">
+      <div class="card-header">
+        <h3 class="card-title">Overall Data Health</h3>
+        <p class="card-description">Combined score</p>
+      </div>
+      <div class="health-chart-container">
+        <div class="chart-wrapper">
+          <p-chart type="polarArea" [data]="chartHealthData" [options]="chartHealthOptions" class="health-chart" />
+        </div>
+      </div>
+    </div>
+  </div>

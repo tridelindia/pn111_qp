@@ -1,0 +1,127 @@
+<!-- Forget Password Popup -->
+<div class="modal" *ngIf="showForgetPopup">
+    <div class="modal-content">
+        <span class="close" (click)="closePopup()">&times;</span>
+
+        <!-- STEP 1: Verify Username + Email -->
+        <div *ngIf="step === 1">
+            <h2>Forget Password</h2>
+            <form (submit)="verifyUser()">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" [(ngModel)]="username" placeholder="Enter Username" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" [(ngModel)]="email" placeholder="Enter Password" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                </div>
+                <button type="submit" class="popup-btn">Verify</button>
+            </form>
+        </div>
+
+        <!-- STEP 2: OTP Verification -->
+        <!-- <div *ngIf="step === 2">
+            <h2>OTP Verification</h2>
+            <button class="popup-btn" (click)="sendOTP()" [disabled]="otpSent">Send OTP</button>
+            <div class="input-group" *ngIf="otpSent">
+                <label>Enter OTP</label>
+                <input type="text" [(ngModel)]="enteredOtp" class="modal-input" />
+            </div>
+            <button class="popup-btn" style="align-self:center;" (click)="verifyOTP()">Verify OTP</button>
+        </div> -->
+
+        <!-- STEP 3: Reset Password -->
+        <div *ngIf="step === 3">
+            <h2>Reset Password</h2>
+            <form (submit)="submitNewPassword()">
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input [type]=" showPassword ? 'text' : 'password' " [(ngModel)]="newPassword"
+                        placeholder="Enter New Password" name="newPassword" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                    <button type="button" (click)="togglePassword()" class="toggle-password">
+                        <i [class]="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
+                    </button>
+                </div>
+                <div class="input-group">
+                    <label>Confirm Password</label>
+                    <input [type]=" showPassword ? 'text' : 'password' " [(ngModel)]="confirmPassword"
+                        placeholder="Confirm New Password" name="confirmnewPassword" class="modal-input"
+                        [ngModelOptions]="{standalone: true}" />
+                    <button type="button" (click)="togglePassword()" class="toggle-password2">
+                        <i [class]="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
+                    </button>
+                </div>
+                <button type="submit" class="popup-btn">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="login1" [ngStyle]="{'filter':showForgetPopup ?'blur(15px)':''}">
+
+
+
+    <!-- Company Branding (Logo + Name + Quote) -->
+    <div class="company-header">
+        <img src="assets/logo.png" alt="Company Logo" class="company-logo">
+        <div class="company-text">
+            <!-- <p class="company-name">QATAR LUSAIL</p> -->
+        </div>
+    </div>
+
+    <!-- Top Right -->
+    <div class="project">
+        <img src="assets/image/authentication/tridel_logo.png" alt="Company Logo" class="project-logo">
+        <span>Tridel Technologies</span>
+    </div>
+
+    <div class="dd">
+        <!-- <div class="gif-container">
+        <img src="assets/image/authentication/buoy2.gif" alt="Loading animation" />
+    </div>   -->
+        <app-qp-buoy></app-qp-buoy>
+    </div>
+
+
+    <!-- Glassy Login Card -->
+    <app-wave></app-wave>
+    <!-- <div class="right"> -->
+    <div class="circular-card">
+        <div class="background-img"></div>
+        <h2>TEMS</h2>
+        <p>LUSAIL QATAR</p>
+
+        <!-- Username Input -->
+        <form (submit)="login($event)" class="form-login">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <div class="input-container">
+                    <input type="text" id="username" placeholder="Enter your username" class="input-box" required
+                        [(ngModel)]="username" [ngModelOptions]="{standalone: true}" required>
+                    <i class="fa-solid fa-user input-icon"></i>
+                </div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="input-container">
+                    <input [type]=" showPassword ? 'text' : 'password' " id="password" placeholder="Enter your password"
+                        class="input-box" required [(ngModel)]="password" [ngModelOptions]="{standalone: true}"
+                        required>
+                    <i class="fa fa-unlock-keyhole input-icon"></i>
+                    <button type="button" (click)="togglePassword()" class="toggle-password3">
+                        <i [class]="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
+                    </button>
+                </div>
+            </div>
+
+            <a class="forget-pass" (click)="openPopup()">Forget Password</a>
+
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+    </div>
+    <!-- </div> -->
+</div>

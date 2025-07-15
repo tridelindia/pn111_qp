@@ -1,0 +1,69 @@
+<div class="sensor-tabs-container">
+  <div class="sensor-tabs-wrapper">
+    <div class="sensor-tabs-center">
+      <div class="sensor-tabs">
+        <div 
+          *ngFor="let sensor of filteredSensors" 
+          class="sensor-tab" 
+          [ngClass]="{
+            'active': activeSensor === sensor.id,
+            'inactive': activeSensor !== sensor.id && activeSensor !== ''
+          }"
+          (click)="selectSensor(sensor.id)"
+        >
+          <div class="icon">{{sensor.icon}}</div>
+          <div>{{sensor.name}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="date-range-selector">
+      <p-calendar 
+        [(ngModel)]="dateRange" 
+        selectionMode="range" 
+        [readonlyInput]="true"
+        [showTime]="false"
+        [showButtonBar]="false"
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="2025:2030"
+        placeholder="Select date range">
+      </p-calendar>
+
+      <button class="apply-btn" (click)="onApplyDateRange()">
+        <i class="fa-solid fa-check"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="custom-tabs">
+    <div class="tabs-container">
+      <div class="sub-tabs-row">
+        @for(tab of currentTabs; track tab.value) {
+          <div class="tab-group">
+            <div class="tab-group-title">{{tab.title}}</div>
+            <p-multiSelect
+              [(ngModel)]="selectedTabs[tab.value]"
+              [options]="tab.subTabs"
+              optionLabel="title"
+              optionValue="value"
+              [showToggleAll]="true"
+              [panelStyle]="{minWidth: '200px'}"
+              [showHeader]="false"
+              [showClear]="true"
+              [placeholder]="'Select ' + tab.title"
+              (onChange)="onTabChange(tab.value)"
+              (onClear)="onTabChange(tab.value)"
+              [showTransitionOptions]="'0ms'"
+              [hideTransitionOptions]="'0ms'"
+              [panelStyleClass]="'hover-panel'"
+              [appendTo]="'body'"
+              class="hover-multiselect"
+            ></p-multiSelect>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

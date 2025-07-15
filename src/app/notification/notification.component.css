@@ -1,0 +1,431 @@
+.notification-container {
+  padding: 1rem;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f8f9fa;
+  padding: 1rem 0;
+}
+
+h2 {
+  color: #333;
+  margin: 0;
+}
+
+h3 {
+  color: #444;
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+.add-notification {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+button {
+  background: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #45a049;
+}
+
+/* Messages */
+.messages {
+  margin-top: 1rem;
+}
+
+.messages p-message {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.error {
+  color: #f44336;
+  padding: 10px;
+  background: #ffebee;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: #4CAF50;
+  padding: 10px;
+  background: #e8f5e9;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+.no-data {
+  text-align: center;
+  padding: 1rem;
+  color: #6c757d;
+}
+
+.phone-input-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.country-code {
+  width: 150px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.phone-number {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.p-inputgroup {
+  display: flex;
+  align-items: center;
+}
+
+.p-inputgroup .p-dropdown {
+  width: 150px !important;
+  margin-right: 0.5rem;
+}
+
+/* Dialog Styles */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+:host ::ng-deep {
+  /* Dialog styling */
+  .p-dialog {
+    .p-dialog-header {
+      padding: 1.5rem 2rem 0.5rem;
+    }
+
+    .p-dialog-content {
+      padding: 0 2rem 2rem;
+    }
+
+    .p-dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+  }
+
+  /* Input styling */
+  .p-inputtext {
+    width: 100%;
+  }
+
+  .p-input-icon-left {
+    width: 100%;
+
+    i {
+      color: #6c757d;
+    }
+  }
+
+  .p-dropdown {
+    min-width: 120px;
+  }
+
+  /* Table styling */
+  .p-datatable {
+    .p-datatable-wrapper {
+      border-radius: 8px;
+    }
+
+    .p-datatable-header {
+      background: #f8f9fa;
+      border: none;
+    }
+
+    .p-datatable-thead > tr > th {
+      background: #f8f9fa;
+      color: #495057;
+      font-weight: 600;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .p-datatable-tbody > tr > td {
+      padding: 1rem;
+    }
+
+    .p-datatable-tbody > tr:hover {
+      background-color: #f8f9fa;
+    }
+  }
+
+  /* Card styling */
+  .p-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Form grid layout */
+  .p-fluid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* Make certain fields full width */
+  .field:has(#issue) {
+    grid-column: 1 / -1;
+  }
+
+  .field:has(.p-inputswitch) {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .p-dialog .p-dialog-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #dee2e6;
+  }
+}
+
+/* Utility classes */
+.w-full {
+  width: 100%;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.block {
+  display: block;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Delete button */
+.delete-btn {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.delete-btn i {
+  font-size: 1rem;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ff6b6b; /* Red when off */
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50; /* Green when on */
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+.toggle-label {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+::ng-deep .p-button {
+  background-color: var(--highlight-color) !important;
+  color: var(--font-color) !important;
+  border: 1px solid var(--highlight-color) !important;
+}

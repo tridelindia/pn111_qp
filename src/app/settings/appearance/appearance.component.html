@@ -1,0 +1,127 @@
+<div class="settings-container">
+    <div class="settings-section">
+        <div class="section-header">
+            <h3>Themes</h3>
+            <p class="section-description">Choose your preferred theme for the application</p>
+        </div>
+        <div class="theme-options">
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'Bronze'}" (click)="changeColor('bronze')">
+                <div class="theme-preview bronze"></div>
+                <span class="theme-name">Bronze</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'Bronze'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'gold'}" (click)="changeColor('gold')">
+                <div class="theme-preview gold"></div>
+                <span class="theme-name">Gold</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'gold'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'blue'}" (click)="changeColor('blue')">
+                <div class="theme-preview blue"></div>
+                <span class="theme-name">Ocean</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'blue'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'green'}" (click)="changeColor('green')">
+                <div class="theme-preview green"></div>
+                <span class="theme-name">Forest</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'green'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'purple'}"
+                (click)="changeColor('purple')">
+                <div class="theme-preview purple"></div>
+                <span class="theme-name">Royal</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'purple'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'orange'}"
+                (click)="changeColor('orange')">
+                <div class="theme-preview orange"></div>
+                <span class="theme-name">Sunset</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'orange'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'pink'}"
+                (click)="changeColor('pink')">
+                <div class="theme-preview pink"></div>
+                <span class="theme-name">Pink</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'pink'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'rosegold'}"
+                (click)="changeColor('rosegold')">
+                <div class="theme-preview rosegold"></div>
+                <span class="theme-name">Rose Gold</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'rosegold'"></i>
+            </div>
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'lightBlue'}"
+                (click)="changeColor('lightBlue')">
+                <div class="theme-preview lightBlue"></div>
+                <span class="theme-name">Sky</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'lightBlue'"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-header">
+            <h3>Current Direction Widget</h3>
+            <p class="section-description">Select your preferred direction widget style</p>
+        </div>
+        <div class="widget-options">
+            <div class="widget-option" [ngClass]="{'active': selectedCurrentdir === 'direction1'}"
+                (click)="changeCurrentdir('direction1')">
+                <div class="widget-preview">
+                    <div class="image"></div>
+                </div>
+                <span class="widget-name">Style 1</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction1'"></i>
+            </div>
+            <div class="widget-option" [ngClass]="{'active': selectedCurrentdir === 'direction2'}"
+                (click)="changeCurrentdir('direction2')">
+                <div class="widget-preview">
+                    <div class="image2"></div>
+                </div>
+                <span class="widget-name">Style 2</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction2'"></i>
+            </div>
+            <div class="widget-option" [ngClass]="{'active': selectedCurrentdir === 'direction3'}"
+                (click)="changeCurrentdir('direction3')">
+                <div class="widget-preview">
+                    <div class="image3"></div>
+                </div>
+                <span class="widget-name">Style 3</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction3'"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-header">
+            <h3>Current Speed Widget</h3>
+            <p class="section-description">Select your preferred speed widget style</p>
+        </div>
+        <div class="widget-options">
+            <div class="widget-option" [ngClass]="{'active': selectedCurrentspeed === 'speed1'}"
+                (click)="changeCurrentspeed('speed1')">
+                <div class="widget-preview">
+                    <div class="image4"></div>
+                </div>
+                <span class="widget-name">Style 1</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed1'"></i>
+            </div>
+            <div class="widget-option" [ngClass]="{'active': selectedCurrentspeed === 'speed2'}"
+                (click)="changeCurrentspeed('speed2')">
+                <div class="widget-preview">
+                    <div class="image5"></div>
+                </div>
+                <span class="widget-name">Style 2</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed2'"></i>
+            </div>
+            <div class="widget-option" [ngClass]="{'active': selectedCurrentspeed === 'speed3'}"
+                (click)="changeCurrentspeed('speed3')">
+                <div class="widget-preview">
+                    <div class="image6"></div>
+                </div>
+                <span class="widget-name">Style 3</span>
+                <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed3'"></i>
+            </div>
+        </div>
+    </div>
+    <div></div>
+</div>

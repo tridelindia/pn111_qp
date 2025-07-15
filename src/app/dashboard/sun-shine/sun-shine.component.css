@@ -1,0 +1,15 @@
+.demo-chart{
+     width: 450px;
+   height: 230px
+      /* padding-top: 50px; */
+      /* margin-left: 20px; */
+      /* margin-top: -20px; */
+}
+
+@media (min-width:1900px) {
+  .demo-chart{
+     width: 600px;
+    height: 270px;
+    margin-left:-70px;
+}
+}

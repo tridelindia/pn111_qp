@@ -1,0 +1,43 @@
+.compass3{
+    height: 100px;
+    width: 100px;
+    /* background-color: aqua; */
+    position: relative;
+}
+.compass3 img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.compass3-needle{
+    height: 100%;
+    width: 100%;
+    /* background-color: rgba(112, 148, 136, 0.574); */
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(0deg);
+  
+  /* animation: rotate 2s forwards; */
+  transition: transform 0.5s ease-in-out; 
+
+}
+
+@keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(90deg);
+        }
+  
+    
+  }
+.compass3-needle img{
+    height: 40%;
+    width: 5%;
+
+}

@@ -1,0 +1,77 @@
+.analisys_main{
+    height: 95%;
+    width: 99.5%;
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.analisys_left{
+    height: 98%;
+    width: 20.5%;
+    /* background-color: blue; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.analisys_right{
+    height: 95vh;
+    width: 79%;
+    /* background-color: green; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    overflow-y: auto;
+    scroll-behavior: auto;
+}
+
+
+
+.one, .two, .three, .four{
+    height: 49.5%;
+    width: 99.5%;
+    background-color: var(--basebg);
+    border-radius: 10px;
+}
+
+
+
+:host {
+    height: 100%;
+    display: block;
+  }
+/* v2 */
+.main_analis{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+}
+.left{
+    height: 80%;
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow-y: scroll;
+    
+}
+.top, .middle, .center, .bottom{
+    height: 400px;
+    width: 100%;
+    background-color: rgb(137, 97, 97);
+    border-radius: 10px;
+    margin: 5px;
+
+}

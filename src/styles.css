@@ -1,0 +1,318 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+body, html{
+    margin: 0px;
+    padding: 0px;
+    transform: scale(1);
+    transform-origin: top left;
+     width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* background-color: black; */
+ 
+ 
+}
+
+p{
+  font-size: 14px;
+}
+*{
+  font-family: "Jost", sans-serif;
+}
+:root{
+    --mainbg: rgba(255, 255, 255, 0.894);
+    --basebg: #FFFFFF;
+    --icons:#000000;
+    --highlighttext: green;
+    --background-color: linear-gradient(90deg, #6fb4f9, #71b4f8);  /* Soft sky blue */
+    --secondary-color: #c7dffb;   /* Deeper blue */
+    --highlight-color: #3fb2fa;   /* Coral (vibrant accent) */
+    --highlight-color-shadow: #007bff4d;   /* Coral (vibrant accent) */
+    --font-color: #2E2E2E;        /* Dark text */
+    --icon-color: #2E2E2E;        /* Dark icons */
+}
+ 
+[data-theme='blue-dark']{
+ 
+}
+[data-theme='light']{
+ 
+}
+[data-theme='blue-light']{
+ 
+}
+[data-theme='dark']
+* {
+    font-family: "Parkinsans", serif;
+    font-optical-sizing: auto;
+   
+    font-style: normal;
+  }
+ 
+.mainBar{
+    height: 6%;
+    width: 100%;
+    /* background-color:var(--basebg); */
+    /* border-radius: 5px; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+ 
+ 
+ 
+    /* Themes colors */
+ 
+    [data-theme='bronze'] {
+      --background-color: #CE8946;  /* Your warm bronze-peach (unchanged) */
+      --menu-color:#CE8946;
+      --secondary-color: #dca58f;   /* Rich terracotta (earthier than rusty copper) */
+      --highlight-color: #D4A017;   /* Muted gold (softer than #E6B800 for better UI) */
+      --highlight-color-shadow: #ffb7004b;   /* Muted gold (softer than #E6B800 for better UI) */
+      --font-color: #FFFFFF;        /* Near-black (better contrast for body text) */
+      --icon-color: #FFFFFF;        /* White (for clarity on bronze) */
+    }
+ 
+    [data-theme='gold'] {
+      --background-color: #FFE566;  /* Dark slate */
+      --menu-color:#FFE566;
+      --secondary-color: #FFFAE5;   /* Slightly lighter dark gray */
+      --highlight-color: #fbe36d;   /* Example: Deep orange for better contrast */
+      --highlight-color-shadow: #ffd5004b;   /* Example: Deep orange for better contrast */
+      --font-color: #333333;        /* Example: Dark text for readability */
+      --icon-color: #555555;        /* Example: Medium-dark icons */
+    }
+ 
+    [data-theme='blue'] {
+      --background-color: #007BFF;  /* Bootstrap blue */
+      --menu-color:#007BFF;
+      --secondary-color: #a2ccfa;   /* Darker blue */
+      --highlight-color: #4a85e2;   /* Yellow (vibrant contrast) */
+      --highlight-color-shadow: #0066ff4b;   /* Yellow (vibrant contrast) */
+      --font-color: #FFFFFF;        /* White text */
+      --icon-color: #FFFFFF;        /* White icons */
+    }
+ 
+    [data-theme='green'] {
+      --background-color: #28A745;  /* Bootstrap green */
+      --menu-color:#28A745;
+      --secondary-color: #c2f3cd;   /* Darker green */
+      --highlight-color: #50ab65;   /* Gold (accent) */
+      --highlight-color-shadow: #00ff3c46;   /* Gold (accent) */
+      --font-color: #FFFFFF;        /* White text */
+      --icon-color: #FFFFFF;        /* White icons */
+    }
+ 
+    [data-theme='purple'] {
+      --background-color: #6F42C1;  /* Bootstrap purple */
+      --menu-color:#6F42C1;
+      --secondary-color: #aa88de;  /* Deep purple */
+      --highlight-color: #b88af5;   /* Orange (warm contrast) */
+      --highlight-color-shadow: #6f00ff46;   /* Orange (warm contrast) */
+      --font-color: #FFFFFF;        /* White text */
+      --icon-color: #FFFFFF;        /* White icons */
+    }
+ 
+    [data-theme='orange'] {
+      --background-color: linear-gradient(135deg, #FF7E5F, #FEB47B);  /* Sunset */
+      --menu-color:#FEB47B;
+      --secondary-color: #fcc2b3;   /* Burnt orange */
+      --highlight-color: #FEB47B;
+      --highlight-color-shadow: #ff6f0041;
+      --font-color: #2E2E2E;        /* Dark text (readable on gradient) */
+      --icon-color: #2E2E2E;        /* Dark icons */
+    }
+ 
+    [data-theme='pink'] {
+      --background-color: #FF9BD2;  /* Soft bright pink */
+      --menu-color:#FF9BD2;
+      --secondary-color: #FFD6EC;   /* Light pink for contrast */
+      --highlight-color: #edb8d4;   /* Deep purple for bold contrast */
+      --highlight-color-shadow: #ff008841;   /* Deep purple for bold contrast */
+      --font-color: #000000;        /* Dark charcoal for readability */
+      --icon-color: #4B4B4B;        /* Medium-dark gray for icons */
+    }
+ 
+    [data-theme='rosegold'] {
+      --background-color: linear-gradient(135deg, #E0BFB8, #E6C9C2, #F3E0DC);  /* Blush */
+      --menu-color:#E8CDC5;
+      --secondary-color: #d6b3b3af;   /* Muted rose */
+      --highlight-color: #9C6B8E;   /* Dusty purple (subtle accent) */
+      --highlight-color-shadow: #ce4ba93d;   /* Dusty purple (subtle accent) */
+      --font-color: #000000;        /* Dark brown (readable on light) */
+      --icon-color: #000000;        /* Dark icons */
+    }
+ 
+    [data-theme='lightBlue'] {
+      --background-color: linear-gradient(90deg, #6fb4f9, #71b4f8);  /* Soft sky blue */
+      --menu-color:#70b4f9;
+      --secondary-color: #c7dffb;   /* Deeper blue */
+      --highlight-color: #5cacf6;   /* Coral (vibrant accent) */
+      --highlight-color-shadow: #0084ff4d;   /* Coral (vibrant accent) */
+      --font-color: #2E2E2E;        /* Dark text */
+      --icon-color: #2E2E2E;        /* Dark icons */
+    }
+ 
+
+
+
+
+ 
+.poppins-thin {
+    font-family: "Poppins", serif;
+    font-weight: 100;
+    font-style: normal;
+  }
+ 
+  .poppins-extralight {
+    font-family: "Poppins", serif;
+    font-weight: 200;
+    font-style: normal;
+  }
+ 
+  .poppins-light {
+    font-family: "Poppins", serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+ 
+  .poppins-regular {
+    font-family: "Poppins", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+ 
+  .poppins-medium {
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+ 
+  .poppins-semibold {
+    font-family: "Poppins", serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+ 
+  .poppins-bold {
+    font-family: "Poppins", serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+ 
+  .poppins-extrabold {
+    font-family: "Poppins", serif;
+    font-weight: 800;
+    font-style: normal;
+  }
+ 
+  .poppins-black {
+    font-family: "Poppins", serif;
+    font-weight: 900;
+    font-style: normal;
+  }
+ 
+  .poppins-thin-italic {
+    font-family: "Poppins", serif;
+    font-weight: 100;
+    font-style: italic;
+  }
+ 
+  .poppins-extralight-italic {
+    font-family: "Poppins", serif;
+    font-weight: 200;
+    font-style: italic;
+  }
+ 
+  .poppins-light-italic {
+    font-family: "Poppins", serif;
+    font-weight: 300;
+    font-style: italic;
+  }
+ 
+  .poppins-regular-italic {
+    font-family: "Poppins", serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+ 
+  .poppins-medium-italic {
+    font-family: "Poppins", serif;
+    font-weight: 500;
+    font-style: italic;
+  }
+ 
+  .poppins-semibold-italic {
+    font-family: "Poppins", serif;
+    font-weight: 600;
+    font-style: italic;
+  }
+ 
+  .poppins-bold-italic {
+    font-family: "Poppins", serif;
+    font-weight: 700;
+    font-style: italic;
+  }
+ 
+  .poppins-extrabold-italic {
+    font-family: "Poppins", serif;
+    font-weight: 800;
+    font-style: italic;
+  }
+ 
+  .poppins-black-italic {
+    font-family: "Poppins", serif;
+    font-weight: 900;
+    font-style: italic;
+  }
+ 
+ 
+  .ubuntu-light {
+    font-family: "Ubuntu", serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+ 
+  .ubuntu-regular {
+    font-family: "Ubuntu", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+ 
+  .ubuntu-medium {
+    font-family: "Ubuntu", serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+ 
+  .ubuntu-bold {
+    font-family: "Ubuntu", serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+ 
+  .ubuntu-light-italic {
+    font-family: "Ubuntu", serif;
+    font-weight: 300;
+    font-style: italic;
+  }
+ 
+  .ubuntu-regular-italic {
+    font-family: "Ubuntu", serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+ 
+  .ubuntu-medium-italic {
+    font-family: "Ubuntu", serif;
+    font-weight: 500;
+    font-style: italic;
+  }
+ 
+  .ubuntu-bold-italic {
+    font-family: "Ubuntu", serif;
+    font-weight: 700;
+    font-style: italic;
+  }

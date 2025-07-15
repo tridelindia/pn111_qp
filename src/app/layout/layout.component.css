@@ -1,0 +1,26 @@
+.layout{
+    /* padding: 5px; */
+    height: 100%;
+    width: 100%;
+    /* background-color: #e8f0f9; */
+    background-color: var(--secondary-color);
+    /* background-color: rgba(230, 228, 228, 0.854); */
+    /* background: rgb(255,255,255);
+background: linear-gradient(150deg, rgba(255,255,255,1) 0%, rgba(242,241,231,1) 39%, rgba(255,233,0,0.7833727240896359) 100%); */
+    /* background-image: url(../../assets/image/f1dd40d36b17542578727c3d6e863903.jpg); */
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    
+
+}
+.basee{
+    width: 96.6%;
+    height: 100%;
+    margin-top: 3%;
+    /* background-color: aqua; */
+    margin-left: 3.4%;
+    /* overflow: hidden; */
+
+}
