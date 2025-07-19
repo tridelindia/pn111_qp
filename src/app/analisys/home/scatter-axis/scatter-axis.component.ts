@@ -3,6 +3,7 @@ import * as echarts from 'echarts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import { ScatterAxis } from '../home.component';
 import { GlobalDataService } from '../../../global-data/global-data.component';
+import { SensorModel } from '../../../models/station.model';
 @Component({
   selector: 'app-scatter-axis',
   imports: [NgxEchartsModule],
@@ -24,9 +25,23 @@ export class ScatterAxisComponent implements OnInit{
   unitY:string='';
 constructor(private data:GlobalDataService){}
   ngOnInit(): void {
-    const u = this.data.SensorConfigs.filter(item=> item.param_name === this.scatterAxis[0].name1);
+    let u:SensorModel[] =[];
+        let u1:SensorModel[]=[];
+   if(this.scatterAxis[0].name1.includes('current_speed')){
+     u = this.data.SensorConfigs.filter(item=> item.param_name === 'current_speed');
+    }else if(this.scatterAxis[0].name1.includes('current_direction')){
+     u = this.data.SensorConfigs.filter(item=> item.param_name === 'current_direction');
+    }else{
+      u = this.data.SensorConfigs.filter(item=> item.param_name === this.scatterAxis[0].name1);
+    }
     this.unitx = u[0].unit
-    const u1 = this.data.SensorConfigs.filter(item=> item.param_name === this.scatterAxis[0].name2);
+    if(this.scatterAxis[0].name2.includes('current_direction')){
+    u1 = this.data.SensorConfigs.filter(item=> item.param_name === 'current_direction');
+    }else if(this.scatterAxis[0].name2.includes('current_speed')){
+    u1 = this.data.SensorConfigs.filter(item=> item.param_name === 'current_speed');
+    }else{
+      u1 = this.data.SensorConfigs.filter(item=> item.param_name === this.scatterAxis[0].name2);
+    }
     this.unitY = u1[0].unit
     for (let index = 0; index < this.scatterAxis.length; index++) {
         this.axisData.push([

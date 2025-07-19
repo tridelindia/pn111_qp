@@ -81,7 +81,7 @@ names:string[]=[];
     this.chartOption = {
       title: {
         text: this.params.param_name,
-        left: 'center'
+        left: 'left'
       },
       tooltip: {
         trigger: 'axis'

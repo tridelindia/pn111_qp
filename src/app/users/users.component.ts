@@ -43,7 +43,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
   ],
   providers:[RoleService, UserService, DesignationsService]
 })
-export class UsersComponent{
+export class UsersComponent {
  
   constructor(private roleService: RoleService, private userService: UserService, private designationService: DesignationsService, private toast: ToastrService) { }
  
@@ -58,20 +58,32 @@ export class UsersComponent{
   activeTab: string = 'users';
  
   setActiveTab(tab: string) {
-    this.activeTab = tab;  
-   
+    this.activeTab = tab;
+ 
     if (tab === 'users') {
       this.resetForm();
       this.resetRoleForm();
-    }if (tab === 'rolesDesignations'){
+      this.passwordTouched = false;
+      this.usernameTouched = false;
+      this.emailTouched = false;
+    } if (tab === 'rolesDesignations') {
       this.resetForm();
-    }if (tab === 'userLog'){
+      this.passwordTouched = false;
+      this.usernameTouched = false;
+      this.emailTouched = false;
+    } if (tab === 'userLog') {
       this.resetForm();
       this.resetRoleForm();
-    }if(tab === 'addEditUser'){
+      this.passwordTouched = false;
+      this.usernameTouched = false;
+      this.emailTouched = false;
+    } if (tab === 'addEditUser') {
       this.resetRoleForm();
+      this.passwordTouched = false;
+      this.usernameTouched = false;
+      this.emailTouched = false;
     }
-   
+ 
     console.log(tab, this.activeTab);
   }
   // ****************End**********************//
@@ -98,7 +110,7 @@ export class UsersComponent{
   isEditingAdmin: boolean = false;
  
   editUser(user: any) {
-   
+ 
     // Prevent edit option of Admin
     // if (user.is_admin) {
     //   alert("Prime Admin cannot be edited.");
@@ -106,11 +118,14 @@ export class UsersComponent{
     // }
  
     // Edit option for admin
-    this.isEditing = true;
-    this.isEditingAdmin = user.is_admin ?? false;
+    const confirmEdit = confirm("Are you sure you want to edit this user ?");
+    if (confirmEdit) {
+      this.isEditing = true;
+      this.isEditingAdmin = user.is_admin ?? false;
  
-    this.currentUser = { ...user, password: '', confirmPassword: '' };
-    this.setActiveTab('addEditUser');
+      this.currentUser = { ...user, password: '', confirmPassword: '' };
+      this.setActiveTab('addEditUser');
+    }
   }
  
  
@@ -124,11 +139,12 @@ export class UsersComponent{
       return;
     }
  
-    const confirmDelete = confirm("Are you sure you want to delete this user ?");
+    const confirmDelete = confirm(`Are you sure you want to delete this user ?`);
     if (confirmDelete) {
       this.userService.deleteUser(userId).subscribe(() => {
         this.loadUsers();
       });
+      this.toast.success(`User deleted successfully!`);
     }
   }
  
@@ -178,20 +194,20 @@ export class UsersComponent{
   }
  
   isUsernameValid(): boolean {
-  return /^[a-zA-Z0-9]+$/.test(this.currentUser.username);
-}
+    return /^[a-zA-Z0-9]+$/.test(this.currentUser.username);
+  }
  
-isEmailFormatValid(): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.currentUser.email);
-}
+  isEmailFormatValid(): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.currentUser.email);
+  }
  
-isPasswordValid(): boolean {
-  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,15}$/.test(this.currentUser.password ?? '');
-}
+  isPasswordValid(): boolean {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,15}$/.test(this.currentUser.password ?? '');
+  }
  
-passwordTouched: boolean = false;
-usernameTouched: boolean = false;
-emailTouched: boolean = false;
+  passwordTouched: boolean = false;
+  usernameTouched: boolean = false;
+  emailTouched: boolean = false;
  
   onUsernameInput(username: string): void {
     this.usernameInput$.next(username);
@@ -246,22 +262,40 @@ emailTouched: boolean = false;
       (!this.isEditingAdmin && (!this.currentUser.role || !this.currentUser.designation)) ||
       !this.currentUser.avatar
     ) {
-      alert('Please fill in all fields before saving the user.');
+      this.toast.error('Please fill in all fields before saving the user.');
       return;
     }
+ 
+  // Username Format Validation
+  if (!this.isUsernameValid()) {
+    this.toast.error('Only letters and numbers are allowed in the username.');
+    return;
+  }
+ 
+  // Email Format Validation
+  if (!this.isEmailFormatValid()) {
+    this.toast.error('Please enter a valid email address.');
+    return;
+  }
+ 
+  // Password Strength Validation
+  if (!this.isEditing && !this.isPasswordValid()) {
+    this.toast.error('Password must be 8-15 characters, contain uppercase, lowercase, number, and special character.');
+    return;
+  }
  
     if (this.usernameTaken) {
-      alert('Username is already taken.');
+      this.toast.error('Username is already taken.');
       return;
     }
-   
+ 
     if (this.emailTaken) {
-      alert('Email is already in use.');
+      this.toast.error('Email is already in use.');
       return;
-    }    
+    }
  
     if (!this.isEditing && this.currentUser.password !== this.currentUser.confirmPassword) {
-      alert('Passwords do not match!');
+      this.toast.error('Passwords do not match!');
       return;
     }
  
@@ -286,14 +320,16 @@ emailTouched: boolean = false;
         this.resetForm();
         this.setActiveTab('users');
       });
+      this.toast.success('User updated successfully!');
     } else {
       this.userService.addUser(payload).subscribe(() => {
         this.loadUsers();
         this.resetForm();
         this.setActiveTab('users');
       });
+      this.toast.success('User saved successfully!');
     }
-  }  
+  }
  
  
  
@@ -321,52 +357,52 @@ emailTouched: boolean = false;
  
  
  
-    // *********Custom Select************** //
-    // Role
-    dropdownOpen = false;
-    selectedRole: string | null = null;
+  // *********Custom Select************** //
+  // Role
+  dropdownOpen = false;
+  selectedRole: string | null = null;
  
-    toggleDropdown() {
-      this.dropdownOpen = !this.dropdownOpen;
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+ 
+  selectRole(value: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.selectedRole = value;
+    this.currentUser.role = value;
+    setTimeout(() => {
+      this.dropdownOpen = false;
+    }, 200);
+  }
+ 
+ 
+  // Designation
+  designationDropdownOpen = false;
+  selectedDesignation: string | null = null;
+ 
+  toggleDesignationDropdown() {
+    this.designationDropdownOpen = !this.designationDropdownOpen;
+  }
+ 
+  selectDesignation(value: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.selectedDesignation = value;
+    this.currentUser.designation = value;
+ 
+    setTimeout(() => {
+      this.designationDropdownOpen = false;
+    }, 200);
+  }
+ 
+ 
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-select')) {
+      this.dropdownOpen = false;
+      this.designationDropdownOpen = false;
     }
- 
-    selectRole(value: string, event: MouseEvent): void {
-      event.stopPropagation();
-      this.selectedRole = value;
-      this.currentUser.role = value;
-      setTimeout(() => {
-        this.dropdownOpen = false;
-      }, 200);
-    }
- 
- 
-    // Designation
-    designationDropdownOpen = false;
-    selectedDesignation: string | null = null;
- 
-    toggleDesignationDropdown() {
-      this.designationDropdownOpen = !this.designationDropdownOpen;
-    }
- 
-    selectDesignation(value: string, event: MouseEvent): void {
-      event.stopPropagation();
-      this.selectedDesignation = value;
-      this.currentUser.designation = value;
- 
-      setTimeout(() => {
-        this.designationDropdownOpen = false;
-      }, 200);
-    }
-   
- 
-    @HostListener('document:click', ['$event'])
-    onClickOutside(event: MouseEvent) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.custom-select')) {
-        this.dropdownOpen = false;
-        this.designationDropdownOpen = false;
-      }
-    }
+  }
   //****************End******************* //
  
  
@@ -396,58 +432,110 @@ emailTouched: boolean = false;
     permissions: { [page: string]: string[] };
     flatPermissions?: string[]; // used only for ng-select binding
   } = {
-    name: '',
-    description: '',
-    permissions: {},
-    flatPermissions:[]
+      name: '',
+      description: '',
+      permissions: {},
+      flatPermissions: []
+    };
+ 
+ 
+  allPermissions: string[] = [];
+ 
+  pages: string[] = ['Home', 'Dashboard', 'Reports', 'Analysis', 'Sensor Health', 'Notification'];
+  actions: string[] = ['read', 'write', 'execute'];
+ 
+  permissionIcons: { [key: string]: string } = {
+    'Home': 'fa-house',
+    'Dashboard': 'fa-square-poll-vertical',
+    'Analysis': 'fa-chart-line',
+    'Reports': 'fa-rectangle-list',
+    'User Management': 'fa-users-cog',
+    'Settings': 'fa-gears',
+    'Sensor Health': 'fa-heart-pulse',
+    'Notification': 'fa-solid fa-envelope',
   };
  
- 
-allPermissions: string[] = [];
- 
-pages: string[] = ['Home', 'Dashboard', 'Reports', 'Analysis', 'Sensor Health', 'Notification'];
-actions: string[] = ['read', 'write', 'execute'];
- 
-permissionIcons: { [key: string]: string } = {
-  'Home': 'fa-house',
-  'Dashboard': 'fa-square-poll-vertical',
-  'Analysis': 'fa-chart-line',
-  'Reports': 'fa-rectangle-list',
-  'User Management': 'fa-users-cog',
-  'Settings': 'fa-gears',
-  'Sensor Health': 'fa-heart-pulse',
-  'Notification': 'fa-solid fa-envelope',
-};
- 
-generateAllPermissionOptions() {
-  this.allPermissions = [];
-  for (const page of this.pages) {
-    for (const action of this.actions) {
-      this.allPermissions.push(`${page} - ${action}`);
+  generateAllPermissionOptions() {
+    this.allPermissions = [];
+    for (const page of this.pages) {
+      for (const action of this.actions) {
+        this.allPermissions.push(`${page} - ${action}`);
+      }
     }
   }
-}
  
  
-addRole() {
-  
+  // addRole() {
+ 
+  //   const parsedPermissions: { [page: string]: string[] } = {};
+ 
+  //   if (this.newRole.flatPermissions) {
+  //     for (const perm of this.newRole.flatPermissions) {
+  //       const [page, action] = perm.split(' - ');
+  //       if (!parsedPermissions[page]) {
+  //         parsedPermissions[page] = [];
+  //       }
+  //       if (!parsedPermissions[page].includes(action)) {
+  //         parsedPermissions[page].push(action);
+  //       }
+  //     }
+  //   }
+ 
+  //   const roleToSend = {
+  //     name: this.newRole.name,
+  //     description: this.newRole.description,
+  //     permissions: parsedPermissions
+  //   };
+ 
+  //   if (this.isEditRole && this.roleBeingEdited) {
+  //     // Edit mode: call update API
+  //     this.roleService.updateRole(this.roleBeingEdited, roleToSend).subscribe(() => {
+  //       this.resetRoleForm();
+  //       this.loadRoles();
+  //     });
+  //     this.toast.success('Role updated successfully!');
+  //   } else {
+  //     // Add mode: call add API
+  //     this.roleService.addRole(roleToSend as Role).subscribe(() => {
+  //       this.newRole = {
+  //         name: '',
+  //         description: '',
+  //         permissions: {},
+  //         flatPermissions: []
+  //       };
+  //       this.loadRoles();
+  //       this.updateRoleOptions();
+  //     });
+  //     this.toast.success('Role added successfully!');
+  //   }
+  // }
+ 
+  addRole() {
+  const name = this.newRole.name?.trim();
+  const description = this.newRole.description?.trim();
+  const flatPermissions = this.newRole.flatPermissions || [];
+ 
+  // Validation check
+  if (!name || !description || flatPermissions.length === 0) {
+    this.toast.error('Role name, description, and at least one permission are required.');
+    return;
+  }
+ 
   const parsedPermissions: { [page: string]: string[] } = {};
  
-  if (this.newRole.flatPermissions) {
-    for (const perm of this.newRole.flatPermissions) {
-      const [page, action] = perm.split(' - ');
-      if (!parsedPermissions[page]) {
-        parsedPermissions[page] = [];
-      }
-      if (!parsedPermissions[page].includes(action)) {
-        parsedPermissions[page].push(action);
-      }
+  for (const perm of flatPermissions) {
+    const [page, action] = perm.split(' - ');
+    if (!parsedPermissions[page]) {
+      parsedPermissions[page] = [];
+    }
+    if (!parsedPermissions[page].includes(action)) {
+      parsedPermissions[page].push(action);
     }
   }
  
   const roleToSend = {
-    name: this.newRole.name,
-    description: this.newRole.description,
+    name,
+    description,
     permissions: parsedPermissions
   };
  
@@ -456,6 +544,7 @@ addRole() {
     this.roleService.updateRole(this.roleBeingEdited, roleToSend).subscribe(() => {
       this.resetRoleForm();
       this.loadRoles();
+      this.toast.success('Role updated successfully!');
     });
   } else {
     // Add mode: call add API
@@ -468,148 +557,162 @@ addRole() {
       };
       this.loadRoles();
       this.updateRoleOptions();
+      this.toast.success('Role added successfully!');
     });
   }
 }
  
-resetRoleForm() {
-  this.newRole = {
-    name: '',
-    description: '',
-    permissions: {},
-    flatPermissions: []
+  resetRoleForm() {
+    this.newRole = {
+      name: '',
+      description: '',
+      permissions: {},
+      flatPermissions: []
+    };
+    this.isEditRole = false;
+    this.roleBeingEdited = null;
+  }
+ 
+  objectEntries(obj: any): [string, string[]][] {
+    return Object.entries(obj || {});
+  }
+ 
+  actionIcons: { [key: string]: string } = {
+    read: 'fa-eye',
+    write: 'fa-pen',
+    execute: 'fa-terminal'
   };
-  this.isEditRole = false;
-  this.roleBeingEdited = null;
-}
- 
-objectEntries(obj: any): [string, string[]][] {
-  return Object.entries(obj || {});
-}
- 
-actionIcons: { [key: string]: string } = {
-  read: 'fa-eye',
-  write: 'fa-pen',
-  execute: 'fa-terminal'
-};
  
  
-updateRoleOptions() {
-  // Ensure selected role stays valid after role list is updated
-  if (!this.roles.find(r => r.name === this.selectedRole)) {
-    this.selectedRole = null;
-  }
-}
- 
-generateTooltip(page: string, actions: string[]): string {
-  return `${page}\n${actions.map(a => `• ${a}`).join('\n')}`;
-}
- 
-deleteRole(roleName: string) {
- 
-  if (roleName === "Admin"){
-    this.toast.info("Role Admin cannot be deleted");
-    return;
-  }
- 
-  const confirmDelete = confirm(`Are you sure you want to delete the role "${roleName}"?`);
-  if (confirmDelete) {
-    this.roleService.deleteRoleByName(roleName).subscribe(() => {
-      this.loadRoles(); // Refresh list
-    });
-  }
-}
- 
-editRole(role: any){
- 
-  if (role.name === "Admin"){
-    alert("Role Admin cannot be edited");
-    return;
-  }
- 
-  this.isEditRole = true;
-  this.roleBeingEdited = role.name;
- 
-  // Flatten the permission object to ["Page - action"] format
-  const flatPermissions: string[] = [];
-  for (const page in role.permissions) {
-    if (role.permissions.hasOwnProperty(page)) {
-      const actions = role.permissions[page];
-      for (const action of actions) {
-        flatPermissions.push(`${page} - ${action}`);
-      }
+  updateRoleOptions() {
+    // Ensure selected role stays valid after role list is updated
+    if (!this.roles.find(r => r.name === this.selectedRole)) {
+      this.selectedRole = null;
     }
   }
  
-  this.newRole = {
-    name: role.name,
-    description: role.description,
-    permissions: role.permissions,
-    flatPermissions: flatPermissions
-  };
+  generateTooltip(page: string, actions: string[]): string {
+    return `${page}\n${actions.map(a => `• ${a}`).join('\n')}`;
+  }
  
-}
+  deleteRole(roleName: string) {
+ 
+    if (roleName === "Admin") {
+      this.toast.info("Role Admin cannot be deleted");
+      return;
+    }
+ 
+    const confirmDelete = confirm(`Are you sure you want to delete this role ?`);
+    if (confirmDelete) {
+      this.roleService.deleteRoleByName(roleName).subscribe(() => {
+        this.loadRoles(); // Refresh list
+      });
+      this.toast.success(`Role deleted successfully!`);
+    }
+  }
+ 
+  editRole(role: any) {
+ 
+    if (role.name === "Admin") {
+      this.toast.info("Role Admin cannot be edited");
+      return;
+    }
+ 
+    const confirmEdit = confirm(`Are you sure you want to edit the role ?`);
+    if (!confirmEdit) return;
+    this.isEditRole = true;
+    this.roleBeingEdited = role.name;
+ 
+    // Flatten the permission object to ["Page - action"] format
+    const flatPermissions: string[] = [];
+    for (const page in role.permissions) {
+      if (role.permissions.hasOwnProperty(page)) {
+        const actions = role.permissions[page];
+        for (const action of actions) {
+          flatPermissions.push(`${page} - ${action}`);
+        }
+      }
+    }
+ 
+    this.newRole = {
+      name: role.name,
+      description: role.description,
+      permissions: role.permissions,
+      flatPermissions: flatPermissions
+    };
+ 
+  }
   //****************End*******************//
  
  
  
   //***************Designation*********** //
-   // Replace hardcoded list
-designations: any[] = [];
+  // Replace hardcoded list
+  designations: any[] = [];
  
-filteredDesignations: any[] = [];
+  filteredDesignations: any[] = [];
  
-// Object for the form
-newDesignation = { title: '', description: '' };
+  // Object for the form
+  newDesignation = { title: '', description: '' };
  
-// Load designations from DB
-loadDesignations() {
-  this.designationService.getDesignations().subscribe(designations => {
-    this.designations = designations;
-    this.filteredDesignations = designations.filter(designation => designation.title.toLowerCase() !== 'admin');
-  });
-}
- 
-// Add designation to DB
-addDesignation() {
-  if (this.newDesignation.title && this.newDesignation.description) {
-    this.designationService.addDesignation(this.newDesignation).subscribe(
-      () => {
-        this.loadDesignations();
-        this.resetDesForm();
-      },
-      (error) => {
-        console.error('Error adding designation:', error);
-      }
-    );
-  }
-}
- 
-// Delete designation from DB
-deleteDesignation(designation: any) {
-
-    if (designation.title === "Admin"){
-    this.toast.info("Designation Admin cannot be deleted");
-    return;
+  // Load designations from DB
+  loadDesignations() {
+    this.designationService.getDesignations().subscribe(designations => {
+      this.designations = designations;
+      this.filteredDesignations = designations.filter(designation => designation.title.toLowerCase() !== 'admin');
+    });
   }
  
-  const confirmDesDelete = confirm(`Are you sure you want to delete this designation ?`);
-  if (confirmDesDelete) {
-  this.designationService.deleteDesignation(designation.id).subscribe(
-    () => {
-      this.loadDesignations();
-    },
-    (error) => {
-      console.error('Error deleting designation:', error);
+  // Add designation to DB
+  addDesignation() {
+    const title = this.newDesignation.title?.trim();
+    const description = this.newDesignation.description?.trim();
+ 
+    if (title && description) {
+      const payload = { title, description }; // use trimmed values
+ 
+      this.designationService.addDesignation(payload).subscribe(
+        () => {
+          this.loadDesignations();
+          this.resetDesForm();
+          this.toast.success('Designation added successfully!');
+        },
+        (error) => {
+          console.error('Error adding designation:', error);
+        }
+      );
+    } else {
+      this.toast.error('Both title and description are required.');
     }
-  );
   }
-}
  
-// Reset form
-resetDesForm() {
-  this.newDesignation = { title: '', description: '' };
-}
+  // Delete designation from DB
+  deleteDesignation(designation: any) {
+ 
+    if (designation.title === "Admin") {
+      this.toast.info("Designation Admin cannot be deleted");
+      return;
+    }
+ 
+    const confirmDesDelete = confirm(`Are you sure you want to delete this designation ?`);
+    if (confirmDesDelete) {
+      this.designationService.deleteDesignation(designation.id).subscribe(
+        () => {
+          this.loadDesignations();
+        },
+        (error) => {
+          console.error('Error deleting designation:', error);
+        }
+      );
+      this.toast.success(`Designation deleted successfully!`);
+    }
+  }
+ 
+  // Reset form
+  resetDesForm() {
+    this.newDesignation = { title: '', description: '' };
+  }
   // ***********************End*******************************//
 }
+ 
  

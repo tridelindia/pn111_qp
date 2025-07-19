@@ -23,8 +23,8 @@
   }
   
   .score_tab {
-    height: 78%;
-    width: 420px;
+    height: 75%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -36,8 +36,12 @@
   .title_data span {
     font-size: 12px;
     font-weight: 300;
+    /* margin-top: -10px; */
+    margin:0;
   }
-  
+  .title_data h3{
+    margin:0;
+  }
   .score {
     height: 50%;
     margin: 10px;
@@ -57,7 +61,7 @@
   
   .score_bars {
     height: 100%;
-    width: 420px;
+    width: 100%;
     /* background-color: #1CB5E0; */
     display: flex;
     flex-direction: row;
@@ -67,16 +71,18 @@
   
   .bar_item {
     height: 100%;
-    width: 12%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-right: 15px;
+    margin-left: 15px;
   }
   
   .bar {
     height: 80%;
-    width: 45%;
+    width: 100%;
     border-radius: 25px;
     position: relative;
     overflow: hidden;

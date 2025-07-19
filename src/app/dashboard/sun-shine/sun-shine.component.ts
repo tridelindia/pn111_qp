@@ -32,7 +32,8 @@ export class SunShineComponent implements OnInit {
     this.sunshineData.forEach(entry => {
       const day = entry.date; // MM-DD
       times.forEach(time => {
-        const label = `${day} ${time}`;
+        const [year, month, date] = entry.date.split('-'); // Assuming "YYYY-MM-DD"
+const label = `${date}-${month} (${time})`;
         xAxisLabels.push(label);
         dataPoints.push(entry.hourly[time] ?? 0);
         // Add sun/moon markers
@@ -99,7 +100,7 @@ export class SunShineComponent implements OnInit {
         const time = label.split(' ')[1];
         const color = time === '12:00' ? '#ffe6bf' : '#dbd9d9'; // light orange or light gray
         return [{
-          name: time === '12:00' ? 'Day' : 'Night',
+          name: time === '12:00' ? 'D' : 'N',
           xAxis: label,
           itemStyle: {
             color: color,

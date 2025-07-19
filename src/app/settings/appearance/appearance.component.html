@@ -5,7 +5,8 @@
             <p class="section-description">Choose your preferred theme for the application</p>
         </div>
         <div class="theme-options">
-            <div class="theme-option" [ngClass]="{'active': selectedColor === 'Bronze'}" (click)="changeColor('bronze')">
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'Bronze'}"
+                (click)="changeColor('bronze')">
                 <div class="theme-preview bronze"></div>
                 <span class="theme-name">Bronze</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'Bronze'"></i>
@@ -37,8 +38,7 @@
                 <span class="theme-name">Sunset</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'orange'"></i>
             </div>
-            <div class="theme-option" [ngClass]="{'active': selectedColor === 'pink'}"
-                (click)="changeColor('pink')">
+            <div class="theme-option" [ngClass]="{'active': selectedColor === 'pink'}" (click)="changeColor('pink')">
                 <div class="theme-preview pink"></div>
                 <span class="theme-name">Pink</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedColor === 'pink'"></i>
@@ -69,7 +69,7 @@
                 <div class="widget-preview">
                     <div class="image"></div>
                 </div>
-                <span class="widget-name">Style 1</span>
+                <span class="widget-name">Current Direction Widget 1</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction1'"></i>
             </div>
             <div class="widget-option" [ngClass]="{'active': selectedCurrentdir === 'direction2'}"
@@ -77,7 +77,7 @@
                 <div class="widget-preview">
                     <div class="image2"></div>
                 </div>
-                <span class="widget-name">Style 2</span>
+                <span class="widget-name">Current Direction Widget 2</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction2'"></i>
             </div>
             <div class="widget-option" [ngClass]="{'active': selectedCurrentdir === 'direction3'}"
@@ -85,7 +85,7 @@
                 <div class="widget-preview">
                     <div class="image3"></div>
                 </div>
-                <span class="widget-name">Style 3</span>
+                <span class="widget-name">Current Direction Widget 3</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentdir === 'direction3'"></i>
             </div>
         </div>
@@ -102,7 +102,7 @@
                 <div class="widget-preview">
                     <div class="image4"></div>
                 </div>
-                <span class="widget-name">Style 1</span>
+                <span class="widget-name">Current Speed Widget 1</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed1'"></i>
             </div>
             <div class="widget-option" [ngClass]="{'active': selectedCurrentspeed === 'speed2'}"
@@ -110,7 +110,7 @@
                 <div class="widget-preview">
                     <div class="image5"></div>
                 </div>
-                <span class="widget-name">Style 2</span>
+                <span class="widget-name">Current Speed Widget 2</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed2'"></i>
             </div>
             <div class="widget-option" [ngClass]="{'active': selectedCurrentspeed === 'speed3'}"
@@ -118,7 +118,7 @@
                 <div class="widget-preview">
                     <div class="image6"></div>
                 </div>
-                <span class="widget-name">Style 3</span>
+                <span class="widget-name">Current Speed Widget 3</span>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedCurrentspeed === 'speed3'"></i>
             </div>
         </div>

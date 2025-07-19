@@ -404,6 +404,7 @@ const editStation = async (req, res) => {
         buoy_loc_seconds_lon,
         buoy_sensors,
         geo_format,
+        buoy_status,
         buoy_image
     } = req.body;
 
@@ -423,8 +424,9 @@ const editStation = async (req, res) => {
                 lon_min = $11,
                 lon_sec = $12,
                 sensors = $13,
-                image = $14
-            WHERE station_id = $15
+                image = $14,
+                status= $15
+            WHERE station_id = $16
             RETURNING *
         `;
 
@@ -443,6 +445,7 @@ const editStation = async (req, res) => {
             buoy_loc_seconds_lon,
             buoy_sensors,
             buoy_image,
+            buoy_status,
             buoy_id
         ];
 

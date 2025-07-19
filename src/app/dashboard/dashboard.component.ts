@@ -35,7 +35,7 @@ interface OceansensorsUnit{
 tm02:string;
 wave_direction:string;
 mean_wave_direction:string;
-max_wave_height:string;
+hmax:string;
 fourier_coefficient_a1:string;
 dominant_time_period_fw:string;
 havg:string;
@@ -141,6 +141,7 @@ export class DashboardComponent implements OnInit{
   buoyLocation:[number, number]= [0,0];
   db_img:string= '';
   ststionID!:string;
+  StationName!:string;
 toggleMapon(){
   this.map.destroyMap();
   this.stationConfiglist = []
@@ -178,7 +179,8 @@ Bins :any[]=[];
 fromDate!:string;
 toDate!:string;
     ngOnInit(): void {
-      this.http.get('http://localhost:3000/api/getBin').subscribe(
+      this.map.destroyMap();
+      this.http.get('http://192.168.0.126:3000/api/getBin').subscribe(
         (response:any)=>{
           //console.log("binsss", response)
          this.Bins = response
@@ -194,6 +196,7 @@ toDate!:string;
     this.toDate = endDate.toISOString();
       this.changeimage();
       this.ststionID = this.layout.selectedStationId
+      this.StationName = this.layout.StationName;
 this.map.destroyMap()
         //console.log("sensorssss", this.sensorsss)
 
@@ -230,11 +233,11 @@ this.map.destroyMap()
  
     
     fetchSensorCofig() {
-      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://192.168.0.126:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           this.sensorConfig = response;
 
-      //console.log("Sensor==", response);
+      console.log("Sensor==", response);
       this.oceanSensorUnit = {} as OceansensorsUnit;
       this.MetUnit = {} as MetSensorUnit;
       this.WaterSensorUnit = {} as WatSensorunit;
@@ -276,7 +279,7 @@ this.map.destroyMap()
     fetchSensors() {
       this.BuoyData = [];
       const params = new HttpParams().set('fromDate', this.fromDate).set('toDate',this.toDate).set('stationId', this.layout.selectedStationId);
-      this.http.get('http://localhost:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
+      this.http.get('http://192.168.0.126:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
         (response: any) => {
           this.BuoyData = response;
           this.checkDataLoaded();
@@ -378,7 +381,7 @@ for (let i = 0; i < this.binData.length; i += 2) {
         mapContainer!,
         this.buoyLocation[0],
         this.buoyLocation[1], 
-      this.warning, this.danger, 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+      this.warning, this.danger, 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', this.StationName
         
       )
     }
@@ -445,6 +448,9 @@ for (let i = 0; i < this.binData.length; i += 2) {
       // console.log(`D10: ${this.direction10.toFixed(2)} -> ${this.d10_value}`);
     }
 
+    parseFoloaT(val: string):number{
+      return parseFloat(val);
+    }
     directionValue(degrees: number): string {
       degrees = degrees % 360;
       if (degrees < 0) degrees += 360;

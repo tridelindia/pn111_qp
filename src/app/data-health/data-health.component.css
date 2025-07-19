@@ -34,3 +34,36 @@
   .main-content, .data-loss-chart {
     margin-bottom: 24px; /* Space between sections */
   }
+
+  ::ng-deep .p-datepicker-panel {
+    background: var(--highlight-color) !important;
+    border: 1px solid var(--highlight-color-shadow) !important;
+    /* color: var(--text-color) !important; */
+  }
+ 
+  ::ng-deep .p-datepicker-header {
+    background: var(--highlight-color) !important;
+  }
+ 
+  ::ng-deep .p-datepicker-day-selected {
+    background: var(--highlight-color-shadow) !important;
+  }
+ 
+  ::ng-deep .p-button-sm.p-button-icon-only.p-button-rounded svg{
+    /* fill: white !important; */
+    color: white !important;
+  }
+ 
+  ::ng-deep .p-datepicker-year-selected {
+    background: var(--highlight-color-shadow) !important;
+  }
+ 
+  ::ng-deep .p-button-label {
+    font-weight: normal;
+    transition: 0.3s;
+  }
+ 
+  ::ng-deep .p-button-label:hover {
+    font-weight: bold;
+  }
+  

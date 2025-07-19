@@ -6,7 +6,7 @@ import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import { Feature } from 'ol';
 import { Circle, LineString, Point } from 'ol/geom';
-import { Circle as CircleStyle, Fill, Icon, Stroke, Style } from 'ol/style';
+import { Circle as CircleStyle, Fill, Icon, Stroke, Style, Text } from 'ol/style';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import { XYZ } from 'ol/source';
@@ -60,7 +60,7 @@ export class MapService {
     vectorLayer.getSource()?.addFeature(circleFeatureLastPoint);
   }
   
-  createMap(target: HTMLElement, latitude: number, longitude: number, warning: number, danger: number, mapUrl:string): void {
+  createMap(target: HTMLElement, latitude: number, longitude: number, warning: number, danger: number, mapUrl:string, name:string): void {
     // Destroy existing map instance if it exists
     this.destroyMap();
     //console.log(show);
@@ -86,8 +86,18 @@ export class MapService {
     });
     const marker = new Feature({ geometry: new Point(center) });
     marker.setStyle(new Style({
-      image: new Icon({ src: '../../assets/buoyimg/buoy.png', scale: 0.04 })
+      image: new Icon({ src: '../../assets/buoyimg/buoy.png', scale: 0.04 }),
+      text: new Text({
+            font: '15px jost',
+            text: name,
+            offsetY: -40,
+            fill: new Fill({ color: '#000' }),
+            stroke: new Stroke({ color: '#fff', width: 2 }),
+          }),
     }));
+
+    
+
     const circleFeature = new Feature({
       geometry: new Circle(center, warning),
     });

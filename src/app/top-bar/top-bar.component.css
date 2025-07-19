@@ -235,7 +235,7 @@ select option{
 .list_of_station p{
   margin-left: 10px;
   color: black;
-font-size: large;
+font-size: medium;
 }
 .list_of_station{
   height: 40px;

@@ -128,7 +128,7 @@ select option{
     background-color: white;
 }
 
-.option{
+/* .option{
     color: black;
     font-size: 15px;
     padding-left: 10px;
@@ -139,7 +139,6 @@ select option{
 .option:hover{
     color: black;
     font-size: 17px;
-    /* background-color: rgb(191, 190, 190); */
     padding-left: 10px;
     padding-right: 10px;
     cursor: pointer;
@@ -161,15 +160,35 @@ width: auto ;
     margin-left: 10px;
     margin-right: 10px;
     padding: 5px;
-    /* padding-top: 5px; */
-    /* padding-bottom: 5px; */
     display: flex;
     font-weight: 100;
     font-size: 15px;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+} */
+
+.option,
+.option_active {
+  font-size: 15px;
+  padding: 5px 5px;
+  cursor: pointer;
+  font-weight: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin: 0 10px;
 }
+ 
+.option:hover {
+  font-size: 17px;
+}
+ 
+.option_active {
+  background-color: var(--highlight-color);
+}
+ 
 
 
 .boddy{

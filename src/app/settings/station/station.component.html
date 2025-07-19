@@ -22,10 +22,10 @@
                         </div>
 
                         <span class="status"
-                            [ngClass]="item.buoy_status === 'active'? 'status' :'status_inactive'"></span>
+                            [ngClass]="item.buoy_status === 'active'? 'status' :item.buoy_status === 'inactive'?'status_inactive':'status_maintanence'"></span>
                     </div>
                     <div class="card-actions">
-                        <button (click)="editStation(item)">
+                        <button (click)="editStation(item, $index)">
                             <i class="fas fa-edit"></i>
                             <span>Edit</span>
                         </button>
@@ -176,7 +176,7 @@
             <div class="action_title">
 
                 <h3>Station Details</h3>
-                <button (click)="addStation()">Add Station</button>
+                <button (click)="addStation()">Create Station</button>
             </div>
             <div class="section_details" *ngIf="isInfo">
 
@@ -184,7 +184,7 @@
                     <div class="left_details_title">
                         <h2>{{selectedstation.buoy_name}}</h2>
                         <button class="activebutton"
-                            [ngClass]="selectedstation.buoy_status == 'active'?'activebutton':'inactivebutton'">{{selectedstation.buoy_status}}</button>
+                            [ngClass]="selectedstation.buoy_status == 'active'?'activebutton':selectedstation.buoy_status == 'inactive'? 'inactivebutton':'maintanencebutton'">{{selectedstation.buoy_status}}</button>
                     </div>
                     <!-- <img [src]="selectedstation.buoy_image" alt=""> -->
                     <p>{{selectedstation.buoy_id}}</p>
@@ -278,11 +278,26 @@
                             <h5>Station ID</h5>
                             <input type="text" value="10" [(ngModel)]="selectedstation!.buoy_id" readonly>
                         </div>
+
+                        <!-- </p-selectButton> -->
                         <div class="right_ini">
                             <!-- <img [src]="imageUrl || 'default.png'" alt="Upload Image" (click)="uploadImage()"
                                 class="upload-img">
                             <input type="file" id="fileInput" hidden (change)="onFileSelected($event)"
                                 accept="image/*" /> -->
+                            <select [(ngModel)]="selectedStatus" (ngModelChange)="onSelect($event)">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="Maintenance">Maintenance</option>
+                            </select>
+                            <!-- <div class="p-buttonset">
+                                <button pButton label="active" (click)="onSelect('active')"
+                                    [class.p-button-outlined]="selected !== 'active'"></button>
+                                <button pButton label="maintanence" (click)="onSelect('maintanence')"
+                                    [class.p-button-outlined]="selected !== 'maintanence'"></button>
+                                <button pButton label="inactive" (click)="onSelect('inactive')"
+                                    [class.p-button-outlined]="selected !== 'inactive'"></button>
+                            </div> -->
                         </div>
                     </div>
                     <!-- <div class="left_details_title">
@@ -478,7 +493,7 @@
                         </div>
                         <div class="actions">
 
-                            <button class="update" (click)="createStation()">update</button>
+                            <button class="update" (click)="createStation()">Submit</button>
                             <button class="check" (click)="check_location()">Check</button>
                         </div>
                     </div>

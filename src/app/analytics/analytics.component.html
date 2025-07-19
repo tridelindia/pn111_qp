@@ -11,6 +11,15 @@
                         </option>
                     </select>
                 </div>
+                <div class="select_div" *ngIf="isMultiCurrent">
+                    <p>Select Profile</p>
+                    <select name="Parameters" id="parameters" [(ngModel)]="selectedBin"
+                        (change)="changewithBinCompare()" [disabled]="false">
+                        <option *ngFor="let param of Bins" [value]="param.name">
+                            {{ param.value }}
+                        </option>
+                    </select>
+                </div>
             </div>
             <app-test-chart id="compare" [plotType]="selectedPlot" [stations]="stations"
                 [selectedStation]="selectedStation" *ngIf="!isLoad" [length]="selectedParams.length"
@@ -53,20 +62,33 @@
                         <div class="dropDowns">
                             <div class="select_div">
                                 <p>Select Y1 Parameter</p>
-                                <select name="Parameters" id="parameters" [(ngModel)]="selectedMultix1"
-                                    (change)="changetiMulOne()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                                <select [(ngModel)]="selectedMultix1Display" (change)="changetiMulOne()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
+                                        [hidden]="param.param_name === selectedMultix2Display">
                                         {{ param.param_name }}
                                     </option>
                                 </select>
                             </div>
+                            <div class="select_div" *ngIf="isMultiy1_current">
+                                <p>Select Bin (Y2 axis)</p>
+                                <select [(ngModel)]="selectedBin_multiy1" (change)="updateBinParam('y1')">
+                                    <option *ngFor="let bin of Bins" [value]="bin.name">{{ bin.value }}</option>
+                                </select>
+                            </div>
+
                             <div class="select_div">
                                 <p>Select Y2 Parameter</p>
-                                <select name="Parameters" id="parameters" [(ngModel)]="selectedMultix2"
-                                    (change)="changetiMulOne()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
-                                        {{ param .param_name}}
+                                <select [(ngModel)]="selectedMultix2Display" (change)="changetiMulOne()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
+                                        [hidden]="param.param_name === selectedMultix1Display">
+                                        {{ param.param_name }}
                                     </option>
+                                </select>
+                            </div>
+                            <div class="select_div" *ngIf="isMultiy2_current">
+                                <p>Select Bin (Y2 axis)</p>
+                                <select [(ngModel)]="selectedBin_multiy2" (change)="updateBinParam('y2')">
+                                    <option *ngFor="let bin of Bins" [value]="bin.name">{{ bin.value }}</option>
                                 </select>
                             </div>
                         </div>
@@ -75,27 +97,51 @@
                     </div>
                     <div class="three">
                         <div class="dropDowns">
+
+                            <!-- X Axis -->
                             <div class="select_div">
                                 <p>Select X Axis</p>
-                                <select name="Parameters" id="parameters" [(ngModel)]="selectedScactterX"
-                                    (change)="changeScatterOne()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
-                                        {{ param .param_name}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="select_div">
-                                <p>Select Y Axis</p>
-                                <select name="Parameters" id="parameters" [(ngModel)]="selectedScatterY"
-                                    (change)="changeScatterOne()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
+                                <select [(ngModel)]="selectedScactterXDisplay" (change)="onScatterChange()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
+                                        [hidden]="param.param_name === selectedScatterYDisplay">
                                         {{ param.param_name }}
                                     </option>
                                 </select>
                             </div>
+
+                            <!-- X Bin -->
+                            <div class="select_div" *ngIf="isScatterXCurrent">
+                                <p>Select Profile (X axis)</p>
+                                <select [(ngModel)]="selectedBinScatterX" (change)="updateScatterBin('x')">
+                                    <option *ngFor="let param of Bins" [value]="param.name">{{ param.value }}</option>
+                                </select>
+                            </div>
+
+                            <!-- Y Axis -->
+                            <div class="select_div">
+                                <p>Select Y Axis</p>
+                                <select [(ngModel)]="selectedScatterYDisplay" (change)="onScatterChange()">
+                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
+                                        [hidden]="param.param_name === selectedScactterXDisplay">
+                                        {{ param.param_name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Y Bin -->
+                            <div class="select_div" *ngIf="isScatterYCurrent">
+                                <p>Select Profile (Y axis)</p>
+                                <select [(ngModel)]="selectedBinScatterY" (change)="updateScatterBin('y')">
+                                    <option *ngFor="let param of Bins" [value]="param.name">{{ param.value }}</option>
+                                </select>
+                            </div>
+
                         </div>
-                        <app-scatter-axis [scatterAxis]="scatterAxis" *ngIf="!isScatterLoading"></app-scatter-axis>
+
+                        <app-scatter-axis [scatterAxis]="scatterAxis" *ngIf="!isScatterLoading">
+                        </app-scatter-axis>
                     </div>
+
                     <div class="fout_split" *ngIf="isPolar">
                         <h3 class="ramp">Polar Plot</h3>
                         <div class="four" [ngStyle]="{ 'width': polarNumber === 2 ? '50%' : '100%' }">
@@ -177,10 +223,11 @@
                 <p class="tit">Select Station</p>
                 <p-multiselect [options]="stations" [(ngModel)]="selectedStation" name="stationId" optionLabel="name"
                     optionValue="stationId" placeholder="Select Stations" class="w-full md:w-56" required
-                    [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView">
+                    [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView"
+                    (ngModelChange)="changeMultiStation()">
                 </p-multiselect>
                 <select name="Stations" id="" [(ngModel)]="singleStation" *ngIf="isSingleView"
-                    (onChange)="singleStationchange()">
+                    (change)="singleStationchange()">
                     <option value="" *ngFor="let station of stations" [value]="station.name">{{station.name}}</option>
                 </select>
             </div>
@@ -262,10 +309,10 @@
                         <p>Year</p>
                     </div>
                 </div>
-                <p-datepicker [(ngModel)]="selectedDate" [showIcon]="true"
-                    [selectionMode]="pickerState === 'date'? 'range':'single'"
-                    [view]="pickerState === 'date' || pickerState === 'week'? 'date' : pickerState === 'month'? 'month': 'year'"
-                    (onClose)="onDatePicked()" dateFormat="dd-mm-yy"></p-datepicker>
+                <p-datepicker [(ngModel)]="selectedDate" [showIcon]="true" [selectionMode]="selectionMode"
+                    [view]="calendarView" (onClose)="onDatePicked()" dateFormat="dd-mm-yy">
+                </p-datepicker>
+
             </div>
 
 
@@ -290,8 +337,46 @@
 
                 </select>
             </div>
+            <div class="sensors" *ngIf="!isSingleView">
+                <p>Select Sensor Group</p>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('oceanography')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'oceanography'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Oceanography</p>
+                    </div>
+                    <div *ngIf="isMeteriology" class="sensor_item" (click)="onSelectSensor('meteriology')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'meteriology'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Meteorology</p>
+                    </div>
+                </div>
+                <div class="split_sensors">
+
+                    <div class="sensor_item" (click)="onSelectSensor('waterQuality')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'waterQuality'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Water Quality</p>
+                    </div>
+                    <div class="sensor_item" (click)="onSelectSensor('microFlu')">
+                        <div class="toggle">
+                            <div class="toggle_fill"
+                                [ngClass]="selectedSensor === 'microFlu'?'toggle_fill_active':'toggle_fill'"></div>
+                        </div>
+                        <p>Oil in Water</p>
+                    </div>
+                </div>
+
+            </div>
             <button class="Submit_button" (click)="isSingleView?fetchSensors(): isSubmitButton()">Submit</button>
-                        <div class="sensors">
+            <div class="sensors" *ngIf="isSingleView">
                 <p>Select Sensor Group</p>
                 <div class="split_sensors">
 
@@ -330,7 +415,7 @@
 
             </div>
         </div>
-        
+
         <div class="param_lists" *ngIf="isSelectParams">
             <i class="fa fa-arrow-left" (click)="onParamSelection('back')"></i>
             <h3>Select parameters</h3>

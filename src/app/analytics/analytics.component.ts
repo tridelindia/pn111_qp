@@ -110,7 +110,7 @@ export class AnalyticsComponent implements OnInit{
   scatterAxis:ScatterAxis[] = [];
   PolarAxis:PolarAxis[] = [];
   PolarAxis2:PolarAxis[]=[];
-  selectedDate!:string;
+  // selectedDate!:string;
 multiStationData!:{
   param_name: string,
   values: { [key: string]: string[] },
@@ -119,50 +119,221 @@ multiStationData!:{
 pickerState:string = 'date';
 
 
-  onPickerTap(state:string){
-    this.pickerState = state
+// bin selection
+selectedMultix1Display: string = '';
+selectedMultix2Display: string = '';
+
+// Actual values to query BuoyData (like "current_speed_bin_1")
+selectedMultix1Actual: string = '';
+selectedMultix2Actual: string = '';
+
+// Flags and bins
+isMultiy1_current: boolean = false;
+isMultiy2_current: boolean = false;
+selectedBin_multiy1: string = '';
+selectedBin_multiy2: string = '';
+
+temp_multiy1!:string;
+temp_multiy2!:string;
+
+get y1Model() {
+  return this.isMultiy1_current ? this.temp_multiy1 : this.selectedMultix1;
+}
+get y2Model() {
+  return this.isMultiy2_current ? this.temp_multiy2 : this.selectedMultix2;
+}
+  changewithMultiBin_y1(){
+    console.log(this.selectedBin_multiy1);
+    switch (this.selectedBin_multiy1) {
+      case 'profile1':
+        this.selectedMultix1 = this.selectedMultix1.includes('speed') ? 'current_speed_bin_1' : 'current_direction_bin_1';
+        this.isMultiLoading = true;
+      setTimeout(() => {
+         this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+        // this.assignSingleAxis(this.selectedparam);
+
+      }, 100);
+        break;
+      case 'profile2':
+        this.selectedMultix1 = this.selectedMultix1.includes('speed') ? 'current_speed_bin_2' : 'current_direction_bin_2';
+        this.isMultiLoading = true;
+      setTimeout(() => {
+        // this.assignSingleAxis(this.selectedMultix1);
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+      }, 100);
+        break;
+      case 'profile3':
+        this.selectedMultix1 = this.selectedMultix1.includes('speed') ? 'current_speed_bin_3' : 'current_direction_bin_3';
+        this.isMultiLoading = true;
+      setTimeout(() => {
+        // this.assignSingleAxis(this.selectedparam);
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+      }, 100);
+        break;
+      case 'profile4':
+        this.selectedMultix1 = this.selectedMultix1.includes('speed') ? 'current_speed_bin_4' : 'current_direction_bin_4';
+        this.isMultiLoading = true;
+      setTimeout(() => {
+        // this.assignSingleAxis(this.selectedparam);
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+      }, 100);
+        break;
+      case 'profile5':
+        this.selectedMultix1 = this.selectedMultix1.includes('speed') ? 'cell_5_speed' : 'cell_5_dir';
+        this.isMultiLoading = true;
+      setTimeout(() => {
+        // this.assignSingleAxis(this.selectedparam);
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+      }, 100);
+        break;
+      default:
+        break;
+    }
+    console.log("param",this.selectedMultix1)
   }
 
-  changetiMultiStationView() {
-    this.isLoad = true;
-  console.log("selected Param value for station", )
-    const selectedParam =  this.selectedMultiStationParam.toLowerCase(); // e.g., "wave_heading"
-  
-    const requests = this.selectedStation.map(stationId =>
-      this.reportService.getAllstationData(stationId, this.fromDate, this.toDate)
-    );
-  
-    forkJoin(requests).subscribe(
-      (responses: any[]) => {
-        const result: {
-          param_name: string,
-          values: { [key: string]: string[] },
-          datetime: string[]
-        } = {
-          param_name: selectedParam,
-          values: {},
-          datetime: []
-        };
-  
-        responses.forEach((stationData: any[], index: number) => {
-          const vKey = `v${index + 1}`; 
-  
-          result.values[vKey] = stationData.map(entry => entry[selectedParam] ?? null);
-  
-          if (index === 0) {
-            result.datetime = stationData.map(entry => entry.datetime);
-          }
-        });
-        this.multiStationData = result;
-        console.log('Final Structured Data:', result);
-        this.isLoad = false;
-      },
-      error => {
-        console.error('Error fetching station data:', error);
-        this.isLoad = false;
-      }
-    );
+
+  changewithMultiBin_y2(){
+    console.log(this.selectedBin_multiy1);
+    switch (this.selectedBin_multiy1) {
+      case 'profile1':
+        this.selectedMultix2 = this.selectedMultix2.includes('speed') ? 'current_speed_bin_1' : 'current_direction_bin_1';
+        this.isMultiLoading = true;
+      setTimeout(() => {
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+
+      }, 100);
+        break;
+      case 'profile2':
+        this.selectedMultix2 = this.selectedMultix2.includes('speed') ? 'current_speed_bin_2' : 'current_direction_bin_2';
+        this.isMultiLoading = true;
+     setTimeout(() => {
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+
+      }, 100);
+        break;
+      case 'profile3':
+        this.selectedMultix2 = this.selectedMultix2.includes('speed') ? 'current_speed_bin_3' : 'current_direction_bin_3';
+        this.isMultiLoading = true;
+       setTimeout(() => {
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+
+      }, 100);
+        break;
+      case 'profile4':
+        this.selectedMultix2 = this.selectedMultix2.includes('speed') ? 'current_speed_bin_4' : 'current_direction_bin_4';
+        this.isMultiLoading = true;
+       setTimeout(() => {
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+
+      }, 100);
+        break;
+      case 'profile5':
+        this.selectedMultix2 = this.selectedMultix2.includes('speed') ? 'cell_5_speed' : 'cell_5_dir';
+        this.isMultiLoading = true;
+       setTimeout(() => {
+        this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
+
+      }, 100);
+        break;
+      default:
+        break;
+    }
+    console.log("param",this.selectedMultix2)
   }
+
+
+
+
+
+  // onPickerTap(state:string){
+  //   this.pickerState = state
+  // }
+changeMultiStation() {
+  console.log("Selected station IDs:", this.selectedStation);
+  console.log("All station configs:", this.ssstations);
+
+  const selectedStations = this.selectedStation.map(stationId =>
+    this.ssstations.find(s => s.station_id === stationId)
+  );
+
+  const bools: boolean[] = selectedStations.map(station => {
+    if (!station || !station.sensors) return false;
+    const sensors = station.sensors.toLowerCase().split(',').map((s:string) => s.trim());
+    return sensors.includes('meteorology');
+  });
+
+  console.log("Stations with meteorology:", bools);
+
+  // If you want to check if **all** stations have meteorology:
+  const allHaveMeteorology = bools.every(val => val === true);
+  if(this.selectedSensor ==='meteriology'){
+    this.selectedSensor = 'oceanography';
+  }
+  this.isMeteriology = allHaveMeteorology;
+  console.log("All stations have meteorology:", allHaveMeteorology);
+
+  // Or check if any is missing:
+  const anyMissingMeteorology = bools.includes(false);
+  console.log("Any station missing meteorology:", anyMissingMeteorology);
+}
+
+
+isMultiCurrent:boolean=false
+ changetiMultiStationView() {
+  this.isLoad = true;
+if(this.selectedMultiStationParam.includes('current')){
+this.isMultiCurrent = true;
+}else{
+  this.isMultiCurrent=false;
+}
+  const selectedParam = this.selectedMultiStationParam?.toLowerCase();
+
+  const requests = this.selectedStation.map(stationId =>
+    this.reportService.getAllstationData(stationId, this.fromDate, this.toDate)
+  );
+
+  forkJoin(requests).subscribe(
+    (responses: any[]) => {
+      const result: {
+        param_name: string;
+        values: { [key: string]: string[] };
+        datetime: string[];
+      } = {
+        param_name: selectedParam,
+        values: {},
+        datetime: []
+      };
+
+      responses.forEach((stationData: any[], index: number) => {
+        const vKey = `v${index + 1}`;
+        result.values[vKey] = stationData.map(entry => {
+          const val = entry[selectedParam];
+          return (val !== null && val !== undefined) ? String(val) : '';
+        });
+
+        if (index === 0) {
+          result.datetime = stationData.map(entry => entry.datetime);
+        }
+      });
+
+      this.multiStationData = result;
+      console.log('Final Structured Data:', result);
+      this.isLoad = false;
+      if(this.selectedMultiStationParam.includes('current_speed')){
+        this.selectedMultiStationParam='current_speed';
+}else if(this.selectedMultiStationParam.includes('current_direction')){
+  this.selectedMultiStationParam = 'current_direction';
+}
+    },
+    error => {
+      console.error('Error fetching station data:', error);
+      this.isLoad = false;
+    }
+  );
+}
+
+
   count:number = 0
 isSubmitButton(){
       this.polarNumber = 0;
@@ -256,35 +427,54 @@ setTimeout(() => {
     this.toDate = endDate.toISOString();
     // console.log("testing",this.isLoad, this.isPolar)
     if(value == 'single'){
+      this.selectedStation = [];
       this.selectedMultiStationParam = this.filteredparams[0].param_name
       this.isSingleView = true;
     }else{
       this.isSingleView = false;
       this.selectedMultiStationParam = this.filteredparams[0].param_name
+      this.selectedStation = [this.stations[0].stationId]
       this.changetiMultiStationView()
     }
   }
   fromDate!: string;
 toDate!: string;
+selectedDate!: Date | Date[];
+// pickerState: string = 'date';
+
+get calendarView(): 'date' | 'month' | 'year' {
+  if (this.pickerState === 'month') return 'month';
+  if (this.pickerState === 'year') return 'year';
+  return 'date';
+}
+
+get selectionMode(): 'single' | 'range' {
+  return this.pickerState === 'date' ? 'range' : 'single';
+}
+
+onPickerTap(state: string) {
+  this.pickerState = state;
+  this.selectedDate = null!;
+}
 
 onDatePicked() {
   if (!this.selectedDate) return;
 
   if (this.pickerState === 'date' && Array.isArray(this.selectedDate)) {
-    // For date range
     const startDate = new Date(this.selectedDate[0]);
     startDate.setHours(0, 0, 0, 0);
 
     const endDate = new Date(this.selectedDate[1]);
     endDate.setHours(23, 59, 0, 0);
 
-    this.fromDate = startDate.toISOString();
-    this.toDate = endDate.toISOString();
+    this.fromDate = this.formatDateLocal(new Date(startDate));
+    this.toDate = this.formatDateLocal(new Date(endDate));
   }
 
-  else if (this.pickerState === 'week') {
-    const selected = new Date(this.selectedDate);
-    const dayOfWeek = selected.getDay(); // Sunday = 0
+  else if (this.pickerState === 'week' && this.selectedDate instanceof Date) {
+    const selected = this.selectedDate;
+    const dayOfWeek = selected.getDay();
+
     const start = new Date(selected);
     start.setDate(selected.getDate() - dayOfWeek);
     start.setHours(0, 0, 0, 0);
@@ -293,52 +483,39 @@ onDatePicked() {
     end.setDate(start.getDate() + 6);
     end.setHours(23, 59, 0, 0);
 
-    this.fromDate = start.toISOString();
-    this.toDate = end.toISOString();
+    this.fromDate = this.formatDateLocal(new Date(start));
+    this.toDate = this.formatDateLocal(new Date(end));
   }
 
-  else if (this.pickerState === 'month') {
-    const selected = new Date(this.selectedDate);
+  else if (this.pickerState === 'month' && this.selectedDate instanceof Date) {
+    const selected = this.selectedDate;
     const start = new Date(selected.getFullYear(), selected.getMonth(), 1, 0, 0, 0, 0);
     const end = new Date(selected.getFullYear(), selected.getMonth() + 1, 0, 23, 59, 0, 0);
 
-    this.fromDate = start.toISOString();
-    this.toDate = end.toISOString();
+    this.fromDate = this.formatDateLocal(new Date(start));
+    this.toDate = this.formatDateLocal(new Date(end));
   }
 
-  else if (this.pickerState === 'year') {
-    const selected = new Date(this.selectedDate);
+  else if (this.pickerState === 'year' && this.selectedDate instanceof Date) {
+    const selected = this.selectedDate;
     const start = new Date(selected.getFullYear(), 0, 1, 0, 0, 0, 0);
     const end = new Date(selected.getFullYear(), 11, 31, 23, 59, 0, 0);
 
-    this.fromDate = start.toISOString();
-    this.toDate = end.toISOString();
+    this.fromDate = this.formatDateLocal(new Date(start));
+    this.toDate = this.formatDateLocal(new Date(end));
   }
 
-    // console.log("date", this.selectedDate)
-    // console.log("date1",new Date(this.selectedDate[0]))
-    console.log("week", this.fromDate, this.toDate);
-    const date = new Date(this.selectedDate[0]);
-    const date2 = new Date(this.selectedDate[1]); 
+  console.log("From:", this.fromDate, "To:", this.toDate);
+}
 
-    console.log("date", date.toISOString(), date2.toISOString())
-  }
-  getFullWeek(selected: Date): Date[] {
-  const selectedDate = new Date(selected);
-  const dayOfWeek = selectedDate.getDay(); // 0 (Sun) to 6 (Sat)
-  
-  const weekStart = new Date(selectedDate);
-  weekStart.setDate(selectedDate.getDate() - dayOfWeek); // Go to Sunday
-
-  const fullWeek: Date[] = [];
-
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(weekStart);
-    day.setDate(weekStart.getDate() + i);
-    fullWeek.push(day);
-  }
-
-  return fullWeek;
+formatDateLocal(date: Date): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  const ss = String(date.getSeconds()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
 }
 
 getWeekBounds(selected: Date): { sunday: string, saturday: string } {
@@ -419,7 +596,7 @@ this.isSelectParams = false;
 
 isMeteriology:boolean=true;
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/api/getBin').subscribe(
+    this.http.get('http://192.168.0.126:3000/api/getBin').subscribe(
         (response:any)=>{
           console.log("binsss", response)
          this.Bins = response
@@ -435,19 +612,25 @@ isMeteriology:boolean=true;
 
     const endDate = new Date();
     endDate.setHours(23, 59, 0, 0);
-
-    this.fromDate = startDate.toISOString();
-    this.toDate = endDate.toISOString();
+    this.fromDate = this.formatDateLocal(new Date(startDate));
+    this.toDate = this.formatDateLocal(new Date(endDate));
     
-     this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
+    this.selectedDate = [startDate, endDate];
+     this.http.get('http://192.168.0.126:3000/api/getStationConfig').subscribe(
             (response: any) => {
-              this.ssstations = response
+              let abcd:any[] =[];
+              abcd = response;
+              this.ssstations = abcd.filter(item=> item.status === 'active');
+
               console.log("stationsssss==============",this.ssstations);
-                for (let index = 0; index < response.length; index++) {
+
+                for (let index = 0; index < this.ssstations.length; index++) {
                     this.stations.push({
                       stationId: response[index].station_id,
                       name:response[index].station_name})
                 }
+                // console.log("station",st)
+                // this.stations = st.filter(item=> item.status === 'active')
                 // this.selectedStation = this.stations;
                 
                 this.singleStation = this.stations[0].name;
@@ -497,9 +680,9 @@ isMeteriology:boolean=true;
 
 singleStationchange(){
   const selectedStationn = this.stations.filter(item=> item.name == this.singleStation);
-  const sstat = this.ssstations.filter(item=> item.name === this.singleStation)
+  const sstat = this.ssstations.filter(item=> item.station_name === this.singleStation)
   this.isMeteriology = sstat[0].sensors.includes('meteorology');
-  console.log("changes station", selectedStationn, sstat);
+  console.log("changes station", this.ssstations, sstat, this.isMeteriology);
   this.selectedStation.push(selectedStationn[0].stationId);
 
 }
@@ -523,7 +706,7 @@ singleStationchange(){
 //     .set('toDate',toDate)
 //     .set('station_id', id[0].stationId);
 //     console.log("params", params);
-//     this.http.get('http://localhost:3000/api/getSensorDataByDate', {params} ).subscribe(
+//     this.http.get('http://192.168.0.126:3000/api/getSensorDataByDate', {params} ).subscribe(
 //       (response: any) => {
 //         this.Buoy = response;
 //         //console.log("buoy",this.Buoy, this.filteredparams);
@@ -570,7 +753,7 @@ this.selectedMultix1 = '';
 this.selectedMultix2 = '';
 this.selectedMultiStationParam = '';
 
-    this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+    this.http.get('http://192.168.0.126:3000/api/getSensorConfig').subscribe(
       (response:any) => {
         //console.log(response);
           this.listparams = response;
@@ -586,10 +769,10 @@ this.selectedMultiStationParam = '';
             )            
           }, 100)
           this.selectedparam = this.filteredparams[0].param_name
-          this.selectedScactterX =  this.filteredparams[1].param_name;
-          this.selectedScatterY =  this.filteredparams[2].param_name;
-          this.selectedMultix1 =  this.filteredparams[1].param_name;
-          this.selectedMultix2 =  this.filteredparams[2].param_name;
+          this.selectedScactterXDisplay =  this.filteredparams[1].param_name;
+          this.selectedScatterYDisplay =  this.filteredparams[2].param_name;
+          this.selectedMultix1Display =  this.filteredparams[1].param_name;
+          this.selectedMultix2Display =  this.filteredparams[2].param_name;
           this.selectedMultiStationParam = this.filteredparams[0].param_name
           this.isSingleLoad = true;
           this.isScatterLoading = true;
@@ -763,6 +946,7 @@ this.selectedMultiStationParam = '';
   // }
 
   changesingle(){
+    this.selectedBin ='';
     this.singleAxis = []
     //console.log(this.selectedparam)
     if (this.selectedparam.includes('current')) {
@@ -826,6 +1010,7 @@ this.selectedMultiStationParam = '';
 
 
   changewithBin(){
+    
     console.log(this.selectedBin);
     switch (this.selectedBin) {
       case 'profile1':
@@ -870,6 +1055,42 @@ this.selectedMultiStationParam = '';
     }
     console.log("param",this.selectedparam)
   }
+ changewithBinCompare() {
+  if (!this.selectedMultiStationParam) return;
+
+  const param = this.selectedMultiStationParam.toLowerCase();
+  const isSpeed = param.includes('speed');
+  let newParam = '';
+
+  switch (this.selectedBin) {
+    case 'profile1':
+      newParam = isSpeed ? 'current_speed_bin_1' : 'current_direction_bin_1';
+      break;
+    case 'profile2':
+      newParam = isSpeed ? 'current_speed_bin_2' : 'current_direction_bin_2';
+      break;
+    case 'profile3':
+      newParam = isSpeed ? 'current_speed_bin_3' : 'current_direction_bin_3';
+      break;
+    case 'profile4':
+      newParam = isSpeed ? 'current_speed_bin_4' : 'current_direction_bin_4';
+      break;
+    case 'profile5':
+      newParam = isSpeed ? 'cell_5_speed' : 'cell_5_dir';
+      break;
+    default:
+      console.warn("Unknown bin selected:", this.selectedBin);
+      return;
+  }
+
+  this.selectedMultiStationParam = newParam;
+  this.isLoad = true;
+
+  setTimeout(() => {
+    this.changetiMultiStationView(); // re-fetch comparison data
+  }, 100);
+}
+
   
   changeScatterOne(){
     this.scatterAxis = []
@@ -878,16 +1099,61 @@ this.selectedMultiStationParam = '';
       this.assignScatterAxis(this.selectedScactterX, this.selectedScatterY );
     }, 100);
   }
-  
-  
-  changetiMulOne(){
-    this.multiAxis = []
-    this.isMultiLoading= true;
-    setTimeout(() => {
-      
-      this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2 );
-    }, 100);
+  changetiMulOne() {
+
+  this.multiAxis = [];
+  this.isMultiLoading = true;
+
+  const y1 = this.selectedMultix1Display || '';
+  const y2 = this.selectedMultix2Display || '';
+
+  const isSpeed = (param: string) => param.includes('current_speed');
+  const isDirection = (param: string) => param.includes('current_direction');
+
+  this.isMultiy1_current = isSpeed(y1) || isDirection(y1);
+  this.isMultiy2_current = isSpeed(y2) || isDirection(y2);
+
+  // If current params, calculate actual values based on bin
+  if (this.isMultiy1_current && this.selectedBin_multiy1) {
+    this.selectedMultix1Actual = this.getBinParam(y1, this.selectedBin_multiy1);
+  } else {
+    this.selectedMultix1Actual = this.selectedMultix1Display;
   }
+
+  if (this.isMultiy2_current && this.selectedBin_multiy2) {
+    this.selectedMultix2Actual = this.getBinParam(y2, this.selectedBin_multiy2);
+  } else {
+    this.selectedMultix2Actual = this.selectedMultix2Display;
+  }
+
+  // Assign final axis
+  setTimeout(() => {
+    this.assignMultiAxis(this.selectedMultix1Actual, this.selectedMultix2Actual);
+  }, 100);
+}
+updateBinParam(axis: 'y1' | 'y2') {
+  this.isMultiLoading = true;
+  if (axis === 'y1') {
+    this.selectedMultix1Actual = this.getBinParam(this.selectedMultix1Display, this.selectedBin_multiy1);
+  } else {
+    this.selectedMultix2Actual = this.getBinParam(this.selectedMultix2Display, this.selectedBin_multiy2);
+  }
+
+  setTimeout(() => {
+    this.assignMultiAxis(this.selectedMultix1Actual, this.selectedMultix2Actual);
+  }, 100);
+}
+getBinParam(param: string, bin: string): string {
+  const binNumber = bin.replace('profile', '');
+  if (param.includes('speed')) {
+    return bin === 'profile5' ? 'cell_5_speed' : `current_speed_bin_${binNumber}`;
+  } else if (param.includes('direction')) {
+    return bin === 'profile5' ? 'cell_5_dir' : `current_direction_bin_${binNumber}`;
+  }
+  return param; // fallback
+}
+
+
 
     fetchData(){   
       //console.log("selected station ID", this.singleStation)
@@ -902,7 +1168,7 @@ this.selectedMultiStationParam = '';
       .set('fromDate',this.fromDate)
       .set('toDate',this.toDate)
       .set('station_id', filter[0].stationId);
-      this.http.get('http://localhost:3000/api/getSensorDataByDate', {params}).subscribe(
+      this.http.get('http://192.168.0.126:3000/api/getSensorDataByDate', {params}).subscribe(
         (data:any) => {
           console.log("buoys data === ",data);
           this.buoyData =data
@@ -917,7 +1183,7 @@ this.selectedMultiStationParam = '';
     }
   
   fetchSensor(){
-    // this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+    // this.http.get('http://192.168.0.126:3000/api/getSensorConfig').subscribe(
     //   (response:any)=>{
     //     console.log("sensor",response)
     //     this.sensorData = response
@@ -930,12 +1196,12 @@ this.selectedMultiStationParam = '';
         this.selectedparam = this.filteredparams[0].param_name
   
   
-        this.selectedScactterX = this.filteredparams[0].param_name;
-        this.selectedScatterY = this.filteredparams[2].param_name;
+        this.selectedScactterXDisplay = this.filteredparams[0].param_name;
+        this.selectedScatterYDisplay = this.filteredparams[2].param_name;
         
         
-        this.selectedMultix1 = this.filteredparams[1].param_name;
-        this.selectedMultix2 = this.filteredparams[2].param_name;
+        this.selectedMultix1Display = this.filteredparams[1].param_name;
+        this.selectedMultix2Display = this.filteredparams[2].param_name;
         
         this.selectedMultiStationParam = this.filteredparams[0].param_name
         const for_polar = this.filteredparams.filter(item=> item.param_name.includes('_speed')&&item.param_name.includes('_direction'))
@@ -948,8 +1214,8 @@ this.selectedMultiStationParam = '';
         setTimeout(() => {
           
           this.assignSingleAxis(this.selectedparam);
-          this.assignScatterAxis(this.selectedScactterX, this.selectedScatterY)
-          this.assignMultiAxis(this.selectedMultix1, this.selectedMultix2)
+          this.assignScatterAxis(this.selectedScactterXDisplay, this.selectedScatterYDisplay)
+          this.assignMultiAxis(this.selectedMultix1Display, this.selectedMultix2Display)
           // this.isPolar()
           this.onAssignDataForPolar()
         }, 100);
@@ -1060,8 +1326,18 @@ this.selectedMultiStationParam = '';
         
       }
   
-      console.log("Scatter",this.scatterAxis)
+      console.log("Scatter",this.multiAxis)
+      if(this.selectedMultix1.includes('current_speed')){
+            this.selectedMultix1 = 'current_speed'
+          }else if(this.selectedMultix1.includes('current_direction')){
+            this.selectedMultix1 = 'current_direction'
+          }else if(this.selectedMultix2.includes('current_speed')){
+            this.selectedMultix2 = 'current_speed'
+          }else if(this.selectedMultix2.includes('current_direction')){
+            this.selectedMultix2 = 'current_direction'
+          }
       this.isMultiLoading = false;
+
 
   }
 
@@ -1120,5 +1396,63 @@ this.PolarAxis = [];
        this.isLoadingCurrentPolar = false;
      }, 100);
   }
+
+
+
+
+  selectedScactterXDisplay: string = '';
+selectedScatterYDisplay: string = '';
+selectedScactterXActual: string = '';
+selectedScatterYActual: string = '';
+
+isScatterXCurrent: boolean = false;
+isScatterYCurrent: boolean = false;
+
+selectedBinScatterX: string = '';
+selectedBinScatterY: string = '';
+
+
+onScatterChange() {
+  this.scatterAxis = [];
+  this.isScatterLoading = true;
+
+  const isSpeed = (param: string) => param.includes('current_speed');
+  const isDirection = (param: string) => param.includes('current_direction');
+
+  const x = this.selectedScactterXDisplay || '';
+  const y = this.selectedScatterYDisplay || '';
+
+  this.isScatterXCurrent = isSpeed(x) || isDirection(x);
+  this.isScatterYCurrent = isSpeed(y) || isDirection(y);
+
+  // Assign actual values
+  this.selectedScactterXActual = this.isScatterXCurrent && this.selectedBinScatterX
+    ? this.getBinParam(x, this.selectedBinScatterX)
+    : x;
+
+  this.selectedScatterYActual = this.isScatterYCurrent && this.selectedBinScatterY
+    ? this.getBinParam(y, this.selectedBinScatterY)
+    : y;
+
+  // Delay for smooth update
+  setTimeout(() => {
+    this.assignScatterAxis(this.selectedScactterXActual, this.selectedScatterYActual);
+  }, 100);
+}
+
+updateScatterBin(axis: 'x' | 'y') {
+  this.isScatterLoading=true;
+  if (axis === 'x') {
+    this.selectedScactterXActual = this.getBinParam(this.selectedScactterXDisplay, this.selectedBinScatterX);
+  } else {
+    this.selectedScatterYActual = this.getBinParam(this.selectedScatterYDisplay, this.selectedBinScatterY);
+  }
+
+  setTimeout(() => {
+    this.assignScatterAxis(this.selectedScactterXActual, this.selectedScatterYActual);
+  }, 100);
+}
+
+
 
 }

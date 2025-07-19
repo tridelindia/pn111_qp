@@ -54,20 +54,20 @@ export class UserlogComponent {
   users: User[] = [];
   selectedUser: User | null = null;
   dateRange: Date[] = [new Date(new Date().setDate(new Date().getDate())), new Date()];
-
+ 
   constructor(
     private logService: LoggingService,
     private statusCodesService: StatusCodesService
   ) {}
-
+ 
   ngOnInit(): void {
     this.loadLogs();
   }
-
+ 
   loadLogs(): void {
     this.isLoading = true;
     this.error = null;
-    
+   
     this.logService.getLogs().subscribe({
       next: (response) => {
         if (response[0]?.logs) {
@@ -86,7 +86,7 @@ export class UserlogComponent {
       }
     });
   }
-
+ 
   loadUsers(): void {
     const uniqueUsers = new Map<number, User>();
     this.logs.forEach(log => {
@@ -99,27 +99,27 @@ export class UserlogComponent {
     });
     this.users = Array.from(uniqueUsers.values());
   }
-
+ 
   filterLogs(): void {
     let filtered = [...this.logs];
-    
+   
     if (this.selectedUser) {
       filtered = filtered.filter(log => log.userId === this.selectedUser!.id);
     }
-    
+   
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(log => 
-        log.userName.toLowerCase().includes(term) || 
+      filtered = filtered.filter(log =>
+        log.userName.toLowerCase().includes(term) ||
         log.message.toLowerCase().includes(term) ||
         log.timestamp.toLowerCase().includes(term) ||
         log.userId.toString().includes(term)
       );
     }
-    
+   
     this.filteredLogs = filtered;
   }
-
+ 
   formatDate(timestamp: string): string {
     const date = new Date(timestamp);
     const day = date.getDate().toString().padStart(2, '0');
@@ -127,27 +127,27 @@ export class UserlogComponent {
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
-
+ 
   formatTime(timestamp: string): string {
     return new Date(timestamp).toLocaleTimeString();
   }
-
+ 
   filterByDateRange(): void {
     if (!this.dateRange || this.dateRange.length !== 2) {
       this.filteredLogs = [...this.logs];
       return;
     }
-
+ 
     const [startDate, endDate] = this.dateRange;
     const formattedStartDate = new Date(startDate);
     formattedStartDate.setHours(0, 0, 0, 0);
-    
+   
     const formattedEndDate = new Date(endDate);
     formattedEndDate.setHours(23, 59, 59, 999);
-
+ 
     this.isLoading = true;
     this.error = null;
-
+ 
     this.logService.getLogs(
       formattedStartDate.toISOString(),
       formattedEndDate.toISOString()
@@ -169,9 +169,10 @@ export class UserlogComponent {
       }
     });
   }
-
+ 
   getStatusDefinition(code: string | null): string {
     if (!code) return '';
     return this.statusCodesService.getStatusMessage(code);
   }
 }
+ 

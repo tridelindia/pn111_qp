@@ -3,7 +3,7 @@
   gap: 20px;
   justify-content: center;
 }
-
+ 
 /* .tabs {
   display: flex;
   gap: 20px;
@@ -11,7 +11,7 @@
   margin: 20px;
   justify-content: center;
 } */
-
+ 
 .sensor-tab {
   display: flex;
   flex-direction: column;
@@ -23,24 +23,57 @@
   transition: all 0.2s ease;
   /* background-color: #f8f9fa; */
   /* border: 1px solid #e9ecef; */
-  
+ 
   &:hover {
     background-color: #e9ecef;
     transform: translateY(-2px);
   }
-  
+ 
   &.active {
     background-color: rgb(113, 180, 248);
     color: white;
     border-color: rgb(113, 180, 248);
-    
+   
     .icon {
       transform: scale(1.1);
     }
   }
 }
-
+ 
 .icon {
   font-size: 24px;
   transition: transform 0.2s ease;
 }
+ 
+ ::ng-deep .p-datepicker-panel {
+    background: var(--highlight-color) !important;
+    border: 1px solid var(--highlight-color-shadow) !important;
+    /* color: var(--text-color) !important; */
+  }
+ 
+  ::ng-deep .p-datepicker-header {
+    background: var(--highlight-color) !important;
+  }
+ 
+  ::ng-deep .p-datepicker-day-selected {
+    background: var(--highlight-color-shadow) !important;
+  }
+ 
+  ::ng-deep .p-button-sm.p-button-icon-only.p-button-rounded svg{
+    /* fill: white !important; */
+    color: white !important;
+  }
+ 
+  ::ng-deep .p-datepicker-year-selected {
+    background: var(--highlight-color-shadow) !important;
+  }
+ 
+  ::ng-deep .p-button-label {
+    font-weight: normal;
+    transition: 0.3s;
+  }
+ 
+  ::ng-deep .p-button-label:hover {
+    font-weight: bold;
+  }
+ 

@@ -61,8 +61,8 @@
                 </svg>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedSensor === 'met'"></i>
             </div>
-            <div class="svg_icon_bor" (click)="onSensorChange('wat')" *ngIf="isNoWaterQuality"
-                data-tooltip="Water Quality" [ngClass]="{'svg_icon_bor_active': selectedSensor === 'wat'}">
+            <div class="svg_icon_bor" (click)="onSensorChange('wat')" *ngIf="isMet" data-tooltip="Water Quality"
+                [ngClass]="{'svg_icon_bor_active': selectedSensor === 'wat'}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512"
                     xml:space="preserve">
                     <path style="fill:#35d8b9"

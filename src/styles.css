@@ -28,8 +28,10 @@ p{
     --background-color: linear-gradient(90deg, #6fb4f9, #71b4f8);  /* Soft sky blue */
     --secondary-color: #c7dffb;   /* Deeper blue */
     --highlight-color: #3fb2fa;   /* Coral (vibrant accent) */
+    --highlight-color-shadow: #007bff4d;   /* Coral (vibrant accent) */
     --font-color: #2E2E2E;        /* Dark text */
     --icon-color: #2E2E2E;        /* Dark icons */
+    --menu-color:#3fb2fa;
 }
  
 [data-theme='blue-dark']{
@@ -69,6 +71,7 @@ p{
       --menu-color:#CE8946;
       --secondary-color: #dca58f;   /* Rich terracotta (earthier than rusty copper) */
       --highlight-color: #D4A017;   /* Muted gold (softer than #E6B800 for better UI) */
+      --highlight-color-shadow: #ffb7004b;
       --font-color: #FFFFFF;        /* Near-black (better contrast for body text) */
       --icon-color: #FFFFFF;        /* White (for clarity on bronze) */
     }
@@ -78,6 +81,7 @@ p{
       --menu-color:#FFE566;
       --secondary-color: #FFFAE5;   /* Slightly lighter dark gray */
       --highlight-color: #fbe36d;   /* Example: Deep orange for better contrast */
+      --highlight-color-shadow: #ffd5004b;
       --font-color: #333333;        /* Example: Dark text for readability */
       --icon-color: #555555;        /* Example: Medium-dark icons */
     }
@@ -87,6 +91,7 @@ p{
       --menu-color:#007BFF;
       --secondary-color: #a2ccfa;   /* Darker blue */
       --highlight-color: #4a85e2;   /* Yellow (vibrant contrast) */
+      --highlight-color-shadow: #0066ff4b;
       --font-color: #FFFFFF;        /* White text */
       --icon-color: #FFFFFF;        /* White icons */
     }
@@ -96,6 +101,7 @@ p{
       --menu-color:#28A745;
       --secondary-color: #c2f3cd;   /* Darker green */
       --highlight-color: #50ab65;   /* Gold (accent) */
+      --highlight-color-shadow: #00ff3c46;
       --font-color: #FFFFFF;        /* White text */
       --icon-color: #FFFFFF;        /* White icons */
     }
@@ -105,6 +111,7 @@ p{
       --menu-color:#6F42C1;
       --secondary-color: #aa88de;  /* Deep purple */
       --highlight-color: hsl(266, 84%, 75%);   /* Orange (warm contrast) */
+      --highlight-color-shadow: #6f00ff46;
       --font-color: #FFFFFF;        /* White text */
       --icon-color: #FFFFFF;        /* White icons */
     }
@@ -114,6 +121,7 @@ p{
       --menu-color:#FEB47B;
       --secondary-color: #fcc2b3;   /* Burnt orange */
       --highlight-color: #FEB47B;
+      --highlight-color-shadow: #ff6f0041;
       --font-color: #2E2E2E;        /* Dark text (readable on gradient) */
       --icon-color: #2E2E2E;        /* Dark icons */
     }
@@ -123,6 +131,7 @@ p{
       --menu-color:#FF9BD2;
       --secondary-color: #FFD6EC;   /* Light pink for contrast */
       --highlight-color: #edb8d4;   /* Deep purple for bold contrast */
+      --highlight-color-shadow: #ff008841;
       --font-color: #000000;        /* Dark charcoal for readability */
       --icon-color: #4B4B4B;        /* Medium-dark gray for icons */
     }
@@ -132,6 +141,7 @@ p{
       --menu-color:#E8CDC5;
       --secondary-color: #d6b3b3af;   /* Muted rose */
       --highlight-color: #9C6B8E;   /* Dusty purple (subtle accent) */
+      --highlight-color-shadow: #ce4ba93d;
       --font-color: #000000;        /* Dark brown (readable on light) */
       --icon-color: #000000;        /* Dark icons */
     }
@@ -141,6 +151,7 @@ p{
       --menu-color:#70b4f9;
       --secondary-color: #c7dffb;   /* Deeper blue */
       --highlight-color: #5cacf6;   /* Coral (vibrant accent) */
+      --highlight-color-shadow: #0084ff4d;
       --font-color: #2E2E2E;        /* Dark text */
       --icon-color: #2E2E2E;        /* Dark icons */
     }
@@ -306,3 +317,45 @@ p{
     font-weight: 700;
     font-style: italic;
   }
+
+   /* Scroll bars */
+ 
+/* Firefox support: Extra thin scrollbar without arrows */
+/* * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--highlight-color) #f0f0f000;
+} */
+ 
+/* WebKit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+ 
+/* Track background */
+::-webkit-scrollbar-track {
+  background: #f0f0f000;
+  border-radius: 10px;
+  margin-block: 10px;
+}
+ 
+/* Scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background: var(--background-color);
+  border-radius: 10px;
+  border: 1px solid var(--brackground-color);
+}
+ 
+/* On hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--higlight-color);
+}
+ 
+/* Remove scrollbar arrows (buttons at top/bottom or left/right) */
+::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+ 
+ 

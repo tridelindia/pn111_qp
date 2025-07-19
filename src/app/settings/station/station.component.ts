@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LoggingService } from '../../users/service/users/logging.service';
+import { ButtonModule } from 'primeng/button';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 interface BuoyDetails{
   buoy_id: string;
@@ -51,7 +53,7 @@ interface AddBuoyDetails{
 @Component({
     selector: 'app-station',
     standalone:true,
-    imports: [CommonModule, HttpClientModule, FormsModule],
+    imports: [CommonModule, HttpClientModule, FormsModule, ButtonModule],
     templateUrl: './station.component.html',
     styleUrl: './station.component.css',
     providers: [LoggingService]
@@ -101,6 +103,18 @@ export class StationComponent implements OnInit{
     // buoy_sensors: [],
     // geo_format: ''
   // };
+toggleOptions = [
+  { label: 'active', value: 'active' },
+  { label: 'maintanence', value: 'maintanence' },
+  { label: 'inactive', value: 'inactive' }
+];
+
+selectedToggle = 'active'; // default
+selectedStatus = 'active';
+
+onSelect(status: string) {
+  console.log('Selected status:', status); // Do what you need here
+}
 
  
   test(){
@@ -142,7 +156,7 @@ export class StationComponent implements OnInit{
           this.buoy_warning!,
           this.buoy_danger!,
           
-          'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+          'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',""
         )
       }, 200);
     }
@@ -150,7 +164,7 @@ export class StationComponent implements OnInit{
 
 
   getStation(){
-    this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
+    this.http.get('http://192.168.0.126:3000/api/getStationConfig').subscribe(
       (response: any) => {
         console.log(response);
         
@@ -176,8 +190,15 @@ export class StationComponent implements OnInit{
    
         }));
         console.log("image api",this.Stations_list![0].buoy_image);
-    this.selectedstation = this.Stations_list![0];
+        if(this.index){
 
+          this.selectedstation = this.Stations_list![this.index];
+        }else{
+          this.selectedstation = this.Stations_list![0];
+        }
+ this.isEdit = false;
+    this.isAdd = false;
+    this.isInfo = true;
        console.log("stations",this.Stations_list![0].buoy_image)
       },
       (error: any) => {
@@ -214,18 +235,19 @@ export class StationComponent implements OnInit{
   toggle(){
     this.mainToggle = !this.mainToggle;
   }
-
-  editStation(data:BuoyDetails){
+index!:number;
+  editStation(data:BuoyDetails,index:number){
     this.map.destroyMap()
     this.isEdit = true;
     this.isAdd = false;
     this.isInfo = false;
     this.selectedstation = data;
-    console.log(this.selectedstation)
+    this.selectedStatus = data.buoy_status;
+    this.index=index;
+    console.log(this.selectedstation);
     this.map.destroyMap();
     // this.section = value;
     setTimeout(() => {
-    
       const mapContainer = document.getElementById('ol-map');
       this.map.createMap(
         mapContainer!,
@@ -233,7 +255,7 @@ export class StationComponent implements OnInit{
         34.895858,
         20,
         40,
-        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',""
       )
     }, 1000);
   }
@@ -242,7 +264,7 @@ export class StationComponent implements OnInit{
     this.isAdd = false;
     this.isEdit = false;
     this.selectedstation = data;
-    console.log(this.selectedstation);
+    console.log("buoy edit",this.selectedstation);
     this.map.destroyMap()
     // this.section = value;
     setTimeout(() => {
@@ -254,7 +276,7 @@ export class StationComponent implements OnInit{
         34.895858,
         20,
         40,
-        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',""
       )
     }, 1000);
   }
@@ -274,7 +296,7 @@ export class StationComponent implements OnInit{
         34.895858,
         20,
         40,
-        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',""
       )
     }, 1000);
 
@@ -284,7 +306,9 @@ export class StationComponent implements OnInit{
   constructor(
     private http: HttpClient,
     private map:MapService,
-    private loggingService: LoggingService
+    private loggingService: LoggingService,
+    private toast:ToastrService
+
   ){}
   ngOnInit(): void {
     this.getStation();
@@ -301,7 +325,7 @@ export class StationComponent implements OnInit{
         parseFloat(this.selectedstation?.buoy_loc_longitude!),
         parseFloat(this.selectedstation?.buoy_warning!),
         parseFloat(this.selectedstation?.buoy_danger!),
-        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
+        'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',""
       )
     }, 1000);
     this.loadImageAsUint8Array();
@@ -354,107 +378,161 @@ export class StationComponent implements OnInit{
 
 
 
- createStation(){
-
+ createStation() {
   const selectedSensors = this.getSelectedSensors();
-    const selectedAsString = selectedSensors.join(',');
-    console.log('Selected Sensors:', selectedSensors);
-    console.log('As String:', selectedAsString);
-    this.buoy_sensors = selectedAsString;
-    if(this.mainToggle){
-      this.geo_format = "DMS"
-    }else{
-      this.geo_format = "DD"
-    }
-    const newStation = {
-      buoy_id: this.buoy_id,
-      buoy_name: this.buoy_name,
-      buoy_warning:this.buoy_warning.toString(),
-      buoy_danger: this.buoy_danger.toString(),
-      buoy_loc_latitude: this.buoy_loc_latitude.toString(),
-      buoy_loc_longitude: this.buoy_loc_longitude.toString(),
-      buoy_loc_degree_lat: this.buoy_loc_degree_lat.toString(),
-      buoy_loc_minutes_lat: this.buoy_loc_minutes_lat.toString(),
-      buoy_loc_seconds_lat: this.buoy_loc_seconds_lat.toString(),
-      buoy_loc_degree_lon: this.buoy_loc_degree_lon.toString(),
-      buoy_loc_minutes_lon: this.buoy_loc_minutes_lon.toString(),
-      buoy_loc_seconds_lon:this.buoy_loc_seconds_lon.toString(),
-      buoy_sensors: this.buoy_sensors,
-      geo_format:this.geo_format,
-      image: ""
-    }
+  const selectedAsString = selectedSensors.join(',');
+  this.buoy_sensors = selectedAsString;
 
-    this.addStationData = newStation
-  console.log("ID", this.buoy_id)
-  this.http.post('http://localhost:3000/api/addStation', this.addStationData).subscribe(
+  if (!this.buoy_id || this.buoy_id.trim() === '') {
+    this.toast.error('Station ID is required', 'Validation Error');
+    return;
+  }
+
+  if (!this.buoy_name || this.buoy_name.trim() === '') {
+    this.toast.error('Station Name is required', 'Validation Error');
+    return;
+  }
+
+  if (!this.buoy_warning || isNaN(Number(this.buoy_warning))) {
+    this.toast.error('Warning range must be a number', 'Validation Error');
+    return;
+  }
+
+  if (!this.buoy_danger || isNaN(Number(this.buoy_danger))) {
+    this.toast.error('Danger range must be a number', 'Validation Error');
+    return;
+  }
+
+  if (!this.buoy_loc_latitude || !this.buoy_loc_longitude) {
+    this.toast.error('Latitude and Longitude are required', 'Validation Error');
+    return;
+  }
+
+  // Geo Format
+  this.geo_format = this.mainToggle ? "DMS" : "DD";
+
+  const newStation = {
+    buoy_id: this.buoy_id,
+    buoy_name: this.buoy_name,
+    buoy_warning: this.buoy_warning.toString(),
+    buoy_danger: this.buoy_danger.toString(),
+    buoy_loc_latitude: this.buoy_loc_latitude.toString(),
+    buoy_loc_longitude: this.buoy_loc_longitude.toString(),
+    buoy_loc_degree_lat: this.buoy_loc_degree_lat?.toString() || '',
+    buoy_loc_minutes_lat: this.buoy_loc_minutes_lat?.toString() || '',
+    buoy_loc_seconds_lat: this.buoy_loc_seconds_lat?.toString() || '',
+    buoy_loc_degree_lon: this.buoy_loc_degree_lon?.toString() || '',
+    buoy_loc_minutes_lon: this.buoy_loc_minutes_lon?.toString() || '',
+    buoy_loc_seconds_lon: this.buoy_loc_seconds_lon?.toString() || '',
+    buoy_sensors: this.buoy_sensors,
+    geo_format: this.geo_format,
+    image: ""
+  };
+
+  this.addStationData = newStation;
+
+  this.http.post('http://192.168.0.126:3000/api/addStation', this.addStationData).subscribe(
     (response) => {
-      console.log(response);  
       this.getStation();
+
       const currentUserStr = localStorage.getItem('currentUser');
-        if (currentUserStr) {
-          const currentUser = JSON.parse(currentUserStr);
-          this.loggingService.addLog(
-            currentUser.username,
-            `New station has been added`, 
-            currentUser.id,
-            'S001',
-            'station.component.ts/createStation'
-          ).subscribe({
-            next: () => console.log('Activity logged successfully'),
-            error: (err) => console.error('Failed to log activity', err)
-          });
-        }
-      },
-      (error) => {
-        console.error(error);
-        }
-  )
- }
-
-
-
- updateStation(){
-  
-console.log("data", this.selectedstation);
-const baseImage = this.imageUrl.split(',');
-console.log("image",baseImage[1] );
-this.selectedstation.buoy_image = baseImage[1];
-console.log("sensor", this.selectedstation.buoy_sensors.join(', '));
-// this.selectedstation.buoy_sensors = this.selectedstation.buoy_sensors.join(', ');
-
-const updatingStation = {
-  buoy_id: this.selectedstation.buoy_id,
-  buoy_name: this.selectedstation.buoy_name,
-  buoy_warning:this.selectedstation.buoy_warning,
-  buoy_danger: this.selectedstation.buoy_danger,
-  buoy_loc_latitude: this.selectedstation.buoy_loc_latitude,
-  buoy_loc_longitude: this.selectedstation.buoy_loc_longitude,
-  buoy_loc_degree_lat: this.selectedstation.buoy_loc_degree_lat,
-  buoy_loc_minutes_lat: this.selectedstation.buoy_loc_minutes_lat,
-  buoy_loc_seconds_lat: this.selectedstation.buoy_loc_seconds_lat,
-  buoy_loc_degree_lon: this.selectedstation.buoy_loc_degree_lon,
-  buoy_loc_minutes_lon: this.selectedstation.buoy_loc_minutes_lon,
-  buoy_loc_seconds_lon: this.selectedstation.buoy_loc_seconds_lon,
-  buoy_image:  baseImage[1],
-  buoy_status:this.selectedstation.buoy_status,
-  buoy_sensors: this.selectedstation.buoy_sensors.join(', '),
-  geo_format:this.selectedstation.buoy_name,
-  created_at:this.selectedstation.buoy_name
-}
-
-
-console.log("update data", updatingStation);
-
-this.http.post('http://localhost:3000/api/editStation', updatingStation).subscribe(
-  (response) => {
-    console.log(response);
-    this.getStation();
-    const currentUserStr = localStorage.getItem('currentUser');
       if (currentUserStr) {
         const currentUser = JSON.parse(currentUserStr);
         this.loggingService.addLog(
           currentUser.username,
-          `Station has been updated`, 
+          `New station has been added`,
+          currentUser.id,
+          'S001',
+          'station.component.ts/createStation'
+        ).subscribe({
+          next: () => console.log('Activity logged successfully'),
+          error: (err) => console.error('Failed to log activity', err)
+        });
+      }
+
+      this.toast.success('New Station Added', 'Success');
+    },
+    (error) => {
+      console.error(error);
+      this.toast.error('Failed to add station. Please try again.', 'Server Error');
+    }
+  );
+}
+
+
+
+
+ updateStation() {
+  if (!this.selectedstation) {
+    this.toast.error('No station selected', 'Validation Error');
+    return;
+  }
+
+  // Validate required fields
+  if (!this.selectedstation.buoy_id || this.selectedstation.buoy_id.trim() === '') {
+    this.toast.error('Station ID is missing', 'Validation Error');
+    return;
+  }
+
+  if (!this.selectedstation.buoy_name || this.selectedstation.buoy_name.trim() === '') {
+    this.toast.error('Station name is missing', 'Validation Error');
+    return;
+  }
+
+  if (!this.selectedstation.buoy_warning || isNaN(Number(this.selectedstation.buoy_warning))) {
+    this.toast.error('Warning range is invalid', 'Validation Error');
+    return;
+  }
+
+  if (!this.selectedstation.buoy_danger || isNaN(Number(this.selectedstation.buoy_danger))) {
+    this.toast.error('Danger range is invalid', 'Validation Error');
+    return;
+  }
+
+  if (!this.selectedstation.buoy_loc_latitude || !this.selectedstation.buoy_loc_longitude) {
+    this.toast.error('Latitude and Longitude are required', 'Validation Error');
+    return;
+  }
+
+  const baseImage = this.imageUrl?.split(',');
+  const imageBase64 = baseImage && baseImage.length > 1 ? baseImage[1] : '';
+
+  const sensors = this.selectedstation.buoy_sensors;
+  const sensorString = Array.isArray(sensors) ? sensors.join(', ') : sensors;
+
+  const updatingStation = {
+    buoy_id: this.selectedstation.buoy_id,
+    buoy_name: this.selectedstation.buoy_name,
+    buoy_warning: this.selectedstation.buoy_warning,
+    buoy_danger: this.selectedstation.buoy_danger,
+    buoy_loc_latitude: this.selectedstation.buoy_loc_latitude,
+    buoy_loc_longitude: this.selectedstation.buoy_loc_longitude,
+    buoy_loc_degree_lat: this.selectedstation.buoy_loc_degree_lat,
+    buoy_loc_minutes_lat: this.selectedstation.buoy_loc_minutes_lat,
+    buoy_loc_seconds_lat: this.selectedstation.buoy_loc_seconds_lat,
+    buoy_loc_degree_lon: this.selectedstation.buoy_loc_degree_lon,
+    buoy_loc_minutes_lon: this.selectedstation.buoy_loc_minutes_lon,
+    buoy_loc_seconds_lon: this.selectedstation.buoy_loc_seconds_lon,
+    buoy_image: imageBase64,
+    buoy_status: this.selectedStatus,
+    buoy_sensors: sensorString,
+    geo_format: this.mainToggle ? 'DMS' : 'DD',
+    created_at: new Date(),
+  };
+
+  console.log('Updating Station:', updatingStation);
+
+  this.http.post('http://192.168.0.126:3000/api/editStation', updatingStation).subscribe(
+    (response) => {
+      this.toast.success('Station details updated successfully', 'Success');
+      this.getStation();
+
+      const currentUserStr = localStorage.getItem('currentUser');
+      if (currentUserStr) {
+        const currentUser = JSON.parse(currentUserStr);
+        this.loggingService.addLog(
+          currentUser.username,
+          'Station has been updated',
           currentUser.id,
           'S002',
           'station.component.ts/updateStation'
@@ -465,16 +543,11 @@ this.http.post('http://localhost:3000/api/editStation', updatingStation).subscri
       }
     },
     (error) => {
-      console.error(error);
-      }
-      )
- }
- parseAndJoin(sensors: string): string {
-  try {
-    return JSON.parse(sensors).join('   '); // 3 spaces between items
-  } catch {
-    return sensors;
-  }
+      console.error('Update failed:', error);
+      this.toast.error('Failed to update station', 'Error');
+    }
+  );
 }
+
 
 }

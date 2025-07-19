@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, viewChild, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -18,6 +18,7 @@ import { saveAs } from 'file-saver';
 import * as FileSaver from 'file-saver';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { DropdownModule } from 'primeng/dropdown'
 
 interface Column {
   field: string;
@@ -38,6 +39,7 @@ interface Column {
     SelectModule,
     DatePickerModule,
     SelectButtonModule,
+    DropdownModule,
   ],
   templateUrl: './report.component.html',
   styleUrl: './report.component.css',
@@ -53,6 +55,7 @@ export class ReportComponent implements OnInit {
   metrological!: [];
   oceanographic!: [];
   waterQuality!: [];
+  selectedExportOption: any = null;
 
   dynaColumns!: Column[];
   selectedColumns!: Column[];
@@ -62,9 +65,9 @@ export class ReportComponent implements OnInit {
   selectedOption: string = 'sensorData';
   options = [
     { label: 'All Sensors', value: 'sensorData', icon: 'fa fas-database' },
-    { label: 'Meteorology', value: 'metrological', icon: 'pi pi-cloud' },
-    { label: 'Oceanographic', value: 'oceanographic', icon: 'pi pi-globe' },
-    { label: 'WaterQuality', value: 'waterQuality', icon: 'pi pi-umbrella' },
+    { label: 'Meteorology', value: 'meteorology', icon: 'pi pi-cloud' },
+    { label: 'Oceanography', value: 'oceanography', icon: 'pi pi-globe' },
+    { label: 'Water Quality', value: 'water_quality', icon: 'pi pi-umbrella' },
   ];
 
   periodOptions = [
@@ -94,6 +97,7 @@ export class ReportComponent implements OnInit {
     private reportService: ReportService,
     private stationConfig: StationconfigService
   ) {}
+  @ViewChild('dt') dt: any;
 
   ngOnInit(): void {
     this.stationConfig.getStationNames().subscribe((data) => {
@@ -124,6 +128,10 @@ export class ReportComponent implements OnInit {
 
   setView(view: string) {
     this.selectedPeriod = view;
+
+    if (this.dt) {
+      this.dt.first = 0;
+    }
 
     if (view === 'date') {
       if (this.rangeDates && this.rangeDates.length === 2) {
@@ -257,7 +265,25 @@ export class ReportComponent implements OnInit {
     });
   }
 
+    alpha: any = null;
   onOptionChange(): void {
+    if (this.selectedOption == 'sensorData') {
+      this.alpha = this.fetchedBuoys;
+    } else {
+      this.alpha = this.fetchedBuoys.filter(
+        (buoy: any) =>
+          typeof buoy.sensors === 'string' &&
+          buoy.sensors
+            .split(',')
+            .map((s: string) => s.trim())
+            .includes(this.selectedOption)
+      );
+    }
+ 
+    console.log('select', this.selectedOption);
+    console.log('fetch', this.fetchedBuoys);
+    console.log('alpha', this.alpha);
+ 
     if (this.selectedOption === 'sensorData') {
       this.dynaColumns = [
         { field: 'wind_speed', header: 'Wind Speed', unit: 'm/s' },
@@ -361,7 +387,7 @@ export class ReportComponent implements OnInit {
         ...this.dynaColumns.map((col) => col.field),
       ];
       console.log('Allsensordyna', this.globalFilterFields);
-    } else if (this.selectedOption === 'metrological') {
+    } else if (this.selectedOption === 'meteorology') {
       // this.dataSource = this.metrological;
       this.dynaColumns = [
         { field: 'wind_speed', header: 'Wind Speed', unit: 'm/s' },
@@ -377,7 +403,7 @@ export class ReportComponent implements OnInit {
       this.selectedColumns = this.dynaColumns;
       this.globalFilterFields = this.dynaColumns.map((col) => col.field);
       console.log('metrological dyna', this.globalFilterFields);
-    } else if (this.selectedOption === 'oceanographic') {
+    } else if (this.selectedOption === 'oceanography') {
       // this.dataSource = this.oceanographic;
       this.dynaColumns = [
         // { field: 'motion', header: 'Motion', unit: '' },
@@ -413,7 +439,7 @@ export class ReportComponent implements OnInit {
         },
         { field: 'havg', header: 'Havg', unit: 'm' },
       ];
-      for (let i = 1; i <= 10; i++) {
+      for (let i = 1; i <= 4; i++) {
         this.dynaColumns.push(
           {
             field: `current_speed_bin_${i}`,
@@ -430,7 +456,7 @@ export class ReportComponent implements OnInit {
       this.selectedColumns = this.dynaColumns;
       this.globalFilterFields = this.dynaColumns.map((col) => col.field);
       console.log('oceanographic dyna', this.globalFilterFields);
-    } else if (this.selectedOption === 'waterQuality') {
+    } else if (this.selectedOption === 'water_quality') {
       // this.dataSource = this.waterQuality;
       this.dynaColumns = [
         // Manta 40+ sensors
@@ -474,6 +500,8 @@ export class ReportComponent implements OnInit {
 
   onExportOptionSelect(event: any, dt2: any) {
     const selectedOption = event.value;
+
+    if (!selectedOption) return;
     switch (selectedOption) {
       case 'csv':
         this.exportCSV(dt2);
@@ -484,9 +512,10 @@ export class ReportComponent implements OnInit {
       case 'pdf':
         this.exportPDF(dt2);
         break;
-      default:
-        break;
     }
+    setTimeout(() => {
+      this.selectedExportOption = null;
+    }, 0);
   }
 
   exportCSV(dt: any) {
@@ -506,33 +535,36 @@ export class ReportComponent implements OnInit {
   convertToCSV(data: any[]): string {
     const fixedHeaders = [
       'S No',
-      'station_id',
-      'timestamp',
-      'datetime',
-      'battery',
-      'lat',
-      'lon',
+      'Station Id',
+      'Timestamp',
+      'Date and Time',
+      'Battery',
+      'Latitude',
+      'Longitude',
     ];
+ 
     const fixedFields = [
       'station_id',
-      'timestamp',
-      'datetime',
+      'timestampFormatted',
+      'datetimeFormatted',
       'battery',
       'lat',
       'lon',
     ];
-
+ 
     const dynamicHeaders = this.selectedColumns.map((col) => col.header);
     const dynamicFields = this.selectedColumns.map((col) => col.field);
-
+ 
     const headers = [...fixedHeaders, ...dynamicHeaders];
     const fields = [...fixedFields, ...dynamicFields];
-
+ 
+    const reversedData = [...data].reverse(); // 🔁 Reverse the rows only
+ 
     const csvRows = [
       headers.join(','), // Header row
-      ...data.map((row, index) =>
+      ...reversedData.map((row, index) =>
         [
-          index + 1, // Serial number
+          index + 1, // S No: normal order
           ...fields.map((field) => {
             if (field === 'Date') {
               const isoDate = row[field];
@@ -549,69 +581,64 @@ export class ReportComponent implements OnInit {
           .join(',')
       ),
     ];
-
+ 
     return csvRows.join('\r\n');
   }
-
+ 
   exportExcel(dt: any, fileName?: string) {
     const filteredData = dt.value;
-
+ 
     if (filteredData && filteredData.length > 0) {
       const fixedHeaders = [
         'S No',
-        'station_id',
-        'timestamp',
-        'datetime',
-        'battery',
-        'lat',
-        'lon',
+        'Station Id',
+        'Timestamp',
+        'Date and Time',
+        'Battery',
+        'Latitude',
+        'Longitude',
       ];
       const fixedFields = [
         'station_id',
-        'timestamp',
-        'datetime',
+        'timestampFormatted',
+        'datetimeFormatted',
         'battery',
         'lat',
         'lon',
       ];
-
+ 
       const dynamicHeaders = this.selectedColumns.map((col) => col.header);
       const dynamicFields = this.selectedColumns.map((col) => col.field);
-
+ 
       const headers = [...fixedHeaders, ...dynamicHeaders];
       const fields = [...fixedFields, ...dynamicFields];
-
-      const dataToExport = filteredData.map((row: any, index: number) => {
+ 
+      const reversedData = [...filteredData].reverse(); // Reverse rows
+ 
+      const dataToExport = reversedData.map((row: any, index: number) => {
         const selectedRow: any = {};
-
-        selectedRow['S No'] = index + 1; // 👈 Set serial number here
-
-        fixedFields.forEach((field) => {
-          if (field === 'Date') {
-            const isoDate = row['Date'];
-            selectedRow[field] = isoDate ? isoDate.split('T')[0] : '';
-          } else if (field === 'Time') {
-            const isoTime = row['Time'];
-            selectedRow[field] = isoTime
-              ? isoTime.split('T')[1]?.split('.')[0]
-              : '';
-          } else {
-            selectedRow[field] = row[field];
-          }
+ 
+        selectedRow['S No'] = index + 1;
+ 
+        // Add fixed fields with matching headers
+        fixedHeaders.slice(1).forEach((header, i) => {
+          const field = fixedFields[i];
+          selectedRow[header] = row[field] || '';
         });
-
-        dynamicFields.forEach((field) => {
-          selectedRow[field] = row[field];
+ 
+        // Add dynamic fields with their column headers
+        dynamicHeaders.forEach((header, i) => {
+          const field = dynamicFields[i];
+          selectedRow[header] = row[field] || '';
         });
-
+ 
         return selectedRow;
       });
-
+ 
       const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
         dataToExport,
         {}
       );
-
       const workbook: XLSX.WorkBook = {
         Sheets: { data: worksheet },
         SheetNames: ['data'],
@@ -620,57 +647,59 @@ export class ReportComponent implements OnInit {
         bookType: 'xlsx',
         type: 'array',
       });
-
+ 
       const finalName = fileName || this.nameOfStation;
       this.saveAsExcelFile(excelBuffer, finalName);
     }
   }
-
+ 
   saveAsExcelFile(buffer: any, fileName: string): void {
     const EXCEL_TYPE =
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
     saveAs(data, `${fileName}.xlsx`);
   }
-
+ 
   exportPDF(dt: any) {
     const filteredData: any[] = dt.value;
-
+ 
     if (filteredData && filteredData.length > 0) {
       const fixedHeaders = [
         'S No',
-        'station_id',
-        'timestamp',
-        'datetime',
-        'battery',
-        'lat',
-        'lon',
+        'Station Id',
+        'Timestamp',
+        'Date and Time',
+        'Battery',
+        'Latitude',
+        'Longitude',
       ];
       const fixedFields = [
         'station_id',
-        'timestamp',
-        'datetime',
+        'timestampFormatted', // Use formatted field
+        'datetimeFormatted', // Use formatted field
         'battery',
         'lat',
         'lon',
       ];
-
+ 
       const dynamicHeaders = this.selectedColumns.map((col) => col.header);
       const dynamicFields = this.selectedColumns.map((col) => col.field);
-
-      const chunkSize = 10; // Adjust based on how many columns fit per page
-
+ 
+      const chunkSize = 10; // Columns per page
       const doc = new jsPDF('landscape');
-
+ 
+      // 🔁 Reverse the data rows (but keep S No ascending)
+      const reversedData = [...filteredData].reverse();
+ 
       for (let i = 0; i < dynamicFields.length; i += chunkSize) {
         const chunkHeaders = dynamicHeaders.slice(i, i + chunkSize);
         const chunkFields = dynamicFields.slice(i, i + chunkSize);
-
+ 
         const headers = [...fixedHeaders, ...chunkHeaders];
         const fields = [...fixedFields, ...chunkFields];
-
-        const data = filteredData.map((row: any, index: number) => {
-          const rowData = [index + 1]; // S No
+ 
+        const data = reversedData.map((row: any, index: number) => {
+          const rowData = [index + 1]; // ✅ S No in ascending order
           fields.forEach((field) => {
             if (field === 'Date') {
               const isoDate = row[field];
@@ -684,14 +713,14 @@ export class ReportComponent implements OnInit {
           });
           return rowData;
         });
-
+ 
         autoTable(doc, {
           head: [headers],
           body: data,
           startY: (doc as any).lastAutoTable
             ? (doc as any).lastAutoTable.finalY + 10
             : 10,
-
+ 
           styles: {
             fontSize: 7,
             cellPadding: 1,
@@ -713,24 +742,23 @@ export class ReportComponent implements OnInit {
           pageBreak: 'auto',
           showHead: 'everyPage',
         });
-
-        // Add new page if more chunks remain
+ 
         if (i + chunkSize < dynamicFields.length) {
           doc.addPage();
         }
       }
-
+ 
       doc.save(`${this.nameOfStation}.pdf`);
     } else {
       console.warn('No data available for PDF export');
     }
   }
-
+ 
   quickExportByRange(dt: any, exportType: 'Daily' | 'Monthly' | 'Yearly') {
     const now = new Date();
     let fromDate: string = '';
     let toDate: string = '';
-
+ 
     if (exportType === 'Daily') {
       const start = new Date(now.setHours(0, 0, 0, 0));
       const end = new Date(now.setHours(23, 59, 59, 999));
@@ -747,7 +775,7 @@ export class ReportComponent implements OnInit {
       fromDate = this.formatDateTime(new Date(firstDay.setHours(0, 0, 0)));
       toDate = this.formatDateTime(new Date(lastDay.setHours(23, 59, 59)));
     }
-
+ 
     if (!this.selectedBuoy?.station_id) {
       console.warn('Buoy not selected');
       return;
@@ -767,16 +795,24 @@ export class ReportComponent implements OnInit {
             console.warn('No data available for export.');
             return;
           }
-
-          // Set filtered data to the table's value
-          dt.value = data;
-
+ 
+          // ✅ Add formatted fields before assigning to dt.value
+          const formattedData = data.map((d) => ({
+            ...d,
+            timestampFormatted: this.formatDate(d.timestamp),
+            datetimeFormatted: this.formatDate(d.datetime),
+          }));
+ 
+          dt.value = formattedData;
+ 
           // Trigger export
           this.exportExcel(dt, `${this.nameOfStation}_${exportType}`);
         },
+ 
         (error) => {
           console.error('Error fetching data:', error);
         }
       );
   }
+ 
 }

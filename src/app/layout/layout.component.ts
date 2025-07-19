@@ -32,6 +32,7 @@ export class LayoutComponent implements OnInit{
   selectedStationId!:string;
   sensors:string[]=[];
   Time:string = '';
+  StationName!:string;
   getScreenSize() {
     return { width: window.innerWidth, height: window.innerHeight };
   }

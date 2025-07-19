@@ -380,7 +380,7 @@ flex-direction: column;
   align-items: center;
   /* background-color: antiquewhite; */
   flex-shrink: 0;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   margin-left: 2px;
   /* border-right: 2px solid blue; */
 }
@@ -477,6 +477,18 @@ margin-top: 5px;
   overflow: hidden;
   margin-bottom: 2px;
 }
+.watch{
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+  /* background-color: #1abc9c; */
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 /* .wave {
 height: 29.6%;
 width: 100%;
@@ -500,6 +512,17 @@ bottom: -17px;
 right: 0;
 }
 
+.buoy3d .lat1{
+  position: absolute;
+  top: 0px;
+  left: 5px;
+}
+.buoy3d .lon1{
+  position: absolute;
+  top: 15px;
+  left: 5px;
+
+}
 @keyframes waveAnimation {
 0% {
   transform: translateY(0);
@@ -523,6 +546,7 @@ right: 0;
     width: 100%;
     margin-top: 5px;
     overflow-y: auto;
+    overflow-x:hidden;
     /* background-color: aqua; */
   }
 
@@ -689,15 +713,15 @@ right: 0;
     position: relative;
     /* justify-content: space-between; */
     /* justify-content: space-sp; */
-    cursor: pointer;
+    /* cursor: pointer; */
   }
   .met_wind_gust h3{
     font-size: 14px;
     font-weight: normal;
   }
 .danger_circle{
-  height: 80px;
-  width: 80px;
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
 display: flex;
 justify-content: center;
@@ -705,8 +729,8 @@ align-items: center;
 border: 2px red solid;
 }
 .warning_circle{
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
   display: flex;
 justify-content: center;
@@ -799,6 +823,23 @@ align-items: center;
     margin-top: 17%;
     margin-bottom: 5px;
     /* top: 10px; */
+  }
+  .directionNeedle{
+       height: 30%;
+    width: 80%;
+    color: rgb(156, 37, 37);
+    margin-top: 5%;
+    /* background-color: #1050cd; */
+    /* margin-bottom: 5px; */
+    /* top: 10px; */
+  }
+  .directionNeedle svg{
+    width: 100%;
+    height: 100%;
+      color: rgb(156, 37, 37);
+    margin-top: 0%;
+    /* background-color: #1050cd; */
+    /* margin-bottom: 5px; */
   }
 
   .met_params2{
@@ -1223,7 +1264,7 @@ backdrop-filter: blur(8px);
   font-weight: bold;
   position: absolute;
   bottom: 5px;
-  left: 45%;
+  /* left: 45%; */
 }
 .battery_box{
   height: 100%;
@@ -1366,6 +1407,7 @@ border-radius: 10px;
   background-color: var(--basebg);
   border-radius: 10px;
   display: flex;
+  box-shadow: 2px 2px 3px  rgb(192, 191, 191) solid;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
@@ -1394,6 +1436,9 @@ border-radius: 10px;
     margin-left: 10px;
     font-weight: normal;
     align-self: flex-start;
+}
+.wat_item1 p{
+  font-weight: bold;
 }
 .wat_item1 svg{
   height: 30%;

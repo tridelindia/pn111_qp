@@ -25,7 +25,7 @@ export class AppearanceComponent implements OnInit {
 
     this.loadPreferences();
 
-  const theme = localStorage.getItem('theme');
+  const theme = localStorage.getItem('selectedColor');
 // chartFont = theme!;
 //   this.theme = theme!;
   this.onChangeTheme(theme!);

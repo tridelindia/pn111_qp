@@ -25,11 +25,10 @@ export class SingleAxisComponent implements OnInit {
   xData: number[] = []; // Store timestamps for x-axis
   yData: number[] = []; // Store values for y-axis
   unit:string='';
-constructor(private data:GlobalDataService){}
+  constructor(private data:GlobalDataService){}
   ngOnInit(): void {
     // const u = this.data.SensorConfigs.filter(item=> item.param_name === this.singleAxis[0].name);
     // this.unit = u[0].unit
-
     const seriesData = this.singleAxis.map(item => [
       new Date(item.DateTime).getTime(),
       parseFloat(item.value)

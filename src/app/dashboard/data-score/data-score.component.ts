@@ -29,12 +29,13 @@ last7Days: { day: string, date: string, value: number, percentage: number }[] = 
   overallScore:number = 0;
   @Input() stationId!:string;
   // overallScore: number = 0;
-  isNoWaterQuality:boolean=false;
+  isMet:boolean=false;
   selectedSensor: string = "ocean";
   constructor(private http:HttpClient, private layout:LayoutComponent){}
   sunShineData!:DailySunshine[];
   ngOnInit() {
-    this.isNoWaterQuality = this.layout.sensors.includes('water_quality');
+    this.isMet = this.layout.sensors.includes('meteorology');
+    console.log("bool", this.layout.sensors, this.isMet)
     this.updateData()
     this.fetchSensorData()
   }
@@ -102,13 +103,32 @@ getpercentage(val:number, sensor:string):number{
   console.log("ocean percent day",data);
   return data;
 }
+fromDate!:string;
+toDate!:string;
 
+formatDateLocal(date: Date): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  const ss = String(date.getSeconds()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+}
   fetchSensorData() {
+      const startDate = new Date();
+startDate.setDate(startDate.getDate() - 7); // Go back 7 days from today
+startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date();
+    endDate.setHours(23, 59, 0, 0);
+    this.fromDate = this.formatDateLocal(new Date(startDate));
+    this.toDate = this.formatDateLocal(new Date(endDate));
   const params = new HttpParams()
-    .set('fromDate', '2025-05-20T00:00:42.000Z')
-    .set('toDate', '2025-06-07T23:59:00.000Z')
+    .set('fromDate', this.fromDate)
+    .set('toDate', this.toDate)
     .set('stationId', this.stationId);
-  const apiUrl = 'http://localhost:3000/api/getSensorDataByStationAndDate';
+  const apiUrl = 'http://192.168.0.126:3000/api/getSensorDataByStationAndDate';
 
   this.http.get<any[]>(apiUrl, { params }).subscribe(data => {
     console.log("API data received:", data);

@@ -9,7 +9,7 @@ import { set } from 'ol/transform';
 import { StationconfigService } from '../home/homeService/stationconfig.service';
 import { ReportService } from '../report/report.service';
 interface Station{
-    station_id: string; station_name: string; sensors:string[]
+    station_id: string; station_name: string; sensors:string[], status:string
   }
 @Component({
     selector: 'app-top-bar',
@@ -71,6 +71,7 @@ export class TopBarComponent implements OnInit{
         setTimeout(() => {
             this.layout.sensors = idset[0].sensors
             this.layout.selectedStationId = idset[0].station_id
+            this.layout.StationName = idset[0].station_name;
             console.log("id_station","one",this.layout.selectedStationId)
             if(this.layout.selectedStationId !== null && this.layout.sensors.length !==0){
                 setTimeout(() => {
@@ -116,17 +117,22 @@ export class TopBarComponent implements OnInit{
     }
 
     getStation(){
-        this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
+        this.http.get('http://192.168.0.126:3000/api/getStationConfig').subscribe(
             (response: any) => {
                 console.log( "Stations",response);
+                let stationsss:Station[]=[]
                 for (let index = 0; index < response.length; index++) {
-                    this.listStations = response
+                    stationsss = response
                 }
+                this.listStations = stationsss.filter(item=> item.status === 'active');
+
                 this.selectedStation = response[0].station_name;
                     console.log("response topbar",response, this.listStations[0].station_name);
                 this.layout.selectedStationId = this.listStations[0].station_id
+                this.layout.StationName = this.listStations[0].station_name;
                 console.log("id_station","one",this.layout.selectedStationId);
                 this.layout.sensors = response[0].sensors
+                this.layout.StationName = response[0].station_name;
                 setTimeout(() => {
                     this.layout.isDashboardLoading = false;
                 }, 200);
