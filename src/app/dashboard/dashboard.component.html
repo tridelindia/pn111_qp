@@ -1152,18 +1152,21 @@
 
                                 <div class="watch_circle">
                                     <!-- <div class="met_param_title"> -->
-                                    <p style="    position: absolute;
-                                    top: 5px;
-                                    left: 6px;
-                                    margin: 0px;
-                                ">Red Tide space</p>
+                                    <p [ngStyle]="{'position': 'absolute',
+                                    'top': '5px',
+                                    'left': '6px',
+                                    
+                                    'margin': '0px' ,'color':IsRedTide?'green':'red'
+                                }">{{IsRedTide? "Red Tide Detected":"Red Tide is not Detected"}}</p>
                                     <!-- </div> -->
                                     <!-- <div class="danger_circle">
                                         <div class="warning_circle">
                                             <img src="../../assets/image/buoy.png" alt="">
                                         </div>
                                     </div>
+                                    
                                     <i class="fa fa-expand"></i> -->
+                                    <p style="font-weight: bold;font-size: 16px;">{{risk}}</p>
                                 </div>
 
                             </div>

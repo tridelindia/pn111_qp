@@ -180,7 +180,7 @@ fromDate!:string;
 toDate!:string;
     ngOnInit(): void {
       this.map.destroyMap();
-      this.http.get('http://192.168.0.126:3000/api/getBin').subscribe(
+      this.http.get('http://localhost:3000/api/getBin').subscribe(
         (response:any)=>{
           //console.log("binsss", response)
          this.Bins = response
@@ -233,7 +233,7 @@ this.map.destroyMap()
  
     
     fetchSensorCofig() {
-      this.http.get('http://192.168.0.126:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           this.sensorConfig = response;
 
@@ -275,16 +275,54 @@ this.map.destroyMap()
         error => console.error('Error fetching sensor config:', error)
       );
     }
+
+    detectRedTide(data: BuoyData): boolean {
+  return (
+    data.chlorophyll_a > 10 &&
+    data.dissolved_oxygen < 4 &&
+    data.turbidity > 10 &&
+    data.water_temperature >= 22 && data.water_temperature <= 32 &&
+    data.salinity >= 25 && data.salinity <= 36 &&
+    (data.ph > 8.5 || data.ph < 7.5)
+  );
+}
+redTideRiskScore(data: BuoyData): string {
+  let score = 0;
+
+  if (data.chlorophyll_a > 10) score += 3;
+  if (data.dissolved_oxygen < 4) score += 2;
+  if (data.turbidity > 10) score += 2;
+  if (data.water_temperature >= 22 && data.water_temperature <= 32) score += 1;
+  if (data.salinity >= 25 && data.salinity <= 36) score += 1;
+  if (data.ph > 8.5 || data.ph < 7.5) score += 1;
+
+  if (score >= 7) {
+    return 'High Risk';
+  } else if (score >= 4) {
+    return 'Moderate Risk';
+  } else {
+    return 'Low Risk';
+  }
+}
+IsRedTide!:boolean;
+risk!:string;
     
     fetchSensors() {
       this.BuoyData = [];
       const params = new HttpParams().set('fromDate', this.fromDate).set('toDate',this.toDate).set('stationId', this.layout.selectedStationId);
-      this.http.get('http://192.168.0.126:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
+      this.http.get('http://localhost:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
         (response: any) => {
           this.BuoyData = response;
           this.checkDataLoaded();
           //console.log("bins 2:", this.BuoyData[0]);
           const bins = this.BuoyData[0];
+const isRedTide = this.detectRedTide(this.BuoyData[0]);
+  const risk = this.redTideRiskScore(this.BuoyData[0]);
+          this.IsRedTide = isRedTide;
+          this.risk = risk;
+  console.log(`Station: ${this.BuoyData[0].station_id}, Time: ${this.BuoyData[0].timestamp}`);
+  console.log('Red Tide Detected:', isRedTide);
+  console.log('Risk Level:', risk);
 
           this.buoyLocation = [this.BuoyData[0].lat, this.BuoyData[0].lon];
           //console.log("location==", this.buoyLocation)

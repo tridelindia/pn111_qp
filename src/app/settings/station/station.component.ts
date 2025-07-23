@@ -164,7 +164,7 @@ onSelect(status: string) {
 
 
   getStation(){
-    this.http.get('http://192.168.0.126:3000/api/getStationConfig').subscribe(
+    this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
       (response: any) => {
         console.log(response);
         
@@ -431,7 +431,7 @@ index!:number;
 
   this.addStationData = newStation;
 
-  this.http.post('http://192.168.0.126:3000/api/addStation', this.addStationData).subscribe(
+  this.http.post('http://localhost:3000/api/addStation', this.addStationData).subscribe(
     (response) => {
       this.getStation();
 
@@ -522,7 +522,7 @@ index!:number;
 
   console.log('Updating Station:', updatingStation);
 
-  this.http.post('http://192.168.0.126:3000/api/editStation', updatingStation).subscribe(
+  this.http.post('http://localhost:3000/api/editStation', updatingStation).subscribe(
     (response) => {
       this.toast.success('Station details updated successfully', 'Success');
       this.getStation();

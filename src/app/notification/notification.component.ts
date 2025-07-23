@@ -300,7 +300,7 @@ export class NotificationComponent implements OnInit {
   }
  
   getStation(){
-    this.http.get('http://192.168.0.126:3000/api/getStationConfig').subscribe(
+    this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
         (response: any) => {
             console.log("Stations loaded:", response);
             this.stations = response;
