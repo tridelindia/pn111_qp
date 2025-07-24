@@ -125,7 +125,11 @@ export class TopBarComponent implements OnInit{
                 for (let index = 0; index < response.length; index++) {
                     stationsss = response
                 }
-                this.listStations = stationsss.filter(item=> item.status === 'active');
+                if(this.layout.selectedIndex === 7){
+                    this.listStations = stationsss;
+                }else{
+                    this.listStations = stationsss.filter(item=> item.status === 'active');
+                }
 
                 this.selectedStation = this.listStations[0].station_name;
                     console.log("response topbar",response, this.listStations[0].station_name);
