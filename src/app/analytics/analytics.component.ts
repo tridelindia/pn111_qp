@@ -626,10 +626,10 @@ isMeteriology:boolean=true;
 
                 for (let index = 0; index < this.ssstations.length; index++) {
                     this.stations.push({
-                      stationId: response[index].station_id,
-                      name:response[index].station_name})
+                      stationId: this.ssstations[index].station_id,
+                      name:this.ssstations[index].station_name})
                 }
-                // console.log("station",st)
+                console.log("station",this.stations)
                 // this.stations = st.filter(item=> item.status === 'active')
                 // this.selectedStation = this.stations;
                 

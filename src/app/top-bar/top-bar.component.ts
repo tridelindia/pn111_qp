@@ -22,7 +22,7 @@ export class TopBarComponent implements OnInit{
     screen!:string;
     @Input() page!:number;
     dropdownOpen:boolean =  false;
-    selectedStation:string = 'Station 1';
+    selectedStation:string = '';
     listStations:Station[]=[];
     currentUser!: CurrentUser;
     isUtc:boolean = true;
@@ -82,6 +82,7 @@ export class TopBarComponent implements OnInit{
     }
 
     ngOnInit(): void {
+        this.listStations = [];
         const scren = this.getScreenSize();
         this.screen = `${scren.width},${scren.height}`;
         this.getStation();
@@ -126,7 +127,7 @@ export class TopBarComponent implements OnInit{
                 }
                 this.listStations = stationsss.filter(item=> item.status === 'active');
 
-                this.selectedStation = response[0].station_name;
+                this.selectedStation = this.listStations[0].station_name;
                     console.log("response topbar",response, this.listStations[0].station_name);
                 this.layout.selectedStationId = this.listStations[0].station_id
                 this.layout.StationName = this.listStations[0].station_name;

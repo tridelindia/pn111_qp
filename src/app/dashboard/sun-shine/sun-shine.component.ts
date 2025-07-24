@@ -100,7 +100,7 @@ const label = `${date}-${month} (${time})`;
         const time = label.split(' ')[1];
         const color = time === '12:00' ? '#ffe6bf' : '#dbd9d9'; // light orange or light gray
         return [{
-          name: time === '12:00' ? 'D' : 'N',
+          name: time === '12:00' ? 'Day' : 'Night',
           xAxis: label,
           itemStyle: {
             color: color,
