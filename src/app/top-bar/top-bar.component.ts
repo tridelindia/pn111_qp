@@ -105,8 +105,8 @@ export class TopBarComponent implements OnInit{
       const seconds = pad(date.getUTCSeconds());
     
       return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-    }
-    
+  }
+   
     // UTC Time
    
     
@@ -118,7 +118,7 @@ export class TopBarComponent implements OnInit{
     }
 
     getStation(){
-        this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
+        this.http.get('http://192.168.0.6:3000/api/getStationConfig').subscribe(
             (response: any) => {
                 console.log( "Stations",response);
                 let stationsss:Station[]=[]
@@ -137,7 +137,7 @@ export class TopBarComponent implements OnInit{
                 this.layout.StationName = this.listStations[0].station_name;
                 console.log("id_station","one",this.layout.selectedStationId);
                 this.layout.sensors = response[0].sensors
-                this.layout.StationName = response[0].station_name;
+                this.layout.StationName = this.listStations[0].station_name;
                 setTimeout(() => {
                     this.layout.isDashboardLoading = false;
                 }, 200);

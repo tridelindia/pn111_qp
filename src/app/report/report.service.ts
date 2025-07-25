@@ -86,7 +86,7 @@ export interface Metrological {
   providedIn: 'root',
 })
 export class ReportService {
-  private apiUrl = 'http://localhost:3000/api/';
+  private apiUrl = 'http://192.168.0.6:3000/api/';
  
   constructor(private http: HttpClient) {}
  

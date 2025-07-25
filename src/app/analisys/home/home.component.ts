@@ -100,7 +100,7 @@ changetiMulOne(){
     const params = new HttpParams()
     .set('fromDate',fromDate)
     .set('toDate',toDate);
-    this.http.get('http://localhost:3000/api/getSensorDataByDate', {params}).subscribe(
+    this.http.get('http://192.168.0.6:3000/api/getSensorDataByDate', {params}).subscribe(
       (data:any) => {
         console.log("",data);
         this.buoyData =data
@@ -115,7 +115,7 @@ changetiMulOne(){
   }
 
 fetchSensor(){
-  this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+  this.http.get('http://192.168.0.6:3000/api/getSensorConfig').subscribe(
     (response:any)=>{
       console.log("sensor",response)
       this.sensorData = response
