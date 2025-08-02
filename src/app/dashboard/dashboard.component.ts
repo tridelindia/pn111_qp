@@ -180,7 +180,7 @@ fromDate!:string;
 toDate!:string;
     ngOnInit(): void {
       this.map.destroyMap();
-      this.http.get('http://192.168.0.6:3000/api/getBin').subscribe(
+      this.http.get('http://localhost:3000/api/getBin').subscribe(
         (response:any)=>{
           //console.log("binsss", response)
          this.Bins = response
@@ -233,7 +233,7 @@ this.map.destroyMap()
  
     
     fetchSensorCofig() {
-      this.http.get('http://192.168.0.6:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           this.sensorConfig = response;
 
@@ -310,7 +310,7 @@ risk!:string;
     fetchSensors() {
       this.BuoyData = [];
       const params = new HttpParams().set('fromDate', this.fromDate).set('toDate',this.toDate).set('stationId', this.layout.selectedStationId);
-      this.http.get('http://192.168.0.6:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
+      this.http.get('http://localhost:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
         (response: any) => {
           this.BuoyData = response;
           this.checkDataLoaded();

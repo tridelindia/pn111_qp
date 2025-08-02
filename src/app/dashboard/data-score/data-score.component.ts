@@ -128,7 +128,7 @@ startDate.setHours(0, 0, 0, 0);
     .set('fromDate', this.fromDate)
     .set('toDate', this.toDate)
     .set('stationId', this.stationId);
-  const apiUrl = 'http://192.168.0.6:3000/api/getSensorDataByStationAndDate';
+  const apiUrl = 'http://localhost:3000/api/getSensorDataByStationAndDate';
 
   this.http.get<any[]>(apiUrl, { params }).subscribe(data => {
     console.log("API data received:", data);

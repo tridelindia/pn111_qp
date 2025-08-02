@@ -80,49 +80,95 @@ export class SensorComponent implements OnInit {
     this.getStationConfig();
   }
  
+ // saveData() {
+  //   try {
+  //     this.http.get('http://192.168.0.19:3000/api/getSensorConfig').subscribe(
+  //       (response: any) => {
+  //         console.log('sensorvalise', response);
+  //         this.sampleData = response;
+  //         this.paramNames = this.sampleData.map((name: any) => name.param_name);
+  //         console.log('Extracted param_names:', this.paramNames);
+  //         this.tableData = this.sampleData.filter(
+  //           (item) => item.name === 'oceanography'
+  //         );
+  //         console.log(this.tableData);
+  //         if (this.isFirst === 1) {
+  //           this.onEdit(this.tableData[0]);
+  //         }
+  //         this.isFirst = this.isFirst + 1;
+  //         // return true;
+  //       },
+ 
+  //       (error) => {
+  //         console.error(error);
+  //         // return false;
+  //       }
+  //     );
+  //     this.http
+  //       .get('http://192.168.0.19:3000/api/getBin')
+  //       .subscribe((response: any) => {
+  //         console.log('binsss', response);
+  //         this.bin1 = response[0].value;
+  //         this.bin2 = response[1].value;
+  //         this.bin3 = response[2].value;
+  //         this.bin4 = response[3].value;
+  //       });
+  //     // return true
+  //   } catch (error) {
+  //     // return false
+  //   }
+  // }
+ 
   saveData() {
     try {
-      this.http.get('http://192.168.0.6:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           console.log('sensorvalise', response);
-          this.sampleData = response;
+ 
+          // Filter out unwanted parameters
+          this.sampleData = response.filter(
+            (item: any) =>
+              item.param_name !== 'current_speed' &&
+              item.param_name !== 'current_direction'
+          );
+ 
           this.paramNames = this.sampleData.map((name: any) => name.param_name);
           console.log('Extracted param_names:', this.paramNames);
+ 
           this.tableData = this.sampleData.filter(
             (item) => item.name === 'oceanography'
           );
           console.log(this.tableData);
+ 
           if (this.isFirst === 1) {
             this.onEdit(this.tableData[0]);
           }
           this.isFirst = this.isFirst + 1;
-          // return true;
         },
- 
         (error) => {
           console.error(error);
-          // return false;
         }
       );
-      this.http.get('http://192.168.0.6:3000/api/getBin').subscribe(
-        (response:any)=>{
-          console.log("binsss", response)
+ 
+      this.http
+        .get('http://localhost:3000/api/getBin')
+        .subscribe((response: any) => {
+          console.log('binsss', response);
           this.bin1 = response[0].value;
-             this.bin2 = response[1].value;
-              this.bin3 = response[2].value;
-               this.bin4 = response[3].value;
-        }
-      )
-      // return true
+          this.bin2 = response[1].value;
+          this.bin3 = response[2].value;
+          this.bin4 = response[3].value;
+        });
     } catch (error) {
-      // return false
+      console.error(error);
     }
   }
+ 
  
   Update() {
 
     this.http
-      .post('http://192.168.0.6:3000/api/updateSensor', this.editData)
+      .post('http://localhost:3000/api/updateSensor', this.editData)
       .subscribe(
         (response: any) => {
           console.log(response);
@@ -155,7 +201,7 @@ export class SensorComponent implements OnInit {
           {"id": 3, "value": this.bin3},
           {"id": 4, "value": this.bin4}
         ]
-        this.http.post('http://192.168.0.6:3000/api/updatebinss', {bins}).subscribe(
+        this.http.post('http://localhost:3000/api/updatebinss', {bins}).subscribe(
           (response:any)=>{
             console.log("bins", response);
             
@@ -246,7 +292,7 @@ export class SensorComponent implements OnInit {
  
   getStationConfig() {
     this.http
-      .get('http://192.168.0.6:3000/api/getStationConfig')
+      .get('http://localhost:3000/api/getStationConfig')
       .subscribe((data: any) => {
         this.stations = data.map((item: any) => ({
           id: item.id,
@@ -279,7 +325,7 @@ export class SensorComponent implements OnInit {
     console.log('Updating station with payload:', payload);
  
     this.http
-      .put('http://192.168.0.6:3000/api/updateHomeConfig', payload)
+      .put('http://localhost:3000/api/updateHomeConfig', payload)
       .subscribe({
         next: (res) => {
           console.log('Update successful:', res);

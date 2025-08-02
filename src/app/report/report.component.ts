@@ -18,14 +18,15 @@ import { saveAs } from 'file-saver';
 import * as FileSaver from 'file-saver';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { DropdownModule } from 'primeng/dropdown'
-
+import { DropdownModule } from 'primeng/dropdown';
+import { SensorModel } from '../models/station.model';
+ 
 interface Column {
   field: string;
   header: string;
   unit?: string;
 }
-
+ 
 @Component({
   selector: 'app-report',
   standalone: true,
@@ -47,21 +48,23 @@ interface Column {
 })
 export class ReportComponent implements OnInit {
   loading: boolean = false;
-
+ 
   fetchedBuoys: StationConfigs[] = [];
   selectedBuoy!: StationConfigs;
-
+ 
   sensorData!: BuoyMeasurement[];
   metrological!: [];
   oceanographic!: [];
   waterQuality!: [];
   selectedExportOption: any = null;
-
+ 
   dynaColumns!: Column[];
   selectedColumns!: Column[];
   globalFilterFields!: string[];
   searchQuery: string = '';
-
+ 
+  paramUnits: SensorModel[] = [];
+ 
   selectedOption: string = 'sensorData';
   options = [
     { label: 'All Sensors', value: 'sensorData', icon: 'fa fas-database' },
@@ -69,90 +72,98 @@ export class ReportComponent implements OnInit {
     { label: 'Oceanography', value: 'oceanography', icon: 'pi pi-globe' },
     { label: 'Water Quality', value: 'water_quality', icon: 'pi pi-umbrella' },
   ];
-
+ 
   periodOptions = [
     { label: 'Date Range', value: 'date' },
     { label: 'Weekly', value: 'week' },
     { label: 'Monthly', value: 'month' },
     { label: 'Yearly', value: 'year' },
   ];
-
+ 
   selectedPeriod: string = 'date';
   selectedDate: Date = new Date(); // for week/month/year
   // fromDateModel: Date = new Date(); // for date range
   // toDateModel: Date = new Date(); // for date range
   rangeDates: Date[] = [new Date(), new Date()]; // optional initial values
-
+ 
   fromDate!: string;
   toDate!: string;
-
+ 
   exportOptions = [
     { label: 'Export to CSV', value: 'csv' },
     { label: 'Export to Excel', value: 'excel' },
     { label: 'Export to PDF', value: 'pdf' },
   ];
   nameOfStation!: string;
-
+ 
   constructor(
     private reportService: ReportService,
-    private stationConfig: StationconfigService
+    private stationConfig: StationconfigService,
+    private paramUnitsService: StationconfigService
   ) {}
   @ViewChild('dt') dt: any;
-
+ 
   ngOnInit(): void {
+    this.paramUnitsService.getSensorConfig().subscribe((paramUnits) => {
+      this.paramUnits = paramUnits;
+      console.log('Sensor Config units: ', this.paramUnits);
+ 
+      this.onOptionChange();
+    });
+ 
     this.stationConfig.getStationNames().subscribe((data) => {
       this.fetchedBuoys = data;
       console.log('fetchedBuoys', this.fetchedBuoys);
-
+ 
       if (this.fetchedBuoys.length > 0) {
         this.selectedBuoy = this.fetchedBuoys[0];
         this.nameOfStation = this.selectedBuoy.station_name;
       }
       console.log('selectedBuoy', this.selectedBuoy);
-
+ 
       this.onOptionChange();
       this.setView(this.selectedPeriod);
     });
   }
-
+ 
   // formatDateTime(date: Date): string {
   //   return date.toISOString().slice(0, 19); // 'YYYY-MM-DDTHH:mm:ss'
   // }
-
+ 
   formatDateTime(date: Date): string {
     // Convert to 'yyyy-MM-dd HH:mm:ss' or whatever your backend expects, in IST
     const offset = date.getTimezoneOffset() * 60000;
     const localDate = new Date(date.getTime() - offset);
     return localDate.toISOString().slice(0, 19).replace('T', ' ');
   }
-
+ 
   setView(view: string) {
     this.selectedPeriod = view;
-
+ 
     if (this.dt) {
       this.dt.first = 0;
     }
-
+ 
     if (view === 'date') {
       if (this.rangeDates && this.rangeDates.length === 2) {
         const start = this.rangeDates[0];
         const end = this.rangeDates[1];
-
+ 
         this.fromDate = this.formatDateTime(new Date(start.setHours(0, 0, 0)));
         this.toDate = this.formatDateTime(new Date(end.setHours(23, 59, 59)));
-
+ 
         this.fetchDataByDate2();
       }
     } else if (view === 'week') {
       if (this.selectedDate) {
         const startOfWeek = new Date(this.selectedDate);
         startOfWeek.setHours(0, 0, 0, 0);
-
+ 
         const weekEndDate = this.getWeekEndDate(startOfWeek);
-
+ 
         this.fromDate = this.formatDateTime(startOfWeek);
         this.toDate = this.formatDateTime(weekEndDate);
-
+ 
         this.fetchDataByDate2();
       } else {
         console.warn('No week selected');
@@ -161,27 +172,27 @@ export class ReportComponent implements OnInit {
       const d = new Date(this.selectedDate);
       const firstDay = new Date(d.getFullYear(), d.getMonth(), 1);
       const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-
+ 
       this.fromDate = this.formatDateTime(new Date(firstDay.setHours(0, 0, 0)));
       this.toDate = this.formatDateTime(new Date(lastDay.setHours(23, 59, 59)));
     } else if (view === 'year') {
       const d = new Date(this.selectedDate);
       const firstDay = new Date(d.getFullYear(), 0, 1);
       const lastDay = new Date(d.getFullYear(), 11, 31);
-
+ 
       this.fromDate = this.formatDateTime(new Date(firstDay.setHours(0, 0, 0)));
       this.toDate = this.formatDateTime(new Date(lastDay.setHours(23, 59, 59)));
     }
-
+ 
     this.fetchDataByDate2();
   }
-
+ 
   fetchDataByDate2() {
     if (!this.fromDate || !this.toDate || !this.selectedBuoy?.station_id) {
       console.warn('Missing required filters: date or buoy not selected');
       return;
     }
-
+ 
     this.reportService
       .getSensorDataByStationAndDate(
         this.selectedBuoy.station_id,
@@ -206,39 +217,39 @@ export class ReportComponent implements OnInit {
     console.log('fromDate', this.fromDate);
     console.log('toDate', this.toDate);
   }
-
+ 
   formatDate(dateStr: any): string {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return '';
-
+ 
     const pad = (n: number) => n.toString().padStart(2, '0');
-
+ 
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1);
     const day = pad(date.getDate());
     const hours = pad(date.getHours());
     const minutes = pad(date.getMinutes());
     const seconds = pad(date.getSeconds());
-
+ 
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
   }
-
+ 
   getWeekEndDate(startDate: Date): Date {
     let endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + 6); // Add 6 days to get the week end
     endDate.setHours(23, 59, 59, 999);
     return endDate;
   }
-
+ 
   onSearch(query: string, dt: any): void {
     this.searchQuery = query;
     dt.filterGlobal(query, 'contains');
   }
-
+ 
   highlightSearchText(value: any): string {
     if (!this.searchQuery) return value;
-
+ 
     // Ensure the value is treated as a string
     const stringValue =
       value !== null && value !== undefined ? String(value) : '';
@@ -249,12 +260,12 @@ export class ReportComponent implements OnInit {
     const regex = new RegExp(`(${escapedSearchQuery})`, 'gi');
     return stringValue.replace(regex, '<span class="highlight">$1</span>');
   }
-
+ 
   rowMatchesSearch(rowData: any, columns: any[]): boolean {
     if (!this.searchQuery) return false;
-
+ 
     const search = this.searchQuery.toLowerCase();
-
+ 
     return columns.some((col) => {
       const value = rowData[col.field];
       return (
@@ -264,8 +275,16 @@ export class ReportComponent implements OnInit {
       );
     });
   }
-
-    alpha: any = null;
+ 
+  alpha: any = null;
+ 
+  getUnitByField(fieldName: string): string {
+    const match = this.paramUnits.find(
+      (unitObj) => unitObj.param_name === fieldName
+    );
+    return match ? match.unit : '';
+  }
+ 
   onOptionChange(): void {
     if (this.selectedOption == 'sensorData') {
       this.alpha = this.fetchedBuoys;
@@ -286,95 +305,206 @@ export class ReportComponent implements OnInit {
  
     if (this.selectedOption === 'sensorData') {
       this.dynaColumns = [
-        { field: 'wind_speed', header: 'Wind Speed', unit: 'm/s' },
-        { field: 'wind_direction_deg', header: 'Wind Direction', unit: '°' },
-        { field: 'wind_gust', header: 'Wind Gust', unit: 'm/s' },
-        { field: 'temperature_deg', header: 'Air Temperature', unit: '°C' },
-        { field: 'rh_percent', header: 'Relative Humidity', unit: '%' },
-        { field: 'bp_hpa', header: 'Barometric Pressure', unit: 'hPa' },
-        { field: 'rain_mm', header: 'Rainfall', unit: 'mm' },
-        { field: 'visibility', header: 'Visibility', unit: 'km' },
-        { field: 'global_radiation', header: 'Radiation', unit: 'W/m²' },
+        {
+          field: 'wind_speed',
+          header: 'Wind Speed',
+          // unit: `(${this.paramUnits[12].unit})`,
+          unit: `(${this.getUnitByField('wind_speed')})`,
+        },
+        {
+          field: 'wind_direction_deg',
+          header: 'Wind Direction',
+          unit: `(${this.getUnitByField('wind_direction_deg')})`,
+        },
+        {
+          field: 'wind_gust',
+          header: 'Wind Gust',
+          unit: `(${this.getUnitByField('wind_gust')})`,
+        },
+        {
+          field: 'temperature_deg',
+          header: 'Air Temperature',
+          unit: `(${this.getUnitByField('temperature_deg')})`,
+        },
+        {
+          field: 'rh_percent',
+          header: 'Relative Humidity',
+          unit: `(${this.getUnitByField('rh_percent')})`,
+        },
+        {
+          field: 'bp_hpa',
+          header: 'Barometric Pressure',
+          unit: `(${this.getUnitByField('bp_hpa')})`,
+        },
+        {
+          field: 'rain_mm',
+          header: 'Rainfall',
+          unit: `(${this.getUnitByField('rain_mm')})`,
+        },
+        {
+          field: 'visibility',
+          header: 'Visibility',
+          unit: `(${this.getUnitByField('visibility')})`,
+        },
+        {
+          field: 'global_radiation',
+          header: 'Radiation',
+          unit: `(${this.getUnitByField('global_radiation')})`,
+        },
  
-        { field: 'wave_heading', header: 'Wave Heading', unit: '°' },
-        { field: 'wave_height', header: 'Wave Height', unit: 'm' },
-        { field: 'tzc', header: 'Peak Wave Period', unit: 's' },
-        { field: 'tz', header: 'Zero Crossing Period', unit: 's' },
-        { field: 'tm02', header: 'Average Wave Period', unit: 's' },
-        { field: 'wave_direction', header: 'Wave Direction', unit: '°' },
+        {
+          field: 'wave_heading',
+          header: 'Wave Heading',
+          unit: `(${this.getUnitByField('wave_heading')})`,
+        },
+        {
+          field: 'wave_height',
+          header: 'Wave Height',
+          unit: `(${this.getUnitByField('wave_height')})`,
+        },
+        {
+          field: 'tzc',
+          header: 'Peak Wave Period',
+          unit: `(${this.getUnitByField('tzc')})`,
+        },
+        {
+          field: 'tz',
+          header: 'Zero Crossing Period',
+          unit: `(${this.getUnitByField('tz')})`,
+        },
+        {
+          field: 'tm02',
+          header: 'Average Wave Period',
+          unit: `(${this.getUnitByField('tm02')})`,
+        },
+        {
+          field: 'wave_direction',
+          header: 'Wave Direction',
+          unit: `(${this.getUnitByField('wave_direction')})`,
+        },
         {
           field: 'wave_direction_fw',
           header: 'Wave Direction FW',
-          unit: '°',
+          unit: `(${this.getUnitByField('wave_direction_fw')})`,
         },
         {
           field: 'mean_wave_direction',
           header: 'Mean Wave Direction',
-          unit: '°',
+          unit: `(${this.getUnitByField('mean_wave_direction')})`,
         },
-        { field: 'hmax', header: 'Max Wave Height', unit: 'm' },
+        {
+          field: 'hmax',
+          header: 'Max Wave Height',
+          unit: `(${this.getUnitByField('hmax')})`,
+        },
         {
           field: 'fourier_coefficient_a1',
           header: 'Fourier Coefficient a1',
-          unit: '',
+          unit: `(${this.getUnitByField('fourier_coefficient_a1')})`,
         },
         {
           field: 'fourier_coefficient_b1',
           header: 'Fourier Coefficient b1',
-          unit: '',
+          unit: `(${this.getUnitByField('fourier_coefficient_b1')})`,
         },
         {
           field: 'fourier_coefficient_a2',
           header: 'Fourier Coefficient a2',
-          unit: '',
+          unit: `(${this.getUnitByField('fourier_coefficient_a2')})`,
         },
         {
           field: 'fourier_coefficient_b2',
           header: 'Fourier Coefficient b2',
-          unit: '',
+          unit: `(${this.getUnitByField('fourier_coefficient_b2')})`,
         },
         {
           field: 'dominant_time_period_fw',
           header: 'Dominant Time Period FW',
-          unit: 's',
+          unit: `(${this.getUnitByField('dominant_time_period_fw')})`,
         },
-        { field: 'havg', header: 'Average Wave Height', unit: 'm' },
+        {
+          field: 'havg',
+          header: 'Average Wave Height',
+          unit: `(${this.getUnitByField('havg')})`,
+        },
  
-        { field: 'turbidity', header: 'Turbidity', unit: 'NTU' },
-        { field: 'water_temperature', header: 'Water Temperature', unit: '°C' },
-        { field: 'ph', header: 'Potential of Hydrogen', unit: 'pH' },
-        { field: 'conductivity', header: 'Conductivity', unit: 'µS/cm' },
-        { field: 'dissolved_oxygen', header: 'Dissolved Oxygen', unit: 'mg/L' },
-        { field: 'salinity', header: 'Salinity', unit: 'ppt' },
+        {
+          field: 'turbidity',
+          header: 'Turbidity',
+          unit: `(${this.getUnitByField('turbidity')})`,
+        },
+        {
+          field: 'water_temperature',
+          header: 'Water Temperature',
+          unit: `(${this.getUnitByField('water_temperature')})`,
+        },
+        {
+          field: 'ph',
+          header: 'Potential of Hydrogen',
+          unit: `(${this.getUnitByField('ph')})`,
+        },
+        {
+          field: 'conductivity',
+          header: 'Conductivity',
+          unit: `(${this.getUnitByField('conductivity')})`,
+        },
+        {
+          field: 'dissolved_oxygen',
+          header: 'Dissolved Oxygen',
+          unit: `(${this.getUnitByField('dissolved_oxygen')})`,
+        },
+        {
+          field: 'salinity',
+          header: 'Salinity',
+          unit: `(${this.getUnitByField('salinity')})`,
+        },
         {
           field: 'chlorophyll_a',
           header: 'Chlorophyll-a',
-          unit: 'µg/L',
+          unit: `(${this.getUnitByField('chlorophyll_a')})`,
         },
-        { field: 'phycoerythrin', header: 'Phycoerythrin', unit: 'µg/L' },
-        { field: 'fluorescein_dye', header: 'Fluorescein Dye', unit: 'ppb' },
-        { field: 'pah', header: 'PAH', unit: 'ppb' },
-        { field: 'oil_in_water', header: 'Oil in Water', unit: 'ppb' },
-        { field: 'bt', header: 'Bottom Temperature', unit: '°C' },
+        {
+          field: 'phycoerythrin',
+          header: 'Phycoerythrin',
+          unit: `(${this.getUnitByField('phycoerythrin')})`,
+        },
+        {
+          field: 'fluorescein_dye',
+          header: 'Fluorescein Dye',
+          unit: `(${this.getUnitByField('fluorescein_dye')})`,
+        },
+        {
+          field: 'pah',
+          header: 'PAH',
+          unit: `(${this.getUnitByField('pah')})`,
+        },
+        {
+          field: 'oil_in_water',
+          header: 'Oil in Water',
+          unit: `(${this.getUnitByField('oil_in_water')})`,
+        },
+        {
+          field: 'bt',
+          header: 'Bottom Temperature',
+          unit: `(${this.getUnitByField('bt')})`,
+        },
       ];
  
-
-      // Add current bins (1–10)
       for (let i = 1; i <= 4; i++) {
         this.dynaColumns.push(
           {
             field: `current_speed_bin_${i}`,
             header: `Current Speed Bin ${i}`,
-            unit: 'm/s',
+            unit: `(${this.getUnitByField('current_speed')})`,
           },
           {
             field: `current_direction_bin_${i}`,
             header: `Current Direction Bin ${i}`,
-            unit: '°',
+            unit: `(${this.getUnitByField('current_direction')})`,
           }
         );
       }
-
+ 
       this.selectedColumns = this.dynaColumns;
       this.globalFilterFields = [
         'id',
@@ -387,69 +517,151 @@ export class ReportComponent implements OnInit {
         ...this.dynaColumns.map((col) => col.field),
       ];
       console.log('Allsensordyna', this.globalFilterFields);
+      console.log('for units assigning thing', this.dynaColumns);
     } else if (this.selectedOption === 'meteorology') {
       // this.dataSource = this.metrological;
       this.dynaColumns = [
-        { field: 'wind_speed', header: 'Wind Speed', unit: 'm/s' },
-        { field: 'wind_direction_deg', header: 'Wind Direction', unit: '°' },
-        { field: 'wind_gust', header: 'Wind Gust', unit: 'm/s' },
-        { field: 'temperature_deg', header: 'Temperature', unit: '°C' },
-        { field: 'rh_percent', header: 'Relative Humidity', unit: '%' },
-        { field: 'bp_hpa', header: 'Barometric Pressure', unit: 'hPa' },
-        { field: 'global_radiation', header: 'Radiation', unit: '' },
-        { field: 'rain_mm', header: 'Rainfall', unit: 'mm' },
-        { field: 'visibility', header: 'Visibility', unit: 'nm' },
+        {
+          field: 'wind_speed',
+          header: 'Wind Speed',
+          // unit: `(${this.paramUnits[12].unit})`,
+          unit: `(${this.getUnitByField('wind_speed')})`,
+        },
+        {
+          field: 'wind_direction_deg',
+          header: 'Wind Direction',
+          unit: `(${this.getUnitByField('wind_direction_deg')})`,
+        },
+        {
+          field: 'wind_gust',
+          header: 'Wind Gust',
+          unit: `(${this.getUnitByField('wind_gust')})`,
+        },
+        {
+          field: 'temperature_deg',
+          header: 'Air Temperature',
+          unit: `(${this.getUnitByField('temperature_deg')})`,
+        },
+        {
+          field: 'rh_percent',
+          header: 'Relative Humidity',
+          unit: `(${this.getUnitByField('rh_percent')})`,
+        },
+        {
+          field: 'bp_hpa',
+          header: 'Barometric Pressure',
+          unit: `(${this.getUnitByField('bp_hpa')})`,
+        },
+        {
+          field: 'rain_mm',
+          header: 'Rainfall',
+          unit: `(${this.getUnitByField('rain_mm')})`,
+        },
+        {
+          field: 'visibility',
+          header: 'Visibility',
+          unit: `(${this.getUnitByField('visibility')})`,
+        },
+        {
+          field: 'global_radiation',
+          header: 'Radiation',
+          unit: `(${this.getUnitByField('global_radiation')})`,
+        },
       ];
       this.selectedColumns = this.dynaColumns;
       this.globalFilterFields = this.dynaColumns.map((col) => col.field);
       console.log('metrological dyna', this.globalFilterFields);
+      console.log('units list checking', this.dynaColumns);
     } else if (this.selectedOption === 'oceanography') {
       // this.dataSource = this.oceanographic;
       this.dynaColumns = [
-        // { field: 'motion', header: 'Motion', unit: '' },
-        { field: 'wave_heading', header: 'Wave_Heading', unit: '°' },
-        { field: 'wave_height', header: 'Wave Height', unit: 'm' },
+        {
+          field: 'wave_heading',
+          header: 'Wave Heading',
+          unit: `(${this.getUnitByField('wave_heading')})`,
+        },
+        {
+          field: 'wave_height',
+          header: 'Wave Height',
+          unit: `(${this.getUnitByField('wave_height')})`,
+        },
         {
           field: 'tzc',
-          header: 'Tzc',
-          unit: 's',
+          header: 'Peak Wave Period',
+          unit: `(${this.getUnitByField('tzc')})`,
         },
-        { field: 'tz', header: 'Tz', unit: 's' },
-        { field: 'tm02', header: 'Tm02', unit: 's' },
-        { field: 'wave_direction', header: 'Wave Direction', unit: '°' },
+        {
+          field: 'tz',
+          header: 'Zero Crossing Period',
+          unit: `(${this.getUnitByField('tz')})`,
+        },
+        {
+          field: 'tm02',
+          header: 'Average Wave Period',
+          unit: `(${this.getUnitByField('tm02')})`,
+        },
+        {
+          field: 'wave_direction',
+          header: 'Wave Direction',
+          unit: `(${this.getUnitByField('wave_direction')})`,
+        },
         {
           field: 'wave_direction_fw',
           header: 'Wave Direction FW',
-          unit: '°',
+          unit: `(${this.getUnitByField('wave_direction_fw')})`,
         },
         {
           field: 'mean_wave_direction',
           header: 'Mean Wave Direction',
-          unit: '°',
+          unit: `(${this.getUnitByField('mean_wave_direction')})`,
         },
-        { field: 'hmax', header: 'Max Wave Height', unit: 'm' },
-        { field: 'fourier_coefficient_a1', header: 'Fourier Coefficient a1' },
-        { field: 'fourier_coefficient_b1', header: 'Fourier Coefficient b1' },
-        { field: 'fourier_coefficient_a2', header: 'Fourier Coefficient a2' },
-        { field: 'fourier_coefficient_b2', header: 'Fourier Coefficient b2' },
+        {
+          field: 'hmax',
+          header: 'Max Wave Height',
+          unit: `(${this.getUnitByField('hmax')})`,
+        },
+        {
+          field: 'fourier_coefficient_a1',
+          header: 'Fourier Coefficient a1',
+          unit: `(${this.getUnitByField('fourier_coefficient_a1')})`,
+        },
+        {
+          field: 'fourier_coefficient_b1',
+          header: 'Fourier Coefficient b1',
+          unit: `(${this.getUnitByField('fourier_coefficient_b1')})`,
+        },
+        {
+          field: 'fourier_coefficient_a2',
+          header: 'Fourier Coefficient a2',
+          unit: `(${this.getUnitByField('fourier_coefficient_a2')})`,
+        },
+        {
+          field: 'fourier_coefficient_b2',
+          header: 'Fourier Coefficient b2',
+          unit: `(${this.getUnitByField('fourier_coefficient_b2')})`,
+        },
         {
           field: 'dominant_time_period_fw',
           header: 'Dominant Time Period FW',
-          unit: 's',
+          unit: `(${this.getUnitByField('dominant_time_period_fw')})`,
         },
-        { field: 'havg', header: 'Havg', unit: 'm' },
+        {
+          field: 'havg',
+          header: 'Average Wave Height',
+          unit: `(${this.getUnitByField('havg')})`,
+        },
       ];
       for (let i = 1; i <= 4; i++) {
         this.dynaColumns.push(
           {
             field: `current_speed_bin_${i}`,
             header: `Current Speed Bin ${i}`,
-            unit: 'm/s',
+            unit: `(${this.getUnitByField('current_speed')})`,
           },
           {
             field: `current_direction_bin_${i}`,
             header: `Current Direction Bin ${i}`,
-            unit: '°',
+            unit: `(${this.getUnitByField('current_direction')})`,
           }
         );
       }
@@ -459,48 +671,77 @@ export class ReportComponent implements OnInit {
     } else if (this.selectedOption === 'water_quality') {
       // this.dataSource = this.waterQuality;
       this.dynaColumns = [
-        // Manta 40+ sensors
-        { field: 'turbidity', header: 'Turbidity', unit: 'NTU' },
-        { field: 'water_temperature', header: 'Water Temperature', unit: '°C' },
-        { field: 'ph', header: 'pH', unit: '' },
-        { field: 'conductivity', header: 'Conductivity', unit: 'µS/cm' },
+        {
+          field: 'turbidity',
+          header: 'Turbidity',
+          unit: `(${this.getUnitByField('turbidity')})`,
+        },
+        {
+          field: 'water_temperature',
+          header: 'Water Temperature',
+          unit: `(${this.getUnitByField('water_temperature')})`,
+        },
+        {
+          field: 'ph',
+          header: 'Potential of Hydrogen',
+          unit: `(${this.getUnitByField('ph')})`,
+        },
+        {
+          field: 'conductivity',
+          header: 'Conductivity',
+          unit: `(${this.getUnitByField('conductivity')})`,
+        },
         {
           field: 'dissolved_oxygen',
           header: 'Dissolved Oxygen',
-          unit: 'mg/L',
+          unit: `(${this.getUnitByField('dissolved_oxygen')})`,
         },
-        { field: 'salinity', header: 'Salinity', unit: 'ppt' },
+        {
+          field: 'salinity',
+          header: 'Salinity',
+          unit: `(${this.getUnitByField('salinity')})`,
+        },
         {
           field: 'chlorophyll_a',
           header: 'Chlorophyll-a',
-          unit: 'µg/L',
+          unit: `(${this.getUnitByField('chlorophyll_a')})`,
         },
         {
           field: 'phycoerythrin',
           header: 'Phycoerythrin',
-          unit: 'µg/L',
+          unit: `(${this.getUnitByField('phycoerythrin')})`,
         },
         {
           field: 'fluorescein_dye',
           header: 'Fluorescein Dye',
-          unit: 'ppb',
+          unit: `(${this.getUnitByField('fluorescein_dye')})`,
         },
-
-        // MicroFlu V2 HC sensors
-        { field: 'pah', header: 'PAH', unit: 'ppb' },
-        { field: 'oil_in_water', header: 'Oil in Water', unit: 'ppb' },
-        { field: 'bt', header: 'BT', unit: 'ppb' },
+        {
+          field: 'pah',
+          header: 'PAH',
+          unit: `(${this.getUnitByField('pah')})`,
+        },
+        {
+          field: 'oil_in_water',
+          header: 'Oil in Water',
+          unit: `(${this.getUnitByField('oil_in_water')})`,
+        },
+        {
+          field: 'bt',
+          header: 'Bottom Temperature',
+          unit: `(${this.getUnitByField('bt')})`,
+        },
       ];
-
+ 
       this.selectedColumns = this.dynaColumns;
       this.globalFilterFields = this.dynaColumns.map((col) => col.field);
       console.log('waterQuality dyna', this.globalFilterFields);
     }
   }
-
+ 
   onExportOptionSelect(event: any, dt2: any) {
     const selectedOption = event.value;
-
+ 
     if (!selectedOption) return;
     switch (selectedOption) {
       case 'csv':
@@ -517,20 +758,24 @@ export class ReportComponent implements OnInit {
       this.selectedExportOption = null;
     }, 0);
   }
-
+ 
   exportCSV(dt: any) {
     const filteredData = dt.filteredValue || dt.value;
-
+ 
     if (filteredData && filteredData.length > 0) {
       const csv = this.convertToCSV(filteredData);
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+ 
+      // Add UTF-8 BOM to prevent encoding issues
+      const BOM = '\uFEFF';
+      const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+ 
       FileSaver.saveAs(blob, `${this.nameOfStation}.csv`);
     } else {
       // Handle case where no data is available
-      //console.warn('No data available for CSV export');
+      // console.warn('No data available for CSV export');
     }
   }
-
+ 
   // Helper method to convert JSON to CSV format
   convertToCSV(data: any[]): string {
     const fixedHeaders = [
@@ -538,9 +783,12 @@ export class ReportComponent implements OnInit {
       'Station Id',
       'Timestamp',
       'Date and Time',
-      'Battery',
-      'Latitude',
-      'Longitude',
+      'Battery' +
+        (this.getUnitByField('battery')
+          ? ` (${this.getUnitByField('battery')})`
+          : ''),
+      'Latitude' + ' (DD)',
+      'Longitude' + ' (DD)',
     ];
  
     const fixedFields = [
@@ -552,7 +800,11 @@ export class ReportComponent implements OnInit {
       'lon',
     ];
  
-    const dynamicHeaders = this.selectedColumns.map((col) => col.header);
+    const dynamicHeaders = this.selectedColumns.map((col) => {
+      const unitText = col.unit ? ` ${col.unit}` : '';
+      return `${col.header}${unitText}`;
+    });
+ 
     const dynamicFields = this.selectedColumns.map((col) => col.field);
  
     const headers = [...fixedHeaders, ...dynamicHeaders];
@@ -594,10 +846,14 @@ export class ReportComponent implements OnInit {
         'Station Id',
         'Timestamp',
         'Date and Time',
-        'Battery',
-        'Latitude',
-        'Longitude',
+        'Battery' +
+          (this.getUnitByField('battery')
+            ? ` (${this.getUnitByField('battery')})`
+            : ''),
+        'Latitude' + ' (DD)',
+        'Longitude' + ' (DD)',
       ];
+ 
       const fixedFields = [
         'station_id',
         'timestampFormatted',
@@ -607,26 +863,28 @@ export class ReportComponent implements OnInit {
         'lon',
       ];
  
-      const dynamicHeaders = this.selectedColumns.map((col) => col.header);
+      // Add units to dynamic headers
+      const dynamicHeaders = this.selectedColumns.map((col) => {
+        const unit = col.unit ? ` ${col.unit}` : '';
+        return `${col.header}${unit}`;
+      });
+ 
       const dynamicFields = this.selectedColumns.map((col) => col.field);
  
       const headers = [...fixedHeaders, ...dynamicHeaders];
       const fields = [...fixedFields, ...dynamicFields];
  
-      const reversedData = [...filteredData].reverse(); // Reverse rows
+      const reversedData = [...filteredData].reverse();
  
       const dataToExport = reversedData.map((row: any, index: number) => {
         const selectedRow: any = {};
- 
         selectedRow['S No'] = index + 1;
  
-        // Add fixed fields with matching headers
         fixedHeaders.slice(1).forEach((header, i) => {
           const field = fixedFields[i];
           selectedRow[header] = row[field] || '';
         });
  
-        // Add dynamic fields with their column headers
         dynamicHeaders.forEach((header, i) => {
           const field = dynamicFields[i];
           selectedRow[header] = row[field] || '';
@@ -669,9 +927,12 @@ export class ReportComponent implements OnInit {
         'Station Id',
         'Timestamp',
         'Date and Time',
-        'Battery',
-        'Latitude',
-        'Longitude',
+        'Battery' +
+          (this.getUnitByField('battery')
+            ? ` (${this.getUnitByField('battery')})`
+            : ''),
+        'Latitude' + ' (DD)',
+        'Longitude' + ' (DD)',
       ];
       const fixedFields = [
         'station_id',
@@ -682,7 +943,11 @@ export class ReportComponent implements OnInit {
         'lon',
       ];
  
-      const dynamicHeaders = this.selectedColumns.map((col) => col.header);
+      const dynamicHeaders = this.selectedColumns.map((col) => {
+        const unit = col.unit ? ` ${col.unit}` : '';
+        return `${col.header}${unit}`;
+      });
+ 
       const dynamicFields = this.selectedColumns.map((col) => col.field);
  
       const chunkSize = 10; // Columns per page
@@ -814,5 +1079,6 @@ export class ReportComponent implements OnInit {
         }
       );
   }
- 
 }
+ 
+ 

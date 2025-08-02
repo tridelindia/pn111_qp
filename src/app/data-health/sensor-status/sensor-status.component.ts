@@ -51,7 +51,7 @@ export class SensorStatusComponent implements OnInit {
 
   private fetchLastSensorData(stationId: string) {
     this.isLoading = true;
-    this.http.get('http://192.168.0.6:3000/api/getLastSensorData', {
+    this.http.get('http://localhost:3000/api/getLastSensorData', {
       params: { station_id: stationId }
     }).subscribe({
       next: (data: any) => {

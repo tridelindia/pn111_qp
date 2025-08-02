@@ -13,7 +13,7 @@ export class AuthService {
  
   CurrentUser!: CurrentUser;
  
-  private apiUrl = 'http://192.168.0.6:3000/api/users/';
+  private apiUrl = 'http://localhost:3000/api/users/';
  
   constructor(private http:HttpClient, private router:Router) { }
   // constructor(private http:HttpClient ) {}
