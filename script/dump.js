@@ -5,14 +5,14 @@ function randomNum(min, max, decimals = 2) {
   return +(Math.random() * (max - min) + min).toFixed(decimals);
 }
 
-function generateCsvForOneMonth(startDateStr = '2025-04-01T00:00:00Z', outputFile = 'station_data.csv') {
+function generateCsvForOneMonth(startDateStr = '2025-08-01T00:00:00Z', outputFile = 'station_data.csv') {
   const startDate = new Date(startDateStr);
   const endDate = new Date(startDate);
   endDate.setMonth(endDate.getMonth() + 3);
 
   const headers = [
     'id', 'station_id', 'timestamp', 'datetime', 'battery', 'cam_img', 'lat', 'lon',
-    'windspeed', 'wind_direction_deg', 'temperature_deg', 'rh_percent', 'bp_hpa', 'global', 'rain_mm', 'visibility_nm',
+    'wind_speed', 'wind_direction_deg', 'temperature_deg', 'rh_percent', 'bp_hpa', 'global_radiation', 'rain_mm', 'visibility',
     'wave_heading', 'wave_height', 'Tzc', 'Tz', 'Tm02', 'wave_direction', 'wave_direction_fw', 'mean_wave_direction', 'hmax',
     'fourier_coefficient_a1', 'fourier_coefficient_b1', 'fourier_coefficient_a2', 'fourier_coefficient_b2', 'havg', 'dominant_time_period_fw',
     'turbidity', 'water_temperature', 'ph', 'conductivity', 'dissolved_oxygen', 'salinity', 'chlorophyll_a', 'wind_gust',
@@ -109,7 +109,7 @@ function generateCsvForOneMonth(startDateStr = '2025-04-01T00:00:00Z', outputFil
 
     const line = [
       id,
-      'Station01',
+      'ST002',
       timestampISO,
       datetimeStr,
       battery.toFixed(2),

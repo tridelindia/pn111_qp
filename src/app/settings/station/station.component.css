@@ -114,10 +114,11 @@
 .action_title button{
     height: 30px;
     background-color: var(--highlight-color);
-    border-radius: 5px;
+    border-radius: 15px;
     border: none;
     cursor: pointer;
     margin-right: 45px;
+    color: white;
 }
 
 .divider{
@@ -367,7 +368,7 @@
 .right_details{
     height: 98%;
     width: 50%;
-    background-color: #acaeb4;
+    /* background-color: #acaeb4; */
     border-radius: 10px;
     margin: 5px;
     position: relative;
@@ -442,7 +443,7 @@
 
 }
 .toggledms {
-    background-color: blue !important; /* Ensure background changes */
+    background-color: var(--background-color)!important; /* Ensure background changes */
 }
 @keyframes togglebc {
     0%{
@@ -639,4 +640,12 @@
     background-color: #f5f7ae;
     margin-right: 15px;
     color: black;
+}
+::ng-deep .custom-toggle .p-toggleswitch .p-toggleswitch-slider {
+  background-color: var(--background-color) !important;
+  transition: background-color 0.3s ease !important;
+}
+ 
+::ng-deep .custom-toggle .p-toggleswitch-checked .p-toggleswitch-slider {
+  background-color: var(--highlight-color) !important;
 }

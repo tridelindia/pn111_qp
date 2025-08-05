@@ -272,7 +272,9 @@ changeMultiStation() {
   }
   this.isMeteriology = allHaveMeteorology;
   console.log("All stations have meteorology:", allHaveMeteorology);
-
+  if(!allHaveMeteorology){
+    this.onSelectSensor('oceanography')
+  }
   // Or check if any is missing:
   const anyMissingMeteorology = bools.includes(false);
   console.log("Any station missing meteorology:", anyMissingMeteorology);
@@ -425,7 +427,7 @@ setTimeout(() => {
 
     this.fromDate = startDate.toISOString();
     this.toDate = endDate.toISOString();
-    // console.log("testing",this.isLoad, this.isPolar)
+    
     if(value == 'single'){
       this.selectedStation = [];
       this.selectedMultiStationParam = this.filteredparams[0].param_name
@@ -436,8 +438,14 @@ setTimeout(() => {
       this.selectedStation = [this.stations[0].stationId]
       this.changetiMultiStationView()
     }
+    setTimeout(() => {
+      console.log("sss", this.stations, this.singleStation);
+      const selectedStationn = this.stations.filter(item=> item.name == this.singleStation);
+  const sstat = this.ssstations.filter(item=> item.station_name === this.singleStation)
+  this.isMeteriology = sstat[0].sensors.includes('meteorology');
+    }, 100);
   }
-  fromDate!: string;
+fromDate!: string;
 toDate!: string;
 selectedDate!: Date | Date[];
 // pickerState: string = 'date';
@@ -472,19 +480,18 @@ onDatePicked() {
   }
 
   else if (this.pickerState === 'week' && this.selectedDate instanceof Date) {
-    const selected = this.selectedDate;
-    const dayOfWeek = selected.getDay();
+   const selected = this.selectedDate;
 
-    const start = new Date(selected);
-    start.setDate(selected.getDate() - dayOfWeek);
-    start.setHours(0, 0, 0, 0);
+const start = new Date(selected);
+start.setHours(0, 0, 0, 0);
 
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 0, 0);
+const end = new Date(start);
+end.setDate(start.getDate() + 6); 
+end.setHours(23, 59, 0, 0); 
 
-    this.fromDate = this.formatDateLocal(new Date(start));
-    this.toDate = this.formatDateLocal(new Date(end));
+this.fromDate = this.formatDateLocal(new Date(start));
+this.toDate = this.formatDateLocal(new Date(end));
+
   }
 
   else if (this.pickerState === 'month' && this.selectedDate instanceof Date) {
@@ -572,13 +579,14 @@ this.isSelectParams = false;
     console.log("selected sensor", this.selectedSensor);
     this.selectedParams = [];
     console.log(this.listparams);
+
     if(name === 'oceanography'){
       this.filteredparams = this.listparams.filter(item => item.name === 'oceanography');
-    }else if(name === 'meteriology'){
+    }else if(name === 'meteorology'){
       this.filteredparams = this.listparams.filter(item => item.name === 'meteorology');
-    }else if(name === 'waterQuality'){
+    }else if(name === 'water_quality'){
       this.filteredparams = this.listparams.filter(item => item.name === 'water_quality');
-    }else if(name === 'microFlu'){
+    }else if(name === 'microflu'){
       this.filteredparams = this.listparams.filter(item => item.name === 'microflu');
     }else if(name === 'adcp'){
       this.filteredparams = this.listparams.filter(item =>
@@ -596,7 +604,7 @@ this.isSelectParams = false;
 
 isMeteriology:boolean=true;
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/api/getBin').subscribe(
+    this.http.get('http://192.168.0.5:3000/api/getBin').subscribe(
         (response:any)=>{
           console.log("binsss", response)
          this.Bins = response
@@ -616,7 +624,7 @@ isMeteriology:boolean=true;
     this.toDate = this.formatDateLocal(new Date(endDate));
     
     this.selectedDate = [startDate, endDate];
-     this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
+     this.http.get('http://192.168.0.5:3000/api/getStationConfig').subscribe(
             (response: any) => {
               let abcd:any[] =[];
               abcd = response;
@@ -682,10 +690,14 @@ singleStationchange(){
   const selectedStationn = this.stations.filter(item=> item.name == this.singleStation);
   const sstat = this.ssstations.filter(item=> item.station_name === this.singleStation)
   this.isMeteriology = sstat[0].sensors.includes('meteorology');
-  console.log("changes station", this.ssstations, sstat, this.isMeteriology);
+  if (!this.isMeteriology) {
+  // this.selectedSensor = 'oceanography';
+  this.onSelectSensor('oceanography');
+  }
+  console.log("changes station", this.ssstations, sstat, this.isMeteriology, this.selectedSensor);
   this.selectedStation.push(selectedStationn[0].stationId);
-
 }
+
   fetchSensorData(){
     const id = this.stations.filter(item=> item.name === this.singleStation)
     
@@ -706,7 +718,7 @@ singleStationchange(){
 //     .set('toDate',toDate)
 //     .set('station_id', id[0].stationId);
 //     console.log("params", params);
-//     this.http.get('http://localhost:3000/api/getSensorDataByDate', {params} ).subscribe(
+//     this.http.get('http://192.168.0.5:3000/api/getSensorDataByDate', {params} ).subscribe(
 //       (response: any) => {
 //         this.Buoy = response;
 //         //console.log("buoy",this.Buoy, this.filteredparams);
@@ -753,13 +765,14 @@ this.selectedMultix1 = '';
 this.selectedMultix2 = '';
 this.selectedMultiStationParam = '';
 
-    this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+    this.http.get('http://192.168.0.5:3000/api/getSensorConfig').subscribe(
       (response:any) => {
         //console.log(response);
           this.listparams = response;
           this.data.SensorConfigs = response
-          //console.log("params",this.listparams.length)
-          this.filteredparams = this.listparams.filter(item => item.name === 'oceanography');
+          console.log("params",this.selectedSensor)
+          this.filteredparams = this.listparams.filter(item => item.name === this.selectedSensor);
+          console.log("filters",this.filteredparams);
           setTimeout(() => {
             this.selectedParams.push(
               {
@@ -918,8 +931,12 @@ this.selectedMultiStationParam = '';
         setTimeout(() => {
           const val3 = matchedStrings[3].includes('current_speed')?matchedStrings[3]:''
           const val4 =matchedStrings[4].includes('current_direction')?matchedStrings[4]:''
-          this.isPolar = true;
-          this.isPolarData(val,val2, val3, val4)
+          if(val3 && val4){
+            this.isPolar = true;
+            this.isPolarData(val,val2, val3, val4)
+          }
+          // const val3 = matchedStrings[3].includes('current_speed')?matchedStrings[3]:''
+          // const val4 =matchedStrings[4].includes('current_direction')?matchedStrings[4]:''
         }, 100);
       }else{
         this.isPolar = false;
@@ -1162,13 +1179,13 @@ getBinParam(param: string, bin: string): string {
               console.log("is met", sstat, this.singleStation, this.ssstations)
   this.isMeteriology = sstat[0].sensors.includes('meteorology');
       //console.log("filter ====== ", filter[0].stationId)
-      const toDate = '2025-04-01T23:59:00.000Z'
-      const fromDate = '2025-04-01T00:00:42.000Z'
+      const toDate = this.fromDate
+      const fromDate = this.toDate
       const params = new HttpParams()
       .set('fromDate',this.fromDate)
       .set('toDate',this.toDate)
       .set('station_id', filter[0].stationId);
-      this.http.get('http://localhost:3000/api/getSensorDataByDate', {params}).subscribe(
+      this.http.get('http://192.168.0.5:3000/api/getSensorDataByDate', {params}).subscribe(
         (data:any) => {
           console.log("buoys data === ",data);
           this.buoyData =data
@@ -1183,7 +1200,7 @@ getBinParam(param: string, bin: string): string {
     }
   
   fetchSensor(){
-    // this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+    // this.http.get('http://192.168.0.5:3000/api/getSensorConfig').subscribe(
     //   (response:any)=>{
     //     console.log("sensor",response)
     //     this.sensorData = response

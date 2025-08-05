@@ -1155,9 +1155,24 @@
                                     <p [ngStyle]="{'position': 'absolute',
                                     'top': '5px',
                                     'left': '6px',
-                                    
-                                    'margin': '0px' ,'color':IsRedTide?'green':'red'
-                                }">{{IsRedTide? "Red Tide Detected":"Red Tide is not Detected"}}</p>
+                                    'margin': '0px' ,'color':IsRedTide?'red':'black'
+                                }">{{IsRedTide? "Red Tide Not Detected":"Red Tide is Detected"}}</p>
+                                    <svg style="margin-top: 40px;" width="64" height="64" viewBox="0 0 64 64"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Background Circle -->
+                                        <circle cx="32" cy="32" r="30" fill="white" stroke="#008000" stroke-width="2" />
+
+                                        <!-- Wave Symbol -->
+                                        <path d="M10,40 Q20,30 30,40 T50,40" fill="none" stroke="#008000"
+                                            stroke-width="4" />
+
+                                        <!-- Droplet Symbol -->
+                                        <path d="M32 16 C28 24, 26 28, 32 36 C38 28, 36 24, 32 16 Z" fill="#008000" />
+
+                                        <!-- Optional exclamation mark -->
+                                        <text x="32" y="50" font-size="16" text-anchor="middle" fill="#008000"
+                                            font-weight="bold">!</text>
+                                    </svg>
 
                                     <p style="font-weight: bold;font-size: 16px;">{{risk}}</p>
                                 </div>
@@ -1382,8 +1397,8 @@
                                     'top': '5px',
                                     'left': '6px',
                                     
-                                    'margin': '0px' ,'color':IsRedTide?'green':'red'
-                                }">{{IsRedTide? "Red Tide Detected":"Red Tide is not Detected"}}</p>
+                                    'margin': '0px' ,'color':IsRedTide?'red':'green'
+                                }">{{IsRedTide? "Red Tide Not Detected":"Red Tide is Detected"}}</p>
 
                         <p style="font-weight: bold;font-size: 16px;">{{risk}}</p>
                     </div>

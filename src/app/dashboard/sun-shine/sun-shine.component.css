@@ -13,3 +13,13 @@
     margin-left:-26px;
 }
 }
+  ::ng-deep .custom-toggle .p-toggleswitch .p-toggleswitch-slider {
+  background-color: red !important;
+  transition: background-color 0.3s ease !important;
+}
+ 
+::ng-deep .custom-toggle .p-toggleswitch-checked .p-toggleswitch-slider {
+  background-color: #e0f7fa !important;
+}
+ 
+ 

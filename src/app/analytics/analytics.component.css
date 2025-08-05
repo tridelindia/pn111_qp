@@ -345,7 +345,7 @@ label{
 }
 .four{
     height: 420px;
-    width: 99%;
+    /* width: 99%; */
     background-color: aqua;
     margin: 5px;
     background-color: var(--basebg);
@@ -354,14 +354,14 @@ label{
 }
 .fout_split{
     height: 420px;
-    width: 99%;
+    /* width: 99%; */
     background-color: aqua;
     margin: 5px;
     background-color: var(--basebg);
     border-radius: 10px;
     display: flex;
     flex-direction: row;
-    justify-content:space-between;
+    justify-content:center;
     align-items: center;
     position: relative;
 }

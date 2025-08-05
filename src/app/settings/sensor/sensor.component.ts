@@ -121,7 +121,7 @@ export class SensorComponent implements OnInit {
  
   saveData() {
     try {
-      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://192.168.0.5:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           console.log('sensorvalise', response);
  
@@ -151,7 +151,7 @@ export class SensorComponent implements OnInit {
       );
  
       this.http
-        .get('http://localhost:3000/api/getBin')
+        .get('http://192.168.0.5:3000/api/getBin')
         .subscribe((response: any) => {
           console.log('binsss', response);
           this.bin1 = response[0].value;
@@ -168,7 +168,7 @@ export class SensorComponent implements OnInit {
   Update() {
 
     this.http
-      .post('http://localhost:3000/api/updateSensor', this.editData)
+      .post('http://192.168.0.5:3000/api/updateSensor', this.editData)
       .subscribe(
         (response: any) => {
           console.log(response);
@@ -201,7 +201,7 @@ export class SensorComponent implements OnInit {
           {"id": 3, "value": this.bin3},
           {"id": 4, "value": this.bin4}
         ]
-        this.http.post('http://localhost:3000/api/updatebinss', {bins}).subscribe(
+        this.http.post('http://192.168.0.5:3000/api/updatebinss', {bins}).subscribe(
           (response:any)=>{
             console.log("bins", response);
             
@@ -292,7 +292,7 @@ export class SensorComponent implements OnInit {
  
   getStationConfig() {
     this.http
-      .get('http://localhost:3000/api/getStationConfig')
+      .get('http://192.168.0.5:3000/api/getStationConfig')
       .subscribe((data: any) => {
         this.stations = data.map((item: any) => ({
           id: item.id,
@@ -325,7 +325,7 @@ export class SensorComponent implements OnInit {
     console.log('Updating station with payload:', payload);
  
     this.http
-      .put('http://localhost:3000/api/updateHomeConfig', payload)
+      .put('http://192.168.0.5:3000/api/updateHomeConfig', payload)
       .subscribe({
         next: (res) => {
           console.log('Update successful:', res);

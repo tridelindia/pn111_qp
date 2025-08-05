@@ -39,7 +39,7 @@ export interface HomeConfig {
   providedIn: 'root',
 })
 export class StationconfigService {
-  private apiUrl = 'http://localhost:3000/api/';
+  private apiUrl = 'http://192.168.0.5:3000/api/';
 
   constructor(private http: HttpClient) {}
 

@@ -301,7 +301,14 @@ input {
 
 color: white;
 }
-
+.selectedmap {
+  border: 3px solid var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--background-color);
+  transition: all 0.2s ease-in-out;
+}
+ 
+ 
 .profile-img {
   margin-bottom: 30px;
   width: 60px;

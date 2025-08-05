@@ -14,7 +14,7 @@
                 </div>
                 <div class="input-group">
                     <label>Email</label>
-                    <input type="email" [(ngModel)]="email" placeholder="Enter Password" class="modal-input"
+                    <input type="email" [(ngModel)]="email" placeholder="Enter Email" class="modal-input"
                         [ngModelOptions]="{standalone: true}" />
                 </div>
                 <button type="submit" class="popup-btn">Verify</button>
@@ -46,7 +46,7 @@
                     </button>
                 </div>
                 <div class="input-group">
-                    <label>Confirm Password</label>
+                    <label>Confirm New Password</label>
                     <input [type]=" showPassword ? 'text' : 'password' " [(ngModel)]="confirmPassword"
                         placeholder="Confirm New Password" name="confirmnewPassword" class="modal-input"
                         [ngModelOptions]="{standalone: true}" />
@@ -118,7 +118,7 @@
                 </div>
             </div>
 
-            <a class="forget-pass" (click)="openPopup()">Forget Password</a>
+            <a class="forget-pass" (click)="openPopup()">Forgot Password</a>
 
             <button type="submit" class="login-btn">Login</button>
         </form>

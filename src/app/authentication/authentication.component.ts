@@ -93,6 +93,11 @@ export class AuthenticationComponent {
  
   closePopup() {
     this.showForgetPopup = false;
+    this.username = '';
+    this.email = '';
+    this.enteredOtp = '';
+    this.newPassword = '';
+    this.confirmPassword = '';
   }
  
   resetPopupFields() {

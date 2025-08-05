@@ -301,8 +301,8 @@ p {
   width: auto;
   padding-left: 20px;
   padding-right: 20px;
-  border-radius: 5px;
-  background-color: rgb(40, 107, 243);
+  border-radius: 15px;
+  background-color: var(--highlight-color);
   border: none;
   margin-top: 50px;
   color: white;
@@ -386,8 +386,8 @@ p {
   width: auto;
   padding-left: 20px;
   padding-right: 20px;
-  border-radius: 5px;
-  background-color: rgb(40, 107, 243);
+  border-radius: 15px;
+  background-color: var(--highlight-color);
   border: none;
   margin-top: 20px;
   color: white;

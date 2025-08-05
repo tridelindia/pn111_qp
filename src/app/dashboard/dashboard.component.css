@@ -1256,7 +1256,7 @@ backdrop-filter: blur(8px);
   font-size: 14px;
   font-weight: normal;
   position: absolute;
-  top: 5px;
+  top: -8px;
   left: 5px;
 }
 .battery_level2{
@@ -1293,7 +1293,7 @@ backdrop-filter: blur(8px);
   font-size: 12px;
   font-weight: bold;
   position: absolute;
-  bottom: 0px;
+  bottom: -8px;
   /* left: 45%; */
 }
 .redT{
@@ -1355,7 +1355,15 @@ backdrop-filter: blur(8px);
   background-color: rgb(78, 76, 76);
 }
 
-
+::ng-deep .p-toggleswitch .p-toggleswitch-slider {
+  background-color: var(--background-color) !important;
+  transition: background-color 0.3s ease !important;
+}
+ 
+::ng-deep .p-toggleswitch-checked .p-toggleswitch-slider {
+  background-color: var(--highlight-color) !important;
+}
+ 
 
 
 

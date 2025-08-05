@@ -40,7 +40,7 @@
 
             </div>
 
-            <div class="svg_icon_bor" (click)="onSensorChange('met')" data-tooltip="Meteorology"
+            <div class="svg_icon_bor" (click)="onSensorChange('met')" *ngIf="isMet" data-tooltip="Meteorology"
                 [ngClass]="{'svg_icon_bor_active': selectedSensor === 'met'}">
 
                 <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
@@ -61,7 +61,7 @@
                 </svg>
                 <i class="fa-regular fa-circle-check" *ngIf="selectedSensor === 'met'"></i>
             </div>
-            <div class="svg_icon_bor" (click)="onSensorChange('wat')" *ngIf="isMet" data-tooltip="Water Quality"
+            <div class="svg_icon_bor" (click)="onSensorChange('wat')" data-tooltip="Water Quality"
                 [ngClass]="{'svg_icon_bor_active': selectedSensor === 'wat'}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512"
                     xml:space="preserve">

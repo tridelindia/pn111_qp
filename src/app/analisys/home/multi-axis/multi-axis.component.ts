@@ -77,12 +77,18 @@ constructor(private data:GlobalDataService){}
         text: 'Dual Y-Axis Plot'
       },
       tooltip: {
-        trigger: 'axis',
-        formatter: (params: any) => {
-          return `${params[0].name}<br/>Value: ${params[0].value}`;
-        }
-
-      },
+  trigger: 'axis',
+  formatter: (params: any) => {
+    const date = new Date(params[0].value[0]).toLocaleString(); // timestamp
+    const val1 = params[0];
+    const val2 = params[1];
+    return `
+      ${date}<br/>
+      ${val1.seriesName}: ${val1.value[1]}<br/>
+      ${val2.seriesName}: ${val2.value[1]}
+    `;
+  }
+},
       xAxis: {
         type: 'time',
         name:'DateTime',
@@ -101,7 +107,7 @@ constructor(private data:GlobalDataService){}
       yAxis: [
         {
           type: 'value',
-          name: `${this.MultiAxis[0].name2} (${this.unitY})`,
+          name: `${this.MultiAxis[0].name1} (${this.unitx})`,
           nameLocation:'middle',
           nameGap: 40,
           position: 'left',
@@ -121,7 +127,7 @@ constructor(private data:GlobalDataService){}
         },
         {
           type: 'value',
-          name: `${this.MultiAxis[0].name1} (${this.unitx})`,
+          name: `${this.MultiAxis[0].name2} (${this.unitY})`,
           nameLocation:'middle',
           nameGap: 40,
           position: 'right',
@@ -144,7 +150,7 @@ constructor(private data:GlobalDataService){}
       series: [
         {
           name: `${this.MultiAxis[0].name2} Data`,
-          data: series1,
+          data: series2,
           type: this.plotType,
           smooth: true,
           yAxisIndex: 0 ,// Uses first Y-axis (default),
@@ -156,7 +162,7 @@ constructor(private data:GlobalDataService){}
         {
           name: `${this.MultiAxis[0].name1} Data`,
           
-          data: series2,
+          data: series1,
           type: this.plotType,
           yAxisIndex: 1, // Uses second Y-axis
           // lable:{

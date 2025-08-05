@@ -25,7 +25,7 @@ import { SensorModel } from '../models/station.model';
   providers: [InfobuoyComponent, StationconfigService, ReportService],
 })
 export class HomeComponent implements OnInit {
-  selectedMap: string = ''; // Add this property
+  selectedMap = 'OpenCycleMap'; // Add this property
   buoystatus='true';
   mapInitialized = false;
   map!: Map | undefined;

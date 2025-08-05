@@ -52,7 +52,7 @@ export class RosePlotComponent implements OnInit{
             }
           },
           name: 'Wind Observations',
-          hovertemplate: 'Direction: %{theta}°<br>Speed: %{r} m/s<extra></extra>'
+          hovertemplate: 'Direction: %{theta}<br>Speed: %{r} m/s<extra></extra>'
         }
       ],
       layout: {

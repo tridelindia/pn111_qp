@@ -1,7 +1,8 @@
 <main>
 
     <div class="map-container">
-        <button (click)="expandMap($event)" class="expand-button"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
+        <button (click)="expandMap($event)" class="expand-button"
+            [ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
                 <path fill-rule="evenodd"
@@ -13,7 +14,8 @@
 
         <div class="expand-space">
             <div class="expand-rectangle" *ngFor="let buoy of buoys">
-                <div class="info-row"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
+                <div class="info-row"
+                    [ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <div class="value">{{ buoy.name }}</div>
                     <img src={{buoy.image}} alt="Profile" class="profile-img" />
                     <!-- <img src="../../assets/home/buoy.png" alt="Profile" class="profile-img"> -->
@@ -22,7 +24,8 @@
                 </div> -->
                 </div>
 
-                <div class="info-row"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
+                <div class="info-row"
+                    [ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <div class="info-item">
                         <img class="locationimg" src="../../assets/svg/ts-map-pin.svg" alt="location">
                     </div>
@@ -36,7 +39,8 @@
                     </div>
                 </div>
 
-                <div class="info-row"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
+                <div class="info-row"
+                    [ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <!-- <span class="value">{{buoy.status}}</span>
                     <img class="active"
                         [src]="buoy.status === 'Online' ? '../../../../assets/home/active.png' : '../../../../assets/home/inactive.jpg'"
@@ -50,14 +54,16 @@
                 </div>
 
 
-                <div class="info-row" style="white-space: pre-line;"[ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
+                <div class="info-row" style="white-space: pre-line;"
+                    [ngClass]="{ 'white-text': selectedMap === 'Spinal Map'||selectedMap ==='TransportDark'||selectedMap ==='Landscape' }">
                     <span class="value">{{buoy.drift}}</span>
                     <img class="locationimg" src="../../assets/home/buoy-unscreen.gif" alt="drift">
                 </div>
             </div>
         </div>
         <div class="toast-container" *ngIf="currentToast">
-            <div [ngClass]="toastClass" class="drift-toast">
+            <div [ngClass]="toastClass" class="drift-toast"
+                [ngStyle]="{'color': selectedMap === 'Landscape' ||selectedMap === 'Spinal Map'||selectedMap === 'TransportDark'?'white':'black'}">
                 {{ currentToast }}
             </div>
         </div>
@@ -67,17 +73,28 @@
     <!-- <div id="ol-map" class="map-container"></div> -->
 
     <img src="../../assets/home/m_one.jpeg" alt="Floating Image 1" class="floating-image1"
-        (click)="mapChange('OpenCycleMap')" pTooltip="OpenCycle Map" tooltipPosition="top">
+        [ngClass]="{ 'selectedmap': selectedMap === 'OpenCycleMap' }" (click)="mapChange('OpenCycleMap')"
+        pTooltip="OpenCycle Map" tooltipPosition="top">
+
     <img src="../../assets/home/m_two.jpeg" alt="Floating Image 2" class="floating-image2"
-        (click)="mapChange('Transport')" pTooltip="Voyager Map" tooltipPosition="top">
+        [ngClass]="{ 'selectedmap': selectedMap === 'Transport' }" (click)="mapChange('Transport')"
+        pTooltip="Voyager Map" tooltipPosition="top">
+
     <img src="../../assets/home/m_three.png" alt="Floating Image 3" class="floating-image3"
-        (click)="mapChange('Landscape')" pTooltip="Dark Map" tooltipPosition="top">
+        [ngClass]="{ 'selectedmap': selectedMap === 'Landscape' }" (click)="mapChange('Landscape')" pTooltip="Dark Map"
+        tooltipPosition="top">
+
     <img src="../../assets/home/m_four.png" alt="Floating Image 4" class="floating-image4"
-        (click)="mapChange('Outdoors')" pTooltip="Light Map" tooltipPosition="top">
+        [ngClass]="{ 'selectedmap': selectedMap === 'Outdoors' }" (click)="mapChange('Outdoors')" pTooltip="Light Map"
+        tooltipPosition="top">
+
     <img src="../../assets/home/m_five.png" alt="Floating Image 5" class="floating-image5"
-        (click)="mapChange('TransportDark')" pTooltip="Alidade Satellite Map" tooltipPosition="top">
+        [ngClass]="{ 'selectedmap': selectedMap === 'TransportDark' }" (click)="mapChange('TransportDark')"
+        pTooltip="Alidade Satellite Map" tooltipPosition="top">
+
     <img src="../../assets/home/m_six.png" alt="Floating Image 6" class="floating-image6"
-        (click)="mapChange('Spinal Map')" pTooltip="World Imagery Map" tooltipPosition="top">
+        [ngClass]="{ 'selectedmap': selectedMap === 'Spinal Map' }" (click)="mapChange('Spinal Map')"
+        pTooltip="World Imagery Map" tooltipPosition="top">
 
 
 
@@ -87,8 +104,8 @@
         [status]="getSelectedMarker()" [statusImg]="getSelectedStatusImg()" [drift]="getSelectedDrift()"
         [markerImg]="getSelectedMarkerImg()"></app-infobuoy> -->
 
-    <app-infobuoy [buoyData]="selectedBuoyData"[selectedMap]="selectedMap" [buoySensor]="selectedParamData" [buoystatus]="buoystatus" [params]="infoBuoyDataSet"
-        *ngIf="buoyTapped"
+    <app-infobuoy [buoyData]="selectedBuoyData" [selectedMap]="selectedMap" [buoySensor]="selectedParamData"
+        [buoystatus]="buoystatus" [params]="infoBuoyDataSet" *ngIf="buoyTapped"
         [markerImg]="getSelectedMarkerImg(selectedBuoyData?.status, getDriftType(selectedBuoyData?.station_name))">
     </app-infobuoy>
 
