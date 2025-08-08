@@ -4,21 +4,17 @@
             <div class="dropDowns">
                 <div class="select_div">
                     <p>Select Parameter</p>
-                    <select name="Parameters" id="parameters" [(ngModel)]="selectedMultiStationParam"
-                        (change)="changetiMultiStationView()">
-                        <option *ngFor="let param of filteredparams" [value]="param.param_name">
-                            {{ param .param_name}}
-                        </option>
-                    </select>
+                    <p-dropdown [options]="filteredparams" optionLabel="param_name" optionValue="param_name"
+                        [(ngModel)]="selectedMultiStationParam" (onChange)="changetiMultiStationView('init')"
+                        placeholder="Select Parameter">
+                    </p-dropdown>
                 </div>
-                <div class="select_div" *ngIf="isMultiCurrent">
+                <div class="select_div"
+                    *ngIf="isMultiCurrent && selectedMultiStationParam.includes('current_speed')||selectedMultiStationParam.includes('current_direction')">
                     <p>Select Profile</p>
-                    <select name="Parameters" id="parameters" [(ngModel)]="selectedBin"
-                        (change)="changewithBinCompare()" [disabled]="false">
-                        <option *ngFor="let param of Bins" [value]="param.name">
-                            {{ param.value }}
-                        </option>
-                    </select>
+                    <p-dropdown [options]="Bins" optionLabel="value" optionValue="name" [(ngModel)]="selectedBin"
+                        (onChange)="changewithBinCompare('html')" [disabled]="false" placeholder="Select Bin">
+                    </p-dropdown>
                 </div>
             </div>
             <app-test-chart id="compare" [plotType]="selectedPlot" [stations]="stations"
@@ -32,24 +28,21 @@
                 <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="example-viewport">
                     <!-- <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div> -->
                     <div class="one">
-                        <div class="dropDowns">
+                        <div class="dropDowns2">
                             <div class="select_div">
                                 <p>Select Parameter</p>
-                                <select name="Parameters" id="parameters" [(ngModel)]="selectedparam"
-                                    (change)="changesingle()" [disabled]="false">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name">
-                                        {{ param.param_name }}
-                                    </option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="filteredparams" [(ngModel)]="selectedparam"
+                                    placeholder="Select Parameter" optionLabel="param_name" optionValue="param_name"
+                                    (onChange)="changesingle()" [disabled]="false">
+                                </p-dropdown>
                             </div>
-                            <div class="select_div" *ngIf="isCurrent">
+                            <div class="select_div"
+                                *ngIf="isCurrent && selectedparam.includes('current_speed')||selectedparam.includes('current_direction')">
                                 <p>Select Profile</p>
-                                <select name="Parameters" id="parameters" [(ngModel)]="selectedBin"
-                                    (change)="changewithBin()" [disabled]="false">
-                                    <option *ngFor="let param of Bins" [value]="param.name">
-                                        {{ param.value }}
-                                    </option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="Bins" [(ngModel)]="selectedBin"
+                                    placeholder="Select Bin" optionLabel="value" optionValue="name"
+                                    (onChange)="changewithBin()" [disabled]="false">
+                                </p-dropdown>
                             </div>
 
                         </div>
@@ -59,81 +52,84 @@
                             [plotType]="selectedPlot"></app-direction-chart>
                     </div>
                     <div class="two">
-                        <div class="dropDowns">
+                        <div class="dropDowns2">
                             <div class="select_div">
                                 <p>Select Y1 Parameter</p>
-                                <select [(ngModel)]="selectedMultix1Display" (change)="changetiMulOne()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
-                                        [hidden]="param.param_name === selectedMultix2Display">
-                                        {{ param.param_name }}
-                                    </option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="filteredparams"
+                                    [(ngModel)]="selectedMultix1Display" placeholder="Select Parameter"
+                                    optionLabel="param_name" optionValue="param_name" (onChange)="changetiMulOne()">
+                                </p-dropdown>
                             </div>
-                            <div class="select_div" *ngIf="isMultiy1_current">
+                            <div class="select_div"
+                                *ngIf="isMultiy1_current && selectedMultix1Display.includes('current_speed')||selectedMultix1Display.includes('current_direction')">
                                 <p>Select Bin (Y2 axis)</p>
-                                <select [(ngModel)]="selectedBin_multiy1" (change)="updateBinParam('y1')">
-                                    <option *ngFor="let bin of Bins" [value]="bin.name">{{ bin.value }}</option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="Bins" [(ngModel)]="selectedBin_multiy1"
+                                    optionLabel="value" optionValue="name" placeholder="Select Bin"
+                                    (onChange)="updateBinParam('y1')">
+                                </p-dropdown>
                             </div>
 
                             <div class="select_div">
                                 <p>Select Y2 Parameter</p>
-                                <select [(ngModel)]="selectedMultix2Display" (change)="changetiMulOne()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
-                                        [hidden]="param.param_name === selectedMultix1Display">
-                                        {{ param.param_name }}
-                                    </option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="getFilteredParamsForMultix2()"
+                                    [(ngModel)]="selectedMultix2Display" optionLabel="param_name"
+                                    optionValue="param_name" placeholder="Select Parameter"
+                                    (onChange)="changetiMulOne()">
+                                </p-dropdown>
                             </div>
-                            <div class="select_div" *ngIf="isMultiy2_current">
+                            <div class="select_div"
+                                *ngIf="isMultiy2_current&& selectedMultix2Display.includes('current_speed')||selectedMultix2Display.includes('current_direction')">
                                 <p>Select Bin (Y2 axis)</p>
-                                <select [(ngModel)]="selectedBin_multiy2" (change)="updateBinParam('y2')">
-                                    <option *ngFor="let bin of Bins" [value]="bin.name">{{ bin.value }}</option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="Bins" [(ngModel)]="selectedBin_multiy2"
+                                    optionLabel="value" optionValue="name" placeholder="Select Bin"
+                                    (onChange)="updateBinParam('y2')">
+                                </p-dropdown>
                             </div>
                         </div>
                         <app-multi-axis [MultiAxis]="multiAxis" *ngIf="!isMultiLoading"
                             [plotType]="selectedPlot"></app-multi-axis>
                     </div>
                     <div class="three">
-                        <div class="dropDowns">
+                        <div class="dropDowns2">
 
                             <!-- X Axis -->
                             <div class="select_div">
                                 <p>Select X Axis</p>
-                                <select [(ngModel)]="selectedScactterXDisplay" (change)="onScatterChange()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
-                                        [hidden]="param.param_name === selectedScatterYDisplay">
-                                        {{ param.param_name }}
-                                    </option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="filteredXParams"
+                                    [(ngModel)]="selectedScactterXDisplay" optionLabel="param_name"
+                                    optionValue="param_name" placeholder="Select X Parameter"
+                                    (onChange)="onScatterChange()">
+                                </p-dropdown>
                             </div>
 
                             <!-- X Bin -->
-                            <div class="select_div" *ngIf="isScatterXCurrent">
+                            <div class="select_div"
+                                *ngIf="isScatterXCurrent && selectedScactterXDisplay.includes('current_speed')||selectedScactterXDisplay.includes('current_direction')">
                                 <p>Select Profile (X axis)</p>
-                                <select [(ngModel)]="selectedBinScatterX" (change)="updateScatterBin('x')">
-                                    <option *ngFor="let param of Bins" [value]="param.name">{{ param.value }}</option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="Bins" [(ngModel)]="selectedBinScatterX"
+                                    optionLabel="value" optionValue="name" placeholder="Select Bin"
+                                    (onChange)="updateScatterBin('x')">
+                                </p-dropdown>
                             </div>
 
                             <!-- Y Axis -->
                             <div class="select_div">
                                 <p>Select Y Axis</p>
-                                <select [(ngModel)]="selectedScatterYDisplay" (change)="onScatterChange()">
-                                    <option *ngFor="let param of filteredparams" [value]="param.param_name"
-                                        [hidden]="param.param_name === selectedScactterXDisplay">
-                                        {{ param.param_name }}
-                                    </option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="getFilteredScatterYParams()"
+                                    [(ngModel)]="selectedScatterYDisplay" optionLabel="param_name"
+                                    optionValue="param_name" placeholder="Select Y-Axis Param"
+                                    (onChange)="onScatterChange()">
+                                </p-dropdown>
                             </div>
 
                             <!-- Y Bin -->
-                            <div class="select_div" *ngIf="isScatterYCurrent">
+                            <div class="select_div"
+                                *ngIf="isScatterYCurrent  && selectedScatterYDisplay.includes('current_speed')||selectedScatterYDisplay.includes('current_direction')">
                                 <p>Select Profile (Y axis)</p>
-                                <select [(ngModel)]="selectedBinScatterY" (change)="updateScatterBin('y')">
-                                    <option *ngFor="let param of Bins" [value]="param.name">{{ param.value }}</option>
-                                </select>
+                                <p-dropdown class="pselect2" [options]="Bins" [(ngModel)]="selectedBinScatterY"
+                                    optionLabel="value" optionValue="name" placeholder="Select Y-Axis Bin"
+                                    (onChange)="updateScatterBin('y')">
+                                </p-dropdown>
                             </div>
 
                         </div>
@@ -146,16 +142,15 @@
                         <h3 class="ramp">Polar Plot</h3>
                         <div class="four" [ngStyle]="{ 'width': polarNumber === 2 ? '50%' : '100%' }"
                             *ngIf="!isPolarLoading && !isLoadingCurrentPolar">
-                            <div class="dropDowns">
+                            <div class="dropDowns2">
 
                                 <div class="select_div" *ngIf="isCurrentPolar">
                                     <p>Select Profile</p>
-                                    <select name="Parameters" id="parameters" [(ngModel)]="selectedBinPolar"
-                                        [disabled]="false" (change)="changePOlarCurrentBin()">
-                                        <option *ngFor="let param of Bins" [value]="param.name">
-                                            {{ param.value }}
-                                        </option>
-                                    </select>
+                                    <p-dropdown class="pselect2" name="Parameters" id="parameters" [options]="Bins"
+                                        [(ngModel)]="selectedBinPolar" optionLabel="value" optionValue="name"
+                                        [disabled]="false" placeholder="Select Parameter"
+                                        (onChange)="changePOlarCurrentBin()">
+                                    </p-dropdown>
                                 </div>
                             </div>
                             <app-rose-plot id="polar1" [polarAxis]="PolarAxis2"
@@ -227,10 +222,10 @@
                     [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView"
                     (ngModelChange)="changeMultiStation()">
                 </p-multiselect>
-                <select name="Stations" id="" [(ngModel)]="singleStation" *ngIf="isSingleView"
-                    (change)="singleStationchange()">
-                    <option value="" *ngFor="let station of stations" [value]="station.name">{{station.name}}</option>
-                </select>
+                <p-dropdown *ngIf="isSingleView" class="pselect" [options]="stations" [(ngModel)]="singleStation"
+                    placeholder="Select Station" optionLabel="name" optionValue="name"
+                    (onChange)="singleStationchange()">
+                </p-dropdown>
             </div>
 
             <!-- <p class="tit">Select Plot</p>
@@ -331,12 +326,9 @@
             <span>Select upto 4 Parameters</span> -->
             <div class="selectPlot">
                 <p class="tit">Select Plot Style</p>
-                <select name="plot" id="" (change)="onPlotSelect($event)">
-                    <option value="line">Line</option>
-                    <!-- <option value="bar">Bar</option> -->
-                    <option value="scatter">Bubble</option>
-
-                </select>
+                <p-dropdown class="pselect" [options]="plotOptions" [(ngModel)]="selectedPlot" optionLabel="label"
+                    optionValue="value" (onChange)="onPlotSelect($event)">
+                </p-dropdown>
             </div>
             <div class="sensors" *ngIf="!isSingleView">
                 <p>Select Sensor Group</p>

@@ -352,12 +352,26 @@ export class HomeComponent implements OnInit {
     const convertDMSToDD = (deg: number, min: number, sec: number): number => {
       return deg + min / 60 + sec / 3600;
     };
-
+ 
     const assignLocation = (config: StationConfigs): [number, number] => {
       if (config.geo_format === 'DMS') {
+        const { lon_deg, lon_min, lon_sec, lat_deg, lat_min, lat_sec } = config;
+ 
+        if (
+          [lon_deg, lon_min, lon_sec, lat_deg, lat_min, lat_sec].some(
+            (v) => v === undefined || v === null || isNaN(Number(v))
+          )
+        ) {
+          console.warn(
+            `DMS values missing or invalid for station ${config.station_name}`,
+            config
+          );
+          return [NaN, NaN]; // will be caught by the check later
+        }
+ 
         return fromLonLat([
-          convertDMSToDD(config.lon_deg, config.lon_min, config.lon_sec),
-          convertDMSToDD(config.lat_deg, config.lat_min, config.lat_sec),
+          convertDMSToDD(Number(lon_deg), Number(lon_min), Number(lon_sec)),
+          convertDMSToDD(Number(lat_deg), Number(lat_min), Number(lat_sec)),
         ]) as [number, number];
       } else if (config.geo_format === 'DD') {
         return fromLonLat([config.lon_dd, config.lat_dd]) as [number, number];
@@ -366,6 +380,7 @@ export class HomeComponent implements OnInit {
         return [0, 0];
       }
     };
+ 
 
     const markerImage = (
       status: string,

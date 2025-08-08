@@ -205,11 +205,11 @@
   }
  
   .calendar-container ::ng-deep .p-calendar {
-    width: 100%;
+    width: 100% !important;
   }
  
   .calendar-container ::ng-deep .p-datepicker {
-    width: 100%;
+    width: 100% !important;
   }
  
   .main-content {
@@ -218,23 +218,23 @@
   }
  
   .update-btn-container{
-    margin-top: 23rem;
+    margin-top: 115%;
     display: flex;
     justify-content: center;
   }
  
   .update-btn-container ::ng-deep .p-button{
-    background: var(--highlight-color);
-    border-color: var(--highlight-color-shadow);
-    color: var(--font-color);
-    border-radius: 15px;
+    background: var(--highlight-color) !important;
+    border-color: var(--highlight-color-shadow) !important;
+    color: var(--font-color) !important;
+    border-radius: 15px !important;
   }
  
   .update-btn-container ::ng-deep .p-button:hover{
     /* background: var(--highlight-color);
     border-color: var(--secondary-color-shadow);
     color: var(--font-color); */
-    font-weight: bold;
+    font-weight: bold !important;
   }
  
   ::ng-deep .p-datepicker-panel {
@@ -261,18 +261,18 @@
   }
  
   ::ng-deep .p-button-label {
-    font-weight: normal;
-    transition: 0.3s;
+    font-weight: normal !important;
+    transition: 0.3s !important;
   }
  
   ::ng-deep .p-button-label:hover {
-    font-weight: bold;
+    font-weight: bold !important;
   }
 
    
   ::ng-deep .p-button:not(:disabled):hover {
-    background: var(--highlight-color);
-    border: 1px solid var(--highlight-color);
-    color: var(--font-color);
+    background: var(--highlight-color) !important;
+    border: 1px solid var(--highlight-color) !important;
+    color: var(--font-color) !important;
   }
  

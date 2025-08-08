@@ -48,7 +48,7 @@ interface Column {
 })
 export class ReportComponent implements OnInit {
   loading: boolean = false;
- 
+ is_meteorology:boolean=true;
   fetchedBuoys: StationConfigs[] = [];
   selectedBuoy!: StationConfigs;
  
@@ -214,9 +214,49 @@ export class ReportComponent implements OnInit {
       );
     console.log('Data fetching for table');
     console.log('selectedBuoy', this.selectedBuoy);
+    console.log("Dd",this.selectedBuoy.sensors)
+const sensors = this.selectedBuoy.sensors as string[] | string;
+ 
+const hasMeteorology =
+  Array.isArray(sensors)
+    ? sensors.map(s => (s || '').trim().toLowerCase()).includes('meteorology')
+    : typeof sensors === 'string' &&
+      sensors
+        .split(',')
+        .map(s => (s || '').trim().toLowerCase())
+        .includes('meteorology');
+ 
+console.log("t", hasMeteorology);
+ 
+if (!hasMeteorology) {
+  this.is_meteorology = false;
+  console.log("smaple", this.is_meteorology);
+}
+else{
+  this.is_meteorology=true;
+    console.log("smaple", this.is_meteorology);
+ 
+}
+this.updateOptions();
+this.onOptionChange();
+ 
+ 
+ 
     console.log('fromDate', this.fromDate);
     console.log('toDate', this.toDate);
   }
+ updateOptions() {
+  this.options = [
+    { label: 'All Sensors', value: 'sensorData', icon: 'fa fas-database' },
+    ...(this.is_meteorology
+      ? [{ label: 'Meteorology', value: 'meteorology', icon: 'pi pi-cloud' }]
+      : []),
+    { label: 'Oceanography', value: 'oceanography', icon: 'pi pi-globe' },
+    { label: 'Water Quality', value: 'water_quality', icon: 'pi pi-umbrella' },
+  ];
+}
+ 
+ 
  
   formatDate(dateStr: any): string {
     if (!dateStr) return '';
@@ -285,459 +325,130 @@ export class ReportComponent implements OnInit {
     return match ? match.unit : '';
   }
  
-  onOptionChange(): void {
-    if (this.selectedOption == 'sensorData') {
-      this.alpha = this.fetchedBuoys;
-    } else {
-      this.alpha = this.fetchedBuoys.filter(
-        (buoy: any) =>
-          typeof buoy.sensors === 'string' &&
-          buoy.sensors
-            .split(',')
-            .map((s: string) => s.trim())
-            .includes(this.selectedOption)
+  // Define reusable column sets
+ meteorologyColumns = [
+  { field: 'wind_speed', header: 'Wind Speed' },
+  { field: 'wind_direction_deg', header: 'Wind Direction' },
+  { field: 'wind_gust', header: 'Wind Gust' },
+  { field: 'temperature_deg', header: 'Air Temperature' },
+  { field: 'rh_percent', header: 'Relative Humidity' },
+  { field: 'bp_hpa', header: 'Barometric Pressure' },
+  { field: 'rain_mm', header: 'Rainfall' },
+  { field: 'visibility', header: 'Visibility' },
+  { field: 'global_radiation', header: 'Radiation' },
+];
+ oceanographyColumns = [
+  { field: 'wave_heading', header: 'Wave Heading' },
+  { field: 'wave_height', header: 'Wave Height' },
+  { field: 'tzc', header: 'Peak Wave Period' },
+  { field: 'tz', header: 'Zero Crossing Period' },
+  { field: 'tm02', header: 'Average Wave Period' },
+  { field: 'wave_direction', header: 'Wave Direction' },
+  { field: 'wave_direction_fw', header: 'Wave Direction FW' },
+  { field: 'mean_wave_direction', header: 'Mean Wave Direction' },
+  { field: 'hmax', header: 'Max Wave Height' },
+  { field: 'fourier_coefficient_a1', header: 'Fourier Coefficient a1' },
+  { field: 'fourier_coefficient_b1', header: 'Fourier Coefficient b1' },
+  { field: 'fourier_coefficient_a2', header: 'Fourier Coefficient a2' },
+  { field: 'fourier_coefficient_b2', header: 'Fourier Coefficient b2' },
+  { field: 'dominant_time_period_fw', header: 'Dominant Time Period FW' },
+  { field: 'havg', header: 'Average Wave Height' },
+];
+ 
+waterQualityColumns = [
+  { field: 'turbidity', header: 'Turbidity' },
+  { field: 'water_temperature', header: 'Water Temperature' },
+  { field: 'ph', header: 'Potential of Hydrogen' },
+  { field: 'conductivity', header: 'Conductivity' },
+  { field: 'dissolved_oxygen', header: 'Dissolved Oxygen' },
+  { field: 'salinity', header: 'Salinity' },
+  { field: 'chlorophyll_a', header: 'Chlorophyll-a' },
+  { field: 'phycoerythrin', header: 'Phycoerythrin' },
+  { field: 'fluorescein_dye', header: 'Fluorescein Dye' },
+  { field: 'pah', header: 'PAH' },
+  { field: 'oil_in_water', header: 'Oil in Water' },
+  { field: 'bt', header: 'Bottom Temperature' },
+];
+ 
+currentBins = Array.from({ length: 4 }, (_, i) => i + 1).flatMap(i => [
+  { field: `current_speed_bin_${i}`, header: `Current Speed Bin ${i}` },
+  { field: `current_direction_bin_${i}`, header: `Current Direction Bin ${i}` },
+]);
+ 
+// Refactored method
+onOptionChange(): void {
+  this.alpha = this.selectedOption === 'sensorData'
+    ? this.fetchedBuoys
+    : this.fetchedBuoys.filter((buoy: any) =>
+        typeof buoy.sensors === 'string' &&
+        buoy.sensors.split(',').map((s: string) => s.trim()).includes(this.selectedOption)
       );
+ 
+  const getColumnSetWithUnits = (columns: any[]) =>
+    columns.map(col => ({
+      ...col,
+      unit: `(${this.getUnitByField(col.field)})`,
+    }));
+ 
+  let dyna: any[] = [];
+ 
+  if (this.selectedOption === 'sensorData') {
+    // Start with oceanography and water quality
+    dyna = [
+      ...getColumnSetWithUnits(this.oceanographyColumns),
+      ...getColumnSetWithUnits(this.waterQualityColumns),
+      ...this.currentBins.map(col => ({
+        ...col,
+        unit: `(${this.getUnitByField(
+          col.field.includes('speed') ? 'current_speed' : 'current_direction'
+        )})`,
+      })),
+    ];
+ 
+    // Check if selected station has meteorology
+    const sensors = this.selectedBuoy?.sensors as string[] | string;
+    const hasMeteorology = Array.isArray(sensors)
+      ? sensors.map(s => (s || '').trim().toLowerCase()).includes('meteorology')
+      : typeof sensors === 'string' &&
+        sensors
+          .split(',')
+          .map(s => (s || '').trim().toLowerCase())
+          .includes('meteorology');
+ 
+    // If yes, prepend meteorology columns
+    if (hasMeteorology) {
+      dyna = [...getColumnSetWithUnits(this.meteorologyColumns), ...dyna];
     }
- 
-    console.log('select', this.selectedOption);
-    console.log('fetch', this.fetchedBuoys);
-    console.log('alpha', this.alpha);
- 
-    if (this.selectedOption === 'sensorData') {
-      this.dynaColumns = [
-        {
-          field: 'wind_speed',
-          header: 'Wind Speed',
-          // unit: `(${this.paramUnits[12].unit})`,
-          unit: `(${this.getUnitByField('wind_speed')})`,
-        },
-        {
-          field: 'wind_direction_deg',
-          header: 'Wind Direction',
-          unit: `(${this.getUnitByField('wind_direction_deg')})`,
-        },
-        {
-          field: 'wind_gust',
-          header: 'Wind Gust',
-          unit: `(${this.getUnitByField('wind_gust')})`,
-        },
-        {
-          field: 'temperature_deg',
-          header: 'Air Temperature',
-          unit: `(${this.getUnitByField('temperature_deg')})`,
-        },
-        {
-          field: 'rh_percent',
-          header: 'Relative Humidity',
-          unit: `(${this.getUnitByField('rh_percent')})`,
-        },
-        {
-          field: 'bp_hpa',
-          header: 'Barometric Pressure',
-          unit: `(${this.getUnitByField('bp_hpa')})`,
-        },
-        {
-          field: 'rain_mm',
-          header: 'Rainfall',
-          unit: `(${this.getUnitByField('rain_mm')})`,
-        },
-        {
-          field: 'visibility',
-          header: 'Visibility',
-          unit: `(${this.getUnitByField('visibility')})`,
-        },
-        {
-          field: 'global_radiation',
-          header: 'Radiation',
-          unit: `(${this.getUnitByField('global_radiation')})`,
-        },
- 
-        {
-          field: 'wave_heading',
-          header: 'Wave Heading',
-          unit: `(${this.getUnitByField('wave_heading')})`,
-        },
-        {
-          field: 'wave_height',
-          header: 'Wave Height',
-          unit: `(${this.getUnitByField('wave_height')})`,
-        },
-        {
-          field: 'tzc',
-          header: 'Peak Wave Period',
-          unit: `(${this.getUnitByField('tzc')})`,
-        },
-        {
-          field: 'tz',
-          header: 'Zero Crossing Period',
-          unit: `(${this.getUnitByField('tz')})`,
-        },
-        {
-          field: 'tm02',
-          header: 'Average Wave Period',
-          unit: `(${this.getUnitByField('tm02')})`,
-        },
-        {
-          field: 'wave_direction',
-          header: 'Wave Direction',
-          unit: `(${this.getUnitByField('wave_direction')})`,
-        },
-        {
-          field: 'wave_direction_fw',
-          header: 'Wave Direction FW',
-          unit: `(${this.getUnitByField('wave_direction_fw')})`,
-        },
-        {
-          field: 'mean_wave_direction',
-          header: 'Mean Wave Direction',
-          unit: `(${this.getUnitByField('mean_wave_direction')})`,
-        },
-        {
-          field: 'hmax',
-          header: 'Max Wave Height',
-          unit: `(${this.getUnitByField('hmax')})`,
-        },
-        {
-          field: 'fourier_coefficient_a1',
-          header: 'Fourier Coefficient a1',
-          unit: `(${this.getUnitByField('fourier_coefficient_a1')})`,
-        },
-        {
-          field: 'fourier_coefficient_b1',
-          header: 'Fourier Coefficient b1',
-          unit: `(${this.getUnitByField('fourier_coefficient_b1')})`,
-        },
-        {
-          field: 'fourier_coefficient_a2',
-          header: 'Fourier Coefficient a2',
-          unit: `(${this.getUnitByField('fourier_coefficient_a2')})`,
-        },
-        {
-          field: 'fourier_coefficient_b2',
-          header: 'Fourier Coefficient b2',
-          unit: `(${this.getUnitByField('fourier_coefficient_b2')})`,
-        },
-        {
-          field: 'dominant_time_period_fw',
-          header: 'Dominant Time Period FW',
-          unit: `(${this.getUnitByField('dominant_time_period_fw')})`,
-        },
-        {
-          field: 'havg',
-          header: 'Average Wave Height',
-          unit: `(${this.getUnitByField('havg')})`,
-        },
- 
-        {
-          field: 'turbidity',
-          header: 'Turbidity',
-          unit: `(${this.getUnitByField('turbidity')})`,
-        },
-        {
-          field: 'water_temperature',
-          header: 'Water Temperature',
-          unit: `(${this.getUnitByField('water_temperature')})`,
-        },
-        {
-          field: 'ph',
-          header: 'Potential of Hydrogen',
-          unit: `(${this.getUnitByField('ph')})`,
-        },
-        {
-          field: 'conductivity',
-          header: 'Conductivity',
-          unit: `(${this.getUnitByField('conductivity')})`,
-        },
-        {
-          field: 'dissolved_oxygen',
-          header: 'Dissolved Oxygen',
-          unit: `(${this.getUnitByField('dissolved_oxygen')})`,
-        },
-        {
-          field: 'salinity',
-          header: 'Salinity',
-          unit: `(${this.getUnitByField('salinity')})`,
-        },
-        {
-          field: 'chlorophyll_a',
-          header: 'Chlorophyll-a',
-          unit: `(${this.getUnitByField('chlorophyll_a')})`,
-        },
-        {
-          field: 'phycoerythrin',
-          header: 'Phycoerythrin',
-          unit: `(${this.getUnitByField('phycoerythrin')})`,
-        },
-        {
-          field: 'fluorescein_dye',
-          header: 'Fluorescein Dye',
-          unit: `(${this.getUnitByField('fluorescein_dye')})`,
-        },
-        {
-          field: 'pah',
-          header: 'PAH',
-          unit: `(${this.getUnitByField('pah')})`,
-        },
-        {
-          field: 'oil_in_water',
-          header: 'Oil in Water',
-          unit: `(${this.getUnitByField('oil_in_water')})`,
-        },
-        {
-          field: 'bt',
-          header: 'Bottom Temperature',
-          unit: `(${this.getUnitByField('bt')})`,
-        },
-      ];
- 
-      for (let i = 1; i <= 4; i++) {
-        this.dynaColumns.push(
-          {
-            field: `current_speed_bin_${i}`,
-            header: `Current Speed Bin ${i}`,
-            unit: `(${this.getUnitByField('current_speed')})`,
-          },
-          {
-            field: `current_direction_bin_${i}`,
-            header: `Current Direction Bin ${i}`,
-            unit: `(${this.getUnitByField('current_direction')})`,
-          }
-        );
-      }
- 
-      this.selectedColumns = this.dynaColumns;
-      this.globalFilterFields = [
-        'id',
-        'station_id',
-        'timestampFormatted',
-        'datetimeFormatted',
-        'battery',
-        'lat',
-        'lon',
-        ...this.dynaColumns.map((col) => col.field),
-      ];
-      console.log('Allsensordyna', this.globalFilterFields);
-      console.log('for units assigning thing', this.dynaColumns);
-    } else if (this.selectedOption === 'meteorology') {
-      // this.dataSource = this.metrological;
-      this.dynaColumns = [
-        {
-          field: 'wind_speed',
-          header: 'Wind Speed',
-          // unit: `(${this.paramUnits[12].unit})`,
-          unit: `(${this.getUnitByField('wind_speed')})`,
-        },
-        {
-          field: 'wind_direction_deg',
-          header: 'Wind Direction',
-          unit: `(${this.getUnitByField('wind_direction_deg')})`,
-        },
-        {
-          field: 'wind_gust',
-          header: 'Wind Gust',
-          unit: `(${this.getUnitByField('wind_gust')})`,
-        },
-        {
-          field: 'temperature_deg',
-          header: 'Air Temperature',
-          unit: `(${this.getUnitByField('temperature_deg')})`,
-        },
-        {
-          field: 'rh_percent',
-          header: 'Relative Humidity',
-          unit: `(${this.getUnitByField('rh_percent')})`,
-        },
-        {
-          field: 'bp_hpa',
-          header: 'Barometric Pressure',
-          unit: `(${this.getUnitByField('bp_hpa')})`,
-        },
-        {
-          field: 'rain_mm',
-          header: 'Rainfall',
-          unit: `(${this.getUnitByField('rain_mm')})`,
-        },
-        {
-          field: 'visibility',
-          header: 'Visibility',
-          unit: `(${this.getUnitByField('visibility')})`,
-        },
-        {
-          field: 'global_radiation',
-          header: 'Radiation',
-          unit: `(${this.getUnitByField('global_radiation')})`,
-        },
-      ];
-      this.selectedColumns = this.dynaColumns;
-      this.globalFilterFields = this.dynaColumns.map((col) => col.field);
-      console.log('metrological dyna', this.globalFilterFields);
-      console.log('units list checking', this.dynaColumns);
-    } else if (this.selectedOption === 'oceanography') {
-      // this.dataSource = this.oceanographic;
-      this.dynaColumns = [
-        {
-          field: 'wave_heading',
-          header: 'Wave Heading',
-          unit: `(${this.getUnitByField('wave_heading')})`,
-        },
-        {
-          field: 'wave_height',
-          header: 'Wave Height',
-          unit: `(${this.getUnitByField('wave_height')})`,
-        },
-        {
-          field: 'tzc',
-          header: 'Peak Wave Period',
-          unit: `(${this.getUnitByField('tzc')})`,
-        },
-        {
-          field: 'tz',
-          header: 'Zero Crossing Period',
-          unit: `(${this.getUnitByField('tz')})`,
-        },
-        {
-          field: 'tm02',
-          header: 'Average Wave Period',
-          unit: `(${this.getUnitByField('tm02')})`,
-        },
-        {
-          field: 'wave_direction',
-          header: 'Wave Direction',
-          unit: `(${this.getUnitByField('wave_direction')})`,
-        },
-        {
-          field: 'wave_direction_fw',
-          header: 'Wave Direction FW',
-          unit: `(${this.getUnitByField('wave_direction_fw')})`,
-        },
-        {
-          field: 'mean_wave_direction',
-          header: 'Mean Wave Direction',
-          unit: `(${this.getUnitByField('mean_wave_direction')})`,
-        },
-        {
-          field: 'hmax',
-          header: 'Max Wave Height',
-          unit: `(${this.getUnitByField('hmax')})`,
-        },
-        {
-          field: 'fourier_coefficient_a1',
-          header: 'Fourier Coefficient a1',
-          unit: `(${this.getUnitByField('fourier_coefficient_a1')})`,
-        },
-        {
-          field: 'fourier_coefficient_b1',
-          header: 'Fourier Coefficient b1',
-          unit: `(${this.getUnitByField('fourier_coefficient_b1')})`,
-        },
-        {
-          field: 'fourier_coefficient_a2',
-          header: 'Fourier Coefficient a2',
-          unit: `(${this.getUnitByField('fourier_coefficient_a2')})`,
-        },
-        {
-          field: 'fourier_coefficient_b2',
-          header: 'Fourier Coefficient b2',
-          unit: `(${this.getUnitByField('fourier_coefficient_b2')})`,
-        },
-        {
-          field: 'dominant_time_period_fw',
-          header: 'Dominant Time Period FW',
-          unit: `(${this.getUnitByField('dominant_time_period_fw')})`,
-        },
-        {
-          field: 'havg',
-          header: 'Average Wave Height',
-          unit: `(${this.getUnitByField('havg')})`,
-        },
-      ];
-      for (let i = 1; i <= 4; i++) {
-        this.dynaColumns.push(
-          {
-            field: `current_speed_bin_${i}`,
-            header: `Current Speed Bin ${i}`,
-            unit: `(${this.getUnitByField('current_speed')})`,
-          },
-          {
-            field: `current_direction_bin_${i}`,
-            header: `Current Direction Bin ${i}`,
-            unit: `(${this.getUnitByField('current_direction')})`,
-          }
-        );
-      }
-      this.selectedColumns = this.dynaColumns;
-      this.globalFilterFields = this.dynaColumns.map((col) => col.field);
-      console.log('oceanographic dyna', this.globalFilterFields);
-    } else if (this.selectedOption === 'water_quality') {
-      // this.dataSource = this.waterQuality;
-      this.dynaColumns = [
-        {
-          field: 'turbidity',
-          header: 'Turbidity',
-          unit: `(${this.getUnitByField('turbidity')})`,
-        },
-        {
-          field: 'water_temperature',
-          header: 'Water Temperature',
-          unit: `(${this.getUnitByField('water_temperature')})`,
-        },
-        {
-          field: 'ph',
-          header: 'Potential of Hydrogen',
-          unit: `(${this.getUnitByField('ph')})`,
-        },
-        {
-          field: 'conductivity',
-          header: 'Conductivity',
-          unit: `(${this.getUnitByField('conductivity')})`,
-        },
-        {
-          field: 'dissolved_oxygen',
-          header: 'Dissolved Oxygen',
-          unit: `(${this.getUnitByField('dissolved_oxygen')})`,
-        },
-        {
-          field: 'salinity',
-          header: 'Salinity',
-          unit: `(${this.getUnitByField('salinity')})`,
-        },
-        {
-          field: 'chlorophyll_a',
-          header: 'Chlorophyll-a',
-          unit: `(${this.getUnitByField('chlorophyll_a')})`,
-        },
-        {
-          field: 'phycoerythrin',
-          header: 'Phycoerythrin',
-          unit: `(${this.getUnitByField('phycoerythrin')})`,
-        },
-        {
-          field: 'fluorescein_dye',
-          header: 'Fluorescein Dye',
-          unit: `(${this.getUnitByField('fluorescein_dye')})`,
-        },
-        {
-          field: 'pah',
-          header: 'PAH',
-          unit: `(${this.getUnitByField('pah')})`,
-        },
-        {
-          field: 'oil_in_water',
-          header: 'Oil in Water',
-          unit: `(${this.getUnitByField('oil_in_water')})`,
-        },
-        {
-          field: 'bt',
-          header: 'Bottom Temperature',
-          unit: `(${this.getUnitByField('bt')})`,
-        },
-      ];
- 
-      this.selectedColumns = this.dynaColumns;
-      this.globalFilterFields = this.dynaColumns.map((col) => col.field);
-      console.log('waterQuality dyna', this.globalFilterFields);
-    }
+  } else if (this.selectedOption === 'meteorology') {
+    dyna = getColumnSetWithUnits(this.meteorologyColumns);
+  } else if (this.selectedOption === 'oceanography') {
+    dyna = [
+      ...getColumnSetWithUnits(this.oceanographyColumns),
+      ...getColumnSetWithUnits(this.currentBins),
+    ];
+  } else if (this.selectedOption === 'water_quality') {
+    dyna = getColumnSetWithUnits(this.waterQualityColumns);
   }
+ 
+  // Assign columns and filters
+  this.dynaColumns = dyna;
+  this.selectedColumns = this.dynaColumns;
+  this.globalFilterFields = [
+    'id',
+    'station_id',
+    'timestampFormatted',
+    'datetimeFormatted',
+    'battery',
+    'lat',
+    'lon',
+    ...this.dynaColumns.map(col => col.field),
+  ];
+ 
+  console.log('Option:', this.selectedOption);
+  console.log('Filtered Buoys:', this.alpha);
+  console.log('Dynamic Columns:', this.dynaColumns);
+}
+ 
  
   onExportOptionSelect(event: any, dt2: any) {
     const selectedOption = event.value;

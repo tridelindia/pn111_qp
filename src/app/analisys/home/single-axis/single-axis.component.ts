@@ -27,8 +27,18 @@ export class SingleAxisComponent implements OnInit {
   unit:string='';
   constructor(private data:GlobalDataService){}
   ngOnInit(): void {
-    // const u = this.data.SensorConfigs.filter(item=> item.param_name === this.singleAxis[0].name);
-    // this.unit = u[0].unit
+    let u:string='';
+    if(this.singleAxis[0].name.includes('current_speed')){
+      const u = this.data.SensorConfigs.filter(item=> item.param_name === 'current_speed');
+      this.unit = u[0].unit
+    }else if(this.singleAxis[0].name.includes('current_direction')){
+       const u = this.data.SensorConfigs.filter(item=> item.param_name === 'current_direction');
+      this.unit = u[0].unit
+    }else{
+       const u = this.data.SensorConfigs.filter(item=> item.param_name === this.singleAxis[0].name);
+      this.unit = u[0].unit
+    }
+    console.log("name", this.singleAxis[0].name);
     const seriesData = this.singleAxis.map(item => [
       new Date(item.DateTime).getTime(),
       parseFloat(item.value)

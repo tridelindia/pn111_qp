@@ -126,7 +126,7 @@
         <div class="station-section">
             <div class="station-card" *ngFor="let station of stations; let idx = index">
                 <h6>{{ station.name }}</h6>
-                <p-multiSelect [options]="paramNames" [(ngModel)]="station.selectedParameters" [filter]="false"
+                <p-multiSelect [options]="paramNames2" [(ngModel)]="station.selectedParameters" [filter]="false"
                     showHeader="false" defaultLabel="Select Params" [maxSelectedLabels]="2"
                     (onChange)="onParamChange(station)">
                 </p-multiSelect>

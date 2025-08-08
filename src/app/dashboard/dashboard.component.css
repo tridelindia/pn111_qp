@@ -1348,6 +1348,62 @@ backdrop-filter: blur(8px);
 
   
 }
+.ol-tooltip {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  font-size: 12px;
+  color: black;
+}
+.measure-btn {
+  position: absolute;
+  top: 70px;
+  left: 10px;
+  z-index: 999;
+  height: 25px;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  background: white;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+}
+.measure-btn-active {
+  position: absolute;
+  top: 70px;
+  left: 10px;
+  z-index: 999;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  background: rgb(43, 153, 221);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+.ol-tooltip-measure {
+  opacity: 1;
+  font-weight: bold;
+}
+
+.ol-tooltip-static {
+  background-color: #ffcc33;
+  color: black;
+  border: 1px solid white;
+}
+
 .nob{
   height: 40%;
   width: 6%;

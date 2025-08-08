@@ -142,7 +142,7 @@ const getHomeConfig = async (req, res) => {
   console.log('Received request to getHomeConfig');
  
   try {
-    const result = await pool.query('SELECT * FROM tb_home_config');
+    const result = await pool.query('SELECT * FROM tb_home_config ORDER BY id ASC');
     console.log('Query successful:', result.rows);
     res.json(result.rows);
   } catch (error) {

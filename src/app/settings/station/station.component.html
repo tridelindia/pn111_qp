@@ -16,7 +16,7 @@
                         <div>
                             <h2>{{item.buoy_name}}</h2>
                             <div class="sensor_namesss">
-                                <p>{{item.buoy_sensors.join(' ')}}</p>
+                                <p>{{item.buoy_sensors.join(' ') |titlecase}}</p>
                             </div>
 
                         </div>
@@ -199,7 +199,7 @@
                             <input type="number" [value]="selectedstation.buoy_danger" readonly>
                         </div>
                     </div>
-                    <div class="divider"></div>
+                    <!-- <div class="divider"></div> -->
                     <h5>Geo Format</h5>
                     <p>{{selectedstation.geo_format}}
                         {{selectedstation.geo_format ==='DD'? '(Decimal Decimal)':'(DegreeMinutes Seconds)'}}</p>
@@ -255,7 +255,7 @@
                         <h5>Sensors</h5>
                         <div class="list_sensors">
                             <!-- @for (item of selectedstation?.buoy_sensors; track $index) {} -->
-                            <p *ngFor="let sensor of selectedstation?.buoy_sensors">{{sensor}}</p>
+                            <p *ngFor="let sensor of selectedstation?.buoy_sensors">{{sensor |titlecase}}</p>
                             <!-- <p>Water Level</p>
                             <p>Meteriology</p>
                             <p>MicroFLu</p> -->
@@ -394,7 +394,7 @@
                         <h5>Sensors</h5>
                         <div class="list_sensors">
 
-                            <p *ngFor="let item of selectedstation!.buoy_sensors">{{item}}</p>
+                            <p *ngFor="let item of selectedstation!.buoy_sensors">{{item |titlecase}}</p>
 
                         </div>
                     </div>

@@ -135,6 +135,8 @@
 }
 
 .date-range-selector {
+  display: flex;
+  flex-direction: row;
   min-width: 228px;
   margin-left: auto;
   margin-right: 10px;

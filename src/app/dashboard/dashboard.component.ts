@@ -43,6 +43,7 @@ current_speed:string;
 current_direction:string;
 wave_height:string;
 wave_heading:string;
+fourier_coefficient_a2:string;
 tz:string
 }
 
@@ -167,6 +168,7 @@ toggleMapon(){
 toggleMapoff(){
   this.map.destroyMap();
   this.showMap = false;
+  this.measureMode=false;
 }
 listImage:string[]=['../../assets/avatars/live4.jpeg', '../../assets/avatars/live5.png', '../../assets/avatars/live6.jpg', '../../assets/image/Aquadopp_Profiler.jpg']
 changeimage(){
@@ -180,7 +182,7 @@ fromDate!:string;
 toDate!:string;
     ngOnInit(): void {
       this.map.destroyMap();
-      this.http.get('http://192.168.0.5:3000/api/getBin').subscribe(
+      this.http.get('http://localhost:3000/api/getBin').subscribe(
         (response:any)=>{
           //console.log("binsss", response)
          this.Bins = response
@@ -233,7 +235,7 @@ this.map.destroyMap()
  
     
     fetchSensorCofig() {
-      this.http.get('http://192.168.0.5:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           this.sensorConfig = response;
 
@@ -310,7 +312,7 @@ risk!:string;
     fetchSensors() {
       this.BuoyData = [];
       const params = new HttpParams().set('fromDate', this.fromDate).set('toDate',this.toDate).set('stationId', this.layout.selectedStationId);
-      this.http.get('http://192.168.0.5:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
+      this.http.get('http://localhost:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
         (response: any) => {
           this.BuoyData = response;
           this.checkDataLoaded();
@@ -411,7 +413,7 @@ for (let i = 0; i < this.binData.length; i += 2) {
         processChunk();
       }
     }
-    
+
     mapInit(){
       //console.log("map init");
       const mapContainer = document.getElementById('ol-map');
@@ -420,9 +422,14 @@ for (let i = 0; i < this.binData.length; i += 2) {
         this.buoyLocation[0],
         this.buoyLocation[1], 
       this.warning, this.danger, 'http://mt{0-3}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', this.StationName
-        
       )
     }
+    measureMode:boolean = false;
+    onEnableMeasurement() {
+      this.measureMode = !this.measureMode
+  this.map.enableMeasurementTool();
+}
+
     dropdownOpen = false;
     selectedText = 'Please Select Station';
     selectedImage: string | null = null;

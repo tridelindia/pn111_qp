@@ -82,7 +82,7 @@
             </div>
 
         </div>
-        <p-toggleswitch [(ngModel)]="isChecked" />
+        <p-toggleswitch [(ngModel)]="isChecked" *ngIf="isMet" />
         <!-- <div class="score">
             {{overallScore}} avg
 

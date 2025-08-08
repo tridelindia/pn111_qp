@@ -128,9 +128,18 @@ export class UserlogComponent {
     return `${day}-${month}-${year}`;
   }
  
-  formatTime(timestamp: string): string {
-    return new Date(timestamp).toLocaleTimeString();
-  }
+ formatTime(timestamp: string): string {
+  const date = new Date(timestamp);
+  const hours = this.padZero(date.getHours());
+  const minutes = this.padZero(date.getMinutes());
+  const seconds = this.padZero(date.getSeconds());
+  return `${hours}:${minutes}:${seconds}`;
+}
+ 
+padZero(value: number): string {
+  return value < 10 ? '0' + value : value.toString();
+}
+ 
  
   filterByDateRange(): void {
     if (!this.dateRange || this.dateRange.length !== 2) {

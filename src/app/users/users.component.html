@@ -64,7 +64,7 @@
                     <div class="column">{{ user.role }}</div>
                     <div class="column">{{ user.designation }}</div>
                     <div class="column">
-                        Time: {{ user.created | date:'dd-MM-yyyy HH:mm:ss':'UTC+8:30' }}
+                        Time: {{ user.created | date:'dd-MM-yyyy HH:mm:ss':'UTC+3:00' }}
                     </div>
                     <div class="column actions">
                         <div class="icon-container">
@@ -295,10 +295,13 @@
                                 <div class="permissions-icons" *ngIf="role.permissions">
                                     <div class="page-icon-tooltip"
                                         *ngFor="let entry of objectEntries(role.permissions)">
-                                        <div class="tooltip-wrapper">
+                                        <div class="tooltip-wrapper"
+                                            (mouseenter)="showTooltip(role.name + '-' + entry[0])"
+                                            (mouseleave)="hideTooltip(role.name + '-' + entry[0])">
                                             <i class="fa-solid"
                                                 [ngClass]="permissionIcons[entry[0]] || 'fa-circle-question'"></i>
-                                            <div class="tooltip-text2">
+                                            <div class="tooltip-text2"
+                                                [class.visible]="activeTooltip === (role.name + '-' + entry[0])">
                                                 <strong>{{ entry[0] }}</strong><br />
                                                 <ng-container *ngFor="let action of entry[1]">
                                                     • {{ action }}<br />
@@ -307,8 +310,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                         <div class="column action">
@@ -354,10 +355,12 @@
                         <div class="button-group">
                             <h3>{{ isEditRole ? 'Update Role' : 'Add Role' }}</h3>
                             <button type="submit" class="add-button">
-                                <i Class="fa-solid fa-plus"></i>&nbsp;
-                                {{ isEditRole ? 'Update Role' : 'Add Role' }}
+                                <i *ngIf="!isEditRole" class="fa-solid fa-plus"></i>
+                                <i *ngIf="isEditRole" class="fa-solid fa-pen"></i>
+                                &nbsp;{{ isEditRole ? 'Update Role' : 'Add Role' }}
                             </button>
                         </div>
+
 
                         <div class="form-group">
                             <label for="roleName"><i class="fa-solid fa-user-shield"></i> Role</label>

@@ -1,0 +1,31 @@
+<svg width="500" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Axes -->
+  <line x1="0" y1="100" x2="500" y2="100" stroke="#999" stroke-width="1"/>
+  <line x1="0" y1="0" x2="0" y2="200" stroke="#999" stroke-width="1"/>
+
+  <!-- Sine Wave -->
+  <path d="M0,100 
+           C25,0 75,0 100,100 
+           C125,200 175,200 200,100 
+           C225,0 275,0 300,100
+           C325,200 375,200 400,100
+           C425,0 475,0 500,100"
+        stroke="#0074D9" fill="none" stroke-width="2"/>
+
+  <!-- Zero crossing indicators -->
+  <circle cx="0" cy="100" r="4" fill="red"/>
+  <circle cx="100" cy="100" r="4" fill="red"/>
+  <text x="30" y="85" font-size="14" fill="black">Zero Crossing</text>
+  <text x="100" y="85" font-size="14" fill="black">Zero Crossing</text>
+
+  <!-- Period arrow -->
+  <line x1="0" y1="130" x2="100" y2="130" stroke="green" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="30" y="125" font-size="14" fill="green">ZC Period</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="green"/>
+    </marker>
+  </defs>
+</svg>

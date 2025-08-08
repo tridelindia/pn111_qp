@@ -83,6 +83,18 @@ export class AuthenticationComponent {
      
     }
   }
+
+    resetForm(): void {
+    this.username = '';
+    this.password = '';
+    this.email = '';
+    this.showForgetPopup = false;
+    this.step = 1;
+    this.otpSent = false;
+    this.enteredOtp = '';
+    this.newPassword = '';
+    this.confirmPassword = '';
+  }
  
   openPopup() {
     this.showForgetPopup = true;

@@ -262,7 +262,7 @@ export class NotificationComponent implements OnInit {
           if (response.success) {
             this.successMessage = 'Notification added successfully';
             this.toast.success(
-              'Notification for a New User added Successfully'
+              'New User added Successfully'
             );
             this.hideAddDialog();
             this.loadNotifications();
@@ -332,7 +332,7 @@ export class NotificationComponent implements OnInit {
   }
 
   getStation() {
-    this.http.get('http://192.168.0.5:3000/api/getStationConfig').subscribe(
+    this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
       (response: any) => {
         console.log('Stations loaded:', response);
         this.stations = response;

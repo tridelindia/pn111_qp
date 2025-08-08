@@ -31,6 +31,18 @@ export class RosePlotComponent implements OnInit{
       this.title = this.polarAxis[0].name.includes('wave')?'Wave':this.polarAxis[0].name.includes('current') ?'Current':this.polarAxis[0].name.includes('wind')?'Wind':'Polar'
       this.setChart()
   }
+// 'Viridis'
+// 'Plasma'
+// 'Inferno'
+// 'Magma'
+// 'Cividis'
+// 'Blues'
+// 'Greens'
+// 'Greys'
+// 'Oranges'
+// 'Purples'
+// 'Reds'
+// 'Turbo'         // vivid & smooth gradient
 
   setChart() {
     this.graph = {
@@ -44,7 +56,7 @@ export class RosePlotComponent implements OnInit{
           marker: {
             // size: 100,
             color: this.V_WIND,
-            colorscale: 'Viridis',
+            colorscale: 'Blues',
             opacity: 0.8,
             colorbar: {
               title: 'Wind Speed',

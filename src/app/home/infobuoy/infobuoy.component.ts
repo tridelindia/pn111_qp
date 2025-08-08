@@ -235,7 +235,7 @@ export class InfobuoyComponent implements OnInit {
       case 'tz':
         return 'Zero-crossing\nPeriod';
       case 'tm02':
-        return 'Average Wave\nPeriod';
+        return 'Average\nWave\nPeriod';
       case 'wave_direction':
         return 'Wave\nDirection';
       case 'wave_direction_fw':

@@ -127,12 +127,14 @@ onSelect(status: string) {
   longitude:number = 0;
   check_location(){
     this.map.destroyMap();
-    if (this.addStationData?.geo_format == "DMS") {
+    if (this.addStationData?.geo_format === "DMS") {
+      console.log("its dms");
+      this.latitude = 0;
+      this.longitude = 0;
       this.latitude = this.dmsToDd(
        this.buoy_loc_degree_lat,
         this.buoy_loc_minutes_lat,
         this.buoy_loc_seconds_lat
-
       );
       this.longitude = this.dmsToDd(
         this.buoy_loc_degree_lon,
@@ -140,6 +142,7 @@ onSelect(status: string) {
         this.buoy_loc_seconds_lon
         );
     }else{
+      console.log("its dd");
       this.latitude = this.buoy_loc_latitude!;
       this.longitude = this.buoy_loc_longitude!;
     }
@@ -164,7 +167,7 @@ onSelect(status: string) {
 
 
   getStation(){
-    this.http.get('http://192.168.0.5:3000/api/getStationConfig').subscribe(
+    this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
       (response: any) => {
         console.log(response);
         
@@ -431,7 +434,7 @@ index!:number;
 
   this.addStationData = newStation;
 
-  this.http.post('http://192.168.0.5:3000/api/addStation', this.addStationData).subscribe(
+  this.http.post('http://localhost:3000/api/addStation', this.addStationData).subscribe(
     (response) => {
       this.getStation();
 
@@ -522,7 +525,7 @@ index!:number;
 
   console.log('Updating Station:', updatingStation);
 
-  this.http.post('http://192.168.0.5:3000/api/editStation', updatingStation).subscribe(
+  this.http.post('http://localhost:3000/api/editStation', updatingStation).subscribe(
     (response) => {
       this.toast.success('Station details updated successfully', 'Success');
       this.getStation();
