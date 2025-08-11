@@ -139,6 +139,8 @@ wave_heading: string[] = ['°'];
   wave_height: ['m', 'ft', 'cm'],
   bt: ['µg/L', 'ppb'],
   fourier_coefficient_a2: [''],
+  fourier_coefficient_b2: [''],
+  fourier_coefficient_b1: [''],
   wave_heading: ['°'],
   temperature: ['°C', '°F', 'K'],
   rainfall: ['mm', 'cm']
@@ -530,5 +532,4 @@ getLabelPrefix(name: string): string {
   }
 
 }
- 
- 
+
