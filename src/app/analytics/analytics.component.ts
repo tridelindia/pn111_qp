@@ -21,6 +21,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ToastrService } from 'ngx-toastr';
 import { ToastModule } from 'primeng/toast';
 import { LayoutComponent } from '../layout/layout.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { DropdownChangeEvent } from 'primeng/dropdown';
 
 interface param{
   param_name:string;
@@ -60,7 +62,7 @@ export interface PolarAxis {
 @Component({
   selector: 'app-analytics',
   standalone:true,
-  imports: [CommonModule, HttpClientModule,DatePickerModule,ToastModule, FormsModule, ScrollingModule, TestChartComponent, Chart2Component, WindChartComponent, ScatterComponent, MultiSelectModule, FormsModule, MultiAxisComponent, SingleAxisComponent, ScatterAxisComponent, RosePlotComponent, FormsModule, DirectionChartComponent],
+  imports: [CommonModule, HttpClientModule,DatePickerModule,ToastModule, FormsModule, ScrollingModule, TestChartComponent, Chart2Component, WindChartComponent, ScatterComponent, MultiSelectModule, FormsModule, MultiAxisComponent, SingleAxisComponent, ScatterAxisComponent, RosePlotComponent, FormsModule, DirectionChartComponent, DropdownModule],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.css'
 })
@@ -243,7 +245,11 @@ get y2Model() {
   }
 
 
-
+plotOptions = [
+  { label: 'Line', value: 'line' },
+  // { label: 'Bar', value: 'bar' }, // optional
+  { label: 'Bubble', value: 'scatter' }
+];
 
 
   // onPickerTap(state:string){
@@ -658,25 +664,19 @@ isMeteriology:boolean=true;
   ){}
 
 
-  onPlotSelect(event:Event, val?:string){
-    this.isLoad = true;
-    this.isSingleLoad = true;
-    this.isMultiLoading = true;
-    setTimeout(() => {
-      let selectedValue:string;
-      if(val){
-        selectedValue = val
-      }else{
-       selectedValue = (event.target as HTMLSelectElement).value;
-      }
-      
-    // console.log(selectedValue);
-    this.selectedPlot = selectedValue;
+onPlotSelect(event: DropdownChangeEvent): void {
+  this.isLoad = true;
+  this.isSingleLoad = true;
+  this.isMultiLoading = true;
+
+  setTimeout(() => {
+    this.selectedPlot = event.value;
+
     this.isLoad = false;
     this.isSingleLoad = false;
-    this.isMultiLoading = false
-    }, 100);
-  }
+    this.isMultiLoading = false;
+  }, 100);
+}
 
 singleStationchange(){
   const selectedStationn = this.stations.filter(item=> item.name == this.singleStation);
@@ -967,7 +967,14 @@ this.selectedMultiStationParam = '';
     }
   }
 
-
+onParam(value: string) {
+  // Force re-triggering of changesingle() even if the same value is selected again
+  this.selectedparam = ''; // temporary reset
+  setTimeout(() => {
+    this.selectedparam = value;
+    this.changesingle(); // manually call your function
+  });
+}
 
   MultiViewData: singleAxis[][] = [];
 // MultiViewData2:singleAxis[] = [];
@@ -1099,6 +1106,11 @@ this.selectedMultiStationParam = '';
       this.assignScatterAxis(this.selectedScactterX, this.selectedScatterY );
     }, 100);
   }
+  
+  getFilteredParamsForMultix2(): any[] {
+  return this.filteredparams?.filter(p => p.param_name !== this.selectedMultix1Display) || [];
+  }
+
   changetiMulOne() {
 
   this.multiAxis = [];
@@ -1411,6 +1423,13 @@ isScatterYCurrent: boolean = false;
 selectedBinScatterX: string = '';
 selectedBinScatterY: string = '';
 
+get filteredXParams(): any[] {
+  return this.filteredparams?.filter(p => p.param_name !== this.selectedScatterYDisplay) || [];
+}
+
+getFilteredScatterYParams(): any[] {
+  return this.filteredparams?.filter(p => p.param_name !== this.selectedScactterXDisplay) || [];
+}
 
 onScatterChange() {
   this.scatterAxis = [];

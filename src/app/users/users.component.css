@@ -250,6 +250,7 @@ nav button.active {
 .tooltip-icon:hover .tooltip-text2 {
   visibility: visible;
   opacity: 1;
+  
 }
  
 /* .tooltip-text::after
@@ -1005,8 +1006,9 @@ background-color: #f1f5f9 !important;
   position: fixed;
   color: red;
   font-size: 0.85rem;
-  margin-top: 5%;
-  margin-left: 0%;
+  margin: 0;
+  margin-top: 75px;
+  margin-right: 30px;
 }
  
  
@@ -1046,6 +1048,11 @@ background-color: #f1f5f9 !important;
   z-index: 9999;
 }
  
+.tooltip-text2.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
 .tooltip-wrapper:hover .tooltip-text2 {
   visibility: visible;
   opacity: 1;

@@ -66,22 +66,30 @@ export class UsersComponent {
       this.passwordTouched = false;
       this.usernameTouched = false;
       this.emailTouched = false;
+      this.usernameTaken = false;
+      this.emailTaken = false;
     } if (tab === 'rolesDesignations') {
       this.resetForm();
       this.passwordTouched = false;
       this.usernameTouched = false;
-      this.emailTouched = false;
+      this.emailTouched = false;      
+      this.usernameTaken = false;
+      this.emailTaken = false;
     } if (tab === 'userLog') {
       this.resetForm();
       this.resetRoleForm();
       this.passwordTouched = false;
       this.usernameTouched = false;
-      this.emailTouched = false;
+      this.emailTouched = false;      
+      this.usernameTaken = false;
+      this.emailTaken = false;
     } if (tab === 'addEditUser') {
       this.resetRoleForm();
       this.passwordTouched = false;
       this.usernameTouched = false;
-      this.emailTouched = false;
+      this.emailTouched = false;      
+      this.usernameTaken = false;
+      this.emailTaken = false;
     }
  
     console.log(tab, this.activeTab);
@@ -171,6 +179,9 @@ export class UsersComponent {
  
   ngOnInit(): void {
  
+    window.addEventListener('scroll', this.closeTooltipOnInteraction, true);
+    document.addEventListener('click', this.closeTooltipOnInteraction, true);
+
     this.loadRoles();
     this.loadUsers();
     this.loadDesignations();
@@ -409,6 +420,15 @@ export class UsersComponent {
  
   //****************Roles***************** //
  
+  ngOnDestroy() {
+  window.removeEventListener('scroll', this.closeTooltipOnInteraction, true);
+  document.removeEventListener('click', this.closeTooltipOnInteraction, true);
+}
+
+closeTooltipOnInteraction = () => {
+  this.activeTooltip = null;
+};
+
   roles: Role[] = [];
  
   filteredRoles: any[] = [];
@@ -642,6 +662,20 @@ export class UsersComponent {
     };
  
   }
+
+activeTooltip: string | null = null;
+
+showTooltip(id: string) {
+  this.activeTooltip = id;
+}
+
+hideTooltip(id: string) {
+  if (this.activeTooltip === id) {
+    this.activeTooltip = null;
+  }
+}
+
+
   //****************End*******************//
  
  

@@ -9,6 +9,7 @@ main {
   height: 100vh;
   border-radius: 15px;
   position: relative;
+  color: black;
 }
 
 .map {

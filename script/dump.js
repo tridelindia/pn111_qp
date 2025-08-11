@@ -5,7 +5,7 @@ function randomNum(min, max, decimals = 2) {
   return +(Math.random() * (max - min) + min).toFixed(decimals);
 }
 
-function generateCsvForOneMonth(startDateStr = '2025-04-01T00:00:00Z', outputFile = 'station_data.csv') {
+function generateCsvForOneMonth(startDateStr = '2025-08-01T00:00:00Z', outputFile = 'station_data.csv') {
   const startDate = new Date(startDateStr);
   const endDate = new Date(startDate);
   endDate.setMonth(endDate.getMonth() + 3);
@@ -109,7 +109,7 @@ function generateCsvForOneMonth(startDateStr = '2025-04-01T00:00:00Z', outputFil
 
     const line = [
       id,
-      'Station01',
+      'MX',
       timestampISO,
       datetimeStr,
       battery.toFixed(2),

@@ -64,7 +64,7 @@
                     <div class="column">{{ user.role }}</div>
                     <div class="column">{{ user.designation }}</div>
                     <div class="column">
-                        Time: {{ user.created | date:'dd-MM-yyyy HH:mm:ss':'UTC+8:30' }}
+                        Time: {{ user.created | date:'dd-MM-yyyy HH:mm:ss':'UTC+3:00' }}
                     </div>
                     <div class="column actions">
                         <div class="icon-container">
@@ -292,21 +292,21 @@
                                     </div>
                                   </div> -->
 
-                                <div class="permissions-icons" *ngIf="role.permissions">
-                                    <div class="page-icon-tooltip"
-                                        *ngFor="let entry of objectEntries(role.permissions)">
-                                        <div class="tooltip-wrapper">
-                                            <i class="fa-solid"
-                                                [ngClass]="permissionIcons[entry[0]] || 'fa-circle-question'"></i>
-                                            <div class="tooltip-text2">
-                                                <strong>{{ entry[0] }}</strong><br />
-                                                <ng-container *ngFor="let action of entry[1]">
-                                                    • {{ action }}<br />
-                                                </ng-container>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<div class="permissions-icons" *ngIf="role.permissions">
+  <div class="page-icon-tooltip" *ngFor="let entry of objectEntries(role.permissions)">
+    <div class="tooltip-wrapper"
+         (mouseenter)="showTooltip(role.name + '-' + entry[0])"
+         (mouseleave)="hideTooltip(role.name + '-' + entry[0])">
+      <i class="fa-solid" [ngClass]="permissionIcons[entry[0]] || 'fa-circle-question'"></i>
+      <div class="tooltip-text2" [class.visible]="activeTooltip === (role.name + '-' + entry[0])">
+        <strong>{{ entry[0] }}</strong><br />
+        <ng-container *ngFor="let action of entry[1]">
+          • {{ action }}<br />
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
 
 
                             </div>

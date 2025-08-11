@@ -151,3 +151,11 @@
 {"timestamp":"2025-07-23T09:36:48.345Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-07-24T05:24:35.531Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-07-24T05:40:00.264Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-08-04T10:50:36.651Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-08-04T10:51:34.593Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-08-05T09:00:46.413Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-08-05T09:00:59.187Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-08-05T09:01:17.085Z","userName":"Admin","activity":"Notification data has been updated","userId":1,"statusCode":"N002","filePath":"notification.component.ts/updateNotification"}
+{"timestamp":"2025-08-05T09:01:27.201Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-08-05T09:01:32.574Z","userName":"Admin","activity":"Notification has been deleted","userId":1,"statusCode":"N003","filePath":"notification.component.ts/deleteNotification"}
+{"timestamp":"2025-08-06T09:54:15.979Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
