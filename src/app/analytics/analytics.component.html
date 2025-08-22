@@ -17,9 +17,13 @@
                     </p-dropdown>
                 </div>
             </div>
+            
+           
+
             <app-test-chart id="compare" [plotType]="selectedPlot" [stations]="stations"
                 [selectedStation]="selectedStation" *ngIf="!isLoad" [length]="selectedParams.length"
-                [title]="selectedMultiStationParam" [params]="multiStationData"></app-test-chart>
+                [title]="selectedMultiStationParam" [params]="multiStationData" [aggregationMode]="pickerState"
+                [showMean]="showMean"></app-test-chart>
             <!-- <app-wind-chart *ngIf="isPolar"></app-wind-chart> -->
         </div>
         <div class="isSingle" *ngIf="isSingleView">
@@ -217,7 +221,7 @@
             </div>
             <div class="selectPlot">
                 <p class="tit">Select Station</p>
-                <p-multiselect [options]="stations" [(ngModel)]="selectedStation" name="stationId" optionLabel="name"
+                <p-multiselect [options]="stations" showHeader="false" [(ngModel)]="selectedStation" name="stationId" optionLabel="name"
                     optionValue="stationId" placeholder="Select Stations" class="w-full md:w-56" required
                     [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView"
                     (ngModelChange)="changeMultiStation()">
@@ -330,6 +334,14 @@
                     optionValue="value" (onChange)="onPlotSelect($event)">
                 </p-dropdown>
             </div>
+            <div class="selectPlot" *ngIf="!isSingleView">
+                <p class="tit">Show mean</p>
+                <label class="toggle-switch" style="margin-left: 10px;">
+                    <input type="checkbox" [(ngModel)]="showMean" (change)="changetiMultiStationView('')">
+                    <span class="slider"></span>
+                    <!-- <span class="label">Show mean</span> -->
+                </label>
+            </div>
             <div class="sensors" *ngIf="!isSingleView">
                 <p>Select Sensor Group</p>
                 <div class="split_sensors">
@@ -368,7 +380,7 @@
                 </div>
 
             </div>
-            <button class="Submit_button" (click)="isSingleView?fetchSensors(): isSubmitButton()">Submit</button>
+            
             <div class="sensors" *ngIf="isSingleView">
                 <p>Select Sensor Group</p>
                 <div class="split_sensors">
@@ -408,6 +420,7 @@
                 </div>
 
             </div>
+            <button class="Submit_button" (click)="isSingleView?fetchSensors(): isSubmitButton()">Submit</button>
         </div>
 
         <div class="param_lists" *ngIf="isSelectParams">

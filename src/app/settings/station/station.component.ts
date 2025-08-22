@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LoggingService } from '../../users/service/users/logging.service';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 interface BuoyDetails{
@@ -53,7 +54,7 @@ interface AddBuoyDetails{
 @Component({
     selector: 'app-station',
     standalone:true,
-    imports: [CommonModule, HttpClientModule, FormsModule, ButtonModule],
+    imports: [CommonModule, HttpClientModule, FormsModule, ButtonModule, TooltipModule],
     templateUrl: './station.component.html',
     styleUrl: './station.component.css',
     providers: [LoggingService]

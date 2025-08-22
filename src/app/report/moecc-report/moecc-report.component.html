@@ -1,13 +1,9 @@
 <div class="report-container">
-    <div class="topcontent">
-        <!-- <h1>Reports</h1> -->
-        <h1>{{ selectedBuoy.station_name }}</h1>
-        <div class="mecc_box">
-            <p-toggleButton [(ngModel)]="checked" onLabel = "MoECC" offLabel = "Report"></p-toggleButton>
-        </div>
-    </div>
+    <!-- <div class="topcontent">
+        <h1>{{ selectedBuoysLabel || 'No stations selected' }}</h1>
+    </div> -->
 
-<ng-container *ngIf="checked; else meccContent">
+
     <div class="tablecontainer">
         <p-table #dt [value]="sensorData" [columns]="selectedColumns" [loading]="loading" paginator="true" [rows]="10"
             [rowsPerPageOptions]="[10,15,20]" [scrollable]="true" [resizableColumns]="true" columnResizeMode="expand"
@@ -41,7 +37,7 @@
 
                         <div class="filter">
                             <p-multiselect display="chip" [options]="dynaColumns" optionLabel="header"
-                                [(ngModel)]="selectedColumns" placeholder="Select Columns" [maxSelectedLabels]="7"
+                                [(ngModel)]="selectedColumns" placeholder="Select Columns" [maxSelectedLabels]="5"
                                 showHeader="true" selectedItemsLabel="{0} Columns selected" [filter]="true" />
                         </div>
                     </div>
@@ -71,19 +67,29 @@
 
                         <div class="importExport">
 
-                            <p-select [options]="alpha" [(ngModel)]="selectedBuoy" optionLabel="station_name"
-                                    placeholder="Select Station" class="w-full md:w-56"
-                                    (onChange)="fetchDataByDate2()" />
- 
-
-                            <!-- <p-multiselect [options]="alpha" [(ngModel)]="selectedBuoys" optionLabel="station_name"
+                            <p-multiselect [options]="alpha" [(ngModel)]="selectedBuoys" optionLabel="station_name"
                                 placeholder="Select Stations" class="w-full md:w-56" (onChange)="fetchDataByDate2()"
-                                display="chip" [maxSelectedLabels]="3" showHeader="true" 
-                                selectedItemsLabel="{0} Stations selected" [filter]="true" /> -->
+                                display="chip" [maxSelectedLabels]="6" showHeader="false" 
+                                selectedItemsLabel="{0}" [filter]="true" />
 
                             <p-dropdown class="export" [options]="exportOptions" [(ngModel)]="selectedExportOption"
                                 placeholder="Export" (onChange)="onExportOptionSelect($event, dt)">
                             </p-dropdown>
+
+                            <div class="moecc">
+                              <p-button
+                              *ngIf="this.is_meteorology"
+                              label="Meteorology"
+                              (onClick)="openMoecc()"
+                              />
+                            </div>
+                            <div class = "moecc">
+                              <p-button
+                              *ngIf="this.is_meteorology"
+                              label="Water Quality"
+                              (onClick)="openStationReport()"
+                            />
+                            </div>
 
                         </div>
 
@@ -162,6 +168,233 @@
         </p-table>
     </div>
 
+    <p-dialog
+    [(visible)]="moeccVisible"
+    [modal]="true"
+    [style]="{ width: '900px' }"
+    header="Meteorology Report"
+  >
+    <h3 style="text-align: center">Station: {{ selectedBuoy.station_name }}</h3>
+    <ng-template pTemplate="header">
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          width: 100%;
+          justify-content: space-between;
+        "
+      >
+        <div>Meteorology Report</div>
+        <div style="display: flex; align-items: center; gap: 8px">
+          <label style="font-size: 12px">Hour interval:</label>
+          <p-dropdown
+            [options]="hourIntervalOptions"
+            [(ngModel)]="selectedHourInterval"
+            optionLabel="label"
+            optionValue="value"
+            [style]="{ width: '120px' }"
+            (onChange)="onHourIntervalChange()"
+          ></p-dropdown>
+          <p-button
+            label="Download PDF"
+            (onClick)="downloadMoecc()"
+            severity="danger"
+            [loading]="isDownloading"
+            [disabled]="isDownloading"
+          />
+        </div>
+      </div>
+    </ng-template>
+    <div *ngIf="selectedRowData" style="margin-bottom: 10px; font-size: 12px">
+      <strong>Row data:</strong>
+      {{ selectedRowData | json }}
+    </div>
+    <div #moeccWrapper class="moecc-wrapper">
+      <div class="moecc-title">
+        Meteorology Report - {{ selectedBuoy.station_name }}
+      </div>
+      <div
+        #moeccContent
+        class="moecc-grid"
+        [ngStyle]="{
+          'grid-template-columns':
+            '140px ' + '1fr '.repeat((moeccHours?.length || 0) * 3).trim()
+        }"
+      >
+        <div class="moecc-head grid-date">Date</div>
+        <div
+          class="moecc-head grid-ws"
+          [style.grid-column]="'span ' + (moeccHours?.length || 0)"
+        >
+          Wind speed
+          {{
+            getUnitByField("wind_speed")
+              ? "(" + getUnitByField("wind_speed") + ")"
+              : ""
+          }}
+        </div>
+        <div
+          class="moecc-head grid-wd"
+          [style.grid-column]="'span ' + (moeccHours?.length || 0)"
+        >
+          Wind direction
+        </div>
+        <div
+          class="moecc-head grid-tp"
+          [style.grid-column]="'span ' + (moeccHours?.length || 0)"
+        >
+          Temperature
+          {{
+            getUnitByField("temperature_deg")
+              ? "(" + getUnitByField("temperature_deg") + ")"
+              : ""
+          }}
+        </div>
+        <div class="moecc-sub"></div>
+        <ng-container *ngFor="let h of moeccHours">
+          <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+        </ng-container>
+        <ng-container *ngFor="let h of moeccHours">
+          <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+        </ng-container>
+        <ng-container *ngFor="let h of moeccHours">
+          <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+        </ng-container>
+ 
+        <ng-container *ngFor="let r of moeccRows">
+          <div class="moecc-cell date">{{ r.dateLabel }}</div>
+          <ng-container *ngFor="let h of moeccHours">
+            <div
+              class="moecc-cell"
+              [style.background]="getWindBg(r.wind_speed?.[h])"
+            >
+              {{ r.wind_speed?.[h] }}
+            </div>
+          </ng-container>
+ 
+          <ng-container *ngFor="let h of moeccHours">
+            <div class="moecc-cell center">
+              <i
+                class="fas fa-location-arrow"
+                [style.transform]="getArrowRotation(r.wind_direction?.[h])"
+              ></i>
+            </div>
+          </ng-container>
+ 
+          <ng-container *ngFor="let h of moeccHours">
+            <div
+              class="moecc-cell"
+              [style.background]="getTempBg(r.temperature?.[h])"
+            >
+              {{ r.temperature?.[h] }}
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </p-dialog>
+ 
+  <!-- Station-wide WQ Report Modal -->
+  <p-dialog
+    [(visible)]="stationReportVisible"
+    [modal]="true"
+    [style]="{ width: '900px' }"
+    header="Water Quality Report"
+  >
+    <ng-template pTemplate="header">
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+        "
+      >
+        <div>
+          Water Quality Report (Date range: {{ fromDate }} → {{ toDate }})
+        </div>
+        <!-- <div>
+          <small
+            >Thresholds: Oil ≤ {{ oilThreshold }}, Chl-a ≤
+            {{ chlThreshold }}</small
+          >
+        </div> -->
+      </div>
+    </ng-template>
+ 
+    <p-table
+      [value]="stationReportRows"
+      [loading]="stationReportLoading"
+      [rows]="10"
+      paginator="true"
+      [rowsPerPageOptions]="[10, 15, 20]"
+      responsiveLayout="scroll"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Guideline / LOR / Monitoring station</th>
+          <th>Date sampled</th>
+          <th>Oil and grease (mg/L)</th>
+          <th>Chlorophyll-α (µg/L)</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+        <ng-container *ngIf="rowIndex === 0">
+          <tr style="background-color: #f3f9ff">
+            <td class="centered-cell">MoECC Permit Conditions</td>
+            <td class="centered-cell">-</td>
+            <td class="centered-cell">&lt;5</td>
+            <td class="centered-cell">-</td>
+          </tr>
+          <tr style="background-color: #f3f9ff">
+            <td class="centered-cell">Qatar Seawater Standards</td>
+            <td class="centered-cell">-</td>
+            <td class="centered-cell">-</td>
+            <td class="centered-cell">&lt;1</td>
+          </tr>
+          <tr style="background-color: #f3f9ff">
+            <td class="centered-cell">Limit of Reporting</td>
+            <td class="centered-cell">-</td>
+            <td class="centered-cell">&lt;0.50</td>
+            <td class="centered-cell">&lt;0.50</td>
+          </tr>
+        </ng-container>
+        <tr>
+          <td class="centered-cell">
+            {{ row.station_name || row.station_id }}
+          </td>
+          <td class="centered-cell">{{ row.date }}</td>
+          <td
+            class="centered-cell"
+            [ngStyle]="{
+              'background-color': getCellBg(row.oil_in_water_avg, 'oil')
+            }"
+          >
+            {{
+              row.oil_in_water_avg === null
+                ? "-"
+                : (row.oil_in_water_avg | number : "1.2-2")
+            }}
+          </td>
+          <td
+            class="centered-cell"
+            [ngStyle]="{
+              'background-color': getCellBg(row.chlorophyll_a_avg, 'chl')
+            }"
+          >
+            {{
+              row.chlorophyll_a_avg === null
+                ? "-"
+                : (row.chlorophyll_a_avg | number : "1.3-3")
+            }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-dialog>
+ 
+
     <div class="quickviewContainer">
         <div class="exportview">
             <h3>Daily</h3>
@@ -188,11 +421,5 @@
             </button>
         </div>
     </div>
-</ng-container>
-
-<ng-template #meccContent>
-    <app-moecc-report></app-moecc-report>
-</ng-template>
-    
 
 </div>

@@ -1,0 +1,597 @@
+.report-container {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    width: 100%;
+    height: 100%;
+    /* border: 1px solid #1ee1ff; */
+    /* box-shadow: 0 4px 4px #1ee1ff; */
+    border-radius: 10px;
+    overflow-y: scroll;
+    /* background-color: #686a6c; */
+  }
+   
+  .topcontent {
+    /* padding: 0px 20px; */
+    display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 20px;
+  margin-right: 20px;
+    /* line-height: 0.1; */
+  }
+
+  .mecc_box{
+    align-content: center;
+  }
+   
+  .tablecontainer {
+    /* height: 100%; */
+    width: 100%;
+    border-radius: 20px;
+    /* margin: 0px 10px 0px 0px; */
+    padding: 0px 20px;
+  }
+   
+   
+  ::ng-deep .p-datatable-header {
+    background-color: white !important;
+    color: #000 !important;
+    border-radius: 20px 20px 0px 0px !important;
+    padding: 20px !important;
+    /* margin: 30px 0px 0px 0px; */
+    border: 1px solid #BDDDFC !important;
+    box-shadow: 0 4px 1px #BDDDFC;
+  }
+   
+  .caption {
+    /* width: 100%; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    /* color: #fff; */
+    /* gap: 10; */
+  }
+   
+  .captionrow {
+    /* width: 100%; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* color: #fff; */
+    /* gap: 10; */
+  }
+   
+  .captionrowinrow {
+    /* width: 50%; */
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    /* justify-content: space-between; */
+  }
+   
+  .captionrowincolumn {
+    display: flex;
+    flex-direction: column;
+  }
+   
+   
+   
+  #search {
+    width: 455px;
+  }
+   
+  #search input[type=search] {
+    background: #ededed url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
+    width: 100%;
+    height: 40px;
+    background-color: #F1F5F9;
+    padding-left: 30px;
+    border: 2px solid #ccc;
+    border-radius: 40px;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 10px;
+  }
+   
+  #search input[type=search]:hover {
+    background-color: #fff;
+  }
+   
+  #search input[type=search]:focus {
+    border-color: var(--highlight-color) !important;
+  }
+   
+  ::ng-deep .highlight {
+    background-color: yellow;
+    color: red;
+    font-weight: bold;
+  }
+   
+  ::ng-deep .highlight-row {
+    background-color: yellow !important;
+    color: red;
+    font-weight: bold;
+  }
+   
+  .centered-cell {
+    text-align: center;
+    vertical-align: middle;
+  }
+   
+   
+   
+  .pselect p-selectbutton {
+    /* width: 500px; */
+    height: 40px !important;
+    border-radius: 15px !important;
+    background-color: white !important;
+    color: black !important;
+    border: solid 1px #ddd !important;
+  }
+   
+   
+  .date-range-selector p-selectbutton {
+    margin-bottom: 10px;
+    height: 40px;
+    /* width: 455px; */
+  }
+   
+  .filter p-multiselect {
+    width: 100%;
+    min-width: 595px;
+    height: 40px;
+  }
+   
+  .date-picker {
+    display: flex;
+    width: 364px;
+    height: 40px;
+    background-color: #F1F5F9;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+  }
+   
+  ::ng-deep .custom-date-input .p-datepicker-input {
+    width: 220px !important;
+  }
+   
+   
+   
+   
+   
+   
+  .importExport {
+    /* margin-top: 5px; */
+    width: 36.5%;
+    height: 40px;
+    display: flex;
+    justify-content: end;
+    gap: 8px;
+    /* background: #F1F5F9; */
+    padding: 5px;
+    border-radius: 8px;
+    /* justify-content: space-between; */
+    align-items: center;
+  }
+
+  .importExport p-multiselect {
+    width: 100%;
+    min-width: 148px;
+    height: 40px;
+  }
+
+  /* ::ng-deep .p-togglebutton-checked .p-togglebutton-content {
+    background: var(--highlight-color) !important;
+    box-shadow: var(--highlight-color-shadow) !important;
+} */
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+  /* Apply styles to PrimeNG table components using ::ng-deep */
+  ::ng-deep .p-datatable-thead th {
+    background-color: white !important;
+    color: rgba(0, 0, 0, 0.674) !important;
+    border: 1px solid #BDDDFC;
+    box-shadow: 0 2px 1px #BDDDFC;
+    text-align: left;
+   
+  }
+   
+  ::ng-deep .p-datatable-tbody td {
+    /* background-color: white !important; */
+    /* Black background for rows */
+    color: black !important;
+    /* White text */
+    border-bottom: none;
+    /* Light grey border for table rows */
+    text-align: center;
+  }
+   
+   
+   
+   
+  /* Paginator Styling */
+  ::ng-deep .p-paginator {
+    /* background-color: white !important; */
+    /* Black background for paginator */
+    color: black !important;
+    /* White text for paginator */
+    border-color: #BDDDFC;
+    box-shadow: 0 4px 1px #BDDDFC;
+    border-radius: 0px 0px 20px 20px !important;
+    /* padding: 30px 20px 40px 20px; */
+    /* margin: 0px 0px 30px 0px ; */
+  }
+   
+  /* Pagination Buttons */
+  ::ng-deep .p-paginator .p-paginator-first,
+  ::ng-deep .p-paginator .p-paginator-prev,
+  ::ng-deep .p-paginator .p-paginator-next,
+  ::ng-deep .p-paginator .p-paginator-last {
+    background-color: #F1F5F9 !important;
+   
+    color: #000 !important;
+    margin: 2px;
+  }
+   
+  /* ::ng-deep .p-paginator .p-paginator-pages .p-highlight {
+    background-color: white !important;
+    color: black !important;
+  } */
+   
+  /* Table */
+   
+   
+   
+   
+  /*Common CSS  */
+  /* button */
+   
+   
+   
+  .quickviewContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    /* height: 400px; */
+    width: 100%;
+    /* background-color: #007bff; */
+    /* border-radius: 20px; */
+    /* margin: 0px 50px 0px 0px; */
+    padding: 20px 20px;
+    line-height: 0.5;
+    margin-bottom: 30px;
+  }
+   
+  .exportview {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center;
+    justify-content: center; */
+    border-radius: 20px;
+    width: 32%;
+    padding: 20px;
+    background-color: white;
+    color: #000;
+    position: relative;
+    margin-bottom: 20px;
+  }
+   
+  .exportviewico {
+    position: absolute;
+    right: 5%;
+    top: 10%;
+    width: 40px;
+    height: 40px;
+    border-radius: 25%;
+    background-color: #BDDDFC;
+    color: #3D668F;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+   
+  .exportview button {
+    border-radius: 20px;
+    padding: 10px;
+    cursor: pointer;
+  }
+   
+   
+   
+  ::ng-deep .p-multiselect:not(.p-disable).p-focus {
+    border-color: var(--highlight-color) !important;
+  }
+   
+  ::ng-deep .p-inputtext:enabled:focus {
+    border: 1px solid var(--highlight-color) !important;
+  }
+   
+  ::ng-deep .p-multiselect {
+    width: 100%;
+    /* font-size: 14px; */
+    cursor: pointer;
+    /* border-radius: 15px !important; */
+    border: 1px solid #ddd !important;
+    /* padding: 5px; */
+    /* background-color: #ffffff; */
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(168, 168, 168, 0.1);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+  }
+   
+  ::ng-deep .p-multiselect-custom.p-multiselect:hover {
+    border: 1px solid var(--highlight-color);
+    box-shadow: 0px 4px 10px var(--highlight-color-shadow);
+  }
+   
+  ::ng-deep .p-multiselect.p-multiselect:focus {
+    border: 1px solid var(--highlight-color);
+    box-shadow: 0px 4px 10px var(--highlight-color-shadow);
+    transform: scale(1.02);
+  }
+   
+  ::ng-deep .p-multiselect .p-multiselect-label {
+    max-height: 65px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding-right: 24px;
+    color: black;
+    /* space for dropdown icon */
+  }
+   
+  /* Dropdown panel */
+  ::ng-deep .p-multiselect-panel {
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 35px !important;
+    z-index: 1000 !important;
+    transition: all 0.3s ease-in-out;
+  }
+   
+  /* Each dropdown option */
+  ::ng-deep .p-multiselect-item {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: white;
+  }
+   
+  ::ng-deep .p-multiselect-overlay {
+    background: white !important;
+    border-radius: 15px !important;
+    border: 1px solid #ddd !important;
+  }
+   
+  ::ng-deep .p-multiselect-option {
+    color: black !important;
+  }
+   
+  /* ::ng-deep .p-inputtext {
+    color: black !important;
+    background-color: white !important;
+    border-radius: 15px !important;
+    border: 1px solid #ddd !important;
+  } */
+   
+  ::ng-deep .p-multiselect-option:not(.p-multiselect-option-selected):not(.p-disabled).p-focus {
+    background: #f1f5f9 !important;
+  }
+   
+  ::ng-deep .p-multiselect-option.p-multiselect-option-selected.p-focus {
+    background: var(--highlight-color-shadow) !important;
+  }
+   
+  ::ng-deep .p-multiselect-option.p-multiselect-option-selected {
+    background: var(--highlight-color-shadow) !important;
+  }
+   
+  ::ng-deep .p-checkbox-input {
+    border-radius: 15px !important;
+    background-color: #f1f5f9 !important;
+  }
+   
+  ::ng-deep .p-checkbox-box {
+    background-color: white !important;
+    border: 1px solid #ddd !important;
+  }
+   
+  ::ng-deep .p-checkbox-checked .p-checkbox-box {
+    border-color: var(--highlight-color) !important;
+    background-color: var(--highlight-color) !important;
+  }
+   
+  ::ng-deep .p-chip {
+    background-color: var(--highlight-color) !important;
+  }
+   
+  ::ng-deep .p-multiselect .p-multiselect-overlay::-webkit-scrollbar {
+    height: 0px !important;
+    width: 0px !important;
+  }
+   
+  ::ng-deep .p-dialog {
+    background-color: white !important;
+    color: black !important;
+    border-radius: 15px !important;
+  }
+   
+  ::ng-deep .p-select {
+    /* height: 40px !important; */
+    /* margin-top: 20px !important; */
+    /* border-radius: 15px !important; */
+    background-color: white !important;
+    color: black !important;
+    border: solid 1px #ddd !important;
+  }
+   
+  ::ng-deep .p-select-label {
+    color: black !important;
+  }
+   
+  ::ng-deep .p-select-overlay {
+    background-color: white !important;
+    /* width: 105px; */
+    border-radius: 15px;
+    border: solid 1px #ddd;
+  }
+   
+  ::ng-deep .p-select-list {
+    background-color: white !important;
+    /* width: 105px; */
+    border-radius: 15px;
+    border: solid 1px #ddd;
+  }
+   
+  ::ng-deep .p-select-option {
+    color: black !important;
+  }
+   
+  ::ng-deep .p-select-option.p-select-option-selected.p-focus {
+    background-color: var(--highlight-color-shadow) !important;
+    border-radius: 15px !important;
+  }
+   
+  ::ng-deep .p-select-option.p-select-option-selected {
+    background-color: var(--highlight-color-shadow) !important;
+    border-radius: 15px !important;
+  }
+   
+  ::ng-deep .p-select-option:not(.p-select-option-selected):not(.p-disabled).p-focus {
+    background-color: white !important;
+    border-radius: 15px !important;
+  }
+   
+  ::ng-deep .p-card {
+    background: white !important;
+    border-radius: 15px !important;
+  }
+   
+  ::ng-deep .p-datatable-tbody>tr>td {
+    /* background: white !important; */
+    border-color: #e2e8f0 !important;
+    color: black !important;
+  }
+   
+  ::ng-deep .p-datatable-thead>tr>th {
+    background: white !important;
+    border-color: #e2e8f0 !important;
+    color: black !important;
+  }
+   
+   
+   
+  ::ng-deep .p-datepicker-panel {
+    background: var(--highlight-color) !important;
+    border: 1px solid var(--highlight-color-shadow) !important;
+    /* color: var(--text-color) !important; */
+  }
+   
+  ::ng-deep .p-datepicker-header {
+    background: var(--highlight-color) !important;
+  }
+   
+  ::ng-deep .p-datepicker-day-selected {
+    background: var(--highlight-color-shadow) !important;
+  }
+   
+  ::ng-deep .p-button-sm.p-button-icon-only.p-button-rounded svg {
+    /* fill: white !important; */
+    color: white !important;
+  }
+   
+  ::ng-deep .p-datepicker-year-selected {
+    background: var(--highlight-color-shadow) !important;
+  }
+   
+  ::ng-deep .p-button-label {
+    font-weight: normal;
+    transition: 0.3s;
+  }
+   
+  ::ng-deep .p-button-label:hover {
+    font-weight: bold;
+  }
+   
+   
+  ::ng-deep .p-select-list {
+    background-color: var(--highlight-color-shadow) !important;
+    /* border-radius: 15px; */
+    border: solid 1px #ddd;
+  }
+   
+
+
+  /* MOECC modal grid */
+.moecc-wrapper {
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow-x: auto; /* horizontal scroll if too wide */
+}
+ 
+.moecc-title {
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+ 
+.moecc-grid {
+  display: grid;
+  grid-template-columns: 140px repeat(12, 1fr);
+  gap: 2px;
+  align-items: stretch;
+}
+ 
+.moecc-head {
+  font-weight: bold;
+  text-align: center;
+  padding: 6px 4px;
+  background: #f1f5f9;
+}
+ 
+.moecc-sub {
+  text-align: center;
+  padding: 6px 4px;
+  background: #fafafa;
+}
+ 
+.moecc-cell {
+  padding: 8px 6px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+}
+ 
+.moecc-cell.date {
+  font-weight: 600;
+}
+ 
+.moecc-cell.center i {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+::ng-deep .moecc .p-button{
+width: 155px !important;
+background-color: white !important;
+/* border-color: var(--highlight-color-shadow) !important; */
+border: 1px solid #ccc !important;
+color: black !important;
+}
+ 

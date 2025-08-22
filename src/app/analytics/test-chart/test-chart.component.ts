@@ -1,6 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import * as echarts from 'echarts';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
+import dayjs from 'dayjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import groupBy from 'lodash/groupBy';
+import { GlobalDataService } from '../../global-data/global-data.component';
 
 interface Station{
   stationId: string; name: string;
@@ -8,7 +13,7 @@ interface Station{
 @Component({
   selector: 'app-test-chart',
   standalone: true,
-  imports: [NgxEchartsModule],
+  imports: [NgxEchartsModule, CommonModule, FormsModule],
   templateUrl: './test-chart.component.html',
   styleUrls: ['./test-chart.component.css'],
   providers: [
@@ -18,7 +23,7 @@ interface Station{
     }
   ]
 })
-export class TestChartComponent implements OnInit {
+export class TestChartComponent implements OnInit, OnChanges {
   @Input() id!: string;
   @Input() plotType: string = 'line';
   @Input() length!: number;
@@ -30,15 +35,38 @@ export class TestChartComponent implements OnInit {
     values: { [key: string]: string[] };
     datetime: string[];
   };
+  @Input() aggregationMode: 'date' | 'week' | 'month' | 'year' = 'date';
 
+
+  @Input() showMean: boolean = false;
   chartOption: any;
   series: any[] = [];
+  names:string[]=[];
+
+
+  constructor(private data:GlobalDataService){}
 
   ngOnInit(): void {
+    console.log('sensorrrrr config',this.data.SensorConfigs);
     this.generateSeries();
     console.log(this.selectedStation);
   }
-names:string[]=[];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes['showMean'] ||
+      changes['params'] ||
+      changes['selectedStation'] ||
+      changes['aggregationMode'] ||
+      changes['plotType']
+    ) {
+      // Regenerate series whenever key inputs change
+      this.generateSeries();
+    }
+  }
+
+  toggleMean() { this.generateSeries(); }
+
   generateSeries(): void {
   this.names = this.selectedStation.map(id => {
   const match = this.stations.find(station => station.stationId === id);
@@ -49,15 +77,26 @@ names:string[]=[];
     
     const legendNames = this.names;
 
+    // Resolve thresholds for current parameter from global SensorConfigs
+    const normalizedParam = (this.params?.param_name || '').toLowerCase();
+    const thresholds = this.getThresholdsForParam(normalizedParam);
+
     keys.forEach((key, index) => {
       const color = this.getColor(index);
       const valueArray = this.params.values[key];
 
       if (!valueArray || valueArray.length === 0) return;
 
-      const data = this.params.datetime.map((dt, i) => ({
-        value: [dt, +valueArray[i] || null]  // Ensure numeric or null
-      }));
+      let data: { value: [string, number | null] }[] = this.params.datetime.map(
+  (dt, i) => ({
+    value: [dt, +valueArray[i] || null] as [string, number | null]
+  })
+);
+
+
+       if (this.showMean) {
+        data = this.aggregateData(data);
+      }
 
       console.log("comapre", data)
       this.series.push({
@@ -78,6 +117,64 @@ names:string[]=[];
       });
     });
 
+    
+
+    const thresholdLegend: string[] = [];
+    const thresholdSeries: any[] = [];
+
+    if (thresholds.qns_min != null) {
+      thresholdLegend.push('Qatar Standards Lower');
+      thresholdSeries.push({
+        name: 'Qatar Standards Lower',
+        type: 'line',
+        data: this.params.datetime.map(dt => [dt, thresholds.qns_min as number]),
+        showSymbol: false,
+        symbol: 'circle',
+        symbolSize: 6,
+        itemStyle: { color: 'red' },
+        lineStyle: { color: 'red', type: 'dashed' }
+      });
+    }
+    if (thresholds.qns_max != null) {
+      thresholdLegend.push('Qatar Standards Upper');
+      thresholdSeries.push({
+        name: 'Qatar Standards Upper',
+        type: 'line',
+        data: this.params.datetime.map(dt => [dt, thresholds.qns_max as number]),
+        showSymbol: false,
+        symbol: 'circle',
+        symbolSize: 6,
+        itemStyle: { color: 'red' },
+        lineStyle: { color: 'red', type: 'dashed' }
+      });
+    }
+    if (thresholds.lusail_max != null) {
+      thresholdLegend.push('Lusail Permit Upper');
+      thresholdSeries.push({
+        name: 'Lusail Permit Upper',
+        type: 'line',
+        data: this.params.datetime.map(dt => [dt, thresholds.lusail_max as number]),
+        showSymbol: false,
+        symbol: 'circle',
+        symbolSize: 6,
+        itemStyle: { color: 'purple' },
+        lineStyle: { color: 'purple', type: 'dashed' }
+      });
+    }
+    if (thresholds.lusail_min != null) {
+      thresholdLegend.push('Lusail Permit Lower');
+      thresholdSeries.push({
+        name: 'Lusail Permit Lower',
+        type: 'line',
+        data: this.params.datetime.map(dt => [dt, thresholds.lusail_min as number]),
+        showSymbol: false,
+        symbol: 'circle',
+        symbolSize: 6,
+        itemStyle: { color: 'purple' },
+        lineStyle: { color: 'purple', type: 'dashed' }
+      });
+    }
+
     this.chartOption = {
       title: {
         text: this.params.param_name,
@@ -88,7 +185,10 @@ names:string[]=[];
       },
       legend: {
         top: 30,
-        data: legendNames
+         data: [
+      ...legendNames,
+      ...thresholdLegend
+    ]
       },
       toolbox: {
         feature: { saveAsImage: {} }
@@ -117,7 +217,10 @@ names:string[]=[];
       yAxis: {
         type: 'value'
       },
-      series: this.series
+      series: [
+    ...this.series,
+    ...thresholdSeries
+  ]
     };
   }
 
@@ -149,4 +252,58 @@ names:string[]=[];
     ];
     return colors[index % colors.length];
   }
+
+
+  aggregateData(
+  data: { value: (string | number | null)[] }[]
+) {
+  let grouped: { [key: string]: typeof data } = {};
+
+  if (this.aggregationMode === 'week') {
+    grouped = groupBy(data, (d) =>
+      dayjs(d.value[0]).startOf('week').format("YYYY-[W]WW")
+    );
+  } 
+  else if (this.aggregationMode === 'month') {
+    grouped = groupBy(data, (d) =>
+      dayjs(d.value[0]).startOf('month').format("YYYY-MM")
+    );
+  } 
+  else if (this.aggregationMode === 'year') {
+    grouped = groupBy(data, (d) =>
+      dayjs(d.value[0]).startOf('year').format("YYYY")
+    );
+  } 
+  else { // default: day
+    grouped = groupBy(data, (d) =>
+      dayjs(d.value[0]).startOf('day').format("YYYY-MM-DD")
+    );
+  }
+
+  return Object.keys(grouped).map((k) => {
+    const group = grouped[k];
+    const avg =
+      group.reduce((sum, d) => sum + (d.value[1] as number ?? 0), 0) / group.length;
+
+    // keep correct key type (time string + avg)
+    return { value: [k, avg] as [string, number] };
+  });
+}
+
+
+  private getThresholdsForParam(paramLower: string): { qns_min: number | null; qns_max: number | null; lusail_max: number | null; lusail_min: number | null } {
+    const cfg: any = (this.data.SensorConfigs || []).find((c: any) => (c?.param_name || '').toLowerCase() === paramLower);
+    const parseNum = (v: any): number | null => {
+      const n = typeof v === 'string' ? parseFloat(v) : v;
+      return Number.isFinite(n) ? n as number : null;
+    };
+    return {
+      qns_min: parseNum(cfg?.qns_min),
+      qns_max: parseNum(cfg?.qns_max),
+      lusail_max: parseNum(cfg?.lusail_max),
+      lusail_min: parseNum(cfg?.lusail_min)
+    };
+  }
+
+
 }

@@ -1,5 +1,5 @@
 const express = require('express')
-const { getStationConfig, getAllSensorData, getAllSensorDatabyStation,getSensorDataByDate, getSensorDataByStationAndDate, getHomeConfig, getMetrologicalData,checkUsername,loginUser,checkEmail, addStation, editStation, insertSensorConfigs, getSensorConfig, updateSensorConfig, fetchDesignation, addDesignation, deleteDesignation, fetchRole, addRole, deleteRole, fetchUser, addUser, updateUser, deleteUser,
+const { getStationConfig, getAllSensorData, getAllSensorDatabyStation,getSensorDataByDate, getSensorDataByStationAndDate, getSensorDataByMultipleStationsAndDate, getHomeConfig, getMetrologicalData,checkUsername,loginUser,checkEmail, addStation, editStation, insertSensorConfigs, getSensorConfig, updateSensorConfig, fetchDesignation, addDesignation, deleteDesignation, fetchRole, addRole, deleteRole, fetchUser, addUser, updateUser, deleteUser,
     getSensorDataForHealth,
     getLastSensorData,
     getAllNotifications,
@@ -22,6 +22,7 @@ router.get('/getAllSensorData', getAllSensorData);
 router.get('/getAllSensorDatabyStation/:stationId', getAllSensorDatabyStation);
 router.get('/getSensorDataByDate', getSensorDataByDate);
 router.get('/getSensorDataByStationAndDate', getSensorDataByStationAndDate) ;
+router.get('/getSensorDataByMultipleStationsAndDate', getSensorDataByMultipleStationsAndDate) ;
 router.get('/getMetrologicalData', getMetrologicalData);
 router.get('/getHomeConfig', getHomeConfig);
 router.post('/addStation', addStation);

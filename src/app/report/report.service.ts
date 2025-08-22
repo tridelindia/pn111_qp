@@ -123,6 +123,17 @@ export class ReportService {
     );
   }
 
+  getSensorDataByMultipleStationsAndDate(
+    stationIds: string[],
+    fromDate: string,
+    toDate: string
+  ): Observable<BuoyMeasurement[]> {
+    const stationIdsParam = stationIds.join(',');
+    return this.http.get<BuoyMeasurement[]>(
+      `${this.apiUrl}getSensorDataByMultipleStationsAndDate?stationIds=${stationIdsParam}&fromDate=${fromDate}&toDate=${toDate}`
+    );
+  }
+
  
  
 

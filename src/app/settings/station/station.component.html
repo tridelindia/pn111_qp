@@ -192,11 +192,11 @@
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Circle</p>
-                            <input type="number" [value]="selectedstation.buoy_warning" readonly>
+                            <input type="number" [value]="selectedstation.buoy_warning" readonly pTooltip="A parameter that covers the area within which the buoy is considered to be in a warning state" tooltipPosition="top">
                         </div>
                         <div class="danger_field">
                             <p>Danger Circle</p>
-                            <input type="number" [value]="selectedstation.buoy_danger" readonly>
+                            <input type="number" [value]="selectedstation.buoy_danger" readonly pTooltip="A parameter that covers the area within which the buoy is considered to be in a danger state" tooltipPosition="top">
                         </div>
                     </div>
                     <!-- <div class="divider"></div> -->
@@ -325,11 +325,11 @@
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Circle</p>
-                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_warning">
+                            <input type="number" value="10" [(ngModel)]="selectedstation!.buoy_warning" pTooltip="A parameter that covers the area within which the buoy is considered to be in a warning state" tooltipPosition="top">
                         </div>
                         <div class="danger_field">
                             <p>Danger Circle</p>
-                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_danger">
+                            <input type="number" value="20" [(ngModel)]="selectedstation!.buoy_danger" pTooltip="A parameter that covers the area within which the buoy is considered to be in a danger state" tooltipPosition="top">
                         </div>
                     </div>
                     <!-- <div class="divider"></div> -->
@@ -418,11 +418,11 @@
                     <div class="threasholds">
                         <div class="warning_field">
                             <p>Warning Circle</p>
-                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_warning">
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_warning" pTooltip="A parameter that covers the area within which the buoy is considered to be in a warning state" tooltipPosition="top">
                         </div>
                         <div class="danger_field">
                             <p>Danger Circle</p>
-                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_danger">
+                            <input style="width: 80%;" type="number" [(ngModel)]="buoy_danger" pTooltip="A parameter that covers the area within which the buoy is considered to be in a danger state" tooltipPosition="top">
                         </div>
                     </div>
                     <h5>Coordinates</h5>

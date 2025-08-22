@@ -82,6 +82,7 @@ export class AnalyticsComponent implements OnInit {
   Buoy: BuoyData[] = [];
 
   isLoad: boolean = false;
+  showMean: boolean = false;
 
   isPolar: boolean = false;
   items = Array.from({ length: 1000 }, (_, i) => `Item #${i}`);
@@ -118,7 +119,9 @@ export class AnalyticsComponent implements OnInit {
     values: { [key: string]: string[] },
     datetime: string[]
   };
-  pickerState: string = 'date';
+  // pickerState: string = 'date';
+  pickerState: 'date' | 'week' | 'month' | 'year' = 'date';
+
 
 
   // bin selection
@@ -140,7 +143,7 @@ export class AnalyticsComponent implements OnInit {
 
   plotOptions = [
   { label: 'Line', value: 'line' },
-  // { label: 'Bar', value: 'bar' }, // optional
+  { label: 'Bar', value: 'bar' }, // optional
   { label: 'Bubble', value: 'scatter' }
 ];
 
@@ -482,10 +485,11 @@ export class AnalyticsComponent implements OnInit {
     return this.pickerState === 'date' ? 'range' : 'single';
   }
 
-  onPickerTap(state: string) {
-    this.pickerState = state;
-    this.selectedDate = null!;
-  }
+onPickerTap(state: 'date' | 'week' | 'month' | 'year') {
+  this.pickerState = state;
+  this.selectedDate = null!;
+}
+
 
   onDatePicked() {
     if (!this.selectedDate) return;

@@ -123,6 +123,48 @@ const getSensorDataByStationAndDate = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+const getSensorDataByMultipleStationsAndDate = async (req, res) => {
+  const { stationIds, fromDate, toDate } = req.query;
+ 
+  if (!stationIds || !fromDate || !toDate) {
+    return res.status(400).json({ error: 'Missing required parameters' });
+  }
+ 
+  const stationIdArray = stationIds.split(',');
+  let allResults = [];
+ 
+  try {
+    for (const stationId of stationIdArray) {
+      const tableName = `tb_buoy_${stationId}_measurements`;
+      
+      try {
+        const result = await pool.query(
+          `SELECT * FROM ${tableName} WHERE timestamp BETWEEN $1 AND $2 ORDER BY id ASC`,
+          [fromDate, toDate]
+        );
+        
+        // Add station_id to each row for identification
+        const rowsWithStationId = result.rows.map(row => ({
+          ...row,
+          station_id: stationId
+        }));
+        
+        allResults = allResults.concat(rowsWithStationId);
+      } catch (tableError) {
+        console.error(`Error fetching data from table ${tableName}:`, tableError.message);
+        // Continue with other tables even if one fails
+      }
+    }
+    
+    // Sort all results by timestamp
+    allResults.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    res.json(allResults.reverse());
+  } catch (error) {
+    console.error('Error fetching data from multiple stations:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
  
  
 const getMetrologicalData = async (req, res) => {
@@ -513,6 +555,11 @@ const insertSensorConfigs = async (req, res) => {
 
 
 
+const toNumberOrNull = (val) => {
+  if (val === "" || val === undefined || val === null) return null;
+  return Number(val);
+};
+ 
 const updateSensorConfig = async (req, res) => {
     const {
         id,
@@ -521,9 +568,14 @@ const updateSensorConfig = async (req, res) => {
         unit,
         warning,
         danger,
-        notification
+        notification,
+        qns_min,
+        qns_max,
+        lusail_min,
+        lusail_max,
+        lor_max
     } = req.body;
-
+ 
     try {
         const updateQuery = `
             UPDATE tb_sensor_config SET
@@ -533,11 +585,16 @@ const updateSensorConfig = async (req, res) => {
                 warning = $4,
                 danger = $5,
                 notification = $6,
+                qns_min = $7,
+                qns_max = $8,
+                lusail_min = $9,
+                lusail_max = $10,
+                lor_max = $11,
                 timestamp = NOW()
-            WHERE id = $7
+            WHERE id = $12
             RETURNING *
         `;
-
+ 
         const values = [
             name,
             param_name,
@@ -545,11 +602,16 @@ const updateSensorConfig = async (req, res) => {
             warning,
             danger,
             notification,
+            toNumberOrNull(qns_min),
+            toNumberOrNull(qns_max),
+            toNumberOrNull(lusail_min),
+            toNumberOrNull(lusail_max),
+            toNumberOrNull(lor_max),
             id
         ];
-
+ 
         const result = await pool.query(updateQuery, values);
-
+ 
         res.json({
             message: "Sensor configuration updated successfully",
             data: result.rows[0]
@@ -559,7 +621,7 @@ const updateSensorConfig = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
+ 
 
 
 
@@ -1891,6 +1953,7 @@ module.exports = {
   getAllSensorDatabyStation,
   getSensorDataByDate,
   getSensorDataByStationAndDate,
+  getSensorDataByMultipleStationsAndDate,
   getMetrologicalData,
   getHomeConfig,
   UpdateHomeConfig,

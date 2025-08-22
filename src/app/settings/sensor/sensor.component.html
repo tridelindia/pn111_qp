@@ -1,140 +1,258 @@
 <div class="sensors_main">
     <div class="sensor_left_section">
-        <div class="sensors">
-            <div class="ocean" [ngClass]="selectedSensor === 'ocean'? 'ocean_selected' : 'ocean'"
-                (click)="onSensorSelect('ocean')">
-                <p>
-                    Oceanography
-                </p>
-            </div>
-            <div class="ocean" [ngClass]="selectedSensor === 'met'? 'ocean_selected' : 'ocean'"
-                (click)="onSensorSelect('met')">
-                <p>Meteorology</p>
-            </div>
-            <div class="ocean" [ngClass]="selectedSensor === 'wat'? 'ocean_selected' : 'ocean'"
-                (click)="onSensorSelect('wat')">
-                <p>Water Quality</p>
-            </div>
-            <div class="ocean" [ngClass]="selectedSensor === 'mic'? 'ocean_selected' : 'ocean'"
-                (click)="onSensorSelect('mic')">
-                <p>Oil in Water</p>
-            </div>
+      <div class="sensors">
+        <div
+          class="ocean"
+          [ngClass]="selectedSensor === 'ocean' ? 'ocean_selected' : 'ocean'"
+          (click)="onSensorSelect('ocean')"
+        >
+          <p>Oceanography</p>
         </div>
-        <div class="sensor_table_container">
-            <div class="sensor_table_header">
-                <table>
-                    <thead>
-                        <tr>
-                            <!-- <th>Id</th> -->
-                            <!-- <th>Sensor</th> -->
-                            <th>Name</th>
-                            <th>Unit</th>
-                            <th>Minimum</th>
-                            <th>Maximum</th>
-
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <div class="sensor_table_body">
-                <table>
-                    <tbody>
-                        <tr *ngFor="let item of tableData; let i = index">
-                            <!-- <td>{{ i + 1 }}</td> -->
-                            <!-- <td>{{ item.sensor }}</td> -->
-                            <td *ngIf="item.param_name !=='wave_heading'">
-                                {{ item?.param_name }}
-
-                            </td>
-                            <td *ngIf="item.param_name !=='wave_heading'">{{ item!.unit }}</td>
-                            <td *ngIf="item.param_name !=='wave_heading'">{{ item!.warning !== null ? item!.warning :
-                                '—' }}</td>
-                            <td *ngIf="item.param_name !=='wave_heading'">{{ item!.danger !== null ? item!.danger : '—'
-                                }}</td>
-
-                            <td *ngIf="item.param_name !=='wave_heading'"><i class="fa fa-edit"
-                                    style="color: rgb(109, 109, 245);" (click)="onEdit(item)"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div
+          class="ocean"
+          [ngClass]="selectedSensor === 'met' ? 'ocean_selected' : 'ocean'"
+          (click)="onSensorSelect('met')"
+        >
+          <p>Meteorology</p>
         </div>
+        <div
+          class="ocean"
+          [ngClass]="selectedSensor === 'wat' ? 'ocean_selected' : 'ocean'"
+          (click)="onSensorSelect('wat')"
+        >
+          <p>Water Quality</p>
+        </div>
+        <div
+          class="ocean"
+          [ngClass]="selectedSensor === 'mic' ? 'ocean_selected' : 'ocean'"
+          (click)="onSensorSelect('mic')"
+        >
+          <p>Oil in Water</p>
+        </div>
+      </div>
+      <div class="sensor_table_container">
+        <div class="sensor_table_header">
+          <table>
+            <thead>
+              <tr>
+                <!-- <th>Id</th> -->
+                <!-- <th>Sensor</th> -->
+                <th>Name</th>
+                <th>Unit</th>
+                <th>Minimum</th>
+                <th>Maximum</th>
+                <th>QNS-Lower</th>
+                <th>QNS-Upper</th>
+                <th>Lusail-Lower</th>
+                <th>Lusail-Upper</th>
+                <th>LOR</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="sensor_table_body">
+          <table>
+            <tbody>
+              <tr *ngFor="let item of tableData; let i = index">
+                <!-- <td>{{ i + 1 }}</td> -->
+                <!-- <td>{{ item.sensor }}</td> -->
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item?.param_name }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.unit }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.warning !== null ? item!.warning : "—" }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.danger !== null ? item!.danger : "—" }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.qns_min !== null ? item!.qns_min : "—" }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.qns_max !== null ? item!.qns_max : "—" }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.lusail_min !== null ? item!.lusail_min : "—" }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.lusail_max !== null ? item!.lusail_max : "—" }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  {{ item!.lor_max !== null ? item!.lor_max : "—" }}
+                </td>
+                <td *ngIf="item.param_name !== 'wave_heading'">
+                  <i
+                    class="fa fa-edit"
+                    style="color: rgb(109, 109, 245)"
+                    (click)="onEdit(item)"
+                  ></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-
+   
     <div class="sensor_right_section">
-        <!-- Right section content -->
-
-        <h4>Edit Parameter</h4>
-
-        <p style="font-weight: 500;">{{editData.param_name}}</p>
-        <!-- <input type="text" placeholder="Enter name"> -->
-
-        <p>Unit</p>
-        <input *ngIf="!isMulti" type="text" placeholder="Enter unit" [(ngModel)]="editData.unit">
-
-        <div class="multi" *ngIf="isMulti">
-            <div class="item" [ngClass]="selectedUnit === i ? 'item_active':'item'" *ngFor="let i of multiData"
-                (click)="onUnitSelect(i)">
-                <p>{{i}}</p>
-            </div>
+      <!-- Right section content -->
+   
+      <h4>Edit Parameter</h4>
+   
+      <p style="font-weight: 500">{{ editData.param_name }}</p>
+      <!-- <input type="text" placeholder="Enter name"> -->
+   
+      <p>Unit</p>
+      <input
+        *ngIf="!isMulti"
+        type="text"
+        placeholder="Enter unit"
+        [(ngModel)]="editData.unit"
+      />
+   
+      <div class="multi" *ngIf="isMulti">
+        <div
+          class="item"
+          [ngClass]="selectedUnit === i ? 'item_active' : 'item'"
+          *ngFor="let i of multiData"
+          (click)="onUnitSelect(i)"
+        >
+          <p>{{ i }}</p>
         </div>
-        <p>Minimum</p>
-        <input type="text" placeholder="Enter Minimum" [(ngModel)]="editData.warning">
-        <p>Maximum</p>
-        <input type="text" placeholder="Enter Maximum" [(ngModel)]="editData.danger">
-        <p *ngIf="editData.param_name.includes('current')">Bin 1</p>
-        <input *ngIf="editData.param_name.includes('current')" type="text" name="" id="" [(ngModel)]="bin1">
-        <p *ngIf="editData.param_name.includes('current')">Bin 2</p>
-        <input *ngIf="editData.param_name.includes('current')" type="text" name="" id="" [(ngModel)]="bin2">
-        <p *ngIf="editData.param_name.includes('current')">Bin 3</p>
-        <input *ngIf="editData.param_name.includes('current')" type="text" name="" id="" [(ngModel)]="bin3">
-        <p *ngIf="editData.param_name.includes('current')">Bin 4</p>
-        <input *ngIf="editData.param_name.includes('current')" type="text" name="" id="" [(ngModel)]="bin4">
-        <!-- <div class="but"> -->
-        <!-- <p>Notification</p> -->
-        <!-- <div class="toggle_pint">
-            <p></p>
-            <div class="toggle" [ngClass]="{'toggledms': mainToggle}"
-                [ngStyle]="{'background-color': mainToggle ? 'blue' : 'rgb(224, 223, 223)'}" (click)="toggle()">
-                <div class="t_button"></div>
-            </div>
-            <p style="margin-left: -5px;">{{mainToggle ? 'Enabled':'Disabled'}}</p>
-        </div> -->
-        <div class="but">
-
-            <button class="edit_params" (click)="Update()">Update</button>
+      </div>
+      <p>Minimum</p>
+      <input
+        type="text"
+        placeholder="Enter Minimum"
+        [(ngModel)]="editData.warning"
+      />
+      <p>Maximum</p>
+      <input
+        type="text"
+        placeholder="Enter Maximum"
+        [(ngModel)]="editData.danger"
+      />
+      <p>QNS Min</p>
+      <input
+        type="text"
+        placeholder="Enter QNS Min"
+        [(ngModel)]="editData.qns_min"
+      />
+      <p>QNS Max</p>
+      <input
+        type="text"
+        placeholder="Enter QNS Max"
+        [(ngModel)]="editData.qns_max"
+      />
+      <p>LUSAIL Min</p>
+      <input
+        type="text"
+        placeholder="Enter LUSAIL Min"
+        [(ngModel)]="editData.lusail_min"
+      />
+      <p>LUSAIL Max</p>
+      <input
+        type="text"
+        placeholder="Enter LUSAIL Max"
+        [(ngModel)]="editData.lusail_max"
+      />
+      <p>LOR Max</p>
+      <input
+        type="text"
+        placeholder="Enter LOR Max"
+        [(ngModel)]="editData.lor_max"
+      />
+      <p *ngIf="editData.param_name.includes('current')">Bin 1</p>
+      <input
+        *ngIf="editData.param_name.includes('current')"
+        type="text"
+        name=""
+        id=""
+        [(ngModel)]="bin1"
+      />
+      <p *ngIf="editData.param_name.includes('current')">Bin 2</p>
+      <input
+        *ngIf="editData.param_name.includes('current')"
+        type="text"
+        name=""
+        id=""
+        [(ngModel)]="bin2"
+      />
+      <p *ngIf="editData.param_name.includes('current')">Bin 3</p>
+      <input
+        *ngIf="editData.param_name.includes('current')"
+        type="text"
+        name=""
+        id=""
+        [(ngModel)]="bin3"
+      />
+      <p *ngIf="editData.param_name.includes('current')">Bin 4</p>
+      <input
+        *ngIf="editData.param_name.includes('current')"
+        type="text"
+        name=""
+        id=""
+        [(ngModel)]="bin4"
+      />
+      <!-- <div class="but"> -->
+      <!-- <p>Notification</p> -->
+      <!-- <div class="toggle_pint">
+              <p></p>
+              <div class="toggle" [ngClass]="{'toggledms': mainToggle}"
+                  [ngStyle]="{'background-color': mainToggle ? 'blue' : 'rgb(224, 223, 223)'}" (click)="toggle()">
+                  <div class="t_button"></div>
+              </div>
+              <p style="margin-left: -5px;">{{mainToggle ? 'Enabled':'Disabled'}}</p>
+          </div> -->
+      <div class="but">
+        <button class="edit_params" (click)="Update()">Update</button>
+      </div>
+      <!-- <div class="current_settings">
+              <h4>Edit Parameter</h4>
+              <p>Bin 1</p>
+              <input type="text" name="" id="" [(ngModel)]="Bins.bin1">
+              <p>Bin 2</p>
+              <input type="text" name="" id="" [(ngModel)]="Bins.bin2">
+              <p>Bin 3</p>
+              <input type="text" name="" id="" [(ngModel)]="Bins.bin3">
+              <p>Bin 4</p>
+              <input type="text" name="" id="" [(ngModel)]="Bins.bin4">
+              <div class="but">
+   
+                  <button (click)="Update()">Update</button>
+              </div>
+          </div> -->
+   
+      <h4>Select Parameters for Each Station</h4>
+      <div class="station-section">
+        <div
+          class="station-card"
+          *ngFor="let station of stations; let idx = index"
+        >
+          <h6>{{ station.name }}</h6>
+          <p-multiSelect
+            [options]="paramNames2"
+            [(ngModel)]="station.selectedParameters"
+            [filter]="false"
+            showHeader="false"
+            defaultLabel="Select Params"
+            [maxSelectedLabels]="2"
+            (onChange)="onParamChange(station)"
+          >
+          </p-multiSelect>
+          <p *ngIf="station.limitReached" class="limit-warning">
+            Max 5 parameters allowed
+          </p>
+          <button class="params_button" (click)="updateHomeConfig(station)">
+            Update
+          </button>
         </div>
-        <!-- <div class="current_settings">
-            <h4>Edit Parameter</h4>
-            <p>Bin 1</p>
-            <input type="text" name="" id="" [(ngModel)]="Bins.bin1">
-            <p>Bin 2</p>
-            <input type="text" name="" id="" [(ngModel)]="Bins.bin2">
-            <p>Bin 3</p>
-            <input type="text" name="" id="" [(ngModel)]="Bins.bin3">
-            <p>Bin 4</p>
-            <input type="text" name="" id="" [(ngModel)]="Bins.bin4">
-            <div class="but">
-
-                <button (click)="Update()">Update</button>
-            </div>
-        </div> -->
-
-        <h4>Select Parameters for Each Station</h4>
-        <div class="station-section">
-            <div class="station-card" *ngFor="let station of stations; let idx = index">
-                <h6>{{ station.name }}</h6>
-                <p-multiSelect [options]="paramNames2" [(ngModel)]="station.selectedParameters" [filter]="false"
-                    showHeader="false" defaultLabel="Select Params" [maxSelectedLabels]="2"
-                    (onChange)="onParamChange(station)">
-                </p-multiSelect>
-                <p *ngIf="station.limitReached" class="limit-warning">Max 5 parameters allowed</p>
-                <button class="params_button" (click)="updateHomeConfig(station)">Update</button>
-            </div>
-        </div>
-
-
+      </div>
     </div>
-</div>
+  </div>
+   
+   

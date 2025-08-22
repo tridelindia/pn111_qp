@@ -17,7 +17,13 @@ interface Sensors {
   warning: string;
   danger: string;
   notification: string;
+  qns_min: string;
+  qns_max: string;
+  lusail_min: string;
+  lusail_max: string;
+  lor_max: string;
 }
+ 
 @Component({
   selector: 'app-sensor',
   imports: [
@@ -26,12 +32,12 @@ interface Sensors {
     FormsModule,
     HttpClientModule,
     MultiSelectModule,
-    ToastrModule
+    ToastrModule,
   ],
   standalone: true,
   templateUrl: './sensor.component.html',
   styleUrl: './sensor.component.css',
-  providers: [LoggingService]
+  providers: [LoggingService],
 })
 export class SensorComponent implements OnInit {
   selectedSensor: string = 'ocean';
@@ -42,49 +48,48 @@ export class SensorComponent implements OnInit {
   isFirst: number = 1;
   selectedUnit: string = 'µg/L';
   multiData: string[] = [];
-wave_direction: string[] = ['°'];
-mean_wave_direction: string[] = ['°'];
-dominant_time_period_fw: string[] = ['s'];
-havg: string[] = ['m', 'ft'];
-current_direction: string[] = ['°'];
-wind_speed: string[] = ['m/s', 'km/h', 'knots'];
-wind_gust: string[] = ['m/s', 'km/h', 'knots'];
-visibility: string[] = ['m', 'km', 'NM'];
-turbidity: string[] = ['NTU', 'FNU'];
-conductivity: string[] = ['µS/cm', 'mS/cm'];
-chlorophyll_a: string[] = ['µg/L', 'mg/m³', 'RFU'];
-dissolved_oxygen: string[] = ['mg/L', '%'];
-fluorescein_dye: string[] = ['ppb', 'µg/L'];
-oil_in_water: string[] = ['mg/L', 'ppm', 'ppb'];
-hmax: string[] = ['m', 'ft'];
-rh_percent: string[] = ['%'];
-rain_mm: string[] = ['mm', 'cm'];
-global_radiation: string[] = ['W/m²'];
-tm02: string[] = ['s'];
-wind_direction_deg: string[] = ['°'];
-bp_hpa: string[] = ['hPa', 'mb'];
-temperature_deg: string[] = ['°C', '°F', 'K'];
-pah: string[] = ['µg/L', 'ppb', 'ppm'];
-water_temperature: string[] = ['°C', '°F'];
-tz: string[] = ['s'];
-battery: string[] = ['V', '%'];
-salinity: string[] = ['PSU', 'ppt', 'g/kg'];
-ph: string[] = ['pH'];
-phycoerythrin: string[] = ['µg/L', 'RFU'];
-tzc: string[] = ['s'];
-fourier_coefficient_a1: string[] = ['unitless'];
-current_speed: string[] = ['m/s', 'cm/s', 'knots'];
-wave_height: string[] = ['m', 'ft', 'cm'];
-bt: string[] = ['µg/L', 'ppb'];
-fourier_coefficient_a2: string[] = ['unitless'];
-wave_heading: string[] = ['°'];
-
-
-    bin1!:string;
-    bin2!:string;
-    bin3!:string;
-    bin4!:string;
-
+  wave_direction: string[] = ['°'];
+  mean_wave_direction: string[] = ['°'];
+  dominant_time_period_fw: string[] = ['s'];
+  havg: string[] = ['m', 'ft'];
+  current_direction: string[] = ['°'];
+  wind_speed: string[] = ['m/s', 'km/h', 'knots'];
+  wind_gust: string[] = ['m/s', 'km/h', 'knots'];
+  visibility: string[] = ['m', 'km', 'NM'];
+  turbidity: string[] = ['NTU', 'FNU'];
+  conductivity: string[] = ['µS/cm', 'mS/cm'];
+  chlorophyll_a: string[] = ['µg/L', 'mg/m³', 'RFU'];
+  dissolved_oxygen: string[] = ['mg/L', '%'];
+  fluorescein_dye: string[] = ['ppb', 'µg/L'];
+  oil_in_water: string[] = ['mg/L', 'ppm', 'ppb'];
+  hmax: string[] = ['m', 'ft'];
+  rh_percent: string[] = ['%'];
+  rain_mm: string[] = ['mm', 'cm'];
+  global_radiation: string[] = ['W/m²'];
+  tm02: string[] = ['s'];
+  wind_direction_deg: string[] = ['°'];
+  bp_hpa: string[] = ['hPa', 'mb'];
+  temperature_deg: string[] = ['°C', '°F', 'K'];
+  pah: string[] = ['µg/L', 'ppb', 'ppm'];
+  water_temperature: string[] = ['°C', '°F'];
+  tz: string[] = ['s'];
+  battery: string[] = ['V', '%'];
+  salinity: string[] = ['PSU', 'ppt', 'g/kg'];
+  ph: string[] = ['pH'];
+  phycoerythrin: string[] = ['µg/L', 'RFU'];
+  tzc: string[] = ['s'];
+  fourier_coefficient_a1: string[] = ['unitless'];
+  current_speed: string[] = ['m/s', 'cm/s', 'knots'];
+  wave_height: string[] = ['m', 'ft', 'cm'];
+  bt: string[] = ['µg/L', 'ppb'];
+  fourier_coefficient_a2: string[] = ['unitless'];
+  wave_heading: string[] = ['°'];
+ 
+  bin1!: string;
+  bin2!: string;
+  bin3!: string;
+  bin4!: string;
+ 
   // parameterOptions = [
   //   { name: 'Water Temperature' },
   //   { name: 'pH Level' },
@@ -103,50 +108,50 @@ wave_heading: string[] = ['°'];
   paramNames2: any = [];
  
   stations: any[] = []; // Includes id, name, selectedParameters, limitReached
- unitMap: { [key: string]: string[] } = {
-  wave_direction: ['°'],
-  mean_wave_direction: ['°'],
-  dominant_time_period_fw: ['s'],
-  havg: ['m', 'ft'],
-  current_direction: ['°'],
-  wind_speed: ['m/s', 'km/h', 'knots'],
-  wind_gust: ['m/s', 'km/h', 'knots'],
-  visibility: ['m', 'km', 'NM'],
-  turbidity: ['NTU', 'FNU'],
-  conductivity: ['µS/cm', 'mS/cm'],
-  chlorophyll_a: ['µg/L', 'mg/m³', 'RFU'],
-  dissolved_oxygen: ['mg/L', '%'],
-  fluorescein_dye: ['ppb', 'µg/L'],
-  oil_in_water: ['mg/L', 'ppm', 'ppb'],
-  hmax: ['m', 'ft'],
-  rh_percent: ['%'],
-  rain_mm: ['mm', 'cm'],
-  global_radiation: ['W/m²'],
-  tm02: ['s'],
-  wind_direction_deg: ['°'],
-  bp_hpa: ['hPa', 'mb'],
-  temperature_deg: ['°C', '°F', 'K'],
-  pah: ['µg/L', 'ppb', 'ppm'],
-  water_temperature: ['°C', '°F'],
-  tz: ['s'],
-  battery: ['V', '%'],
-  salinity: ['PSU', 'ppt', 'g/kg'],
-  ph: ['pH'],
-  phycoerythrin: ['µg/L', 'RFU'],
-  tzc: ['s'],
-  fourier_coefficient_a1: [''],
-  current_speed: ['m/s', 'cm/s', 'knots'],
-  wave_height: ['m', 'ft', 'cm'],
-  bt: ['µg/L', 'ppb'],
-  fourier_coefficient_a2: [''],
-  fourier_coefficient_b2: [''],
-  fourier_coefficient_b1: [''],
-  wave_heading: ['°'],
-  temperature: ['°C', '°F', 'K'],
-  rainfall: ['mm', 'cm']
-};
-
-getLabelPrefix(name: string): string {
+  unitMap: { [key: string]: string[] } = {
+    wave_direction: ['°'],
+    mean_wave_direction: ['°'],
+    dominant_time_period_fw: ['s'],
+    havg: ['m', 'ft'],
+    current_direction: ['°'],
+    wind_speed: ['m/s', 'km/h', 'knots'],
+    wind_gust: ['m/s', 'km/h', 'knots'],
+    visibility: ['m', 'km', 'NM'],
+    turbidity: ['NTU', 'FNU'],
+    conductivity: ['µS/cm', 'mS/cm'],
+    chlorophyll_a: ['µg/L', 'mg/m³', 'RFU'],
+    dissolved_oxygen: ['mg/L', '%'],
+    fluorescein_dye: ['ppb', 'µg/L'],
+    oil_in_water: ['mg/L', 'ppm', 'ppb'],
+    hmax: ['m', 'ft'],
+    rh_percent: ['%'],
+    rain_mm: ['mm', 'cm'],
+    global_radiation: ['W/m²'],
+    tm02: ['s'],
+    wind_direction_deg: ['°'],
+    bp_hpa: ['hPa', 'mb'],
+    temperature_deg: ['°C', '°F', 'K'],
+    pah: ['µg/L', 'ppb', 'ppm'],
+    water_temperature: ['°C', '°F'],
+    tz: ['s'],
+    battery: ['V', '%'],
+    salinity: ['PSU', 'ppt', 'g/kg'],
+    ph: ['pH'],
+    phycoerythrin: ['µg/L', 'RFU'],
+    tzc: ['s'],
+    fourier_coefficient_a1: [''],
+    current_speed: ['m/s', 'cm/s', 'knots'],
+    wave_height: ['m', 'ft', 'cm'],
+    bt: ['µg/L', 'ppb'],
+    fourier_coefficient_a2: [''],
+    fourier_coefficient_b2: [''],
+    fourier_coefficient_b1: [''],
+    wave_heading: ['°'],
+    temperature: ['°C', '°F', 'K'],
+    rainfall: ['mm', 'cm'],
+  };
+ 
+  getLabelPrefix(name: string): string {
     switch (name) {
       case 'battery':
         return 'Battery';
@@ -261,15 +266,18 @@ getLabelPrefix(name: string): string {
         return '';
     }
   }
-
-
-  constructor(private http: HttpClient, private loggingService: LoggingService, private toast:ToastrService) {}
+ 
+  constructor(
+    private http: HttpClient,
+    private loggingService: LoggingService,
+    private toast: ToastrService
+  ) {}
   ngOnInit(): void {
     const stat = this.saveData();
     this.getStationConfig();
   }
  
- // saveData() {
+  // saveData() {
   //   try {
   //     this.http.get('http://192.168.0.19:3000/api/getSensorConfig').subscribe(
   //       (response: any) => {
@@ -307,7 +315,7 @@ getLabelPrefix(name: string): string {
   //     // return false
   //   }
   // }
- mainSensor:Sensors[]=[]
+  mainSensor: Sensors[] = [];
   saveData() {
     try {
       this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
@@ -315,7 +323,7 @@ getLabelPrefix(name: string): string {
           console.log('sensorvalise', response);
  
           // Filter out unwanted parameters
-          this.mainSensor= response;
+          this.mainSensor = response;
           this.sampleData = response.filter(
             (item: any) =>
               item.param_name !== 'current_speed' &&
@@ -324,12 +332,11 @@ getLabelPrefix(name: string): string {
  
           this.paramNames = this.sampleData.map((name: any) => name.param_name);
           console.log('Extracted param_names:', this.paramNames);
-
-          this.paramNames2 = this.sampleData.map((item:any) => ({
+ 
+          this.paramNames2 = this.sampleData.map((item: any) => ({
             label: this.getLabelPrefix(item.param_name),
-            value: item.param_name
-          })) 
-          
+            value: item.param_name,
+          }));
  
           this.tableData = this.mainSensor.filter(
             (item) => item.name === 'oceanography'
@@ -361,9 +368,7 @@ getLabelPrefix(name: string): string {
     }
   }
  
- 
   Update() {
-
     this.http
       .post('http://localhost:3000/api/updateSensor', this.editData)
       .subscribe(
@@ -374,17 +379,18 @@ getLabelPrefix(name: string): string {
           const currentUserStr = localStorage.getItem('currentUser');
           if (currentUserStr) {
             const currentUser = JSON.parse(currentUserStr);
-            this.loggingService.addLog(
-              currentUser.username,
-              `Sensor has been updated`, 
-              currentUser.id,
-              'SE002',
-              'sensor.component.ts/updateSensor'
-            ).subscribe({
-              next: () => console.log('Activity logged successfully'),
-              error: (err) => console.error('Failed to log activity', err)
-            });
-
+            this.loggingService
+              .addLog(
+                currentUser.username,
+                `Sensor has been updated`,
+                currentUser.id,
+                'SE002',
+                'sensor.component.ts/updateSensor'
+              )
+              .subscribe({
+                next: () => console.log('Activity logged successfully'),
+                error: (err) => console.error('Failed to log activity', err),
+              });
           }
           this.toast.success('Parameter values updated', 'Success');
         },
@@ -392,22 +398,22 @@ getLabelPrefix(name: string): string {
           console.error(error);
         }
       );
-
-      if(this.editData.param_name.includes('current')){
-        const bins =[
-          {"id": 1, "value": this.bin1},
-          {"id": 2, "value": this.bin2},
-          {"id": 3, "value": this.bin3},
-          {"id": 4, "value": this.bin4}
-        ]
-        this.http.post('http://localhost:3000/api/updatebinss', {bins}).subscribe(
-          (response:any)=>{
-            console.log("bins", response);
-            
+ 
+    if (this.editData.param_name.includes('current')) {
+      const bins = [
+        { id: 1, value: this.bin1 },
+        { id: 2, value: this.bin2 },
+        { id: 3, value: this.bin3 },
+        { id: 4, value: this.bin4 },
+      ];
+      this.http
+        .post('http://localhost:3000/api/updatebinss', { bins })
+        .subscribe((response: any) => {
+          console.log('bins', response);
+ 
           this.saveData();
-          }
-        )
-      }
+        });
+    }
   }
  
   onUnitSelect(unit: string) {
@@ -415,22 +421,21 @@ getLabelPrefix(name: string): string {
     this.editData.unit = unit;
   }
   onEdit(item: any) {
-  this.editData = item;
-  this.mainToggle = item.notification === 'enabled';
-  console.log(this.editData);
-
-  const unitOptions = this.unitMap[item.param_name];
-
-  if (unitOptions) {
-    this.isMulti = true;
-    this.multiData = unitOptions;
-  } else {
-    this.isMulti = false;
+    this.editData = item;
+    this.mainToggle = item.notification === 'enabled';
+    console.log(this.editData);
+ 
+    const unitOptions = this.unitMap[item.param_name];
+ 
+    if (unitOptions) {
+      this.isMulti = true;
+      this.multiData = unitOptions;
+    } else {
+      this.isMulti = false;
+    }
+ 
+    this.selectedUnit = item.unit;
   }
-
-  this.selectedUnit = item.unit;
-}
-
  
   toggle() {
     this.mainToggle = !this.mainToggle;
@@ -489,7 +494,6 @@ getLabelPrefix(name: string): string {
       });
   }
  
- 
   updateHomeConfig(station: any) {
     const params = [...station.selectedParameters];
  
@@ -530,6 +534,6 @@ getLabelPrefix(name: string): string {
       station.limitReached = false;
     }
   }
-
 }
-
+ 
+ 

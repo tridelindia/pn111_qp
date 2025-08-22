@@ -12,8 +12,17 @@
 }
  
 .topcontent {
-  padding: 0px 20px;
+  /* padding: 0px 20px; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 20px;
+  margin-right: 20px;
   /* line-height: 0.1; */
+}
+
+.mecc_box{
+  align-content: center;
 }
  
 .tablecontainer {
@@ -513,223 +522,14 @@
   border: solid 1px #ddd;
 }
  
-::ng-deep .p-datepicker{
-    width: 100% !important;
-}
- 
- 
-::ng-deep .p-multiselect:not(.p-disable).p-focus {
-  border-color: var(--highlight-color) !important;
-}
- 
-::ng-deep .p-inputtext:enabled:focus {
-  border: 1px solid var(--highlight-color) !important;
-}
- 
+
 ::ng-deep .p-multiselect {
-  width: 94% !important;
-  font-size: 14px !important;
-  cursor: pointer !important;
-  border-radius: 15px !important;
+  width: 100px;
+  cursor: pointer;
   border: 1px solid #ddd !important;
-  padding: 5px !important;
   background: white !important;
-  box-shadow: 0 2px 4px rgba(168, 168, 168, 0.1) !important;
-  transition: all 0.3s ease-in-out !important;
-  position: relative !important;
+  box-shadow: 0 2px 4px rgba(168, 168, 168, 0.1);
+  transition: all 0.3s ease-in-out;
+  position: relative;
 }
- 
-::ng-deep .p-multiselect-custom.p-multiselect:hover {
-  border: 1px solid var(--highlight-color) !important;
-  box-shadow: 0px 4px 10px var(--highlight-color-shadow) !important;
-}
- 
-::ng-deep .p-multiselect.p-multiselect:focus {
-  border: 1px solid var(--highlight-color) !important;
-  box-shadow: 0px 4px 10px var(--highlight-color-shadow) !important;
-  transform: scale(1.02) !important;
-}
- 
-::ng-deep .p-multiselect .p-multiselect-label {
-  max-height: 65px !important;
-  overflow-y: auto !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  align-items: flex-start !important;
-  padding-right: 24px !important;
-  color: black !important;
-}
- 
-::ng-deep .p-multiselect-panel {
-  border-radius: 6px !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-  margin-top: 35px !important;
-  z-index: 1000 !important;
-  transition: all 0.3s ease-in-out !important;
-}
- 
-::ng-deep .p-multiselect-item {
-  padding: 8px 12px !important;
-  font-size: 14px !important;
-  background-color: white !important;
-}
- 
-::ng-deep .p-multiselect-overlay {
-  background: white !important;
-  border-radius: 15px !important;
-  border: 1px solid #ddd !important;
-}
- 
-::ng-deep .p-multiselect-option {
-  color: black !important;
-}
- 
-::ng-deep .p-inputtext {
-  color: black !important;
-  background-color: white !important;
-  border-radius: 15px !important;
-  border: 1px solid #ddd !important;
-}
- 
-::ng-deep .p-multiselect-option:not(.p-multiselect-option-selected):not(.p-disabled).p-focus{
-  background: #f1f5f9 !important;
-}
- 
-::ng-deep .p-multiselect-option.p-multiselect-option-selected.p-focus {
-  background: var(--highlight-color-shadow) !important;
-}
- 
-::ng-deep .p-multiselect-option.p-multiselect-option-selected {
-  background: var(--highlight-color-shadow) !important;
-}
- 
-::ng-deep .p-checkbox-input {
-border-radius: 15px !important;
-background-color: #f1f5f9 !important;
-}
- 
-::ng-deep .p-checkbox-box {
-  background-color: white !important ;
-  border: 1px solid #ddd !important;
-}
- 
-::ng-deep .p-checkbox-checked .p-checkbox-box {
-  border-color: var(--highlight-color) !important;
-  background-color: var(--highlight-color) !important;
-}
- 
-::ng-deep .p-chip {
-  background-color: var(--highlight-color) !important;
-}
- 
-::ng-deep .p-multiselect .p-multiselect-overlay::-webkit-scrollbar{
-  height: 0px !important;
-  width: 0px !important;
-}
- 
-::ng-deep .p-dialog {
-  background-color: white !important;
-  color: black !important;
-  border-radius: 15px !important;
-}
- 
-::ng-deep .p-select {
-  height: 40px !important;
-  width: 70% !important;
-  border-radius: 15px !important;
-  background-color: white !important;
-  color: black !important;
-  border: solid 1px #ddd !important;
-}
- 
-::ng-deep .p-select-label {
-  color: black !important;
-}
- 
-::ng-deep .p-select-overlay{
-  background-color: white !important;
-  width: 105px !important;
-  border-radius: 15px !important;
-  border: solid 1px #ddd !important;
-}
- 
-::ng-deep .p-select-list{
-  background-color: rgba(255, 255, 255, 0) !important;
-  width: 100% !important;
-  border-radius: 15px !important;
-  border: none !important;
-}
- 
-::ng-deep .p-select-option {
-  color: black !important;
-}
- 
-::ng-deep .p-select-option.p-select-option-selected.p-focus{
-  background-color: var(--highlight-color-shadow) !important;
-  border-radius: 15px !important;
-}
- 
-::ng-deep .p-select-option.p-select-option-selected{
-  background-color: var(--highlight-color-shadow) !important;
-  border-radius: 15px !important;
-}
- 
-::ng-deep .p-select-option:not(.p-select-option-selected):not(.p-disabled).p-focus {
-  background-color: white !important;
-  border-radius: 15px !important;
-}
- 
-::ng-deep .p-card {
-  background: white !important;
-  border-radius: 15px !important;
-}
- 
-::ng-deep .p-datatable-tbody > tr > td {
-    background: white !important;
-    border-color: #e2e8f0 !important;
-    color: black !important;
-}
- 
-::ng-deep .p-datatable-thead > tr > th {
-    background: white !important;
-    border-color: #e2e8f0 !important;
-    color: black !important;
-  }
- 
-  ::ng-deep .p-datepicker-panel {
-    background: var(--highlight-color) !important;
-    border: 1px solid var(--highlight-color-shadow) !important;
-  }
- 
-  ::ng-deep .p-datepicker-header {
-    background: var(--highlight-color) !important;
-  }
- 
-  ::ng-deep .p-datepicker-day-selected {
-    background: var(--highlight-color-shadow) !important;
-  }
- 
-  ::ng-deep .p-button-sm.p-button-icon-only.p-button-rounded svg{
-    color: white !important;
-  }
- 
-  ::ng-deep .p-datepicker-year-selected {
-    background: var(--highlight-color-shadow) !important;
-  }
- 
-  ::ng-deep .p-button-label {
-    font-weight: normal !important;
-    transition: 0.3s !important;
-  }
- 
-  ::ng-deep .p-button-label:hover {
-    font-weight: bold !important;
-  }
- 
-  ::ng-deep .p-datepicker-dropdown {
-    background: var(--highlight-color) !important;
-    border: 1px solid var(--highlight-color-shadow) !important;
-    border-radius: 15px !important;
-    color: white !important;
-  }
  
