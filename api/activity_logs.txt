@@ -196,3 +196,5 @@
 {"timestamp":"2025-08-07T09:50:36.356Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
 {"timestamp":"2025-08-07T09:50:53.246Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
 {"timestamp":"2025-08-07T10:24:33.422Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-08-25T05:22:10.298Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-08-25T05:32:59.081Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}

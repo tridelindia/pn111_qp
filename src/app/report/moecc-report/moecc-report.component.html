@@ -1,180 +1,270 @@
+`
 <div class="report-container">
-    <!-- <div class="topcontent">
+  <!-- <div class="topcontent">
         <h1>{{ selectedBuoysLabel || 'No stations selected' }}</h1>
     </div> -->
 
+  <div class="tablecontainer">
+    <p-table
+      #dt
+      [value]="sensorData"
+      [columns]="selectedColumns"
+      [loading]="loading"
+      paginator="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 15, 20]"
+      [scrollable]="true"
+      [resizableColumns]="true"
+      columnResizeMode="expand"
+      [globalFilterFields]="globalFilterFields"
+      [exportHeader]="'exportHeader'"
+      selectionMode="multiple"
+      [(selection)]="selectedColumns"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [filterDelay]="0"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      responsiveLayout="stack"
+      [breakpoint]="'260px'"
+      stripedRows
+      rowHover="true"
+      showCurrentPageReport="true"
+    >
+      <ng-template #caption>
+        <div class="caption">
+          <div class="captionrow">
+            <div id="search">
+              <input
+                type="search"
+                placeholder="Search"
+                (input)="onSearch($any($event).target.value, dt)"
+              />
+            </div>
 
-    <div class="tablecontainer">
-        <p-table #dt [value]="sensorData" [columns]="selectedColumns" [loading]="loading" paginator="true" [rows]="10"
-            [rowsPerPageOptions]="[10,15,20]" [scrollable]="true" [resizableColumns]="true" columnResizeMode="expand"
-            [globalFilterFields]="globalFilterFields" [exportHeader]="'exportHeader'" selectionMode="multiple"
-            [(selection)]="selectedColumns"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [filterDelay]="0"
-            [tableStyle]="{'min-width': '50rem'}" responsiveLayout="stack" [breakpoint]="'260px'" stripedRows
-            rowHover="true" showCurrentPageReport="true">
+            <div class="pselect">
+              <p-selectButton
+                [options]="options"
+                [(ngModel)]="selectedOption"
+                (onChange)="onOptionChange()"
+              >
+              </p-selectButton>
+            </div>
+          </div>
 
-            <ng-template #caption>
-                <div class="caption">
-                    <div class="captionrow">
-                        <div id="search">
-                            <input type="search" placeholder="Search"
-                                (input)="onSearch($any($event).target.value, dt)" />
-                        </div>
+          <div class="captionrow">
+            <div class="date-range-selector">
+              <p-selectButton
+                [options]="periodOptions"
+                [(ngModel)]="selectedPeriod"
+                (onChange)="setView(selectedPeriod)"
+              >
+              </p-selectButton>
+            </div>
 
-                        <div class="pselect">
-                            <p-selectButton [options]="options" [(ngModel)]="selectedOption"
-                                (onChange)="onOptionChange()">
-                            </p-selectButton>
-                        </div>
-                    </div>
+            <div class="filter">
+              <p-multiselect
+                display="chip"
+                [options]="dynaColumns"
+                optionLabel="header"
+                [(ngModel)]="selectedColumns"
+                placeholder="Select Columns"
+                [maxSelectedLabels]="5"
+                showHeader="true"
+                selectedItemsLabel="{0} Columns selected"
+                [filter]="true"
+              />
+            </div>
+          </div>
 
-                    <div class="captionrow">
-                        <div class="date-range-selector">
-                            <p-selectButton [options]="periodOptions" [(ngModel)]="selectedPeriod"
-                                (onChange)="setView(selectedPeriod)">
-                            </p-selectButton>
-                        </div>
+          <div class="captionrow">
+            <div class="date-picker">
+              <p-datepicker
+                [(ngModel)]="rangeDates"
+                selectionMode="range"
+                [showIcon]="true"
+                dateFormat="dd/mm/yy"
+                (onSelect)="setView('date')"
+                [ngClass]="{ 'custom-date-input': selectedPeriod === 'date' }"
+                *ngIf="selectedPeriod === 'date'"
+              >
+              </p-datepicker>
 
-                        <div class="filter">
-                            <p-multiselect display="chip" [options]="dynaColumns" optionLabel="header"
-                                [(ngModel)]="selectedColumns" placeholder="Select Columns" [maxSelectedLabels]="5"
-                                showHeader="true" selectedItemsLabel="{0} Columns selected" [filter]="true" />
-                        </div>
-                    </div>
+              <p-datepicker
+                [(ngModel)]="selectedDate"
+                [showIcon]="true"
+                (onSelect)="setView('week')"
+                dateFormat="dd/mm/yy"
+                *ngIf="selectedPeriod === 'week'"
+              ></p-datepicker>
 
-                    <div class="captionrow">
+              <p-datepicker
+                [(ngModel)]="selectedDate"
+                view="month"
+                dateFormat="MM yy"
+                [showIcon]="true"
+                (onSelect)="setView('month')"
+                *ngIf="selectedPeriod === 'month'"
+              >
+              </p-datepicker>
 
-                        <div class="date-picker">
-                            <p-datepicker [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
-                                dateFormat="dd/mm/yy" (onSelect)="setView('date')"
-                                [ngClass]="{ 'custom-date-input': selectedPeriod === 'date' }"
-                                *ngIf="selectedPeriod === 'date'">
-                            </p-datepicker>
+              <p-datepicker
+                [(ngModel)]="selectedDate"
+                view="year"
+                dateFormat="yy"
+                [showIcon]="true"
+                (onSelect)="setView('year')"
+                *ngIf="selectedPeriod === 'year'"
+              >
+              </p-datepicker>
+            </div>
 
-                            <p-datepicker [(ngModel)]="selectedDate" [showIcon]="true" (onSelect)="setView('week')"
-                                dateFormat="dd/mm/yy" *ngIf="selectedPeriod === 'week'"></p-datepicker>
+            <div class="importExport">
+              <p-multiselect
+                [options]="alpha"
+                [(ngModel)]="selectedBuoys"
+                optionLabel="station_name"
+                placeholder="Select Stations"
+                class="w-full md:w-56"
+                (onChange)="fetchDataByDate2()"
+                display="chip"
+                [maxSelectedLabels]="6"
+                showHeader="false"
+                selectedItemsLabel="{0}"
+                [filter]="true"
+              />
 
-                            <p-datepicker [(ngModel)]="selectedDate" view="month" dateFormat="MM yy" [showIcon]="true"
-                                (onSelect)="setView('month')" *ngIf="selectedPeriod === 'month'">
-                            </p-datepicker>
+              <p-dropdown
+                class="export"
+                [options]="exportOptions"
+                [(ngModel)]="selectedExportOption"
+                placeholder="Export"
+                (onChange)="onExportOptionSelect($event, dt)"
+              >
+              </p-dropdown>
 
-                            <p-datepicker [(ngModel)]="selectedDate" view="year" dateFormat="yy" [showIcon]="true"
-                                (onSelect)="setView('year')" *ngIf="selectedPeriod === 'year'">
-                            </p-datepicker>
-                        </div>
+              <div class="moecc">
+                <p-button
+                  *ngIf="this.is_meteorology"
+                  label="Meteorology"
+                  (onClick)="openMoecc()"
+                />
+              </div>
+              <div class="moecc">
+                <p-button
+                  label="Water Quality"
+                  (onClick)="openStationReport()"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
 
-
-
-                        <div class="importExport">
-
-                            <p-multiselect [options]="alpha" [(ngModel)]="selectedBuoys" optionLabel="station_name"
-                                placeholder="Select Stations" class="w-full md:w-56" (onChange)="fetchDataByDate2()"
-                                display="chip" [maxSelectedLabels]="6" showHeader="false" 
-                                selectedItemsLabel="{0}" [filter]="true" />
-
-                            <p-dropdown class="export" [options]="exportOptions" [(ngModel)]="selectedExportOption"
-                                placeholder="Export" (onChange)="onExportOptionSelect($event, dt)">
-                            </p-dropdown>
-
-                            <div class="moecc">
-                              <p-button
-                              *ngIf="this.is_meteorology"
-                              label="Meteorology"
-                              (onClick)="openMoecc()"
-                              />
-                            </div>
-                            <div class = "moecc">
-                              <p-button
-                              *ngIf="this.is_meteorology"
-                              label="Water Quality"
-                              (onClick)="openStationReport()"
-                            />
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </ng-template>
-
-            <ng-template #header let-columns>
-                <tr>
-                    <th pSortableColumn="id" class="centered-cell">
-                        ID <p-sortIcon field="id"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="station_id" class="centered-cell">
-                        Station ID <p-sortIcon field="station_id"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="timestamp" class="centered-cell">
-                        Timestamp <p-sortIcon field="timestamp"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="datetime" class="centered-cell">
-                        Date and Time <p-sortIcon field="datetime"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="battery" class="centered-cell">
-                        Battery {{ getUnitByField('battery') ? '(' + getUnitByField('battery') + ')' : '' }}
-                        <p-sortIcon field="battery"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="lat" class="centered-cell">
-                        Latitude (DD) <p-sortIcon field="lat"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="lon" class="centered-cell">
-                        Longitude (DD) <p-sortIcon field="lon"></p-sortIcon>
-                    </th>
-                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="centered-cell">
-                        <!-- <div style="display: flex; flex-direction: column; align-items: center;"> -->
-                        <span>{{ col.header }} <small *ngIf="col.unit" class="text-gray-500">{{ col.unit }}</small>
-                            <p-sortIcon [field]="col.field"></p-sortIcon></span>
-                        <!-- <small *ngIf="col.unit" class="text-gray-500">{{ col.unit }}</small>
+      <ng-template #header let-columns>
+        <tr>
+          <th pSortableColumn="id" class="centered-cell">
+            ID <p-sortIcon field="id"></p-sortIcon>
+          </th>
+          <th pSortableColumn="station_id" class="centered-cell">
+            Station ID <p-sortIcon field="station_id"></p-sortIcon>
+          </th>
+          <th pSortableColumn="timestamp" class="centered-cell">
+            Timestamp <p-sortIcon field="timestamp"></p-sortIcon>
+          </th>
+          <th pSortableColumn="datetime" class="centered-cell">
+            Date and Time <p-sortIcon field="datetime"></p-sortIcon>
+          </th>
+          <th pSortableColumn="battery" class="centered-cell">
+            Battery
+            {{
+              getUnitByField("battery")
+                ? "(" + getUnitByField("battery") + ")"
+                : ""
+            }}
+            <p-sortIcon field="battery"></p-sortIcon>
+          </th>
+          <th pSortableColumn="lat" class="centered-cell">
+            Latitude (DD) <p-sortIcon field="lat"></p-sortIcon>
+          </th>
+          <th pSortableColumn="lon" class="centered-cell">
+            Longitude (DD) <p-sortIcon field="lon"></p-sortIcon>
+          </th>
+          <th
+            *ngFor="let col of columns"
+            [pSortableColumn]="col.field"
+            class="centered-cell"
+          >
+            <!-- <div style="display: flex; flex-direction: column; align-items: center;"> -->
+            <span
+              >{{ col.header }}
+              <small *ngIf="col.unit" class="text-gray-500">{{
+                col.unit
+              }}</small>
+              <p-sortIcon [field]="col.field"></p-sortIcon
+            ></span>
+            <!-- <small *ngIf="col.unit" class="text-gray-500">{{ col.unit }}</small>
                         </div> -->
-                    </th>
-                </tr>
-            </ng-template>
+          </th>
+        </tr>
+      </ng-template>
 
-            <ng-template #body let-rowData let-columns="columns">
-                <!-- <tr> -->
-                <tr [ngClass]="{ 'highlight-row': rowMatchesSearch(rowData, columns) }">
-                    <!-- Static Columns -->
-                    <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText(rowData['id'])"></span>
-                    </td>
-                    <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['station_id']))"></span>
-                    </td>
-                    <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['timestampFormatted']))"></span>
+      <ng-template #body let-rowData let-columns="columns">
+        <!-- <tr> -->
+        <tr [ngClass]="{ 'highlight-row': rowMatchesSearch(rowData, columns) }">
+          <!-- Static Columns -->
+          <td class="centered-cell">
+            <span [innerHTML]="highlightSearchText(rowData['id'])"></span>
+          </td>
+          <td class="centered-cell">
+            <span
+              [innerHTML]="highlightSearchText(rowData['station_id'])"
+            ></span>
+          </td>
+          <td class="centered-cell">
+            <span
+              [innerHTML]="highlightSearchText(rowData['timestampFormatted'])"
+            ></span>
+          </td>
+          <td class="centered-cell">
+            <span
+              [innerHTML]="highlightSearchText(rowData['datetimeFormatted'])"
+            ></span>
+          </td>
+          <td class="centered-cell">
+            <span [innerHTML]="highlightSearchText(rowData['battery'])"></span>
+          </td>
+          <td class="centered-cell">
+            <span
+              [innerHTML]="highlightSearchText(rowData['lat'] + ' N')"
+            ></span>
+          </td>
+          <td class="centered-cell">
+            <span
+              [innerHTML]="highlightSearchText(rowData['lon'] + ' E')"
+            ></span>
+          </td>
+          <td *ngFor="let col of columns" class="centered-cell">
+            <span
+              [innerHTML]="
+                col.field === 'timestamp' || col.field === 'datatim'
+                  ? highlightSearchText(rowData[col.field])
+                  : highlightSearchText(rowData[col.field])
+              "
+            ></span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 
-                    </td>
-                    <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['datetimeFormatted']))"></span>
-                    </td>
-                    <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['battery']))"></span>
-                    </td>
-                    <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['lat']) + ' N')"></span>
-                    </td>
-                    <td class="centered-cell">
-                        <span [innerHTML]="highlightSearchText((rowData['lon']) + ' E')"></span>
-                    </td>
-                    <td *ngFor="let col of columns" class="centered-cell">
-                        <span [innerHTML]="col.field === 'timestamp' || col.field === 'datatim'
-                        ? highlightSearchText((rowData[col.field]))
-                        : highlightSearchText(rowData[col.field])"></span>
-                    </td>
-                </tr>
-            </ng-template>
-
-        </p-table>
-    </div>
-
-    <p-dialog
+  <p-dialog
     [(visible)]="moeccVisible"
     [modal]="true"
     [style]="{ width: '900px' }"
     header="Meteorology Report"
   >
-    <h3 style="text-align: center">Station: {{ selectedBuoy.station_name }}</h3>
+    <h3 style="text-align: center" *ngIf="(moeccStations?.length || 0) <= 1">
+      Station: {{ moeccStations[0]?.station_name || selectedBuoy.station_name }}
+    </h3>
     <ng-template pTemplate="header">
       <div
         style="
@@ -211,90 +301,183 @@
       {{ selectedRowData | json }}
     </div>
     <div #moeccWrapper class="moecc-wrapper">
-      <div class="moecc-title">
-        Meteorology Report - {{ selectedBuoy.station_name }}
-      </div>
-      <div
-        #moeccContent
-        class="moecc-grid"
-        [ngStyle]="{
-          'grid-template-columns':
-            '140px ' + '1fr '.repeat((moeccHours?.length || 0) * 3).trim()
-        }"
-      >
-        <div class="moecc-head grid-date">Date</div>
-        <div
-          class="moecc-head grid-ws"
-          [style.grid-column]="'span ' + (moeccHours?.length || 0)"
-        >
-          Wind speed
-          {{
-            getUnitByField("wind_speed")
-              ? "(" + getUnitByField("wind_speed") + ")"
-              : ""
-          }}
-        </div>
-        <div
-          class="moecc-head grid-wd"
-          [style.grid-column]="'span ' + (moeccHours?.length || 0)"
-        >
-          Wind direction
-        </div>
-        <div
-          class="moecc-head grid-tp"
-          [style.grid-column]="'span ' + (moeccHours?.length || 0)"
-        >
-          Temperature
-          {{
-            getUnitByField("temperature_deg")
-              ? "(" + getUnitByField("temperature_deg") + ")"
-              : ""
-          }}
-        </div>
-        <div class="moecc-sub"></div>
-        <ng-container *ngFor="let h of moeccHours">
-          <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
-        </ng-container>
-        <ng-container *ngFor="let h of moeccHours">
-          <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
-        </ng-container>
-        <ng-container *ngFor="let h of moeccHours">
-          <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
-        </ng-container>
- 
-        <ng-container *ngFor="let r of moeccRows">
-          <div class="moecc-cell date">{{ r.dateLabel }}</div>
-          <ng-container *ngFor="let h of moeccHours">
+      <div class="moecc-title">Meteorology Report</div>
+      <div #moeccContent>
+        <!-- Multi-station view -->
+        <ng-container *ngIf="moeccStations?.length; else singleStationGrid">
+          <div
+            *ngFor="let st of moeccStations"
+            class="moecc-section"
+            style="margin-bottom: 24px"
+          >
+            <div style="font-weight: 600; margin: 8px 0">
+              Station: {{ st.station_name || st.station_id }}
+            </div>
             <div
-              class="moecc-cell"
-              [style.background]="getWindBg(r.wind_speed?.[h])"
+              class="moecc-grid"
+              [ngStyle]="{
+                'grid-template-columns':
+                  '140px ' + '1fr '.repeat((st.hours?.length || 0) * 3).trim()
+              }"
             >
-              {{ r.wind_speed?.[h] }}
+              <div class="moecc-head grid-date">Date</div>
+              <div
+                class="moecc-head grid-ws"
+                [style.grid-column]="'span ' + (st.hours?.length || 0)"
+              >
+                Wind speed
+                {{
+                  getUnitByField("wind_speed")
+                    ? "(" + getUnitByField("wind_speed") + ")"
+                    : ""
+                }}
+              </div>
+              <div
+                class="moecc-head grid-wd"
+                [style.grid-column]="'span ' + (st.hours?.length || 0)"
+              >
+                Wind direction
+              </div>
+              <div
+                class="moecc-head grid-tp"
+                [style.grid-column]="'span ' + (st.hours?.length || 0)"
+              >
+                Temperature
+                {{
+                  getUnitByField("temperature_deg")
+                    ? "(" + getUnitByField("temperature_deg") + ")"
+                    : ""
+                }}
+              </div>
+              <div class="moecc-sub"></div>
+              <ng-container *ngFor="let h of st.hours">
+                <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+              </ng-container>
+              <ng-container *ngFor="let h of st.hours">
+                <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+              </ng-container>
+              <ng-container *ngFor="let h of st.hours">
+                <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+              </ng-container>
+
+              <ng-container *ngFor="let r of st.rows">
+                <div class="moecc-cell date">{{ r.dateLabel }}</div>
+                <ng-container *ngFor="let h of st.hours">
+                  <div
+                    class="moecc-cell"
+                    [style.background]="getWindBgWith(st, r.wind_speed?.[h])"
+                  >
+                    {{ r.wind_speed?.[h] }}
+                  </div>
+                </ng-container>
+
+                <ng-container *ngFor="let h of st.hours">
+                  <div class="moecc-cell center">
+                    <i
+                      class="fas fa-location-arrow"
+                      [style.transform]="getArrowRotation(r.wind_direction?.[h])"
+                    ></i>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngFor="let h of st.hours">
+                  <div
+                    class="moecc-cell"
+                    [style.background]="getTempBgWith(st, r.temperature?.[h])"
+                  >
+                    {{ r.temperature?.[h] }}
+                  </div>
+                </ng-container>
+              </ng-container>
             </div>
-          </ng-container>
- 
-          <ng-container *ngFor="let h of moeccHours">
-            <div class="moecc-cell center">
-              <i
-                class="fas fa-location-arrow"
-                [style.transform]="getArrowRotation(r.wind_direction?.[h])"
-              ></i>
-            </div>
-          </ng-container>
- 
-          <ng-container *ngFor="let h of moeccHours">
-            <div
-              class="moecc-cell"
-              [style.background]="getTempBg(r.temperature?.[h])"
-            >
-              {{ r.temperature?.[h] }}
-            </div>
-          </ng-container>
+          </div>
         </ng-container>
+        <!-- Single-station fallback -->
+        <ng-template #singleStationGrid>
+          <div
+            class="moecc-grid"
+            [ngStyle]="{
+              'grid-template-columns':
+                '140px ' + '1fr '.repeat((moeccHours?.length || 0) * 3).trim()
+            }"
+          >
+            <div class="moecc-head grid-date">Date</div>
+            <div
+              class="moecc-head grid-ws"
+              [style.grid-column]="'span ' + (moeccHours?.length || 0)"
+            >
+              Wind speed
+              {{
+                getUnitByField("wind_speed")
+                  ? "(" + getUnitByField("wind_speed") + ")"
+                  : ""
+              }}
+            </div>
+            <div
+              class="moecc-head grid-wd"
+              [style.grid-column]="'span ' + (moeccHours?.length || 0)"
+            >
+              Wind direction
+            </div>
+            <div
+              class="moecc-head grid-tp"
+              [style.grid-column]="'span ' + (moeccHours?.length || 0)"
+            >
+              Temperature
+              {{
+                getUnitByField("temperature_deg")
+                  ? "(" + getUnitByField("temperature_deg") + ")"
+                  : ""
+              }}
+            </div>
+            <div class="moecc-sub"></div>
+            <ng-container *ngFor="let h of moeccHours">
+              <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+            </ng-container>
+            <ng-container *ngFor="let h of moeccHours">
+              <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+            </ng-container>
+            <ng-container *ngFor="let h of moeccHours">
+              <div class="moecc-sub">{{ (h | number : "2.0-0") + "h" }}</div>
+            </ng-container>
+
+            <ng-container *ngIf="is_meteorology">
+              <ng-container *ngFor="let r of moeccRows">
+                <div class="moecc-cell date">{{ r.dateLabel }}</div>
+                <ng-container *ngFor="let h of moeccHours">
+                  <div
+                    class="moecc-cell"
+                    [style.background]="getWindBg(r.wind_speed?.[h])"
+                  >
+                    {{ r.wind_speed?.[h] }}
+                  </div>
+                </ng-container>
+
+                <ng-container *ngFor="let h of moeccHours">
+                  <div class="moecc-cell center">
+                    <i
+                      class="fas fa-location-arrow"
+                      [style.transform]="getArrowRotation(r.wind_direction?.[h])"
+                    ></i>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngFor="let h of moeccHours">
+                  <div
+                    class="moecc-cell"
+                    [style.background]="getTempBg(r.temperature?.[h])"
+                  >
+                    {{ r.temperature?.[h] }}
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-template>
       </div>
     </div>
   </p-dialog>
- 
+
   <!-- Station-wide WQ Report Modal -->
   <p-dialog
     [(visible)]="stationReportVisible"
@@ -314,112 +497,107 @@
         <div>
           Water Quality Report (Date range: {{ fromDate }} → {{ toDate }})
         </div>
-        <!-- <div>
-          <small
-            >Thresholds: Oil ≤ {{ oilThreshold }}, Chl-a ≤
-            {{ chlThreshold }}</small
-          >
-        </div> -->
+        <div>
+          <p-button
+            label="Download PDF"
+            (onClick)="downloadStationReportPDF()"
+            severity="danger"
+            [loading]="isDownloadingWQ"
+            [disabled]="isDownloadingWQ"
+          />
+        </div>
       </div>
     </ng-template>
- 
-    <p-table
-      [value]="stationReportRows"
-      [loading]="stationReportLoading"
-      [rows]="10"
-      paginator="true"
-      [rowsPerPageOptions]="[10, 15, 20]"
-      responsiveLayout="scroll"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Guideline / LOR / Monitoring station</th>
-          <th>Date sampled</th>
-          <th>Oil and grease (mg/L)</th>
-          <th>Chlorophyll-α (µg/L)</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-        <ng-container *ngIf="rowIndex === 0">
-          <tr style="background-color: #f3f9ff">
-            <td class="centered-cell">MoECC Permit Conditions</td>
-            <td class="centered-cell">-</td>
-            <td class="centered-cell">&lt;5</td>
-            <td class="centered-cell">-</td>
-          </tr>
-          <tr style="background-color: #f3f9ff">
-            <td class="centered-cell">Qatar Seawater Standards</td>
-            <td class="centered-cell">-</td>
-            <td class="centered-cell">-</td>
-            <td class="centered-cell">&lt;1</td>
-          </tr>
-          <tr style="background-color: #f3f9ff">
-            <td class="centered-cell">Limit of Reporting</td>
-            <td class="centered-cell">-</td>
-            <td class="centered-cell">&lt;0.50</td>
-            <td class="centered-cell">&lt;0.50</td>
-          </tr>
-        </ng-container>
-        <tr>
-          <td class="centered-cell">
-            {{ row.station_name || row.station_id }}
-          </td>
-          <td class="centered-cell">{{ row.date }}</td>
-          <td
-            class="centered-cell"
-            [ngStyle]="{
-              'background-color': getCellBg(row.oil_in_water_avg, 'oil')
-            }"
-          >
-            {{
-              row.oil_in_water_avg === null
-                ? "-"
-                : (row.oil_in_water_avg | number : "1.2-2")
-            }}
-          </td>
-          <td
-            class="centered-cell"
-            [ngStyle]="{
-              'background-color': getCellBg(row.chlorophyll_a_avg, 'chl')
-            }"
-          >
-            {{
-              row.chlorophyll_a_avg === null
-                ? "-"
-                : (row.chlorophyll_a_avg | number : "1.3-3")
-            }}
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-dialog>
- 
 
-    <div class="quickviewContainer">
-        <div class="exportview">
-            <h3>Daily</h3>
-            <div class="exportviewico"><i class="fas fa-calendar-check"></i></div>
-            <p>Export Daily Sensor data</p>
-            <button class="export-btn" (click)="quickExportByRange(dt, 'Daily')">
-                <i class="fas fa-file-download"></i> Quick Export
-            </button>
-        </div>
-        <div class="exportview">
-            <h3>Monthly</h3>
-            <div class="exportviewico"><i class="fas fa-calendar-check"></i></div>
-            <p>Export Monthly Sensor Data</p>
-            <button class="export-btn" (click)="quickExportByRange(dt, 'Monthly')">
-                <i class="fas fa-file-download"></i> Quick Export
-            </button>
-        </div>
-        <div class="exportview">
-            <h3>Yearly</h3>
-            <div class="exportviewico"><i class="fas fa-calendar-check"></i></div>
-            <p>Export Yearly Sensor Data</p>
-            <button class="export-btn" (click)="quickExportByRange(dt, 'Yearly')">
-                <i class="fas fa-file-download"></i> Quick Export
-            </button>
-        </div>
+    <div #stationReportWrapper style="padding: 12px">
+      <div #stationReportContent>
+        <p-table
+          [value]="stationReportRows"
+          [loading]="stationReportLoading"
+          [scrollable]="true"
+          [scrollHeight]="'400px'"
+          responsiveLayout="scroll"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Guideline / LOR / Monitoring station</th>
+              <th>Date sampled</th>
+              <th>Oil and grease (mg/L)</th>
+              <th>Chlorophyll-α (µg/L)</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <ng-container *ngIf="rowIndex === 0">
+              <tr *ngFor="let gr of guidelineRows" class="guideline-row">
+                <td class="centered-cell">{{ gr[0] }}</td>
+                <td class="centered-cell">{{ gr[1] }}</td>
+                <td class="centered-cell">{{ gr[2] }}</td>
+                <td class="centered-cell">{{ gr[3] }}</td>
+              </tr>
+              <tr class="guideline-separator">
+                <td colspan="4"></td>
+              </tr>
+            </ng-container>
+            <tr>
+              <td class="centered-cell">
+                {{ row.station_name || row.station_id }}
+              </td>
+              <td class="centered-cell">{{ row.date }}</td>
+              <td
+                class="centered-cell"
+                [ngStyle]="{
+                  'background-color': getCellBg(row.oil_in_water_avg, 'oil')
+                }"
+              >
+                {{
+                  row.oil_in_water_avg === null
+                    ? "-"
+                    : (row.oil_in_water_avg | number : "1.2-2")
+                }}
+              </td>
+              <td
+                class="centered-cell"
+                [ngStyle]="{
+                  'background-color': getCellBg(row.chlorophyll_a_avg, 'chl')
+                }"
+              >
+                {{
+                  row.chlorophyll_a_avg === null
+                    ? "-"
+                    : (row.chlorophyll_a_avg | number : "1.3-3")
+                }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
+  </p-dialog>
 
+  <div class="quickviewContainer">
+    <div class="exportview">
+      <h3>Daily</h3>
+      <div class="exportviewico"><i class="fas fa-calendar-check"></i></div>
+      <p>Export Daily Sensor data</p>
+      <button class="export-btn" (click)="quickExportByRange(dt, 'Daily')">
+        <i class="fas fa-file-download"></i> Quick Export
+      </button>
+    </div>
+    <div class="exportview">
+      <h3>Monthly</h3>
+      <div class="exportviewico"><i class="fas fa-calendar-check"></i></div>
+      <p>Export Monthly Sensor Data</p>
+      <button class="export-btn" (click)="quickExportByRange(dt, 'Monthly')">
+        <i class="fas fa-file-download"></i> Quick Export
+      </button>
+    </div>
+    <div class="exportview">
+      <h3>Yearly</h3>
+      <div class="exportviewico"><i class="fas fa-calendar-check"></i></div>
+      <p>Export Yearly Sensor Data</p>
+      <button class="export-btn" (click)="quickExportByRange(dt, 'Yearly')">
+        <i class="fas fa-file-download"></i> Quick Export
+      </button>
+    </div>
+  </div>
 </div>

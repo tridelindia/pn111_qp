@@ -7,7 +7,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { LoggingService } from '../../users/service/users/logging.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
- 
+
 interface Sensors {
   id: number;
   timestamp: string;
@@ -23,7 +23,7 @@ interface Sensors {
   lusail_max: string;
   lor_max: string;
 }
- 
+
 @Component({
   selector: 'app-sensor',
   imports: [
@@ -84,12 +84,12 @@ export class SensorComponent implements OnInit {
   bt: string[] = ['µg/L', 'ppb'];
   fourier_coefficient_a2: string[] = ['unitless'];
   wave_heading: string[] = ['°'];
- 
+
   bin1!: string;
   bin2!: string;
   bin3!: string;
   bin4!: string;
- 
+
   // parameterOptions = [
   //   { name: 'Water Temperature' },
   //   { name: 'pH Level' },
@@ -102,11 +102,11 @@ export class SensorComponent implements OnInit {
   //   { name: 'Phosphate' },
   //   { name: 'Chlorophyll' },
   // ];
- 
+
   stationNames: any = [];
   paramNames: any = [];
   paramNames2: any = [];
- 
+
   stations: any[] = []; // Includes id, name, selectedParameters, limitReached
   unitMap: { [key: string]: string[] } = {
     wave_direction: ['°'],
@@ -150,7 +150,7 @@ export class SensorComponent implements OnInit {
     temperature: ['°C', '°F', 'K'],
     rainfall: ['mm', 'cm'],
   };
- 
+
   getLabelPrefix(name: string): string {
     switch (name) {
       case 'battery':
@@ -179,7 +179,7 @@ export class SensorComponent implements OnInit {
         return 'Rainfall';
       case 'visibility':
         return 'Visibility';
- 
+
       case 'wave_heading':
         return 'Wave\nHeading';
       case 'wave_height':
@@ -210,7 +210,7 @@ export class SensorComponent implements OnInit {
         return 'Average\nWave\nHeight';
       case 'dominant_time_period_fw':
         return 'Dominant\nPeriod FW';
- 
+
       case 'turbidity':
         return 'Turbidity';
       case 'water_temperature':
@@ -235,7 +235,7 @@ export class SensorComponent implements OnInit {
         return 'Oil in\nWater';
       case 'bt':
         return 'Bottom\nTemperature';
- 
+
       // Current speed bins
       case 'current_speed_bin_1':
       case 'current_speed_bin_2':
@@ -248,7 +248,7 @@ export class SensorComponent implements OnInit {
       case 'current_speed_bin_9':
       case 'current_speed_bin_10':
         return 'Current\nSpeed';
- 
+
       // Current direction bins
       case 'current_direction_bin_1':
       case 'current_direction_bin_2':
@@ -261,12 +261,12 @@ export class SensorComponent implements OnInit {
       case 'current_direction_bin_9':
       case 'current_direction_bin_10':
         return 'Current\nDirection';
- 
+
       default:
         return '';
     }
   }
- 
+
   constructor(
     private http: HttpClient,
     private loggingService: LoggingService,
@@ -276,7 +276,7 @@ export class SensorComponent implements OnInit {
     const stat = this.saveData();
     this.getStationConfig();
   }
- 
+
   // saveData() {
   //   try {
   //     this.http.get('http://192.168.0.19:3000/api/getSensorConfig').subscribe(
@@ -295,7 +295,7 @@ export class SensorComponent implements OnInit {
   //         this.isFirst = this.isFirst + 1;
   //         // return true;
   //       },
- 
+
   //       (error) => {
   //         console.error(error);
   //         // return false;
@@ -321,7 +321,7 @@ export class SensorComponent implements OnInit {
       this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           console.log('sensorvalise', response);
- 
+
           // Filter out unwanted parameters
           this.mainSensor = response;
           this.sampleData = response.filter(
@@ -329,20 +329,20 @@ export class SensorComponent implements OnInit {
               item.param_name !== 'current_speed' &&
               item.param_name !== 'current_direction'
           );
- 
+
           this.paramNames = this.sampleData.map((name: any) => name.param_name);
           console.log('Extracted param_names:', this.paramNames);
- 
+
           this.paramNames2 = this.sampleData.map((item: any) => ({
             label: this.getLabelPrefix(item.param_name),
             value: item.param_name,
           }));
- 
+
           this.tableData = this.mainSensor.filter(
             (item) => item.name === 'oceanography'
           );
           console.log(this.tableData);
- 
+
           if (this.isFirst === 1) {
             this.onEdit(this.tableData[1]);
           }
@@ -353,7 +353,7 @@ export class SensorComponent implements OnInit {
           console.error(error);
         }
       );
- 
+
       this.http
         .get('http://localhost:3000/api/getBin')
         .subscribe((response: any) => {
@@ -367,7 +367,7 @@ export class SensorComponent implements OnInit {
       console.error(error);
     }
   }
- 
+
   Update() {
     this.http
       .post('http://localhost:3000/api/updateSensor', this.editData)
@@ -398,7 +398,7 @@ export class SensorComponent implements OnInit {
           console.error(error);
         }
       );
- 
+
     if (this.editData.param_name.includes('current')) {
       const bins = [
         { id: 1, value: this.bin1 },
@@ -410,12 +410,12 @@ export class SensorComponent implements OnInit {
         .post('http://localhost:3000/api/updatebinss', { bins })
         .subscribe((response: any) => {
           console.log('bins', response);
- 
+
           this.saveData();
         });
     }
   }
- 
+
   onUnitSelect(unit: string) {
     this.selectedUnit = unit;
     this.editData.unit = unit;
@@ -424,19 +424,19 @@ export class SensorComponent implements OnInit {
     this.editData = item;
     this.mainToggle = item.notification === 'enabled';
     console.log(this.editData);
- 
+
     const unitOptions = this.unitMap[item.param_name];
- 
+
     if (unitOptions) {
       this.isMulti = true;
       this.multiData = unitOptions;
     } else {
       this.isMulti = false;
     }
- 
+
     this.selectedUnit = item.unit;
   }
- 
+
   toggle() {
     this.mainToggle = !this.mainToggle;
   }
@@ -461,7 +461,7 @@ export class SensorComponent implements OnInit {
     }
   }
   sampleData: Sensors[] = [];
- 
+
   getStationConfig() {
     this.http
       .get('http://localhost:3000/api/getHomeConfig')
@@ -474,7 +474,7 @@ export class SensorComponent implements OnInit {
             item.param4,
             item.param5,
           ].filter((p) => !!p); // avoid nulls
- 
+
           return {
             id: item.id,
             station_id: item.station_id,
@@ -483,7 +483,7 @@ export class SensorComponent implements OnInit {
             limitReached: false,
           };
         });
- 
+
         console.log('Stations with selected parameters:', this.stations);
         this.stations.forEach((s, i) => {
           console.log(
@@ -493,14 +493,14 @@ export class SensorComponent implements OnInit {
         });
       });
   }
- 
+
   updateHomeConfig(station: any) {
     const params = [...station.selectedParameters];
- 
+
     while (params.length < 5) {
       params.push(null);
     }
- 
+
     const payload = {
       station_id: station.station_id,
       param1: params[0],
@@ -509,9 +509,9 @@ export class SensorComponent implements OnInit {
       param4: params[3],
       param5: params[4],
     };
- 
+
     console.log('Updating station with payload:', payload);
- 
+
     this.http
       .put('http://localhost:3000/api/updateHomeConfig', payload)
       .subscribe({
@@ -525,7 +525,7 @@ export class SensorComponent implements OnInit {
         },
       });
   }
- 
+
   onParamChange(station: any) {
     if (station.selectedParameters.length > 5) {
       station.limitReached = true;
@@ -535,5 +535,3 @@ export class SensorComponent implements OnInit {
     }
   }
 }
- 
- 

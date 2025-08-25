@@ -77,20 +77,41 @@ export class MapService {
     // Hover event
     this.map.getViewport().addEventListener('pointermove', (event) => {
       const pixel = this.map.getEventPixel(event);
-      const feature = this.map.forEachFeatureAtPixel(pixel, (feat) => feat);
+      const feature = this.map.forEachFeatureAtPixel(
+        pixel,
+        (feat) => feat as Feature
+      );
 
-      if (feature && feature.get('stationId')) {
-        tooltipElement.style.display = 'block';
-        tooltipElement.innerHTML = `${feature.get('stationId')}`;
+      if (feature) {
+        // If hovering over a station marker, keep existing behavior
+        if (feature.get('stationId')) {
+          tooltipElement.style.display = 'block';
+          tooltipElement.innerHTML = `${feature.get('stationId')}`;
+          const coordinate = this.map.getEventCoordinate(event);
+          this.tooltipOverlay.setPosition(coordinate);
+          this.map.getTargetElement().style.cursor = 'pointer';
+          return;
+        }
 
-        const coordinate = this.map.getEventCoordinate(event);
-        this.tooltipOverlay.setPosition(coordinate);
-        this.map.getTargetElement().style.cursor = 'pointer';
-      } else {
-        tooltipElement.style.display = 'none';
-        this.tooltipOverlay.setPosition(undefined);
-        this.map.getTargetElement().style.cursor = '';
+        // If hovering over a circle, show OK/Not OK depending on range type
+        const rangeType = feature.get('rangeType'); // 'warning' | 'danger'
+        if (rangeType) {
+          tooltipElement.style.display = 'block';
+          tooltipElement.innerHTML =
+            rangeType === 'warning'
+              ? 'Inside Warning Circle'
+              : 'Inside Danger Circle';
+          const coordinate = this.map.getEventCoordinate(event);
+          this.tooltipOverlay.setPosition(coordinate);
+          this.map.getTargetElement().style.cursor = 'pointer';
+          return;
+        }
       }
+
+      // Default: hide tooltip
+      tooltipElement.style.display = 'none';
+      this.tooltipOverlay.setPosition(undefined);
+      this.map.getTargetElement().style.cursor = '';
     });
   }
 
@@ -152,6 +173,13 @@ export class MapService {
     const circleFeature = new Feature({
       geometry: new Circle(center, radius),
     });
+
+    // Tag feature for identification on hover
+    const rangeType =
+      color === 'yellow' ? 'warning' : color === 'red' ? 'danger' : undefined;
+    if (rangeType) {
+      circleFeature.set('rangeType', rangeType);
+    }
 
     const circleStyle = new Style({
       stroke: new Stroke({ color, width: 2 }),
