@@ -1,0 +1,11 @@
+node_modules
+api
+script
+src
+public
+docker/database
+.git
+.github
+.agents
+*.log
+.DS_Store
