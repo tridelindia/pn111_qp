@@ -423,10 +423,10 @@
                     <div id="ol-map" class="map-containerr"></div>
                 </div> -->
                 <div class="adcp_param_container">
-                    <div class="adcp_params" *ngFor="let bin of pairedBins | slice:0:4; let i = index">
+                    <div class="adcp_params" *ngFor="let bin of pairedBins | slice:0:4; let i = index; trackBy: trackByBin">
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed
-                                {{Bins[i].value}}</h3>
+                                {{Bins[i]?.value || ''}}</h3>
                             <app-gauge3 [value]="bin.speed" *ngIf="current_speed_widget === 'speed1'"></app-gauge3>
                             <app-gauge1 [value]="bin.speed" *ngIf="current_speed_widget === 'speed3'"></app-gauge1>
                             <app-gauge2 [value]="bin.speed" *ngIf="current_speed_widget === 'speed2'"></app-gauge2>
@@ -434,7 +434,7 @@
                         </div>
                         <div class="speed">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Direction
-                                {{Bins[i].value}}</h3>
+                                {{Bins[i]?.value || ''}}</h3>
                             <app-direction1 [id]="'bin'+ (i+1)" [direction]="bin.direction"
                                 *ngIf="current_direction_widget === 'direction2'"></app-direction1>
                             <app-direction2 [direction]="bin.direction" style="width: 100px; height: 100px;"
@@ -1367,9 +1367,9 @@
                 <div class="battery_level">
                     <h3>Battery Voltage</h3>
                     <div class="battery">
-                        <app-battery [voltage]="BuoyData[0].battery"></app-battery>
+                        <app-battery [voltage]="BuoyData[0]?.battery || 0"></app-battery>
                     </div>
-                    <h4>{{BuoyData[0].battery}} V</h4>
+                    <h4>{{BuoyData[0]?.battery || 0}} V</h4>
                     <!-- <div class="battery">
                         <div class="battery_box">
                             <div class="battery_fill"></div>

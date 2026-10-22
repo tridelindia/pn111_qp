@@ -372,6 +372,10 @@ const addStation = async (req, res) => {
       
           await client.query('COMMIT');
           console.log('All tables created and station saved.');
+          try {
+            const { triggerImmediateBroadcast } = require('./websocket');
+            triggerImmediateBroadcast().catch(err => console.warn('[WebSocket] Broadcast trigger error:', err.message));
+          } catch (_) {}
           res.json(result.rows);
     } catch (error) {
         await client.query('ROLLBACK');

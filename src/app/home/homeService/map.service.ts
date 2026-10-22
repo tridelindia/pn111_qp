@@ -120,20 +120,21 @@ export class MapService {
     stationId: string,
     img: string
   ): void {
+    if (!this.vectorLayer) return;
     const vectorSource = this.vectorLayer.getSource() as VectorSource;
+    if (!vectorSource) return;
 
     const markerStyle = new Style({
       image: new Icon({
         src: img,
         scale: 0.06,
-        imgSize: [0.01, 0.01],
-      } as any),
+      }),
       text: new Text({
-        font: '15px jost',
+        font: '15px Calibri,sans-serif',
         text: name,
-        offsetY: -20,
+        offsetY: -30,
         fill: new Fill({ color: '#000' }),
-        stroke: new Stroke({ color: '#fff', width: 2 }),
+        stroke: new Stroke({ color: '#fff', width: 3 }),
       }),
     });
 
@@ -146,8 +147,55 @@ export class MapService {
     vectorSource.addFeature(marker);
   }
 
-  addCircle(center: [number, number], radius: number, color: string): void {
+  updateMarker(
+    coordinate: [number, number],
+    name: string,
+    stationId: string,
+    img: string
+  ): void {
+    if (!this.vectorLayer) return;
     const vectorSource = this.vectorLayer.getSource() as VectorSource;
+    if (!vectorSource) return;
+
+    const features = vectorSource.getFeatures();
+    const existingFeature = features.find(
+      (f: any) =>
+        f.get('stationId') === stationId ||
+        f.get('name') === name ||
+        (f.get('stationId') && f.get('stationId').toLowerCase() === stationId.toLowerCase())
+    );
+
+    if (existingFeature) {
+      const geom = existingFeature.getGeometry() as Point;
+      if (geom && typeof geom.setCoordinates === 'function') {
+        geom.setCoordinates(coordinate);
+      }
+      if (img) {
+        const markerStyle = new Style({
+          image: new Icon({
+            src: img,
+            scale: 0.06,
+          }),
+          text: new Text({
+            font: '15px Calibri,sans-serif',
+            text: name,
+            offsetY: -30,
+            fill: new Fill({ color: '#000' }),
+            stroke: new Stroke({ color: '#fff', width: 3 }),
+          }),
+        });
+        existingFeature.setStyle(markerStyle);
+      }
+    } else {
+      this.addMarker(coordinate, name, stationId, img);
+    }
+  }
+
+  addCircle(center: [number, number], radius: number, color: string): void {
+    if (!center || !radius || isNaN(radius) || radius <= 0) return;
+    if (!this.vectorLayer) return;
+    const vectorSource = this.vectorLayer.getSource() as VectorSource;
+    if (!vectorSource) return;
 
     const circleFeature = new Feature({
       geometry: new Circle(center, radius),
@@ -155,7 +203,7 @@ export class MapService {
 
     const circleStyle = new Style({
       stroke: new Stroke({ color, width: 2 }),
-      fill: new Fill({ color: 'rgba(0, 0, 255, 0.1)' }),
+      fill: new Fill({ color: color === 'red' ? 'rgba(231, 76, 60, 0.08)' : 'rgba(241, 196, 15, 0.08)' }),
     });
     circleFeature.setStyle(circleStyle);
     vectorSource.addFeature(circleFeature);

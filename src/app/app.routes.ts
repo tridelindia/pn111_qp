@@ -7,6 +7,8 @@ import { ReportComponent } from './report/report.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { UsersComponent } from './users/users.component';
 import { SettingsComponent } from './settings/settings.component';
+import { DataHealthComponent } from './data-health/data-health.component';
+import { NotificationComponent } from './notification/notification.component';
 import { AuthGuard } from './services/auth.guard';
 import { permissionGuard } from './services/auth.guard.spec';
 
@@ -14,59 +16,92 @@ export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo:'auth'
+        redirectTo: 'login'
     },
     {
-        path:'auth',
-        component:AuthenticationComponent
+        path: 'login',
+        component: AuthenticationComponent
+    },
+    {
+        path: 'auth',
+        redirectTo: 'login'
     },
     {
         path: 'base',
         component: LayoutComponent,
         canActivate: [AuthGuard],
-        children:[
+        children: [
             {
-                path:'home',
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'home'
+            },
+            {
+                path: 'home',
                 component: HomeComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Home', action: 'read'}
- 
+                data: { permission: 'Home', action: 'read' }
             },
             {
-                path:'dashboard',
-                component:DashboardComponent,
+                path: 'dashboard',
+                component: DashboardComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Dashboard', action: 'read'}
+                data: { permission: 'Dashboard', action: 'read' }
             },
             {
-                path:'reports',
-                component:ReportComponent,
+                path: 'reports',
+                component: ReportComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Reports', action: 'read'}
+                data: { permission: 'Reports', action: 'read' }
             },
             {
-                path:'analytics',
-                component:AnalyticsComponent,
+                path: 'analytics',
+                component: AnalyticsComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Analytics', action: 'read'}
+                data: { permission: 'Analysis', action: 'read' }
             },
             {
-                path:'users',
-                component:UsersComponent,
-                canActivate: [permissionGuard],
-                data: { permission: 'User Management', action: 'read'}
+                path: 'analysis',
+                redirectTo: 'analytics'
             },
             {
-                path:'settings',
-                component:SettingsComponent,
+                path: 'users',
+                component: UsersComponent,
                 canActivate: [permissionGuard],
-                data: { permission: 'Settings', action: 'read'}
+                data: { permission: 'User Management', action: 'read' }
+            },
+            {
+                path: 'settings',
+                component: SettingsComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Settings', action: 'read' }
+            },
+            {
+                path: 'data-health',
+                component: DataHealthComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Sensor Health', action: 'read' }
+            },
+            {
+                path: 'notification',
+                component: NotificationComponent,
+                canActivate: [permissionGuard],
+                data: { permission: 'Notification', action: 'read' }
             }
-            
         ]
     },
+    // Top-level aliases for direct navigation
+    { path: 'home', redirectTo: 'base/home' },
+    { path: 'dashboard', redirectTo: 'base/dashboard' },
+    { path: 'reports', redirectTo: 'base/reports' },
+    { path: 'analytics', redirectTo: 'base/analytics' },
+    { path: 'analysis', redirectTo: 'base/analytics' },
+    { path: 'users', redirectTo: 'base/users' },
+    { path: 'settings', redirectTo: 'base/settings' },
+    { path: 'data-health', redirectTo: 'base/data-health' },
+    { path: 'notification', redirectTo: 'base/notification' },
     {
-        path:'**',
-        redirectTo:'auth'
+        path: '**',
+        redirectTo: 'login'
     }
 ];

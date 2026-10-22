@@ -18,3 +18,28 @@
 {"timestamp":"2025-05-29T05:52:49.900Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-05-29T05:52:50.229Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
 {"timestamp":"2025-05-29T06:14:12.347Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-05-29T11:19:23.658Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T11:19:25.382Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T11:19:26.185Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T11:19:26.336Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T11:19:26.560Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T11:19:29.196Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T11:21:04.835Z","userName":"Admin","activity":"New station has been added","userId":1,"statusCode":"S001","filePath":"station.component.ts/createStation"}
+{"timestamp":"2025-05-29T11:21:07.542Z","userName":"Admin","activity":"New station has been added","userId":1,"statusCode":"S001","filePath":"station.component.ts/createStation"}
+{"timestamp":"2025-05-29T11:24:41.689Z","userName":"Admin","activity":"New station has been added","userId":1,"statusCode":"S001","filePath":"station.component.ts/createStation"}
+{"timestamp":"2025-05-29T11:24:49.551Z","userName":"Admin","activity":"New station has been added","userId":1,"statusCode":"S001","filePath":"station.component.ts/createStation"}
+{"timestamp":"2025-05-29T12:07:08.580Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T12:10:28.808Z","userName":"Admin","activity":"Station has been updated","userId":1,"statusCode":"S002","filePath":"station.component.ts/updateStation"}
+{"timestamp":"2025-05-29T12:44:53.712Z","userName":"Admin","activity":"New notification has been added","userId":1,"statusCode":"N001","filePath":"notification.component.ts/addNotification"}
+{"timestamp":"2025-05-30T12:38:57.868Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-05-30T12:38:59.033Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-05-30T12:38:59.265Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-05-30T12:38:59.590Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-05-30T12:38:59.955Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-05-30T12:39:00.428Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2025-05-31T06:47:28.068Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2025-05-31T06:47:29.622Z","userName":"Admin","activity":"Notification status has been updated","userId":1,"statusCode":"N004","filePath":"notification.component.ts/toggleNotificationStatus"}
+{"timestamp":"2026-10-22T05:27:19.468Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2026-10-22T05:27:20.904Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2026-10-22T05:27:21.607Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}
+{"timestamp":"2026-10-22T05:27:21.797Z","userName":"Admin","activity":"Sensor has been updated","userId":1,"statusCode":"SE002","filePath":"sensor.component.ts/updateSensor"}

@@ -9,49 +9,52 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef }
   styleUrl: './battery.component.css'
 })
 export class BatteryComponent implements OnInit, OnChanges {
-  @Input() voltage: number = 0; // changed name
+  @Input() voltage: number | string = 0;
   percentage: number = 0;
-  strokeDashoffset: number = 0;
-  batteryColor: string = 'red';
+  strokeDashoffset: number = -51;
+  batteryColor: string = '#E74C3C';
 
-  ngOnInit() {
-    this.batteryColor = this.getColor()
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
     this.updateValues();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-  if (changes['voltage']) {
-    this.updateValues();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['voltage']) {
+      this.updateValues();
+    }
   }
-}
 
-constructor(private cdr: ChangeDetectorRef) {}
+  private updateValues(): void {
+    if (this.voltage === undefined || this.voltage === null || this.voltage === '') {
+      return;
+    }
 
-  private updateValues() {
-  const maxVoltage = 12.4;
-  let voltage = Math.min(this.voltage, maxVoltage);
+    const raw = typeof this.voltage === 'string' ? parseFloat(this.voltage) : Number(this.voltage);
+    if (isNaN(raw) || raw <= 0) {
+      return;
+    }
 
-  const voltagePercentage = Math.round((voltage / maxVoltage) * 100);
-  this.percentage = voltagePercentage;
-  console.log("percentage is battery",this.percentage)
+    // 12V marine battery nominal scale (up to 13.0V for charging/float)
+    const maxVoltage = 13.0;
+    const clamped = Math.max(0, Math.min(raw, maxVoltage));
+    this.percentage = Math.round((clamped / maxVoltage) * 100);
 
-  this.calculateOffset();
-  this.batteryColor = this.getColor();
+    this.calculateOffset();
+    this.batteryColor = this.getColor();
     this.cdr.detectChanges();
+  }
 
-}
-
-
-  private calculateOffset() {
+  private calculateOffset(): void {
     const circleLength = 51;
     this.strokeDashoffset = -51 - ((circleLength / 100) * this.percentage);
-    console.log(`Stroke Dashoffset calculated: ${this.strokeDashoffset}`);
   }
 
- getColor(): string {
+  getColor(): string {
     if (this.percentage >= 75) return '#01A437'; // Green
     if (this.percentage >= 50) return '#F1C40F'; // Yellow
-    if (this.percentage >= 25) return '#E74C3C'; // Orange
+    if (this.percentage >= 25) return '#E67E22'; // Orange
     return '#E74C3C'; // Red
   }
 }

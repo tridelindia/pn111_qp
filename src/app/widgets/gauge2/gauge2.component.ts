@@ -1,11 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
-import { distance } from 'ol/coordinate';
-
 
 @Component({
     selector: 'app-gauge2',
-    standalone:true,
+    standalone: true,
     imports: [NgxEchartsModule],
     templateUrl: './gauge2.component.html',
     styleUrls: ['./gauge2.component.css'],
@@ -16,98 +14,131 @@ import { distance } from 'ol/coordinate';
         }
     ]
 })
-export class Gauge2Component {
-  @Input() value:number = 0;
-  gaugeOption: any = {
-    // backgroundColor: '#f4f4f4', // Background color
-    tooltip: {
-      formatter: '{a} <br/>{b} : {c}%',
-      textStyle: {
-        fontSize: 14,
-        color: '#333'
-      }
-    },
-    series: [
-      {
-        name: 'Pressure',
-        type: 'gauge',
-        radius: '90%', // Size of the gauge
-        min: 0,
-        max: 100,
-        splitNumber: 10, // Number of ticks
-        axisLine: {
-          lineStyle: {
-            width: 3, // Width of the axis line
-            // color: [
-            //   [0.3, '#ff4500'],  // Red for 0-30%
-            //   [0.7, '#ffa500'],  // Orange for 30-70%
-            //   [1, '#008000']    // Green for 70-100%
-            // ]
-          }
-        },
-        axisTick: {
-          length: 10, 
-          distance: 1,
-          lineStyle: {
-            color: '#000',
-            width: 0.5
-          }
-        },
-        splitLine: {
-          length: 12,
-          distance: 1,
-          lineStyle: {
-            color: '#000',
-            width: 2
-          }
-        },
-        axisLabel: {
-          fontSize: 8,
-          color: '#000',
-          distance: 5
-        },
-        pointer: {
-          length: '80%',
-          width: 4,
-          itemStyle: {
-            color: 'blue'
-          }
-        },
-        progress: {
-          show: true,
-          width: 3
-        },
-        // detail: {
-        //   formatter: '{value} m/s',
-        //   fontSize: 18,
-        //   color: '#000',
-         
-        // },
-        data: [
-          {
-            value: 50,
-            color:'#000',
-            show:false,
-            // distance:20,
-            // name: 'SCORE',
-            title: {
-              offsetCenter: [0, '70%'],
-              fontSize: 12,
-              color: '#000',
-              show:false
-            },
-            detail: {
-              offsetCenter: [0, '40%'],
-              fontSize: 12,
-              distance:-30,
-              // fontWeight: 'bold',
-              color: '#000',
-              show:false
+export class Gauge2Component implements OnInit, OnChanges {
+  @Input() value: number | string = 0;
+  @Input() min: number = 0;
+  @Input() max: number = 3;
 
-            }
-          }
-        ]
+  gaugeOption: any;
+  mergeOption: any;
+
+  ngOnInit(): void {
+    this.initGauge();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value'] || changes['min'] || changes['max']) {
+      if (!this.gaugeOption) {
+        this.initGauge();
+      } else {
+        this.updateGauge();
       }
-    ]
-  };
+    }
+  }
+
+  private getEffectiveMax(): number {
+    const val = Number(this.value) || 0;
+    const base = this.max || 3;
+    return val > base ? Math.ceil(val) : base;
+  }
+
+  private initGauge(): void {
+    const val = Number(this.value) || 0;
+    const effectiveMax = this.getEffectiveMax();
+
+    this.gaugeOption = {
+      animation: true,
+      animationDuration: 800,
+      animationDurationUpdate: 800,
+      animationEasing: 'cubicOut',
+      animationEasingUpdate: 'cubicOut',
+      tooltip: {
+        formatter: '{a} <br/>{b} : {c} m/s',
+        textStyle: {
+          fontSize: 14,
+          color: '#333'
+        }
+      },
+      series: [
+        {
+          name: 'Current Speed',
+          type: 'gauge',
+          radius: '90%',
+          min: this.min,
+          max: effectiveMax,
+          splitNumber: 6,
+          axisLine: {
+            lineStyle: {
+              width: 3
+            }
+          },
+          axisTick: {
+            length: 10,
+            distance: 1,
+            lineStyle: {
+              color: '#000',
+              width: 0.5
+            }
+          },
+          splitLine: {
+            length: 12,
+            distance: 1,
+            lineStyle: {
+              color: '#000',
+              width: 2
+            }
+          },
+          axisLabel: {
+            fontSize: 8,
+            color: '#000',
+            distance: 5,
+            formatter: (v: number) => Number.isInteger(v) ? `${v}` : v.toFixed(1)
+          },
+          pointer: {
+            length: '80%',
+            width: 4,
+            itemStyle: {
+              color: 'blue'
+            }
+          },
+          progress: {
+            show: true,
+            width: 3
+          },
+          data: [
+            {
+              value: val,
+              color: '#000',
+              show: false,
+              title: {
+                show: false
+              },
+              detail: {
+                show: false
+              }
+            }
+          ]
+        }
+      ]
+    };
+  }
+
+  private updateGauge(): void {
+    const val = Number(this.value) || 0;
+    const effectiveMax = this.getEffectiveMax();
+
+    this.mergeOption = {
+      series: [
+        {
+          min: this.min,
+          max: effectiveMax,
+          data: [
+            {
+              value: val
+            }
+          ]
+        }
+      ]
+    };
+  }
 }

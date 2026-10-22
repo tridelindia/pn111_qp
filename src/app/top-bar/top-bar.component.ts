@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { GlobalDataService } from '../global-data/global-data.component';
 import { AuthService } from '../services/auth.service';
 import { CurrentUser } from '../user-model/user-model.module';
@@ -18,34 +18,49 @@ interface Station{
     templateUrl: './top-bar.component.html',
     styleUrl: './top-bar.component.css'
 })
-export class TopBarComponent implements OnInit{
+export class TopBarComponent implements OnInit, OnDestroy{
     screen!:string;
     @Input() page!:number;
     dropdownOpen:boolean =  false;
     selectedStation:string = 'Station 1';
     listStations:Station[]=[];
     currentUser!: CurrentUser;
-    isUtc:boolean = true;
-    date:string = ''
+    isUtc:boolean = false;
+    date:string = '';
+    private timerId: any = null;
 
     onToggleChange(){
-        const now = new Date();
+        this.isUtc = !this.isUtc;
+        this.updateTime();
+    }
 
-        const utcDate = new Date(now.getTime());
-        const formattedUTC = this.formatDate(utcDate);
-        
-        // IST Time (UTC + 5:30)
-        const istOffset = 5.5 * 60 * 60 * 1000;
-        const istDate = new Date(now.getTime() + istOffset);
-        const formattedIST = this.formatDate(istDate);
-        
-        console.log("UTC Time:", formattedUTC);
-        console.log("IST Time:", formattedIST);
-        this.isUtc = !this.isUtc
-        if(this.isUtc){
-            this.date = formattedUTC;
-        }else{
-            this.date = formattedIST
+    updateTime(){
+        const now = new Date();
+        this.date = this.isUtc 
+            ? this.formatTime(now, 'UTC') 
+            : this.formatTime(now, 'Asia/Qatar');
+    }
+
+    formatTime(date: Date, timeZone: string): string {
+        try {
+            const formatter = new Intl.DateTimeFormat('en-GB', {
+                timeZone,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            const parts = formatter.formatToParts(date);
+            const p: { [key: string]: string } = {};
+            for (const part of parts) {
+                p[part.type] = part.value;
+            }
+            return `${p['day']}-${p['month']}-${p['year']} ${p['hour']}:${p['minute']}:${p['second']}`;
+        } catch (e) {
+            return date.toISOString().replace('T', ' ').slice(0, 19);
         }
     }
     constructor(private http:HttpClient, private data:GlobalDataService,private authService: AuthService, private layout:LayoutComponent, private report:ReportService){}
@@ -85,27 +100,16 @@ export class TopBarComponent implements OnInit{
         this.screen = `${scren.width},${scren.height}`;
         this.getStation();
         this.currentUser = this.authService.getCurrentUser();
-        this.onToggleChange();
-
-        
-        
+        this.updateTime();
+        this.timerId = setInterval(() => this.updateTime(), 1000);
     }
-    
 
-     formatDate(date: Date) {
-      const pad = (n: number) => n.toString().padStart(2, '0');
-    
-      const year = date.getUTCFullYear();
-      const month = pad(date.getUTCMonth() + 1);
-      const day = pad(date.getUTCDate());
-      const hours = pad(date.getUTCHours());
-      const minutes = pad(date.getUTCMinutes());
-      const seconds = pad(date.getUTCSeconds());
-    
-      return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    ngOnDestroy(): void {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+            this.timerId = null;
+        }
     }
-    
-    // UTC Time
    
     
     getScreenSize() {
@@ -116,7 +120,7 @@ export class TopBarComponent implements OnInit{
     }
 
     getStation(){
-        this.http.get('http://192.168.0.147:3000/api/getStationConfig').subscribe(
+        this.http.get('http://localhost:3000/api/getStationConfig').subscribe(
             (response: any) => {
                 console.log( "Stations",response);
                 for (let index = 0; index < response.length; index++) {
@@ -126,7 +130,8 @@ export class TopBarComponent implements OnInit{
                     console.log("response topbar",response, this.listStations[0].station_name);
                 this.layout.selectedStationId = this.listStations[0].station_id
                 console.log("id_station","one",this.layout.selectedStationId);
-                this.layout.sensors = response[0].sensors
+                this.layout.sensors = response[0].sensors;
+                this.data.setStationId(this.listStations[0].station_id);
                 setTimeout(() => {
                     this.layout.isDashboardLoading = false;
                 }, 200);

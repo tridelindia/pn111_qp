@@ -1,4 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Map } from 'ol';
 import { fromLonLat, toLonLat } from 'ol/proj';
 import { MapService } from './homeService/map.service';
@@ -15,6 +16,7 @@ import { InfobuoyComponent } from '../home/infobuoy/infobuoy.component';
 import { BuoyMeasurement, ReportService } from '../report/report.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { SensorModel } from '../models/station.model';
+import { WebsocketService } from '../services/websocket.service';
 
 @Component({
   selector: 'app-home',
@@ -116,20 +118,21 @@ export class HomeComponent implements OnInit {
     }
     this.mapService.updateMapLayer(this.mapUrl);
   }
+  private wsSub?: Subscription;
+
   constructor(
     private mapService: MapService,
     private stationConfig: StationconfigService,
     private infobuoy: InfobuoyComponent,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private wsService: WebsocketService
   ) {}
 
-    formatDateTime(date: Date): string {
-    // Convert to 'yyyy-MM-dd HH:mm:ss' or whatever your backend expects, in IST
+  formatDateTime(date: Date): string {
     const offset = date.getTimezoneOffset() * 60000;
     const localDate = new Date(date.getTime() - offset);
     return localDate.toISOString().slice(0, 19).replace('T', ' ');
   }
- 
 
   ngOnInit(): void {
     this.stationConfig.getHomeConfig().subscribe((homeConfig) => {
@@ -137,196 +140,231 @@ export class HomeComponent implements OnInit {
       console.log('Home Circle selected params : ', this.fetchedparams2);
     });
 
-    // this.stationConfig.getSensorConfig().subscribe((sensorConfig) => {
-    //   this.paramUnits = sensorConfig;
-
-    // });
-
     this.stationConfig.getStationNames().subscribe((stationConfig) => {
       this.fetchedBuoys = stationConfig;
       console.log('Station config Details: ', this.fetchedBuoys);
 
-      const configStationIds = this.fetchedBuoys.map((id) =>
-        id.station_id.toLowerCase()
-      );
-      console.log('Station IDs: ', configStationIds);
-
-      this.reportService.getAllSensorData().subscribe((data) => {
-        this.livefetchedBuoys = data.filter((buoy) =>
-          configStationIds.includes(buoy.station_id.toLowerCase())
-        );
-        this.livefetchedBuoys = data
-          .filter((buoy) =>
-            configStationIds.includes(buoy.station_id.toLowerCase())
-          )
-          .sort(
-            (a, b) =>
-              configStationIds.indexOf(a.station_id.toLowerCase()) -
-              configStationIds.indexOf(b.station_id.toLowerCase())
-          );
-        console.log('Filtered last Data Live Buoys: ', this.livefetchedBuoys);
-
-        if (this.livefetchedBuoys.length !== 0) {
-          for (let index = 0; index < this.livefetchedBuoys.length; index++) {
-            const cord = fromLonLat([
-              this.livefetchedBuoys[index].lon,
-              this.livefetchedBuoys[index].lat,
-            ]) as [number, number];
-            // (this as any)[`livelocationbuoy${index + 1}`] = cord;
-            this.livelocationbuoys[index] = cord;
-            // console.log('Live Location: ', this.livelocationbuoys);
-            console.log('five staions lat long', cord);
-            setTimeout(() => {
-              this.mapService.addMarker(
-                cord,
-                this.fetchedBuoys[index].station_name,
-                this.fetchedBuoys[index].station_id,
-                this.imageMarkers[index]
-              );
-            }, 1000);
-          }
-
-          console.log('Checking buoy range conditions...');
-          this.fetchedBuoys.forEach((configBuoy, index) => {
-            const liveMatch = this.livefetchedBuoys.find(
-              (live) =>
-                live.station_id.toLowerCase() ===
-                configBuoy.station_id.toLowerCase()
-            );
-
-            if (liveMatch) {
-              const result = this.haversineDistanceAndDirection(
-                [configBuoy.lon_dd, configBuoy.lat_dd],
-                [liveMatch.lon, liveMatch.lat]
-              );
-
-              const driftDistance = result.distance;
-              const driftDirection = result.direction;
-              const wrange = (this as any)[`buoy${index + 1}wrange`];
-              const drange = (this as any)[`buoy${index + 1}drange`];
-
-              this.buoyDranges[index] = drange;
-              this.buoyWRanges[index] = wrange;
-
-              let driftStatus = '';
-              let driftClass = '';
-              let driftType = '';
-
-              if (driftDistance <= wrange) {
-                driftStatus = `Within the range`;
-                driftClass = 'text-success';
-                driftType = 'within';
-              } else if (driftDistance > wrange && driftDistance <= drange) {
-                driftStatus = `Across the\nwarning range`;
-                driftClass = 'text-warning';
-                driftType = 'warning';
-              } else {
-                driftStatus = `Across the\ndanger range`;
-                driftClass = 'text-danger';
-                driftType = 'danger';
-              }
-
-              const driftAction =
-                driftType === 'within' ? 'Drifting' : 'Drifted';
-              const displayDistance =
-                driftDistance >= 1000
-                  ? `${(driftDistance / 1000).toFixed(1)} km`
-                  : `${driftDistance.toFixed(1)} m`;
-
-              const driftText = `${driftAction} ${displayDistance} ${driftDirection}\n(${driftStatus})`;
-
-              this.buoyDrifts.push({
-                name: configBuoy.station_name,
-                drift: driftText,
-                type: driftType,
-              });
-
-              this.toastQueue.push({
-                message: `${configBuoy.station_name}: ${driftStatus}`,
-                cssClass: driftClass,
-              });
-
-              console.log(
-                `Drift for ${configBuoy.station_name}: ${driftText} , ${driftType}`
-              );
-            }
-          });
-
-          this.showToastSequentially();
-
-          const status = this.coordassign(stationConfig);
-
-          if (this.imageMarker1 != null) {
-            if (status && !this.map) {
-              this.MapInit();
-            }
-          }
-
-          // Build final buoy list
-          this.buoys = this.fetchedBuoys.map((configBuoy) => {
-            const liveMatch = this.livefetchedBuoys.find(
-              (live) =>
-                live.station_id.toLowerCase() ===
-                configBuoy.station_id.toLowerCase()
-            );
-
-            const statusText =
-              this.statusTexts.find((st) => st.name === configBuoy.station_name)
-                ?.status || 'Unknown';
-            const driftText =
-              this.buoyDrifts.find((d) => d.name === configBuoy.station_name)
-                ?.drift || 'N/A';
-
-            return {
-              name: configBuoy.station_name,
-              lat: liveMatch?.lat || configBuoy.lat_dd, // fallback to config if no live data
-              long: liveMatch?.lon || configBuoy.lon_dd,
-              status: statusText,
-              drift: driftText,
-              image: (() => {
-                if (statusText !== 'Online') {
-                  return '../../assets/home/buoy_offline.png';
-                }
-
-                const driftEntry = this.buoyDrifts.find(
-                  (d) => d.name === configBuoy.station_name
-                );
-                if (!driftEntry) {
-                  return '../../assets/home/buoy.png'; // default if no drift data
-                }
-
-                if (driftEntry.drift.includes('danger range')) {
-                  return '../../assets/home/buoy_danger.png';
-                } else if (driftEntry.drift.includes('warning range')) {
-                  return '../../assets/home/buoy_warning.png';
-                } else {
-                  return '../../assets/home/buoy.png';
-                }
-              })(),
-            };
-          });
-
-          console.log('Extend Buoy Data: ', this.buoys);
-        }
-      });
-
+      this.buoyWRanges = [];
+      this.buoyDranges = [];
       for (let i = 0; i < stationConfig.length; i++) {
-        (this as any)[`buoy${i + 1}wrange`] = parseFloat(
-          stationConfig[i].warning
-        );
-        (this as any)[`buoy${i + 1}drange`] = parseFloat(
-          stationConfig[i].danger
-        );
-
+        const wrange = parseFloat(stationConfig[i].warning) || 150;
+        const drange = parseFloat(stationConfig[i].danger) || 300;
+        this.buoyWRanges[i] = wrange;
+        this.buoyDranges[i] = drange;
+        (this as any)[`buoy${i + 1}wrange`] = wrange;
+        (this as any)[`buoy${i + 1}drange`] = drange;
         (this as any)[`buoy${i + 1}lat`] = stationConfig[i].lat_dd;
         (this as any)[`buoy${i + 1}long`] = stationConfig[i].lon_dd;
       }
 
       this.statusTexts = stationConfig.map((station, index) => ({
-        name: this.fetchedBuoys[index].station_name,
+        name: this.fetchedBuoys[index]?.station_name || station.station_name,
         status: station.status === 'active' ? 'Online' : 'Offline',
       }));
+
+      const status = this.coordassign(stationConfig);
+      if (status && !this.mapInitialized) {
+        this.MapInit();
+      }
+
+      // Initial HTTP fetch
+      this.reportService.getAllSensorData().subscribe((data) => {
+        this.handleLiveSensorUpdate(data);
+      });
     });
+
+    // Real-time WebSocket updates for all stations & GPS locations
+    this.wsSub = this.wsService.liveData$.subscribe((payload) => {
+      if (!payload) return;
+
+      if (payload.stationsConfig && payload.stationsConfig.length > 0 && this.fetchedBuoys.length === 0) {
+        this.fetchedBuoys = payload.stationsConfig;
+        this.coordassign(payload.stationsConfig);
+        if (!this.mapInitialized) {
+          this.MapInit();
+        }
+      }
+
+      if (payload.data && Array.isArray(payload.data)) {
+        this.handleLiveSensorUpdate(payload.data);
+      }
+    });
+  }
+
+  handleLiveSensorUpdate(data: BuoyMeasurement[]): void {
+    if (!this.fetchedBuoys || this.fetchedBuoys.length === 0 || !data || data.length === 0) {
+      return;
+    }
+
+    const configStationIds = this.fetchedBuoys.map((id) =>
+      id.station_id.toLowerCase()
+    );
+
+    this.livefetchedBuoys = data
+      .filter((buoy) =>
+        buoy.station_id && configStationIds.includes(buoy.station_id.toLowerCase())
+      )
+      .sort(
+        (a, b) =>
+          configStationIds.indexOf(a.station_id.toLowerCase()) -
+          configStationIds.indexOf(b.station_id.toLowerCase())
+      );
+
+    if (this.livefetchedBuoys.length === 0) return;
+
+    // 1. Update map coordinates and markers in real-time
+    this.fetchedBuoys.forEach((configBuoy, index) => {
+      const liveMatch = this.livefetchedBuoys.find(
+        (live) =>
+          live.station_id &&
+          live.station_id.toLowerCase() === configBuoy.station_id.toLowerCase()
+      );
+
+      if (liveMatch && liveMatch.lon != null && liveMatch.lat != null) {
+        const cord = fromLonLat([
+          Number(liveMatch.lon),
+          Number(liveMatch.lat),
+        ]) as [number, number];
+
+        this.livelocationbuoys[index] = cord;
+
+        const markerImg = this.imageMarkers[index] || '../../assets/home/buoy.png';
+        if (this.mapService.map) {
+          this.map = this.mapService.map;
+          this.mapService.updateMarker(
+            cord,
+            configBuoy.station_name,
+            configBuoy.station_id,
+            markerImg
+          );
+        }
+
+        // Calculate live drift
+        const result = this.haversineDistanceAndDirection(
+          [configBuoy.lon_dd, configBuoy.lat_dd],
+          [Number(liveMatch.lon), Number(liveMatch.lat)]
+        );
+
+        const driftDistance = result.distance;
+        const driftDirection = result.direction;
+        const wrange = (this as any)[`buoy${index + 1}wrange`] || parseFloat(configBuoy.warning) || 150;
+        const drange = (this as any)[`buoy${index + 1}drange`] || parseFloat(configBuoy.danger) || 300;
+
+        this.buoyDranges[index] = drange;
+        this.buoyWRanges[index] = wrange;
+
+        let driftStatus = '';
+        let driftClass = '';
+        let driftType = '';
+
+        if (driftDistance <= wrange) {
+          driftStatus = `Within the range`;
+          driftClass = 'text-success';
+          driftType = 'within';
+        } else if (driftDistance > wrange && driftDistance <= drange) {
+          driftStatus = `Across the\nwarning range`;
+          driftClass = 'text-warning';
+          driftType = 'warning';
+        } else {
+          driftStatus = `Across the\ndanger range`;
+          driftClass = 'text-danger';
+          driftType = 'danger';
+        }
+
+        const driftAction = driftType === 'within' ? 'Drifting' : 'Drifted';
+        const displayDistance =
+          driftDistance >= 1000
+            ? `${(driftDistance / 1000).toFixed(1)} km`
+            : `${driftDistance.toFixed(1)} m`;
+
+        const driftText = `${driftAction} ${displayDistance} ${driftDirection}\n(${driftStatus})`;
+
+        const existingIdx = this.buoyDrifts.findIndex(
+          (d) => d.name === configBuoy.station_name
+        );
+        const driftObj = {
+          name: configBuoy.station_name,
+          drift: driftText,
+          type: driftType,
+        };
+
+        if (existingIdx >= 0) {
+          this.buoyDrifts[existingIdx] = driftObj;
+        } else {
+          this.buoyDrifts.push(driftObj);
+        }
+      }
+    });
+
+    // 2. Update buoys list for HTML UI cards (lat, long, drift, status)
+    this.buoys = this.fetchedBuoys.map((configBuoy) => {
+      const liveMatch = this.livefetchedBuoys.find(
+        (live) =>
+          live.station_id &&
+          live.station_id.toLowerCase() === configBuoy.station_id.toLowerCase()
+      );
+
+      const statusText =
+        this.statusTexts.find((st) => st.name === configBuoy.station_name)
+          ?.status || (configBuoy.status === 'active' ? 'Online' : 'Offline');
+      const driftText =
+        this.buoyDrifts.find((d) => d.name === configBuoy.station_name)?.drift ||
+        'N/A';
+
+      return {
+        name: configBuoy.station_name,
+        lat: liveMatch?.lat !== undefined ? liveMatch.lat : configBuoy.lat_dd,
+        long: liveMatch?.lon !== undefined ? liveMatch.lon : configBuoy.lon_dd,
+        status: statusText,
+        drift: driftText,
+        image: (() => {
+          if (statusText !== 'Online' && configBuoy.status !== 'active') {
+            return '../../assets/home/buoy_offline.png';
+          }
+          const driftEntry = this.buoyDrifts.find(
+            (d) => d.name === configBuoy.station_name
+          );
+          if (!driftEntry) return '../../assets/home/buoy.png';
+          if (driftEntry.drift.includes('danger range')) return '../../assets/home/buoy_danger.png';
+          if (driftEntry.drift.includes('warning range')) return '../../assets/home/buoy_warning.png';
+          return '../../assets/home/buoy.png';
+        })(),
+      };
+    });
+
+    // 3. If buoy info modal is currently open, update its real-time params
+    if (this.buoyTapped && this.selectedBuoyData) {
+      const liveMatch = this.livefetchedBuoys.find(
+        (l) =>
+          l.station_id &&
+          l.station_id.toLowerCase() === this.selectedBuoyData.station_id.toLowerCase()
+      );
+
+      if (liveMatch) {
+        this.selectedParamData = liveMatch;
+        const filter = this.fetchedparams2.filter(
+          (item) =>
+            item.station_id &&
+            item.station_id.toLowerCase() === this.selectedBuoyData.station_id.toLowerCase()
+        );
+
+        if (filter && filter.length > 0) {
+          const config = filter[0];
+          const dataaa: { name: string; value: string }[] = [];
+          for (let i = 1; i <= 5; i++) {
+            const key = `param${i}`;
+            const paramName = (config as any)[key];
+            if (paramName) {
+              dataaa.push({
+                name: paramName,
+                value: (liveMatch as any)[paramName] !== undefined ? String((liveMatch as any)[paramName]) : 'N/A',
+              });
+            }
+          }
+          this.infoBuoyDataSet = dataaa;
+        }
+      }
+    }
   }
 
   showToastSequentially() {
@@ -401,7 +439,9 @@ export class HomeComponent implements OnInit {
       }
  
       this.centerBuoys[index] = assignedLoc;
- 
+      this.buoyWRanges[index] = parseFloat(config.warning) || 150;
+      this.buoyDranges[index] = parseFloat(config.danger) || 300;
+
       const driftEntry = this.buoyDrifts.find(
         (d) => d.name === config.station_name
       );
@@ -451,6 +491,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
+    if (this.wsSub) {
+      this.wsSub.unsubscribe();
+    }
     this.mapService.destroyMap();
   }
 
@@ -459,47 +502,50 @@ export class HomeComponent implements OnInit {
     console.log('Initializing map...');
 
     if (!this.mapInitialized) {
-      console.log('Map not initialized yet. Proceeding with initialization.');
+      const initialCenter =
+        this.centerBuoys[0] ||
+        this.centerbuoy4 ||
+        this.centerbuoy1 ||
+        [5738596, 2928500];
 
-      console.log('Calling initializeMap with:', {
+      console.log('Map not initialized yet. Proceeding with initialization.', {
         mapTarget: this.mapTarget,
-        center: this.centerbuoy4,
-        zoomLevel: 14,
+        center: initialCenter,
+        zoomLevel: 13,
         mapUrl: this.mapUrl,
       });
 
       this.mapService.initializeMap(
         this.mapTarget,
-        this.centerbuoy4,
-        14,
+        initialCenter,
+        13,
         this.mapUrl
       );
-
-      console.log('Adding circles for each buoy...');
-      for (let index = 0; index < this.fetchedBuoys.length; index++) {
-         const center = this.centerBuoys[index];
-        const drange = this.buoyDranges[index]; // Make sure you have arrays for these ranges
-        const wrange = this.buoyWRanges[index];
- 
-        if (!center || !Array.isArray(center) || center.length !== 2) {
-          console.warn(
-            `Center coordinates for buoy ${
-              index + 1
-            } are missing or invalid. Skipping.`
-          );
-          continue;
-        }
- 
-
-        console.log(`Buoy ${index + 1}: center =`, center);
-        console.log(`Adding danger range circle (red):`, drange);
-        this.mapService.addCircle(center, drange, 'red');
-
-        console.log(`Adding warning range circle (yellow):`, wrange);
-        this.mapService.addCircle(center, wrange, 'yellow');
-      }
-
+      this.map = this.mapService.map;
       this.mapInitialized = true;
+
+      console.log('Adding circles and markers for each buoy...');
+      for (let index = 0; index < this.fetchedBuoys.length; index++) {
+        const center = this.centerBuoys[index];
+        const config = this.fetchedBuoys[index];
+        const drange = this.buoyDranges[index] || parseFloat(config?.danger) || 300;
+        const wrange = this.buoyWRanges[index] || parseFloat(config?.warning) || 150;
+
+        if (center && Array.isArray(center) && center.length === 2 && !center.some(isNaN)) {
+          console.log(`Buoy ${index + 1} (${config.station_name}): center =`, center);
+          this.mapService.addCircle(center, drange, 'red');
+          this.mapService.addCircle(center, wrange, 'yellow');
+
+          const loc = this.livelocationbuoys[index] || center;
+          const markerImg = this.imageMarkers[index] || '../../assets/home/buoy.png';
+          this.mapService.addMarker(
+            loc,
+            config.station_name,
+            config.station_id,
+            markerImg
+          );
+        }
+      }
       console.log('Map successfully initialized.');
       this.mapService.registerClickListener((feature: Feature) => {
         this.buoyTapped = false;

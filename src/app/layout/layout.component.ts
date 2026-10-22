@@ -1,55 +1,73 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { HomeComponent } from '../home/home.component';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { SidebarComponent } from "../sidebar/sidebar.component";
-import { BuoyComponent } from "../buoy/buoy.component";
-import { ToastrModule, ToastrService } from 'ngx-toastr';
-import { RadarHomeComponent } from "../radar-home/radar-home.component";
-import { ReportComponent } from "../report/report.component";
 import { TopBarComponent } from "../top-bar/top-bar.component";
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { DashboardComponent } from '../dashboard/dashboard.component';
-import { AnalyticsComponent } from "../analytics/analytics.component";
-import { UsersComponent } from "../users/users.component";
-import { SettingsComponent } from "../settings/settings.component";
-import { AnalysisComponent } from "../analysis/analysis.component";
-import { HomeAnalysisComponent } from "../analisys/home/home.component";
-import { DataHealthComponent } from '../data-health/data-health.component';
-import { NotificationComponent } from '../notification/notification.component';
-
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-layout',
-    standalone:true,
-    imports: [HomeComponent, SidebarComponent, ToastrModule, RouterModule, DashboardComponent, ReportComponent, AnalyticsComponent, UsersComponent, SettingsComponent, TopBarComponent, AnalysisComponent, HomeAnalysisComponent, CommonModule, DataHealthComponent, NotificationComponent],
+    standalone: true,
+    imports: [SidebarComponent, TopBarComponent, CommonModule, RouterModule, ToastrModule],
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.css'
 })
-export class LayoutComponent implements OnInit{
-  selectedIndex: number = 0;
-  isTopBarLoading:boolean = false;
-  isDashboardLoading:boolean = true;
-  selectedStationId!:string;
-  sensors:string[]=[];
-  Time:string = '';
+export class LayoutComponent implements OnInit {
+  selectedIndex: number = 0;    // page index for topbar
+  isTopBarLoading: boolean = false;
+  isDashboardLoading: boolean = true;
+  selectedStationId!: string;
+  sensors: string[] = [];
+  Time: string = '';
+
   getScreenSize() {
     return { width: window.innerWidth, height: window.innerHeight };
   }
 
-  constructor(private toast: ToastrService,private renderer: Renderer2){}
+  constructor(
+    private toast: ToastrService,
+    private renderer: Renderer2,
+    private router: Router
+  ) {}
+
   ngOnInit(): void {
-    const scren = this.getScreenSize();
-this.selectedIndex = 5
-    // this.toast.success(`width: ${scren.width}`, `height: ${scren.height}`);
+    this.updateIndexFromUrl(this.router.url);
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.updateIndexFromUrl(event.urlAfterRedirects || event.url);
+    });
+
     const theme = localStorage.getItem('selectedColor');
-// chartFont = theme!;
-//   this.theme = theme!;
-  this.onChangeTheme(theme!);
+    this.onChangeTheme(theme!);
   }
- onChangeTheme(theme:string){
-    this.renderer.setAttribute(document.documentElement, 'data-theme', theme);
-    localStorage.setItem('theme', theme);
-    console.log("themeeeeee=======", theme);
-   const data = window.dispatchEvent(new Event('storage'));
+
+  updateIndexFromUrl(url: string): void {
+    if (!url) return;
+    if (url.includes('/home')) {
+      this.selectedIndex = 0;
+    } else if (url.includes('/dashboard')) {
+      this.selectedIndex = 1;
+    } else if (url.includes('/analytics') || url.includes('/analysis')) {
+      this.selectedIndex = 2;
+    } else if (url.includes('/reports')) {
+      this.selectedIndex = 3;
+    } else if (url.includes('/users')) {
+      this.selectedIndex = 4;
+    } else if (url.includes('/settings')) {
+      this.selectedIndex = 5;
+    } else if (url.includes('/data-health')) {
+      this.selectedIndex = 7;
+    } else if (url.includes('/notification')) {
+      this.selectedIndex = 8;
+    }
+  }
+
+  onChangeTheme(theme: string) {
+    if (theme) {
+      this.renderer.setAttribute(document.documentElement, 'data-theme', theme);
+    }
   }
 }

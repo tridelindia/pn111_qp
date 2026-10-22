@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 // import { MapService } from '../map_service/map.service';
 import { RadarHomeComponent } from '../radar-home/radar-home.component';
 import { HomeV1ChartComponent } from '../home-v1-chart/home-v1-chart.component';
@@ -16,13 +17,13 @@ import { Gauge1Component } from "../widgets/gauge1/gauge1.component";
 import { Direction3Component } from "../widgets/direction3/direction3.component";
 import { MapService } from '../settings/station/map.service';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
-import { BuoyData } from '../global-data/global-data.component';
+import { BuoyData, GlobalDataService } from '../global-data/global-data.component';
 import { SensorModel } from '../models/station.model';
 import { LayoutComponent } from '../layout/layout.component';
 import { ReportService } from '../report/report.service';
 import { StationConfigs, StationconfigService } from '../home/homeService/stationconfig.service';
-import { response } from 'express';
 import { fromLonLat } from 'ol/proj';
+import { WebsocketService } from '../services/websocket.service';
 
 interface binData{
   value:number;
@@ -84,9 +85,29 @@ bt:string;
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit{
-  @Input() sensorsss!:string[];
-  constructor(private map:MapService, private http:HttpClient, private layout:LayoutComponent, private station:StationconfigService){}
+export class DashboardComponent implements OnInit, OnDestroy{
+  private _sensorsss?: string[];
+  @Input()
+  set sensorsss(val: string[]) {
+    this._sensorsss = val;
+  }
+  get sensorsss(): string[] {
+    if (this._sensorsss && this._sensorsss.length > 0) {
+      return this._sensorsss;
+    }
+    return this.layout?.sensors || [];
+  }
+  private wsSub?: Subscription;
+  private stationSub?: Subscription;
+
+  constructor(
+    private map: MapService,
+    private http: HttpClient,
+    public layout: LayoutComponent,
+    private station: StationconfigService,
+    private wsService: WebsocketService,
+    private globalData: GlobalDataService
+  ){}
   direction1:number = 110;
   direction_val:string = '';
   direction2_val:string = '';
@@ -178,7 +199,7 @@ Bins :any[]=[];
 fromDate!:string;
 toDate!:string;
     ngOnInit(): void {
-      this.http.get('http://192.168.0.147:3000/api/getBin').subscribe(
+      this.http.get('http://localhost:3000/api/getBin').subscribe(
         (response:any)=>{
           console.log("binsss", response)
          this.Bins = response
@@ -193,13 +214,13 @@ toDate!:string;
     this.fromDate = startDate.toISOString();
     this.toDate = endDate.toISOString();
       this.changeimage();
-      this.ststionID = this.layout.selectedStationId
-this.map.destroyMap()
+      this.ststionID = this.layout?.selectedStationId || this.globalData.getStationId();
+      this.map.destroyMap();
         console.log("sensorssss", this.sensorsss)
 
      this.current_speed_widget= localStorage.getItem('selectedCurrentspeed') ?? '';
      this.current_direction_widget = localStorage.getItem('selectedCurrentdir') ?? '';
-      console.log("id_station", this.layout.selectedStationId)
+      console.log("id_station", this.layout.selectedStationId);
       this.fetchSensorCofig();
       this.fetchSensors();
 
@@ -209,28 +230,62 @@ this.map.destroyMap()
     
       this.directionAndvalue();
 
-      // if (!this.map) {
+      // Listen for station changes from TopBar
+      this.stationSub = this.globalData.stationId$.subscribe((newStationId: string) => {
+        if (newStationId && newStationId !== this.ststionID) {
+          this.ststionID = newStationId;
+          this.layout.selectedStationId = newStationId;
+          const snapshot = this.wsService.getLatestSnapshot();
+          if (snapshot && snapshot.byStation) {
+            const rec = snapshot.byStation[newStationId] ||
+                        snapshot.byStation[newStationId.toLowerCase()] ||
+                        snapshot.byStation[newStationId.toUpperCase()];
+            if (rec) {
+              this.updateDashboardWithLiveRecord(rec);
+            } else {
+              this.fetchSensors();
+            }
+          } else {
+            this.fetchSensors();
+          }
+        }
+      });
+
+      // Real-time WebSocket listener: updates dashboard immediately
+      this.wsSub = this.wsService.liveData$.subscribe((payload) => {
+        if (!payload || !payload.byStation) return;
+        const activeStation = this.layout.selectedStationId || this.ststionID;
+        if (!activeStation) return;
+
+        const rec = payload.byStation[activeStation] ||
+                    payload.byStation[activeStation.toLowerCase()] ||
+                    payload.byStation[activeStation.toUpperCase()];
+
+        if (rec) {
+          this.updateDashboardWithLiveRecord(rec);
+        }
+      });
+
   this.station.getStationNames().subscribe(
     (response:any)=>{
       this.stationConfiglist = response;
       const selectedStation = this.stationConfiglist.filter(item=> item.station_id === this.layout.selectedStationId);
-      console.log("sssssss",selectedStation);
-      this.warning = parseFloat(selectedStation[0].warning);
-      this.danger = parseFloat(selectedStation[0].danger);
-      if(this.warning !==0 && this.danger !==0){
-        setTimeout(() => {
-    
-          this.mapInit()
-        }, 100);
+      if (selectedStation && selectedStation.length > 0) {
+        this.warning = parseFloat(selectedStation[0].warning);
+        this.danger = parseFloat(selectedStation[0].danger);
+        if(this.warning !==0 && this.danger !==0){
+          setTimeout(() => {
+            this.mapInit()
+          }, 100);
+        }
       }
     }
-  )
-      // }
+  );
     }
  
     
     fetchSensorCofig() {
-      this.http.get('http://192.168.0.147:3000/api/getSensorConfig').subscribe(
+      this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           this.sensorConfig = response;
 
@@ -274,59 +329,89 @@ this.map.destroyMap()
     }
     
     fetchSensors() {
-      this.BuoyData = [];
-      const params = new HttpParams().set('fromDate', this.fromDate).set('toDate',this.toDate).set('stationId', this.layout.selectedStationId);
-      this.http.get('http://192.168.0.147:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
+      const activeStation = this.layout.selectedStationId || this.ststionID;
+      if (!activeStation) return;
+      const params = new HttpParams().set('fromDate', this.fromDate).set('toDate', this.toDate).set('stationId', activeStation);
+      this.http.get('http://localhost:3000/api/getSensorDataByStationAndDate', { params }).subscribe(
         (response: any) => {
-          this.BuoyData = response;
-          this.checkDataLoaded();
-          console.log("bins 2:", this.BuoyData[0]);
-          const bins = this.BuoyData[0];
-
-          this.buoyLocation = [this.BuoyData[0].lat, this.BuoyData[0].lon];
-          console.log("location==", this.buoyLocation)
-          const currentData = Object.keys(bins)
-              .filter(key =>
-                key.toLowerCase().includes('current_speed') || key.toLowerCase().includes('current_direction')
-              )
-              .map(key => ({
-                name: key,
-                value: (bins as any)[key]
-              }));
-
-          console.log("bins",currentData);
-          for (let index = 0; index < currentData.length; index++) {
-            // const element = array[index];
-            const dir = parseFloat(currentData[index].value)
-            this.binData.push(
-              {
-                name:currentData[index].name,
-                value:currentData[index].value,
-                direction:this.directionValue(currentData[index].value)
-              }
-            )
-            
+          if (response && response.length > 0) {
+            this.updateDashboardWithLiveRecord(response[0]);
           }
-          this.wave_direction_fw_value = this.directionValue(this.BuoyData[0].wave_direction_fw);
-          this.mean_wave_direction_value = this.directionValue(this.BuoyData[0].mean_wave_direction)
-          this.pairedBins = []; // new array to use in HTML
-
-for (let i = 0; i < this.binData.length; i += 2) {
-  const speedBin = this.binData[i];
-  const directionBin = this.binData[i + 1];
-
-  this.pairedBins.push({
-    speed: speedBin.value,
-    speedLabel: speedBin.name,
-    direction: directionBin.value,
-    directionLabel: directionBin.name,
-    directionText: directionBin.direction
-  });
-}
-          console.log("bins 3===", this.binData)
         },
         error => console.error('Error fetching sensors:', error)
       );
+    }
+
+    updateDashboardWithLiveRecord(bins: any): void {
+      if (!bins) return;
+      this.BuoyData = [bins];
+      this.buoyLocation = [Number(bins.lat), Number(bins.lon)];
+
+      if (bins.wave_heading != null) {
+        this.direction2 = Number(bins.wave_heading);
+        this.direction2_val = this.directionValue(this.direction2);
+      }
+      if (bins.wave_direction != null) {
+        this.direction1 = Number(bins.wave_direction);
+        this.direction_val = this.directionValue(this.direction1);
+      }
+      if (bins.wave_direction_fw != null) {
+        this.wave_direction_fw_value = this.directionValue(Number(bins.wave_direction_fw));
+      }
+      if (bins.mean_wave_direction != null) {
+        this.mean_wave_direction_value = this.directionValue(Number(bins.mean_wave_direction));
+      }
+
+      const newPaired: any[] = [];
+      for (let b = 1; b <= 10; b++) {
+        const speedKey = `current_speed_bin_${b}`;
+        const dirKey = `current_direction_bin_${b}`;
+        const speedRaw = bins[speedKey];
+        const dirRaw = bins[dirKey];
+        const speedVal = speedRaw != null ? parseFloat(speedRaw) : 0;
+        const dirVal = dirRaw != null ? parseFloat(dirRaw) : 0;
+        newPaired.push({
+          id: b,
+          speed: isNaN(speedVal) ? 0 : speedVal,
+          speedLabel: speedKey,
+          direction: isNaN(dirVal) ? 0 : dirVal,
+          directionLabel: dirKey,
+          directionText: this.directionValue(dirVal)
+        });
+      }
+
+      // Update existing objects in-place so Angular *ngFor doesn't destroy child components
+      if (this.pairedBins.length === newPaired.length) {
+        for (let i = 0; i < newPaired.length; i++) {
+          this.pairedBins[i].speed = newPaired[i].speed;
+          this.pairedBins[i].speedLabel = newPaired[i].speedLabel;
+          this.pairedBins[i].direction = newPaired[i].direction;
+          this.pairedBins[i].directionLabel = newPaired[i].directionLabel;
+          this.pairedBins[i].directionText = newPaired[i].directionText;
+        }
+      } else {
+        this.pairedBins = newPaired;
+      }
+
+      // Sync individual current directions
+      for (let b = 1; b <= 10; b++) {
+        const key = `current_direction_bin_${b}`;
+        if (bins[key] != null) {
+          const val = parseFloat(bins[key]);
+          if (b === 1) { this.direction = val; this.d1_value = this.directionValue(val); }
+          else if (b === 2) { this.direction22 = val; this.d2_value = this.directionValue(val); }
+          else if (b === 3) { this.direction33 = val; this.d3_value = this.directionValue(val); }
+          else if (b === 4) { this.direction4 = val; this.d4_value = this.directionValue(val); }
+          else if (b === 5) { this.direction5 = val; this.d5_value = this.directionValue(val); }
+          else if (b === 6) { this.direction6 = val; this.d6_value = this.directionValue(val); }
+          else if (b === 7) { this.direction7 = val; this.d7_value = this.directionValue(val); }
+          else if (b === 8) { this.direction8 = val; this.d8_value = this.directionValue(val); }
+          else if (b === 9) { this.direction9 = val; this.d9_value = this.directionValue(val); }
+          else if (b === 10) { this.direction10 = val; this.d10_value = this.directionValue(val); }
+        }
+      }
+
+      this.checkDataLoaded();
     }
     
 
@@ -479,5 +564,19 @@ for (let i = 0; i < this.binData.length; i += 2) {
       } else {
         return 'NNW'; // North-Northwest
       }
+    }
+
+    trackByBin(index: number, bin: any): any {
+      return bin ? bin.id || bin.speedLabel || index : index;
+    }
+
+    ngOnDestroy(): void {
+      if (this.wsSub) {
+        this.wsSub.unsubscribe();
+      }
+      if (this.stationSub) {
+        this.stationSub.unsubscribe();
+      }
+      this.map.destroyMap();
     }
 }

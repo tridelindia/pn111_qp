@@ -25,6 +25,7 @@ export class SunShineComponent implements OnInit {
   chartOption: any;
   @Input() sunshineData!: SunshineData[];
   ngOnInit(): void {
+    console.log("sunShine", this.sunshineData)
     const times = ['06:00', '12:00', '18:00'];
     const xAxisLabels: string[] = [];
     const dataPoints: number[] = [];

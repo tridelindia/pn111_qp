@@ -1,8 +1,10 @@
+const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { connectDB, pool } = require('./db');
-const userRouter = require('./router')
+const userRouter = require('./router');
+const { initWebSocket } = require('./websocket');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,18 +22,10 @@ connectDB();
 
 app.use('/api', userRouter);
 
-// app.get('/api/data', async (req, res) => {
-//     try {
-//         console.log("Querying database...");
-//         const result = await pool.query('SELECT * FROM ecfs_data');
-//         res.json(result.rows);
-//     } catch (err){
-//         console.error('Error fetching data:', err);
-//         res.status(500).json({error: 'Failed to fetch data' })
-//     }
-// });
+const server = http.createServer(app);
+initWebSocket(server);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
