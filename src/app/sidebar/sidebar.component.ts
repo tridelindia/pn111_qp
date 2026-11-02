@@ -21,6 +21,7 @@ constructor(private lay:LayoutComponent, private data:GlobalDataService, private
    this.lay.selectedIndex = index;
    this.selectedIndex = this.lay.selectedIndex;
    this.data.index = index;
+   localStorage.setItem('activePageIndex', index.toString());
    this.lay.isTopBarLoading= true;
    setTimeout(() => {
     this.lay.isTopBarLoading=false;
@@ -31,7 +32,9 @@ constructor(private lay:LayoutComponent, private data:GlobalDataService, private
   permissions: { [key: string]: string[] } = {};
   
   ngOnInit(): void {
-      this.selectOption(0);
+      const savedIndex = localStorage.getItem('activePageIndex');
+      const initialIndex = savedIndex !== null ? parseInt(savedIndex, 10) : 0;
+      this.selectOption(initialIndex);
       const permString = localStorage.getItem('permissions');
       let parsedPermissions: any;
     

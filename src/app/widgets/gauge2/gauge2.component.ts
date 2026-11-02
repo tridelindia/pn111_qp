@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import { distance } from 'ol/coordinate';
 
@@ -16,8 +16,40 @@ import { distance } from 'ol/coordinate';
         }
     ]
 })
-export class Gauge2Component {
-  @Input() value:number = 0;
+export class Gauge2Component implements OnChanges {
+  @Input() value: number = 0;
+  echartsInstance: any;
+
+  onChartInit(ec: any) {
+    this.echartsInstance = ec;
+    this.updateGaugeValue();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value']) {
+      this.updateGaugeValue();
+    }
+  }
+
+  private updateGaugeValue() {
+    const val = Number(this.value) || 0;
+    if (this.gaugeOption?.series?.[0]?.data?.[0]) {
+      this.gaugeOption.series[0].data[0].value = val;
+    }
+    if (this.echartsInstance) {
+      this.echartsInstance.setOption({
+        series: [{
+          data: [{
+            value: val,
+            color: '#000',
+            show: false,
+            title: { show: false },
+            detail: { show: false }
+          }]
+        }]
+      }, false);
+    }
+  }
   gaugeOption: any = {
     // backgroundColor: '#f4f4f4', // Background color
     tooltip: {

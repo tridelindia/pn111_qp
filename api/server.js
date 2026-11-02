@@ -31,7 +31,13 @@ app.use('/api', userRouter);
 //     }
 // });
 
-app.listen(PORT, () => {
+const http = require('http');
+const { initWebSocket } = require('./websocket');
+
+const server = http.createServer(app);
+initWebSocket(server);
+
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 

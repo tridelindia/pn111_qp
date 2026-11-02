@@ -28,25 +28,31 @@ export class TopBarComponent implements OnInit{
     isUtc:boolean = true;
     date:string = ''
 
-    onToggleChange(){
-        const now = new Date();
+    timerId: any;
 
-        const utcDate = new Date(now.getTime());
-        const formattedUTC = this.formatDate(utcDate);
-        
-        // IST Time (UTC + 5:30)
-        const istOffset = 5.5 * 60 * 60 * 1000;
-        const istDate = new Date(now.getTime() + istOffset);
-        const formattedIST = this.formatDate(istDate);
-        
-        console.log("UTC Time:", formattedUTC);
-        console.log("IST Time:", formattedIST);
-        this.isUtc = !this.isUtc
-        if(this.isUtc){
-            this.date = formattedUTC;
-        }else{
-            this.date = formattedIST
+    updateTime() {
+        const now = new Date();
+        if (this.isUtc) {
+            this.date = this.formatDate(now);
+        } else {
+            // Qatar Local Time (Asia/Qatar - UTC+3)
+            const qatarFormatter = new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Asia/Qatar',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            this.date = qatarFormatter.format(now).replace(/\//g, '-').replace(',', '');
         }
+    }
+
+    onToggleChange(){
+        this.isUtc = !this.isUtc;
+        this.updateTime();
     }
     constructor(private http:HttpClient, private data:GlobalDataService,private authService: AuthService, private layout:LayoutComponent, private report:ReportService){}
     onSelect(name:string){
@@ -87,10 +93,16 @@ export class TopBarComponent implements OnInit{
         this.screen = `${scren.width},${scren.height}`;
         this.getStation();
         this.currentUser = this.authService.getCurrentUser();
-        this.onToggleChange();
+        this.updateTime();
+        this.timerId = setInterval(() => {
+            this.updateTime();
+        }, 1000);
+    }
 
-        
-        
+    ngOnDestroy(): void {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+        }
     }
     
 

@@ -75,44 +75,55 @@ export class MapService {
     this.map.addOverlay(this.tooltipOverlay);
 
     // Hover event
-    this.map.getViewport().addEventListener('pointermove', (event) => {
-      const pixel = this.map.getEventPixel(event);
-      const feature = this.map.forEachFeatureAtPixel(
-        pixel,
-        (feat) => feat as Feature
-      );
+    const viewport = this.map?.getViewport();
+    const targetElement = this.map?.getTargetElement();
+    if (viewport) {
+      viewport.addEventListener('pointermove', (event) => {
+        if (!this.map) return;
+        const pixel = this.map.getEventPixel(event);
+        const feature = this.map.forEachFeatureAtPixel(
+          pixel,
+          (feat) => feat as Feature
+        );
 
-      if (feature) {
-        // If hovering over a station marker, keep existing behavior
-        if (feature.get('stationId')) {
-          tooltipElement.style.display = 'block';
-          tooltipElement.innerHTML = `${feature.get('stationId')}`;
-          const coordinate = this.map.getEventCoordinate(event);
-          this.tooltipOverlay.setPosition(coordinate);
-          this.map.getTargetElement().style.cursor = 'pointer';
-          return;
+        if (feature) {
+          // If hovering over a station marker, keep existing behavior
+          if (feature.get('stationId')) {
+            tooltipElement.style.display = 'block';
+            tooltipElement.innerHTML = `${feature.get('stationId')}`;
+            const coordinate = this.map.getEventCoordinate(event);
+            this.tooltipOverlay.setPosition(coordinate);
+            if (targetElement) {
+              targetElement.style.cursor = 'pointer';
+            }
+            return;
+          }
+
+          // If hovering over a circle, show OK/Not OK depending on range type
+          const rangeType = feature.get('rangeType'); // 'warning' | 'danger'
+          if (rangeType) {
+            tooltipElement.style.display = 'block';
+            tooltipElement.innerHTML =
+              rangeType === 'warning'
+                ? 'Inside Warning Circle'
+                : 'Inside Danger Circle';
+            const coordinate = this.map.getEventCoordinate(event);
+            this.tooltipOverlay.setPosition(coordinate);
+            if (targetElement) {
+              targetElement.style.cursor = 'pointer';
+            }
+            return;
+          }
         }
 
-        // If hovering over a circle, show OK/Not OK depending on range type
-        const rangeType = feature.get('rangeType'); // 'warning' | 'danger'
-        if (rangeType) {
-          tooltipElement.style.display = 'block';
-          tooltipElement.innerHTML =
-            rangeType === 'warning'
-              ? 'Inside Warning Circle'
-              : 'Inside Danger Circle';
-          const coordinate = this.map.getEventCoordinate(event);
-          this.tooltipOverlay.setPosition(coordinate);
-          this.map.getTargetElement().style.cursor = 'pointer';
-          return;
+        // Default: hide tooltip
+        tooltipElement.style.display = 'none';
+        this.tooltipOverlay.setPosition(undefined);
+        if (targetElement) {
+          targetElement.style.cursor = '';
         }
-      }
-
-      // Default: hide tooltip
-      tooltipElement.style.display = 'none';
-      this.tooltipOverlay.setPosition(undefined);
-      this.map.getTargetElement().style.cursor = '';
-    });
+      });
+    }
   }
 
   destroyMap(): void {
@@ -165,6 +176,34 @@ export class MapService {
     });
     marker.setStyle(markerStyle);
     vectorSource.addFeature(marker);
+  }
+
+  updateMarker(stationId: string, coordinate: [number, number], img?: string, name?: string): void {
+    if (!this.vectorLayer) return;
+    const vectorSource = this.vectorLayer.getSource() as VectorSource;
+    if (!vectorSource) return;
+    const features = vectorSource.getFeatures();
+    const marker = features.find((f) => f.get('stationId') === stationId);
+    if (marker) {
+      const geom = marker.getGeometry();
+      if (geom instanceof Point) {
+        geom.setCoordinates(coordinate);
+      }
+      if (img) {
+        const style = marker.getStyle() as Style;
+        if (style) {
+          style.setImage(
+            new Icon({
+              src: img,
+              scale: 0.06,
+              imgSize: [0.01, 0.01],
+            } as any)
+          );
+        }
+      }
+    } else if (name && img) {
+      this.addMarker(coordinate, name, stationId, img);
+    }
   }
 
   addCircle(center: [number, number], radius: number, color: string): void {

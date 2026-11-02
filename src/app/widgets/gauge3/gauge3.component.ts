@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import Background from 'three/src/renderers/common/Background.js';
 
@@ -15,8 +15,38 @@ import Background from 'three/src/renderers/common/Background.js';
         }
     ]
 })
-export class Gauge3Component {
-  @Input() value:number = 0;
+export class Gauge3Component implements OnChanges {
+  @Input() value: number = 0;
+  echartsInstance: any;
+
+  onChartInit(ec: any) {
+    this.echartsInstance = ec;
+    this.updateGaugeValue();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value']) {
+      this.updateGaugeValue();
+    }
+  }
+
+  private updateGaugeValue() {
+    const val = Number(this.value) || 0;
+    if (this.options?.series?.[0]?.data?.[0]) {
+      this.options.series[0].data[0].value = val;
+    }
+    if (this.options?.series?.[1]?.data?.[0]) {
+      this.options.series[1].data[0].value = val;
+    }
+    if (this.echartsInstance) {
+      this.echartsInstance.setOption({
+        series: [
+          { data: [{ value: val }] },
+          { data: [{ value: val, show: false }] }
+        ]
+      }, false);
+    }
+  }
   options:any= {
     // backgroundColor:'#000',
     series: [

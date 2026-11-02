@@ -10,7 +10,7 @@ import {
 } from './homeService/stationconfig.service';
 import VectorSource from 'ol/source/Vector';
 import { Feature } from 'ol/render/webgl/MixedGeometryBatch';
-import { InfobuoyComponent } from '../home/infobuoy/infobuoy.component';
+import { InfobuoyComponent } from './infobuoy/infobuoy.component';
 import { ReportService } from '../report/report.service';
 
 @Component({

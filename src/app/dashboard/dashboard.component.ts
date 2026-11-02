@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { WebsocketService } from '../services/websocket.service';
 // import { MapService } from '../map_service/map.service';
 import { RadarHomeComponent } from '../radar-home/radar-home.component';
 import { HomeV1ChartComponent } from '../home-v1-chart/home-v1-chart.component';
@@ -85,9 +87,17 @@ bt:string;
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit, OnDestroy {
   @Input() sensorsss!:string[];
-  constructor(private map:MapService, private http:HttpClient, private layout:LayoutComponent, private station:StationconfigService){}
+  private wsSub?: Subscription;
+
+  constructor(
+    private map: MapService,
+    private http: HttpClient,
+    public layout: LayoutComponent,
+    private station: StationconfigService,
+    private wsService: WebsocketService
+  ) {}
   direction1:number = 110;
   direction_val:string = '';
   direction2_val:string = '';
@@ -188,49 +198,75 @@ toDate!:string;
          this.Bins = response
         }
       )
-          const startDate = new Date();
-    startDate.setHours(0, 0, 0, 0);
+      const startDate = new Date();
+      startDate.setHours(0, 0, 0, 0);
 
-    const endDate = new Date();
-    endDate.setHours(23, 59, 0, 0);
+      const endDate = new Date();
+      endDate.setHours(23, 59, 0, 0);
 
-    this.fromDate = startDate.toISOString();
-    this.toDate = endDate.toISOString();
+      this.fromDate = startDate.toISOString();
+      this.toDate = endDate.toISOString();
       this.changeimage();
-      this.ststionID = this.layout.selectedStationId
+      this.ststionID = this.layout.selectedStationId;
       this.StationName = this.layout.StationName;
-this.map.destroyMap()
-        //console.log("sensorssss", this.sensorsss)
+      this.map.destroyMap();
 
-     this.current_speed_widget= localStorage.getItem('selectedCurrentspeed') ?? '';
-     this.current_direction_widget = localStorage.getItem('selectedCurrentdir') ?? '';
-      //console.log("id_station", this.layout.selectedStationId)
+      this.current_speed_widget= localStorage.getItem('selectedCurrentspeed') ?? '';
+      this.current_direction_widget = localStorage.getItem('selectedCurrentdir') ?? '';
       this.fetchSensorCofig();
       this.fetchSensors();
 
       this.direction_val = this.directionValue(this.direction1);
       this.direction2_val = this.directionValue(this.direction2);
       this.map.destroyMap();
-    
+
       this.directionAndvalue();
 
-      // if (!this.map) {
-  this.station.getStationNames().subscribe(
-    (response:any)=>{
-      this.stationConfiglist = response;
-      const selectedStation = this.stationConfiglist.filter(item=> item.station_id === this.layout.selectedStationId);
-      //console.log("sssssss",selectedStation);
-      this.warning = parseFloat(selectedStation[0].warning);
-      this.danger = parseFloat(selectedStation[0].danger);
-      if(this.warning !==0 && this.danger !==0){
-        setTimeout(() => {
-    
-          this.mapInit()
-        }, 100);
-      }
+      this.station.getStationNames().subscribe(
+        (response:any)=>{
+          this.stationConfiglist = response;
+          const selectedStation = this.stationConfiglist.filter(item=> item.station_id === this.layout.selectedStationId);
+          if (selectedStation && selectedStation.length > 0) {
+            this.warning = parseFloat(selectedStation[0].warning) || 0;
+            this.danger = parseFloat(selectedStation[0].danger) || 0;
+            if(this.warning !==0 && this.danger !==0){
+              setTimeout(() => {
+                this.mapInit();
+              }, 100);
+            }
+          }
+        }
+      );
+
+      // Listen for live sensor updates from WebSocket server
+      this.wsSub = this.wsService.liveData$.subscribe((payload) => {
+        if (!payload) return;
+        const currentStationId = this.layout.selectedStationId || this.ststionID;
+        if (!currentStationId) return;
+
+        let stationRecord = null;
+        if (payload.byStation) {
+          const sid = currentStationId.trim();
+          stationRecord = payload.byStation[sid] ||
+                          payload.byStation[sid.toUpperCase()] ||
+                          payload.byStation[sid.toLowerCase()];
+        }
+        if (!stationRecord && payload.data && Array.isArray(payload.data)) {
+          stationRecord = payload.data.find((item: any) =>
+            item.station_id?.toString().toUpperCase() === currentStationId.toString().toUpperCase()
+          );
+        }
+
+        if (stationRecord) {
+          this.updateDashboardWithLiveRecord(stationRecord);
+        }
+      });
     }
-  )
-      // }
+
+    ngOnDestroy(): void {
+      if (this.wsSub) {
+        this.wsSub.unsubscribe();
+      }
     }
  
     
@@ -316,62 +352,78 @@ risk!:string;
         (response: any) => {
           this.BuoyData = response;
           this.checkDataLoaded();
-          //console.log("bins 2:", this.BuoyData[0]);
-          const bins = this.BuoyData[0];
-const isRedTide = this.detectRedTide(this.BuoyData[0]);
-  const risk = this.redTideRiskScore(this.BuoyData[0]);
-          this.IsRedTide = isRedTide;
-          this.risk = risk;
-  console.log(`Station: ${this.BuoyData[0].station_id}, Time: ${this.BuoyData[0].timestamp}`);
-  console.log('Red Tide Detected:', isRedTide);
-  console.log('Risk Level:', risk);
-
-          this.buoyLocation = [this.BuoyData[0].lat, this.BuoyData[0].lon];
-          //console.log("location==", this.buoyLocation)
-          const currentData = Object.keys(bins)
-              .filter(key =>
-                key.toLowerCase().includes('current_speed') || key.toLowerCase().includes('current_direction')
-              )
-              .map(key => ({
-                name: key,
-                value: (bins as any)[key]
-              }));
-
-          //console.log("bins",currentData);
-          for (let index = 0; index < currentData.length; index++) {
-            // const element = array[index];
-            const dir = parseFloat(currentData[index].value)
-            this.binData.push(
-              {
-                name:currentData[index].name,
-                value:currentData[index].value,
-                direction:this.directionValue(currentData[index].value)
-              }
-            )
-            
+          if (this.BuoyData && this.BuoyData.length > 0) {
+            this.updateDashboardWithLiveRecord(this.BuoyData[0]);
           }
-          this.wave_direction_fw_value = this.directionValue(this.BuoyData[0].wave_direction_fw);
-          this.mean_wave_direction_value = this.directionValue(this.BuoyData[0].mean_wave_direction)
-          this.pairedBins = []; // new array to use in HTML
-
-for (let i = 0; i < this.binData.length; i += 2) {
-  const speedBin = this.binData[i];
-  console.log("spww",speedBin)
-  const directionBin = this.binData[i + 1];
-
-  this.pairedBins.push({
-    speed: speedBin.value,
-    speedLabel: speedBin.name,
-    direction: directionBin.value,
-    directionLabel: directionBin.name,
-    directionText: directionBin.direction
-  });
-  console.log("pairs",this.pairedBins)
-}
-          //console.log("bins 3===", this.binData)
         },
         error => console.error('Error fetching sensors:', error)
       );
+    }
+
+    updateDashboardWithLiveRecord(record: any) {
+      if (!record) return;
+
+      if (!this.BuoyData || this.BuoyData.length === 0) {
+        this.BuoyData = [record];
+      } else {
+        this.BuoyData[0] = { ...this.BuoyData[0], ...record };
+      }
+
+      const currentRecord = this.BuoyData[0];
+      this.IsRedTide = this.detectRedTide(currentRecord);
+      this.risk = this.redTideRiskScore(currentRecord);
+
+      if (currentRecord.lat && currentRecord.lon) {
+        this.buoyLocation = [currentRecord.lat, currentRecord.lon];
+      }
+
+      this.wave_direction_fw_value = this.directionValue(currentRecord.wave_direction_fw);
+      this.mean_wave_direction_value = this.directionValue(currentRecord.mean_wave_direction);
+
+      const currentData = Object.keys(currentRecord)
+        .filter(key =>
+          key.toLowerCase().includes('current_speed') || key.toLowerCase().includes('current_direction')
+        )
+        .map(key => ({
+          name: key,
+          value: (currentRecord as any)[key]
+        }));
+
+      this.binData = [];
+      for (let index = 0; index < currentData.length; index++) {
+        this.binData.push({
+          name: currentData[index].name,
+          value: currentData[index].value,
+          direction: this.directionValue(parseFloat(currentData[index].value) || 0)
+        });
+      }
+
+      for (let i = 0; i < this.binData.length; i += 2) {
+        const speedBin = this.binData[i];
+        const directionBin = this.binData[i + 1];
+        const pairIdx = i / 2;
+
+        if (this.pairedBins[pairIdx]) {
+          this.pairedBins[pairIdx].speed = speedBin ? speedBin.value : 0;
+          this.pairedBins[pairIdx].speedLabel = speedBin ? speedBin.name : '';
+          this.pairedBins[pairIdx].direction = directionBin ? directionBin.value : 0;
+          this.pairedBins[pairIdx].directionLabel = directionBin ? directionBin.name : '';
+          this.pairedBins[pairIdx].directionText = directionBin ? directionBin.direction : '';
+        } else {
+          this.pairedBins.push({
+            id: pairIdx,
+            speed: speedBin ? speedBin.value : 0,
+            speedLabel: speedBin ? speedBin.name : '',
+            direction: directionBin ? directionBin.value : 0,
+            directionLabel: directionBin ? directionBin.name : '',
+            directionText: directionBin ? directionBin.direction : ''
+          });
+        }
+      }
+    }
+
+    trackByBin(index: number, bin: any): any {
+      return bin?.id ?? index;
     }
     
 

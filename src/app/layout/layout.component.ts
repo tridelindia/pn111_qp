@@ -40,7 +40,8 @@ export class LayoutComponent implements OnInit{
   constructor(private toast: ToastrService,private renderer: Renderer2){}
   ngOnInit(): void {
     const scren = this.getScreenSize();
-this.selectedIndex = 5
+    const savedIndex = localStorage.getItem('activePageIndex');
+    this.selectedIndex = savedIndex !== null ? parseInt(savedIndex, 10) : 0;
     // this.toast.success(`width: ${scren.width}`, `height: ${scren.height}`);
     const theme = localStorage.getItem('selectedColor');
 // chartFont = theme!;

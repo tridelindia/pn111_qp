@@ -1,1 +1,1 @@
-<div echarts [options]="gaugeOption" class="chart-container"></div>
+<div echarts [options]="gaugeOption" (chartInit)="onChartInit($event)" class="chart-container"></div>

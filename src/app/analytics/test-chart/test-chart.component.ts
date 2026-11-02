@@ -10,9 +10,7 @@ import { NGX_ECHARTS_CONFIG, NgxEchartsModule } from 'ngx-echarts';
 import dayjs from 'dayjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import groupBy from 'lodash/groupBy';
 import { GlobalDataService } from '../../global-data/global-data.component';
-import { min } from 'lodash';
 
 interface Station {
   stationId: string;
@@ -268,24 +266,33 @@ export class TestChartComponent implements OnInit, OnChanges {
     return colors[index % colors.length];
   }
 
+  private groupDataBy<T>(array: T[], keyFn: (item: T) => string): { [key: string]: T[] } {
+    return array.reduce((acc, item) => {
+      const key = keyFn(item);
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {} as { [key: string]: T[] });
+  }
+
   aggregateData(data: { value: (string | number | null)[] }[]) {
     let grouped: { [key: string]: typeof data } = {};
 
     if (this.aggregationMode === 'week') {
-      grouped = groupBy(data, (d) =>
+      grouped = this.groupDataBy(data, (d: { value: (string | number | null)[] }) =>
         dayjs(d.value[0]).startOf('week').format('YYYY-[W]WW')
       );
     } else if (this.aggregationMode === 'month') {
-      grouped = groupBy(data, (d) =>
+      grouped = this.groupDataBy(data, (d: { value: (string | number | null)[] }) =>
         dayjs(d.value[0]).startOf('month').format('YYYY-MM')
       );
     } else if (this.aggregationMode === 'year') {
-      grouped = groupBy(data, (d) =>
+      grouped = this.groupDataBy(data, (d: { value: (string | number | null)[] }) =>
         dayjs(d.value[0]).startOf('year').format('YYYY')
       );
     } else {
       // default: day
-      grouped = groupBy(data, (d) =>
+      grouped = this.groupDataBy(data, (d: { value: (string | number | null)[] }) =>
         dayjs(d.value[0]).startOf('day').format('YYYY-MM-DD')
       );
     }

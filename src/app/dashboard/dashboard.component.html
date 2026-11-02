@@ -551,7 +551,7 @@
                     <div id="ol-map" class="map-containerr"></div>
                 </div> -->
                 <div class="adcp_param_container">
-                    <div class="adcp_params" *ngFor="let bin of pairedBins | slice:0:4; let i = index">
+                    <div class="adcp_params" *ngFor="let bin of pairedBins | slice:0:4; let i = index; trackBy: trackByBin">
                         <div class="direction">
                             <h3 style="margin: 0; font-size:14px; font-weight: normal;">Current Speed
                                 {{Bins[i].value}}</h3>
