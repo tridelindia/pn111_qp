@@ -1,0 +1,33 @@
+# ========================================================
+# Lusail Marine Monitoring System - AMD64 Release Build
+# Target Architecture: linux/amd64 (Windows Intel/AMD systems)
+#
+# Build with:
+#   docker compose -f build-release-images.yml build
+# ========================================================
+
+services:
+  # 1. DATABASE SERVICE (PostgreSQL with pre-populated db_lusail)
+  database:
+    platform: linux/amd64
+    image: lusail-database:latest
+    build:
+      context: ./docker/database
+      dockerfile: Dockerfile
+
+  # 2. BACKEND SERVICE (Node.js REST API + WebSocket)
+  backend:
+    platform: linux/amd64
+    image: lusail-backend:latest
+    build:
+      context: ./api
+      dockerfile: ../docker/backend/Dockerfile
+
+  # 3. FRONTEND SERVICE (Angular SPA + Nginx)
+  frontend:
+    platform: linux/amd64
+    image: lusail-frontend:latest
+    build:
+      context: ./docker/frontend
+      dockerfile: Dockerfile
+

@@ -100,7 +100,7 @@ changetiMulOne(){
     const params = new HttpParams()
     .set('fromDate',fromDate)
     .set('toDate',toDate);
-    this.http.get('http://localhost:3000/api/getSensorDataByDate', {params}).subscribe(
+    this.http.get('http://localhost:3000/api/getSensorDataByDate', { params }).subscribe(
       (data:any) => {
         console.log("",data);
         this.buoyData =data
