@@ -27,11 +27,15 @@ export class TopBarComponent implements OnInit{
     currentUser!: CurrentUser;
     isUtc:boolean = true;
     date:string = ''
+    lastReceivedTimestamp: string = '';
+    lastRawTimestamp: string = '';
+    isStale: boolean = true;
 
     timerId: any;
 
     updateTime() {
         const now = new Date();
+        this.checkStaleness(now);
         if (this.isUtc) {
             this.date = this.formatDate(now);
         } else {
@@ -53,6 +57,16 @@ export class TopBarComponent implements OnInit{
     onToggleChange(){
         this.isUtc = !this.isUtc;
         this.updateTime();
+    }
+
+    checkStaleness(now: Date) {
+        if (!this.lastRawTimestamp) {
+            this.isStale = true;
+            return;
+        }
+        const lastTime = new Date(this.lastRawTimestamp).getTime();
+        const diffMinutes = (now.getTime() - lastTime) / (1000 * 60);
+        this.isStale = diffMinutes > 11;
     }
     constructor(private http:HttpClient, private data:GlobalDataService,private authService: AuthService, private layout:LayoutComponent, private report:ReportService){}
     onSelect(name:string){
@@ -97,6 +111,20 @@ export class TopBarComponent implements OnInit{
         this.timerId = setInterval(() => {
             this.updateTime();
         }, 1000);
+
+        // Subscribe to last received timestamp from data service
+        this.data.lastReceivedTimestamp$.subscribe((timestamp: string) => {
+            if (timestamp) {
+                this.lastRawTimestamp = timestamp;
+                const ts = new Date(timestamp);
+                if (!isNaN(ts.getTime())) {
+                    this.lastReceivedTimestamp = this.formatDate(ts);
+                } else {
+                    this.lastReceivedTimestamp = timestamp;
+                }
+                this.checkStaleness(new Date());
+            }
+        });
     }
 
     ngOnDestroy(): void {

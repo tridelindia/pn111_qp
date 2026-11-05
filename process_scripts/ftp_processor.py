@@ -138,11 +138,33 @@ COLUMN_MAP = {
     'Hmax': ['hmax'],
     'Havg': ['havg'],
     'Tzc': ['tzc'],
-    'Tmean': ['tz'],
+    'Tmean': ['tmean'],
     'AveragePeriodAPD': ['tm02'],
     'DominantPeriodFW': ['dominant_time_period_fw'],
     'WaveDirectionFW': ['wave_direction_fw', 'wave_direction'],
     'MeanWaveDir': ['mean_wave_direction'],
+
+    # Additional Oceanographic Wave & Tilt Dynamics Parameters
+    'Pmax': ['pmax'],
+    'AveragePeriodTe': ['average_period_te'],
+    'Hm0': ['hm0'],
+    'Hm1': ['hm1'],
+    'Tpeak': ['tpeak', 'tp'],
+    'Epsilon': ['epslion', 'epsilon'],
+    'H3eps': ['h3_eps'],
+    'H2': ['h2'],
+    'T2': ['t2'],
+    'H3': ['h3'],
+    'T3': ['t3'],
+    'H10': ['h10'],
+    'T10': ['t10'],
+    'HmaxZC': ['hmax_zc'],
+    'Hmaxzc': ['hmax_zc'],
+    'Hmax_zc': ['hmax_zc'],
+    'RmsTilt': ['rms_tilt'],
+    'Rmstilt': ['rms_tilt'],
+    'Rms_tilt': ['rms_tilt'],
+    'MaxTilt': ['max_tilt'],
 
     # ADCP Current Profiler Bins (1 to 5)
     'Cell_1_Speed': ['current_speed_bin_1'],
@@ -419,10 +441,19 @@ class BuoyCSVParser:
                 }
 
                 for col_name, raw_val in zip(line2_headers, row):
+                    col_key = col_name.strip().strip('"') if col_name else ''
                     cleaned = cls.clean_number(raw_val)
-                    if cleaned is not None and col_name in COLUMN_MAP:
-                        for db_field in COLUMN_MAP[col_name]:
-                            record[db_field] = cleaned
+                    if cleaned is not None:
+                        fields = COLUMN_MAP.get(col_key)
+                        if not fields:
+                            col_key_lower = col_key.lower()
+                            for k, v in COLUMN_MAP.items():
+                                if k.lower() == col_key_lower:
+                                    fields = v
+                                    break
+                        if fields:
+                            for db_field in fields:
+                                record[db_field] = cleaned
 
                 # If temperature_deg not set from air temp, fallback to PTemp_C if available
                 if ('temperature_deg' not in record or record['temperature_deg'] is None) and 'PTemp_C' in line2_headers:

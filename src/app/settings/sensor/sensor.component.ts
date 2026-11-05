@@ -14,14 +14,14 @@ interface Sensors {
   name: string;
   param_name: string;
   unit: string;
-  warning: string;
-  danger: string;
+  warning: any;
+  danger: any;
   notification: string;
-  qns_min: string;
-  qns_max: string;
-  lusail_min: string;
-  lusail_max: string;
-  lor_max: string;
+  qns_min: any;
+  qns_max: any;
+  lusail_min: any;
+  lusail_max: any;
+  lor_max: any;
 }
 
 @Component({
@@ -84,6 +84,22 @@ export class SensorComponent implements OnInit {
   bt: string[] = ['µg/L', 'ppb'];
   fourier_coefficient_a2: string[] = ['unitless'];
   wave_heading: string[] = ['°'];
+  pmax: string[] = ['s', 'sec'];
+  average_period_te: string[] = ['s', 'sec'];
+  hm0: string[] = ['m', 'ft', 'cm'];
+  hm1: string[] = ['m', 'ft', 'cm'];
+  tmean: string[] = ['s', 'sec'];
+  epslion: string[] = ['unitless', ''];
+  epsilon: string[] = ['unitless', ''];
+  h3_eps: string[] = ['m', 'ft', 'cm'];
+  h2: string[] = ['m', 'ft', 'cm'];
+  t2: string[] = ['s', 'sec'];
+  h3: string[] = ['m', 'ft', 'cm'];
+  t3: string[] = ['s', 'sec'];
+  h10: string[] = ['m', 'ft', 'cm'];
+  t10: string[] = ['s', 'sec'];
+  hmax_zc: string[] = ['m', 'ft', 'cm'];
+  rms_tilt: string[] = ['°', 'deg', 'rad'];
 
   bin1!: string;
   bin2!: string;
@@ -149,6 +165,22 @@ export class SensorComponent implements OnInit {
     wave_heading: ['°'],
     temperature: ['°C', '°F', 'K'],
     rainfall: ['mm', 'cm'],
+    pmax: ['s', 'sec'],
+    average_period_te: ['s', 'sec'],
+    hm0: ['m', 'ft', 'cm'],
+    hm1: ['m', 'ft', 'cm'],
+    tmean: ['s', 'sec'],
+    epslion: ['unitless', ''],
+    epsilon: ['unitless', ''],
+    h3_eps: ['m', 'ft', 'cm'],
+    h2: ['m', 'ft', 'cm'],
+    t2: ['s', 'sec'],
+    h3: ['m', 'ft', 'cm'],
+    t3: ['s', 'sec'],
+    h10: ['m', 'ft', 'cm'],
+    t10: ['s', 'sec'],
+    hmax_zc: ['m', 'ft', 'cm'],
+    rms_tilt: ['°', 'deg', 'rad'],
   };
 
   getLabelPrefix(name: string): string {
@@ -210,6 +242,37 @@ export class SensorComponent implements OnInit {
         return 'Average\nWave\nHeight';
       case 'dominant_time_period_fw':
         return 'Dominant\nPeriod FW';
+      case 'pmax':
+        return 'Peak Power\n(Pmax)';
+      case 'average_period_te':
+        return 'Average\nPeriod Te';
+      case 'hm0':
+        return 'Wave Height\nHm0';
+      case 'hm1':
+        return 'Wave Height\nHm1';
+      case 'tmean':
+        return 'Mean Wave\nPeriod';
+      case 'epslion':
+      case 'epsilon':
+        return 'Spectral\nWidth (ε)';
+      case 'h3_eps':
+        return 'Wave Height\nH3 Eps';
+      case 'h2':
+        return 'Wave Height\nH2';
+      case 't2':
+        return 'Wave Period\nT2';
+      case 'h3':
+        return 'Wave Height\nH3';
+      case 't3':
+        return 'Wave Period\nT3';
+      case 'h10':
+        return 'Wave Height\nH10';
+      case 't10':
+        return 'Wave Period\nT10';
+      case 'hmax_zc':
+        return 'Max Wave\nHeight ZC';
+      case 'rms_tilt':
+        return 'RMS\nTilt';
 
       case 'turbidity':
         return 'Turbidity';
@@ -271,7 +334,7 @@ export class SensorComponent implements OnInit {
     private http: HttpClient,
     private loggingService: LoggingService,
     private toast: ToastrService
-  ) {}
+  ) { }
   ngOnInit(): void {
     const stat = this.saveData();
     this.getStationConfig();
@@ -316,15 +379,57 @@ export class SensorComponent implements OnInit {
   //   }
   // }
   mainSensor: Sensors[] = [];
+  defaultOceanSensors: Partial<Sensors>[] = [
+    { name: 'oceanography', param_name: 'pmax', unit: 'kW/m', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'average_period_te', unit: 's', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'hm0', unit: 'm', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'hm1', unit: 'm', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'tmean', unit: 's', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'epslion', unit: 'unitless', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'h3_eps', unit: 'm', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'h2', unit: 'm', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 't2', unit: 's', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'h3', unit: 'm', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 't3', unit: 's', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'h10', unit: 'm', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 't10', unit: 's', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'hmax_zc', unit: 'm', warning: null, danger: null, notification: 'disabled' },
+    { name: 'oceanography', param_name: 'rms_tilt', unit: '°', warning: null, danger: null, notification: 'disabled' },
+  ];
+
   saveData() {
     try {
       this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
         (response: any) => {
           console.log('sensorvalise', response);
 
+          let allConfigs: Sensors[] = Array.isArray(response) ? [...response] : [];
+
+          // Ensure new oceanography parameters exist in configs if not already present from DB
+          let nextId = allConfigs.length > 0 ? Math.max(...allConfigs.map((c: any) => c.id || 0)) + 1 : 100;
+          this.defaultOceanSensors.forEach((sensor) => {
+            if (!allConfigs.some((item: any) => item.param_name === sensor.param_name)) {
+              allConfigs.push({
+                id: nextId++,
+                timestamp: new Date().toISOString(),
+                name: sensor.name || 'oceanography',
+                param_name: sensor.param_name || '',
+                unit: sensor.unit || '',
+                warning: sensor.warning ?? null,
+                danger: sensor.danger ?? null,
+                notification: sensor.notification || 'disabled',
+                qns_min: null,
+                qns_max: null,
+                lusail_min: null,
+                lusail_max: null,
+                lor_max: null,
+              });
+            }
+          });
+
           // Filter out unwanted parameters
-          this.mainSensor = response;
-          this.sampleData = response.filter(
+          this.mainSensor = allConfigs;
+          this.sampleData = allConfigs.filter(
             (item: any) =>
               item.param_name !== 'current_speed' &&
               item.param_name !== 'current_direction'
@@ -343,14 +448,41 @@ export class SensorComponent implements OnInit {
           );
           console.log(this.tableData);
 
-          if (this.isFirst === 1) {
-            this.onEdit(this.tableData[1]);
+          if (this.isFirst === 1 && this.tableData.length > 0) {
+            this.onEdit(this.tableData[0]);
           }
           this.isFirst = this.isFirst + 1;
           this.getStationConfig();
         },
         (error) => {
           console.error(error);
+          let allConfigs: Sensors[] = [];
+          let nextId = 1;
+          this.defaultOceanSensors.forEach((sensor) => {
+            allConfigs.push({
+              id: nextId++,
+              timestamp: new Date().toISOString(),
+              name: sensor.name || 'oceanography',
+              param_name: sensor.param_name || '',
+              unit: sensor.unit || '',
+              warning: sensor.warning ?? null,
+              danger: sensor.danger ?? null,
+              notification: sensor.notification || 'disabled',
+              qns_min: null,
+              qns_max: null,
+              lusail_min: null,
+              lusail_max: null,
+              lor_max: null,
+            });
+          });
+          this.mainSensor = allConfigs;
+          this.sampleData = allConfigs;
+          this.tableData = this.mainSensor.filter(
+            (item) => item.name === 'oceanography'
+          );
+          if (this.tableData.length > 0 && !this.editData) {
+            this.onEdit(this.tableData[0]);
+          }
         }
       );
 
@@ -368,9 +500,39 @@ export class SensorComponent implements OnInit {
     }
   }
 
+  cleanNumeric(val: any) {
+    if (val === null || val === undefined) return null;
+    const str = String(val).trim();
+    if (
+      str === '' ||
+      str === '—' ||
+      str === '–' ||
+      str === '-' ||
+      str === '--' ||
+      str.toLowerCase() === 'null' ||
+      str.toLowerCase() === 'undefined' ||
+      str.toLowerCase() === 'nan'
+    ) {
+      return null;
+    }
+    const num = Number(str);
+    return isNaN(num) ? null : num;
+  }
+
   Update() {
+    const payload = {
+      ...this.editData,
+      warning: this.cleanNumeric(this.editData.warning),
+      danger: this.cleanNumeric(this.editData.danger),
+      qns_min: this.cleanNumeric(this.editData.qns_min),
+      qns_max: this.cleanNumeric(this.editData.qns_max),
+      lusail_min: this.cleanNumeric(this.editData.lusail_min),
+      lusail_max: this.cleanNumeric(this.editData.lusail_max),
+      lor_max: this.cleanNumeric(this.editData.lor_max),
+    };
+
     this.http
-      .post('http://localhost:3000/api/updateSensor', this.editData)
+      .post('http://localhost:3000/api/updateSensor', payload)
       .subscribe(
         (response: any) => {
           console.log(response);
@@ -421,7 +583,15 @@ export class SensorComponent implements OnInit {
     this.editData.unit = unit;
   }
   onEdit(item: any) {
-    this.editData = item;
+    this.editData = { ...item };
+    if (this.editData.warning === '—' || this.editData.warning === '–' || this.editData.warning === '-') this.editData.warning = null;
+    if (this.editData.danger === '—' || this.editData.danger === '–' || this.editData.danger === '-') this.editData.danger = null;
+    if (this.editData.qns_min === '—' || this.editData.qns_min === '–' || this.editData.qns_min === '-') this.editData.qns_min = null;
+    if (this.editData.qns_max === '—' || this.editData.qns_max === '–' || this.editData.qns_max === '-') this.editData.qns_max = null;
+    if (this.editData.lusail_min === '—' || this.editData.lusail_min === '–' || this.editData.lusail_min === '-') this.editData.lusail_min = null;
+    if (this.editData.lusail_max === '—' || this.editData.lusail_max === '–' || this.editData.lusail_max === '-') this.editData.lusail_max = null;
+    if (this.editData.lor_max === '—' || this.editData.lor_max === '–' || this.editData.lor_max === '-') this.editData.lor_max = null;
+
     this.mainToggle = item.notification === 'enabled';
     console.log(this.editData);
 

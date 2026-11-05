@@ -456,3 +456,11 @@ color: black;
 .input-group:focus-within .toggle-password2{
 color: black;
 }
+.top-right-logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}

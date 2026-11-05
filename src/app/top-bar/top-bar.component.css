@@ -347,3 +347,44 @@ align-items: start;
   border-radius: 50%;
   background-color: antiquewhite;
 }
+
+
+/* Status indicator - glowing dot */
+.status-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.indicator-green {
+  background-color: #00ff00;
+  box-shadow: 0 0 6px #00ff00, 0 0 12px #00ff00, 0 0 20px #00ff00;
+  animation: glow-green 1.5s ease-in-out infinite alternate;
+}
+
+.indicator-red {
+  background-color: #ff0000;
+  box-shadow: 0 0 6px #ff0000, 0 0 12px #ff0000, 0 0 20px #ff0000;
+  animation: glow-red 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow-green {
+  from {
+    box-shadow: 0 0 4px #00ff00, 0 0 8px #00ff00;
+  }
+  to {
+    box-shadow: 0 0 8px #00ff00, 0 0 16px #00ff00, 0 0 24px #00ff00;
+  }
+}
+
+@keyframes glow-red {
+  from {
+    box-shadow: 0 0 4px #ff0000, 0 0 8px #ff0000;
+  }
+  to {
+    box-shadow: 0 0 8px #ff0000, 0 0 16px #ff0000, 0 0 24px #ff0000;
+  }
+}

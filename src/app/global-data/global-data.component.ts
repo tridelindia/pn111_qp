@@ -34,6 +34,22 @@ export interface BuoyData {
   fourier_coefficient_b2: number;
   havg: number;
   dominant_time_period_fw: number;
+  pmax?: number;
+  average_period_te?: number;
+  hm0?: number;
+  hm1?: number;
+  tmean?: number;
+  epslion?: number;
+  epsilon?: number;
+  h3_eps?: number;
+  h2?: number;
+  t2?: number;
+  h3?: number;
+  t3?: number;
+  h10?: number;
+  t10?: number;
+  hmax_zc?: number;
+  rms_tilt?: number;
   turbidity: number;
   water_temperature: number;
   ph: number;
@@ -80,6 +96,17 @@ export class GlobalDataService {
   SensorConfigs:SensorModel[]=[];
 
   // onChangeDashboard(id:){}
+  private lastReceivedTimestampSubject = new BehaviorSubject<string>('');
+  lastReceivedTimestamp$ = this.lastReceivedTimestampSubject.asObservable();
+
+  setLastReceivedTimestamp(timestamp: string) {
+    this.lastReceivedTimestampSubject.next(timestamp);
+  }
+
+  getLastReceivedTimestamp(): string {
+    return this.lastReceivedTimestampSubject.value;
+  }
+
   private stationIdSubject = new BehaviorSubject<string>('');
   stationId$ = this.stationIdSubject.asObservable();
 

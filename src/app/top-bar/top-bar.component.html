@@ -3,6 +3,10 @@
         <h3 style="color: white; margin-left: 10px;">TEMS
         </h3>
     </div>
+    <div style="padding-right: 20%;" *ngIf="page === 1">
+        <h5><span class="status-indicator" [ngClass]="isStale ? 'indicator-red' : 'indicator-green'"></span>Last Updated
+            Time : {{ lastReceivedTimestamp || 'N/A' }}</h5>
+    </div>
     <div class="selec_station" (click)="touggleDrop()" *ngIf="page === 1 || page === 7">
         <img class="station_image" src="../../assets/buoyimg/buoy.png" alt="">
         <p>{{selectedStation}}</p>
