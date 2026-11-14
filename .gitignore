@@ -15,6 +15,8 @@ yarn-error.log
 /process_scripts/M29
 /process_scripts/M40
 /process_scripts/MX
+/process_scripts/processed.txt
+
 # IDEs and editors
 .idea/
 .project
