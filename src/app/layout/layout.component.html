@@ -24,4 +24,62 @@
         <!-- <app-report></app-report> -->
     </div>
 
+    <!-- Global Glassy Leak & Intrusion Notifications (Top Right) -->
+    <div class="glass-alert-container" *ngIf="(leakAlertService.alerts$ | async) as alerts">
+        <ng-container *ngIf="alerts.length > 0">
+            <div class="glass-alert-item" *ngFor="let alert of alerts" [ngClass]="'alert-' + alert.type"
+                (click)="dismissAlert(alert)">
+
+                <div class="glass-alert-glow"></div>
+
+                <div class="glass-alert-icon-box">
+                    <!-- Water Droplet SVG for Leak -->
+                    <svg *ngIf="alert.type === 'leak'" viewBox="0 0 24 24" class="alert-svg">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="rgba(2, 132, 199, 0.15)" stroke="#0284c7"
+                            stroke-width="2" />
+                        <path d="M12 11v4" stroke="#0284c7" stroke-width="2" stroke-linecap="round" />
+                        <circle cx="12" cy="17.5" r="1.2" fill="#0284c7" />
+                    </svg>
+                    <!-- Shield Alert SVG for Intrusion -->
+                    <svg *ngIf="alert.type === 'intrusion'" viewBox="0 0 24 24" class="alert-svg">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(239, 68, 68, 0.15)"
+                            stroke="#ef4444" stroke-width="2" />
+                        <path d="M12 8v5" stroke="#dc2626" stroke-width="2" stroke-linecap="round" />
+                        <circle cx="12" cy="16" r="1.2" fill="#dc2626" />
+                    </svg>
+                </div>
+
+                <div class="glass-alert-body">
+                    <div class="glass-alert-meta">
+                        <span class="glass-alert-station-tag">{{ alert.stationName }}</span>
+                        <span class="glass-alert-timestamp" *ngIf="alert.time">
+                            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            {{ alert.time }}
+                        </span>
+                    </div>
+                    <div class="glass-alert-headline">
+                        <span class="pulse-dot"></span>
+                        {{ alert.title }}
+                    </div>
+                    <div class="glass-alert-desc" *ngIf="alert.message">
+                        {{ alert.message }}
+                    </div>
+                </div>
+
+                <button type="button" class="glass-alert-close-btn" (click)="dismissAlert(alert, $event)"
+                    aria-label="Close" title="Dismiss">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5"
+                        fill="none">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+
 </div>

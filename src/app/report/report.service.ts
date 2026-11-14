@@ -12,6 +12,8 @@ export interface BuoyMeasurement {
   cam_img: string;
   lat: number;
   lon: number;
+  leak_detection?: number | null;
+  intrusion_detection?: number | null;
   wind_speed: number;
   wind_direction_deg: number;
   temperature_deg: number;

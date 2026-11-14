@@ -48,11 +48,11 @@ export class SensorComponent implements OnInit {
   isFirst: number = 1;
   selectedUnit: string = 'µg/L';
   multiData: string[] = [];
-  wave_direction: string[] = ['°'];
-  mean_wave_direction: string[] = ['°'];
-  dominant_time_period_fw: string[] = ['s'];
+  wave_direction: string[] = ['°', 'rad'];
+  mean_wave_direction: string[] = ['°', 'rad'];
+  dominant_time_period_fw: string[] = ['s', 'sec'];
   havg: string[] = ['m', 'ft'];
-  current_direction: string[] = ['°'];
+  current_direction: string[] = ['°', 'sec'];
   wind_speed: string[] = ['m/s', 'km/h', 'knots'];
   wind_gust: string[] = ['m/s', 'km/h', 'knots'];
   visibility: string[] = ['m', 'km', 'NM'];
@@ -66,31 +66,30 @@ export class SensorComponent implements OnInit {
   rh_percent: string[] = ['%'];
   rain_mm: string[] = ['mm', 'cm'];
   global_radiation: string[] = ['W/m²'];
-  tm02: string[] = ['s'];
-  wind_direction_deg: string[] = ['°'];
+  tm02: string[] = ['s', 'sec'];
+  wind_direction_deg: string[] = ['°', 'rad'];
   bp_hpa: string[] = ['hPa', 'mb'];
   temperature_deg: string[] = ['°C', '°F', 'K'];
   pah: string[] = ['µg/L', 'ppb', 'ppm'];
   water_temperature: string[] = ['°C', '°F'];
-  tz: string[] = ['s'];
-  battery: string[] = ['V', '%'];
+  tz: string[] = ['s', 'sec'];
+  battery: string[] = ['V', 'mV'];
   salinity: string[] = ['PSU', 'ppt', 'g/kg'];
   ph: string[] = ['pH'];
   phycoerythrin: string[] = ['µg/L', 'RFU'];
-  tzc: string[] = ['s'];
+  tzc: string[] = ['s', 'sec'];
   fourier_coefficient_a1: string[] = ['unitless'];
   current_speed: string[] = ['m/s', 'cm/s', 'knots'];
   wave_height: string[] = ['m', 'ft', 'cm'];
   bt: string[] = ['µg/L', 'ppb'];
   fourier_coefficient_a2: string[] = ['unitless'];
-  wave_heading: string[] = ['°'];
+  wave_heading: string[] = ['°', 'rad'];
   pmax: string[] = ['s', 'sec'];
   average_period_te: string[] = ['s', 'sec'];
   hm0: string[] = ['m', 'ft', 'cm'];
   hm1: string[] = ['m', 'ft', 'cm'];
   tmean: string[] = ['s', 'sec'];
   epslion: string[] = ['unitless', ''];
-  epsilon: string[] = ['unitless', ''];
   h3_eps: string[] = ['m', 'ft', 'cm'];
   h2: string[] = ['m', 'ft', 'cm'];
   t2: string[] = ['s', 'sec'];
@@ -99,7 +98,7 @@ export class SensorComponent implements OnInit {
   h10: string[] = ['m', 'ft', 'cm'];
   t10: string[] = ['s', 'sec'];
   hmax_zc: string[] = ['m', 'ft', 'cm'];
-  rms_tilt: string[] = ['°', 'deg', 'rad'];
+  rms_tilt: string[] = ['°', 'rad'];
 
   bin1!: string;
   bin2!: string;
@@ -125,11 +124,11 @@ export class SensorComponent implements OnInit {
 
   stations: any[] = []; // Includes id, name, selectedParameters, limitReached
   unitMap: { [key: string]: string[] } = {
-    wave_direction: ['°'],
-    mean_wave_direction: ['°'],
-    dominant_time_period_fw: ['s'],
+    wave_direction: ['°', 'rad'],
+    mean_wave_direction: ['°', 'rad'],
+    dominant_time_period_fw: ['s', 'sec'],
     havg: ['m', 'ft'],
-    current_direction: ['°'],
+    current_direction: ['°', 'rad'],
     wind_speed: ['m/s', 'km/h', 'knots'],
     wind_gust: ['m/s', 'km/h', 'knots'],
     visibility: ['m', 'km', 'NM'],
@@ -143,18 +142,18 @@ export class SensorComponent implements OnInit {
     rh_percent: ['%'],
     rain_mm: ['mm', 'cm'],
     global_radiation: ['W/m²'],
-    tm02: ['s'],
+    tm02: ['s', 'sec'],
     wind_direction_deg: ['°'],
     bp_hpa: ['hPa', 'mb'],
     temperature_deg: ['°C', '°F', 'K'],
     pah: ['µg/L', 'ppb', 'ppm'],
     water_temperature: ['°C', '°F'],
-    tz: ['s'],
-    battery: ['V', '%'],
+    tz: ['s', 'sec'],
+    battery: ['V', 'mV'],
     salinity: ['PSU', 'ppt', 'g/kg'],
     ph: ['pH'],
     phycoerythrin: ['µg/L', 'RFU'],
-    tzc: ['s'],
+    tzc: ['s', 'sec'],
     fourier_coefficient_a1: [''],
     current_speed: ['m/s', 'cm/s', 'knots'],
     wave_height: ['m', 'ft', 'cm'],
@@ -180,7 +179,7 @@ export class SensorComponent implements OnInit {
     h10: ['m', 'ft', 'cm'],
     t10: ['s', 'sec'],
     hmax_zc: ['m', 'ft', 'cm'],
-    rms_tilt: ['°', 'deg', 'rad'],
+    rms_tilt: ['°', 'rad'],
   };
 
   getLabelPrefix(name: string): string {

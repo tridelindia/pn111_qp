@@ -23,17 +23,17 @@ type SortKey = keyof SensorStatus;
 export class SensorStatusComponent implements OnInit {
   sensorStatuses: SensorStatus[] = [];
   isLoading: boolean = true;
-  
+
   searchTerm: string = '';
   sortKey: SortKey | null = null;
   sortDirection: SortDirection = '';
   selectedStation: string = '';
   station_Id: string = '';
   hasMeteorology = false;
-  
+
   constructor(
     private http: HttpClient,
-    private layout:LayoutComponent
+    private layout: LayoutComponent
   ) {
     this.station_Id = this.layout.selectedStationId;
     this.hasMeteorology = this.layout.sensors.includes('meteorology');
@@ -104,7 +104,7 @@ export class SensorStatusComponent implements OnInit {
       'water_quality.biological.34': 'Chlorophyll-a',
       'water_quality.biological.35': 'Water Temperature (°C)',
       'water_quality.biological.36': 'Phycoerythrin',
-      'water_quality.biological.37': 'Fluorescein Dye'
+      'water_quality.biological.37': 'Fluorescein'
     };
 
     const currentTime = new Date();
@@ -128,19 +128,19 @@ export class SensorStatusComponent implements OnInit {
       const seconds = date.getSeconds().toString().padStart(2, '0');
       return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
     }
-    
+
     const categoryStatuses: Record<CategoryType, CategoryStatus> = {
-      oceanography: { 
-        isActive: true, 
-        lastReceived: formatDateTime(lastReceivedTime) 
+      oceanography: {
+        isActive: true,
+        lastReceived: formatDateTime(lastReceivedTime)
       },
-      meteorology: { 
-        isActive: true, 
-        lastReceived: formatDateTime(lastReceivedTime) 
+      meteorology: {
+        isActive: true,
+        lastReceived: formatDateTime(lastReceivedTime)
       },
-      water_quality: { 
-        isActive: true, 
-        lastReceived: formatDateTime(lastReceivedTime) 
+      water_quality: {
+        isActive: true,
+        lastReceived: formatDateTime(lastReceivedTime)
       }
     };
 
@@ -148,7 +148,7 @@ export class SensorStatusComponent implements OnInit {
     Object.entries(data.data.dataPresent).forEach(([key, value]: [string, any]) => {
       const category = key.split('.')[0] as CategoryType;
       const isParameterActive = timeDiff < 15 * 60 * 1000 && value !== 0;
-      
+
       if (category in categoryStatuses) {
         // If any parameter is inactive, mark the whole category as inactive
         if (!isParameterActive) {
@@ -175,10 +175,10 @@ export class SensorStatusComponent implements OnInit {
 
   get filteredStatuses(): SensorStatus[] {
     let filtered = this.sensorStatuses;
-    
+
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(status => 
+      filtered = filtered.filter(status =>
         status.name.toLowerCase().includes(term) ||
         status.lastReceived.toLowerCase().includes(term) ||
         (status.isActive ? 'active' : 'inactive').includes(term)
@@ -189,7 +189,7 @@ export class SensorStatusComponent implements OnInit {
       filtered.sort((a, b) => {
         const aValue = a[this.sortKey!];
         const bValue = b[this.sortKey!];
-        
+
         if (this.sortDirection === 'asc') {
           return aValue > bValue ? 1 : -1;
         } else {
@@ -203,8 +203,8 @@ export class SensorStatusComponent implements OnInit {
 
   onSort(key: SortKey): void {
     if (this.sortKey === key) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 
-                          this.sortDirection === 'desc' ? '' : 'asc';
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' :
+        this.sortDirection === 'desc' ? '' : 'asc';
       if (this.sortDirection === '') {
         this.sortKey = null;
       }
@@ -216,7 +216,7 @@ export class SensorStatusComponent implements OnInit {
 
   getSortIcon(key: SortKey): string {
     if (this.sortKey !== key) return '↕';
-    return this.sortDirection === 'asc' ? '↑' : 
-           this.sortDirection === 'desc' ? '↓' : '↕';
+    return this.sortDirection === 'asc' ? '↑' :
+      this.sortDirection === 'desc' ? '↓' : '↕';
   }
 }

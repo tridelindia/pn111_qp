@@ -16,6 +16,8 @@ import { AnalysisComponent } from "../analysis/analysis.component";
 import { HomeAnalysisComponent } from "../analisys/home/home.component";
 import { DataHealthComponent } from '../data-health/data-health.component';
 import { NotificationComponent } from '../notification/notification.component';
+import { LeakAlertService } from '../services/leak-alert.service';
+import { LeakIntrusionAlert } from '../models/station.model';
 
 
 @Component({
@@ -37,7 +39,11 @@ export class LayoutComponent implements OnInit{
     return { width: window.innerWidth, height: window.innerHeight };
   }
 
-  constructor(private toast: ToastrService,private renderer: Renderer2){}
+  constructor(
+    private toast: ToastrService,
+    private renderer: Renderer2,
+    public leakAlertService: LeakAlertService
+  ){}
   ngOnInit(): void {
     const scren = this.getScreenSize();
     const savedIndex = localStorage.getItem('activePageIndex');
@@ -53,5 +59,12 @@ export class LayoutComponent implements OnInit{
     localStorage.setItem('theme', theme);
     console.log("themeeeeee=======", theme);
    const data = window.dispatchEvent(new Event('storage'));
+  }
+
+  dismissAlert(alert: LeakIntrusionAlert, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.leakAlertService.dismissAlert(alert);
   }
 }

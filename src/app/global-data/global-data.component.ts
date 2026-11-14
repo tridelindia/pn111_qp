@@ -63,6 +63,7 @@ export interface BuoyData {
   pah: number;
   oil_in_water: number;
   bt: number;
+  sun_hrs: number;
 
   current_speed_bin_1: number;
   current_direction_bin_1: number;
@@ -90,10 +91,10 @@ export interface BuoyData {
   providedIn: 'root'
 })
 export class GlobalDataService {
-  selectedStation:any = {};
-  index!:number;
-  isDashboardLoad:boolean = false;
-  SensorConfigs:SensorModel[]=[];
+  selectedStation: any = {};
+  index!: number;
+  isDashboardLoad: boolean = false;
+  SensorConfigs: SensorModel[] = [];
 
   // onChangeDashboard(id:){}
   private lastReceivedTimestampSubject = new BehaviorSubject<string>('');

@@ -38,7 +38,7 @@ from psycopg2 import sql
 
 # 1. Database Connection Credentials
 DB_CONFIG = {
-    'host': os.environ.get('DB_HOST', 'localhost'),
+    'host': os.environ.get('DB_HOST', '192.168.0.9'),
     'port': int(os.environ.get('DB_PORT', 5433)),
     'database': os.environ.get('DB_NAME', 'db_terra_qatar'),
     'user': os.environ.get('DB_USER', 'postgres'),
@@ -57,7 +57,7 @@ FTP_CONFIG = {
 
 # 3. Exact Clock Schedule (Minutes of Every Hour)
 # Runs ONLY when the PC system clock hits these minutes:
-SCHEDULED_MINUTES = [2, 12, 22, 32, 42, 52]
+SCHEDULED_MINUTES = [2, 12, 18, 22, 26, 30, 35, 42, 46, 50, 56]
 
 # Run immediately on startup ONLY if '--now' is passed in command line arguments,
 # otherwise strictly wait for the next scheduled minute according to the PC clock.
@@ -125,6 +125,9 @@ COLUMN_MAP = {
     'DO_mgL': ['dissolved_oxygen'],
     'Turb_NTU': ['turbidity'],
     'Chl_ugL': ['chlorophyll_a'],
+    'Sun_Hrs': ['sun_hrs'],
+    'BGA_ppb': ['phycoerythrin'],
+    'Fluor_ppb': ['fluorescein_dye'],
 
     # MicroFLU (Hydrocarbons / Oil in Water / PAH)
     'Oil_mgL': ['oil_in_water'],
@@ -177,6 +180,9 @@ COLUMN_MAP = {
     'Cell_4_Dir': ['current_direction_bin_4'],
     'Cell_5_Speed': ['current_speed_bin_5'],
     'Cell_5_Dir': ['current_direction_bin_5'],
+
+    'Leak_Max': ['leak_detection'],
+    'Intrusion_Max': ['intrusion_detection'],
 }
 
 # Base Paths

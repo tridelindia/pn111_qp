@@ -373,7 +373,7 @@ export class ReportComponent implements OnInit {
     { field: 'salinity', header: 'Salinity' },
     { field: 'chlorophyll_a', header: 'Chlorophyll-a' },
     { field: 'phycoerythrin', header: 'Phycoerythrin' },
-    { field: 'fluorescein_dye', header: 'Fluorescein Dye' },
+    { field: 'fluorescein_dye', header: 'Fluorescein' },
     { field: 'pah', header: 'PAH' },
     { field: 'oil_in_water', header: 'Oil in Water' },
     { field: 'bt', header: 'Bottom Temperature' },

@@ -2,8 +2,8 @@
     <div class="title_data">
 
         <h3>
-            {{isChecked? 'Sun Shine Hours':'Data Availability'}} <br>
-            <span> {{isChecked ?"Past 4 days" :"Past 7 days"}}</span>
+            {{isChecked ? 'Peak Sun Shine Hours' : 'Data Availability'}} <br>
+            <span>Past 7 days</span>
         </h3>
         <div class="sensor_list" *ngIf="!isChecked">
             <div class="svg_icon_bor" (click)="onSensorChange('ocean')" data-tooltip="Oceanography"
@@ -82,7 +82,7 @@
             </div>
 
         </div>
-        <!-- <p-toggleswitch [(ngModel)]="isChecked" *ngIf="isMet" /> -->
+        <p-toggleswitch styleClass="custom-toggle" [(ngModel)]="isChecked" *ngIf="isMet" />
         <!-- <div class="score">
             {{overallScore}} avg
 

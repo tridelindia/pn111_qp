@@ -94,3 +94,14 @@ export interface SensorModel {
   unit: string;
   warning: number;
 }
+
+export interface LeakIntrusionAlert {
+  id: string;
+  stationId: string;
+  stationName: string;
+  type: 'leak' | 'intrusion';
+  title: string;
+  message: string;
+  time?: string;
+  badge?: string;
+}

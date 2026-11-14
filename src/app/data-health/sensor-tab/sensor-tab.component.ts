@@ -50,10 +50,10 @@ export class SensorTabComponent {
   @Input() activeSensor: string = '';
   @Input() loading: boolean = false;
   @Output() sensorSelected = new EventEmitter<string>();
-  @Output() updateData = new EventEmitter<{sensor: string, tab: string}>();
+  @Output() updateData = new EventEmitter<{ sensor: string, tab: string }>();
   @Output() dateRangeChange = new EventEmitter<{ from: Date | null; to: Date | null }>();
   @Output() manualRefresh = new EventEmitter<void>();
-  
+
   activeTab: string = '';
   dateRange: Date[] = [new Date(new Date().setDate(new Date().getDate() - 1)), new Date()];
   hourFormat: string = '24';
@@ -61,11 +61,11 @@ export class SensorTabComponent {
   hasMeteorology = false;
 
   constructor(
-    private layout:LayoutComponent
-  ) { 
+    private layout: LayoutComponent
+  ) {
     this.hasMeteorology = this.layout.sensors.includes('meteorology');
   }
-  
+
   sensors: Sensor[] = [
     { id: 'oceanography', name: 'Oceanography', icon: '🌊' },
     { id: 'meteorology', name: 'Meteorology', icon: '🌤️' },
@@ -155,7 +155,7 @@ export class SensorTabComponent {
           { value: '34', title: 'Chlorophyll-a' },
           { value: '35', title: 'Water Temperature (°C)' },
           { value: '36', title: 'Phycoerythrin' },
-          { value: '37', title: 'Fluorescein Dye' }
+          { value: '37', title: 'Fluorescein' }
         ]
       }
     ]

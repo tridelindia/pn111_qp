@@ -168,7 +168,7 @@ export class MoeccReportComponent implements OnInit {
     private reportService: ReportService,
     private stationConfig: StationconfigService,
     private paramUnitsService: StationconfigService
-  ) {}
+  ) { }
   @ViewChild('dt') dt: any;
 
   ngOnInit(): void {
@@ -385,13 +385,13 @@ export class MoeccReportComponent implements OnInit {
 
     const hasMeteorology = Array.isArray(sensors)
       ? sensors
-          .map((s) => (s || '').trim().toLowerCase())
-          .includes('meteorology')
+        .map((s) => (s || '').trim().toLowerCase())
+        .includes('meteorology')
       : typeof sensors === 'string' &&
-        sensors
-          .split(',')
-          .map((s) => (s || '').trim().toLowerCase())
-          .includes('meteorology');
+      sensors
+        .split(',')
+        .map((s) => (s || '').trim().toLowerCase())
+        .includes('meteorology');
 
     console.log('t', hasMeteorology);
 
@@ -544,7 +544,7 @@ export class MoeccReportComponent implements OnInit {
     { field: 'salinity', header: 'Salinity' },
     { field: 'chlorophyll_a', header: 'Chlorophyll-a' },
     { field: 'phycoerythrin', header: 'Phycoerythrin' },
-    { field: 'fluorescein_dye', header: 'Fluorescein Dye' },
+    { field: 'fluorescein_dye', header: 'Fluorescein' },
     { field: 'pah', header: 'PAH' },
     { field: 'oil_in_water', header: 'Oil in Water' },
     { field: 'bt', header: 'Bottom Temperature' },
@@ -564,13 +564,13 @@ export class MoeccReportComponent implements OnInit {
       this.selectedOption === 'sensorData'
         ? this.fetchedBuoys
         : this.fetchedBuoys.filter(
-            (buoy: any) =>
-              typeof buoy.sensors === 'string' &&
-              buoy.sensors
-                .split(',')
-                .map((s: string) => s.trim())
-                .includes(this.selectedOption)
-          );
+          (buoy: any) =>
+            typeof buoy.sensors === 'string' &&
+            buoy.sensors
+              .split(',')
+              .map((s: string) => s.trim())
+              .includes(this.selectedOption)
+        );
 
     const getColumnSetWithUnits = (columns: any[]) =>
       columns.map((col) => ({
@@ -597,13 +597,13 @@ export class MoeccReportComponent implements OnInit {
       const sensors = this.selectedBuoy?.sensors as string[] | string;
       const hasMeteorology = Array.isArray(sensors)
         ? sensors
-            .map((s) => (s || '').trim().toLowerCase())
-            .includes('meteorology')
+          .map((s) => (s || '').trim().toLowerCase())
+          .includes('meteorology')
         : typeof sensors === 'string' &&
-          sensors
-            .split(',')
-            .map((s) => (s || '').trim().toLowerCase())
-            .includes('meteorology');
+        sensors
+          .split(',')
+          .map((s) => (s || '').trim().toLowerCase())
+          .includes('meteorology');
 
       // If yes, prepend meteorology columns
       if (hasMeteorology) {
@@ -684,9 +684,9 @@ export class MoeccReportComponent implements OnInit {
       'Timestamp',
       'Date and Time',
       'Battery' +
-        (this.getUnitByField('battery')
-          ? ` (${this.getUnitByField('battery')})`
-          : ''),
+      (this.getUnitByField('battery')
+        ? ` (${this.getUnitByField('battery')})`
+        : ''),
       'Latitude' + ' (DD)',
       'Longitude' + ' (DD)',
     ];
@@ -747,9 +747,9 @@ export class MoeccReportComponent implements OnInit {
         'Timestamp',
         'Date and Time',
         'Battery' +
-          (this.getUnitByField('battery')
-            ? ` (${this.getUnitByField('battery')})`
-            : ''),
+        (this.getUnitByField('battery')
+          ? ` (${this.getUnitByField('battery')})`
+          : ''),
         'Latitude' + ' (DD)',
         'Longitude' + ' (DD)',
       ];
@@ -828,9 +828,9 @@ export class MoeccReportComponent implements OnInit {
         'Timestamp',
         'Date and Time',
         'Battery' +
-          (this.getUnitByField('battery')
-            ? ` (${this.getUnitByField('battery')})`
-            : ''),
+        (this.getUnitByField('battery')
+          ? ` (${this.getUnitByField('battery')})`
+          : ''),
         'Latitude' + ' (DD)',
         'Longitude' + ' (DD)',
       ];
@@ -1082,7 +1082,7 @@ export class MoeccReportComponent implements OnInit {
         if (dd && mm && yyyy) {
           allowedDateKey = `${yyyy}-${mm}-${dd}`;
         }
-      } catch {}
+      } catch { }
     }
 
     for (const item of this.sensorData) {
@@ -1209,12 +1209,12 @@ export class MoeccReportComponent implements OnInit {
       if (!sensors) return false;
       return Array.isArray(sensors)
         ? sensors
-            .map((s) => (s || '').trim().toLowerCase())
-            .includes('meteorology')
+          .map((s) => (s || '').trim().toLowerCase())
+          .includes('meteorology')
         : sensors
-            .split(',')
-            .map((s) => (s || '').trim().toLowerCase())
-            .includes('meteorology');
+          .split(',')
+          .map((s) => (s || '').trim().toLowerCase())
+          .includes('meteorology');
     };
 
     if (selectedIds.length > 1) {
@@ -1293,7 +1293,7 @@ export class MoeccReportComponent implements OnInit {
     const ratio = Math.min(
       Math.max(
         (value - this.moeccTempMin) /
-          (this.moeccTempMax - this.moeccTempMin || 1),
+        (this.moeccTempMax - this.moeccTempMin || 1),
         0
       ),
       1
@@ -1618,8 +1618,8 @@ export class MoeccReportComponent implements OnInit {
       this.selectedBuoys && this.selectedBuoys.length > 0
         ? this.selectedBuoys.map((b) => b.station_id)
         : this.selectedBuoy?.station_id
-        ? [this.selectedBuoy.station_id]
-        : [];
+          ? [this.selectedBuoy.station_id]
+          : [];
 
     if (stationIds.length === 0) {
       console.warn('No stations selected for export');

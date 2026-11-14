@@ -354,95 +354,7 @@
                                 {{ BuoyData[0].hmax }} {{ oceanSensorUnit.hmax }}
                             </h3>
                         </div>
-                        <div class="parameters_oceanography_right">
-                            <div class="param_title">
-                                <p>Fourier Coefficient a1</p>
-                            </div>
-                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <rect width="64" height="64" rx="10" />
-                                <path
-                                    d="M4 32C8 32 8 16 12 16C16 16 16 48 20 48C24 48 24 16 28 16C32 16 32 48 36 48C40 48 40 16 44 16C48 16 48 32 52 32C56 32 56 16 60 16"
-                                    stroke="#007FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                                <circle cx="32" cy="32" r="30" stroke="#007FFF" stroke-width="2" />
-                            </svg>
 
-                            <!-- <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"
-                                text-rendering="geometricPrecision" image-rendering="optimizeQuality"
-                                fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 356.618">
-                                <path
-                                    d="M31.179 0H480.82C497.972 0 512 14.028 512 31.182v294.257c0 17.151-14.028 31.179-31.18 31.179H31.179C14.028 356.618 0 342.59 0 325.439V31.182C0 14.028 14.028 0 31.179 0zM56.11 194.421c0-28.707 11.639-54.7 30.451-73.515 18.814-18.812 44.807-30.451 73.514-30.451 21.077 0 40.685 6.274 57.07 17.052l-10.471 9.365a89.941 89.941 0 00-40.929-12.733v11.993h-16.401v-11.537c-17.969 2.125-34.321 9.511-47.476 20.577l8.988 8.987-11.531 11.593-8.972-8.971c-12.95 15.651-20.736 35.736-20.736 57.64H56.11zm248.377-2.479h10.04v-76.795a2.412 2.412 0 012.408-2.405h24.887a2.412 2.412 0 012.407 2.405v76.795h18.269V98.29a2.411 2.411 0 012.407-2.404h24.875a2.41 2.41 0 012.407 2.404v93.652h18.27v-46.825c0-1.325 1.081-2.419 2.404-2.419h24.89a2.411 2.411 0 012.407 2.407v46.837h8.978v9.102H304.487v-9.102zM59.474 235.126h393.052v14.444H59.474v-14.444zm0 42.986h348.034v15.422H59.474v-15.422zm179.767-151.081c15.462 18.148 24.8 41.682 24.8 67.39h-13.508c0-21.448-7.469-41.156-19.939-56.662l8.647-10.728zM36.595 57.637h438.813c9.685 0 17.607 7.925 17.607 17.609v243.968c0 9.688-7.922 17.607-17.607 17.607H36.595c-9.685 0-17.607-7.919-17.607-17.607V75.246c0-9.684 7.922-17.609 17.607-17.609z" />
-                                <path fill="#EF1C25"
-                                    d="M234.063 105.745l-83.197 74.405c-15.799 13.054 5.333 35.025 19.59 16.321l69.185-85.836-5.578-4.89z" />
-                            </svg> -->
-                            <h3 [ngStyle]="{
-  'color':
-    +BuoyData[0].fourier_coefficient_a1 > sensorConfig[7].danger ? 'red' :
-    +BuoyData[0].fourier_coefficient_a1 < sensorConfig[7].warning ? 'red' :
-    BuoyData[0].fourier_coefficient_a1 === sensorConfig[7].warning ? 'orange' : 'black'
-}">
-                                {{ BuoyData[0].fourier_coefficient_a1 }} {{ oceanSensorUnit.fourier_coefficient_a1 }}
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="parameters_oceanography_item">
-                        <div class="parameters_oceanography_left">
-                            <div class="param_title">
-                                <p>Fourier Coefficient b1</p>
-                            </div>
-
-                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <rect width="64" height="64" rx="10" />
-                                <path
-                                    d="M4 32C8 32 8 16 12 16C16 16 16 48 20 48C24 48 24 16 28 16C32 16 32 48 36 48C40 48 40 16 44 16C48 16 48 32 52 32C56 32 56 16 60 16"
-                                    stroke="#007FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                                <circle cx="32" cy="32" r="30" stroke="#007FFF" stroke-width="2" />
-                            </svg>
-
-                            <h3>{{BuoyData[0].fourier_coefficient_b1}} {{oceanSensorUnit.fourier_coefficient_a1}}</h3>
-                        </div>
-                        <div class="parameters_oceanography_right">
-                            <div class="param_title">
-                                <p>Fourier Coefficient a2</p>
-                            </div>
-
-                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <rect width="64" height="64" rx="10" />
-                                <path
-                                    d="M4 32C8 32 8 16 12 16C16 16 16 48 20 48C24 48 24 16 28 16C32 16 32 48 36 48C40 48 40 16 44 16C48 16 48 32 52 32C56 32 56 16 60 16"
-                                    stroke="#007FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                                <circle cx="32" cy="32" r="30" stroke="#007FFF" stroke-width="2" />
-                            </svg>
-
-                            <h3 [ngStyle]="{
-  'color':
-    +BuoyData[0].fourier_coefficient_a2 > sensorConfig[35].danger ? 'red' :
-    +BuoyData[0].fourier_coefficient_a2 < sensorConfig[35].warning ? 'red' :
-    BuoyData[0].fourier_coefficient_a2 === sensorConfig[35].warning ? 'orange' : 'black'
-}">
-                                {{ BuoyData[0].fourier_coefficient_a2 }} {{ oceanSensorUnit.fourier_coefficient_a2 }}
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="parameters_oceanography_item">
-                        <div class="parameters_oceanography_left">
-                            <div class="param_title">
-                                <p>Fourier Coefficient b2</p>
-                            </div>
-
-                            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <rect width="64" height="64" rx="10" />
-                                <path
-                                    d="M4 32C8 32 8 16 12 16C16 16 16 48 20 48C24 48 24 16 28 16C32 16 32 48 36 48C40 48 40 16 44 16C48 16 48 32 52 32C56 32 56 16 60 16"
-                                    stroke="#007FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                                <circle cx="32" cy="32" r="30" stroke="#007FFF" stroke-width="2" />
-                            </svg>
-
-                            <h3>{{BuoyData[0].fourier_coefficient_b2}} {{oceanSensorUnit.fourier_coefficient_a1}}</h3>
-                        </div>
                         <div class="parameters_oceanography_right">
                             <div class="param_title">
                                 <p>Dominant Time Period FW</p>
@@ -1226,7 +1138,7 @@
                         </p>
                     </div>
                     <div class="wat_item1">
-                        <h3>Fluorescein dye</h3>
+                        <h3>Fluorescein</h3>
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 83.95 122.88"
                             style="enable-background:new 0 0 83.95 122.88" xml:space="preserve">
@@ -1792,50 +1704,36 @@
                         </h3>
                     </div>
                     <div class="micro_flu_item">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 84.2 122.88"
-                            style="enable-background:new 0 0 84.2 122.88" xml:space="preserve">
-                            <style type="text/css">
-                                .st0 {
-                                    fill: #262626;
-                                }
 
-                                .st1 {
-                                    fill: #FE5B61;
-                                }
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+                            <defs>
+                                <linearGradient id="sunFill" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#FFE66D" />
+                                    <stop offset="100%" stop-color="#FFAA00" />
+                                </linearGradient>
+                            </defs>
 
-                                .st2 {
-                                    fill: #FEFDEF;
-                                }
-
-                                .st3 {
-                                    fill: #FFFFFF;
-                                }
-                            </style>
-                            <g>
-                                <path class="st0"
-                                    d="M25.93,0h33.82c1.88,0,3.59,0.77,4.84,2.01v0.01h0.01l0.01,0.01c1.23,1.25,2,2.95,2,4.82v10.37 c0,1.89-0.77,3.6-2.01,4.85c-0.06,0.06-0.13,0.12-0.19,0.17c-1.22,1.14-2.87,1.84-4.65,1.84h-0.78v18.15 c7.25,3.18,13.43,8.34,17.87,14.78c4.64,6.77,7.36,14.96,7.36,23.78c0,23.25-18.84,42.09-42.09,42.09C18.84,122.89,0,104.05,0,80.8 c0-8.96,2.82-17.28,7.61-24.12c4.56-6.51,10.92-11.67,18.34-14.76V24.08h-0.01c-1.88,0-3.59-0.77-4.84-2.02l-0.01,0.01 c-1.25-1.25-2.01-2.95-2.01-4.84V6.85c0-1.88,0.77-3.59,2.01-4.83h0.01V2.01L21.1,2C22.35,0.76,24.07,0,25.93,0L25.93,0L25.93,0z" />
-                                <path class="st2"
-                                    d="M32.96,77.63c12.3,5.93,13.86,3.99,16.53,0.68c2.26-2.81,5.08-6.31,11.5-8.88c3.2-1.28,6.46-2.06,9.77-2.53 l0,0c2.01-0.28,4-0.43,6-0.51c-0.91-1.99-1.99-3.9-3.22-5.68c-4.28-6.24-9.71-11.13-16.86-13.93c-1.16-0.35-2.01-1.43-2.01-2.7 V21.23c0-1.55,1.26-2.81,2.81-2.81h3.63c0.37,0,0.7-0.13,0.96-0.35c0.02-0.03,0.06-0.06,0.09-0.09c0.27-0.27,0.44-0.65,0.44-1.05 V6.5c0-0.41-0.17-0.78-0.43-1.05l0,0l-0.01-0.01c-0.27-0.27-0.63-0.42-1.05-0.42H24.74c-0.41,0-0.78,0.17-1.05,0.42l0,0l-0.01,0.01 c-0.27,0.27-0.42,0.64-0.42,1.05v10.43c0,0.4,0.17,0.78,0.43,1.05l0,0v0.01c0.27,0.27,0.63,0.42,1.05,0.42h2.82 c1.55,0,2.81,1.26,2.81,2.81v22.58h-0.01c0,1.15-0.71,2.23-1.85,2.64c-7.41,2.7-13.1,7.62-17.54,13.96 c-3.55,5.07-5.89,11.05-6.62,17.54C12.27,76.14,25.86,74.22,32.96,77.63L32.96,77.63z" />
-                                <path class="st1"
-                                    d="M15.36,79.84c-4.16,0.46-8.21,1.25-11.26,1.99c0.81,20.29,17.51,36.49,37.99,36.49 c21,0,38.02-17.02,38.02-38.03c0-3.55-0.49-6.99-1.39-10.25c-1.53,0.02-3.03,0.09-4.51,0.21c-12.47,1.64-14.76,2.65-20.41,9.66 c-4.43,5.5-7.02,8.71-23.34,0.86C26.47,78.88,19.81,79.48,15.36,79.84L15.36,79.84z" />
-                                <path class="st3"
-                                    d="M61.05,92.13c1.51,0,2.89,0.62,3.88,1.61c0.99,1,1.61,2.37,1.61,3.88s-0.62,2.89-1.61,3.88 c-0.99,1-2.37,1.61-3.88,1.61s-2.89-0.62-3.88-1.61c-0.99-0.99-1.61-2.37-1.61-3.88s0.62-2.89,1.61-3.88 C58.17,92.74,59.54,92.13,61.05,92.13L61.05,92.13L61.05,92.13z" />
-                                <path class="st3"
-                                    d="M40.1,99.15c1.92,0,3.67,0.78,4.93,2.04c1.26,1.27,2.04,3.01,2.04,4.93s-0.79,3.67-2.04,4.93 c-1.26,1.27-3.01,2.04-4.93,2.04s-3.67-0.79-4.93-2.04c-1.26-1.26-2.04-3.01-2.04-4.93s0.78-3.67,2.04-4.93 C36.43,99.93,38.17,99.15,40.1,99.15L40.1,99.15L40.1,99.15z" />
-                                <path class="st3"
-                                    d="M19.51,86.48c2.89,0,5.23,2.34,5.23,5.23s-2.34,5.23-5.23,5.23c-2.89,0-5.23-2.34-5.23-5.23 S16.62,86.48,19.51,86.48L19.51,86.48L19.51,86.48z" />
-                                <path class="st3"
-                                    d="M72.4,75.88c-0.8-0.8-1.91-1.29-3.13-1.29s-2.33,0.49-3.13,1.29c-0.79,0.8-1.28,1.91-1.28,3.13 s0.49,2.33,1.29,3.13c0.8,0.8,1.91,1.29,3.13,1.29s2.33-0.49,3.13-1.29c0.8-0.8,1.29-1.91,1.29-3.13 C73.7,77.79,73.21,76.68,72.4,75.88L72.4,75.88L72.4,75.88z" />
+                            <g stroke="#F59E0B" stroke-width="5" stroke-linecap="round">
+                                <path d="M50 7 V19" />
+                                <path d="M50 81 V93" />
+                                <path d="M7 50 H19" />
+                                <path d="M81 50 H93" />
+                                <path d="M19.6 19.6 L28 28" />
+                                <path d="M72 72 L80.4 80.4" />
+                                <path d="M80.4 19.6 L72 28" />
+                                <path d="M28 72 L19.6 80.4" />
                             </g>
+
+                            <circle cx="50" cy="50" r="27" fill="url(#sunFill)" stroke="#F59E0B" stroke-width="2" />
+
+                            <g fill="#92400E">
+
+                            </g>
+
                         </svg>
-                        <h3 [ngStyle]="{
-  'color':
-    +BuoyData[0].bt > sensorConfig[32].danger ? 'red' :
-    +BuoyData[0].bt < sensorConfig[32].warning ? 'red' :
-    BuoyData[0].bt === sensorConfig[32].warning ? 'orange' : ''
-}">
-                            <span>Bottom Temperature</span><br>{{ BuoyData[0].bt }} {{ microUnit.bt }}
+
+                        <h3>
+                            <span>Sunshine Hours</span><br>{{ BuoyData[0].sun_hrs }} hrs
                         </h3>
                     </div>
                 </div>
@@ -2226,7 +2124,7 @@
                                 </svg>
                             </div>
                             <h3>
-                                Fluorescein Dye<br>
+                                Fluorescein<br>
                                 <span [ngStyle]="{
     'color':
       +BuoyData[0].fluorescein_dye > sensorConfig[29].danger ? 'red' :

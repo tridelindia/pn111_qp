@@ -2,20 +2,21 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { LayoutComponent } from '../../layout/layout.component';
-import { SunShineComponent } from "../sun-shine/sun-shine.component";
+import { SunShineComponent, SunshineData } from "../sun-shine/sun-shine.component";
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 
 export interface RadiationEntry {
-  datetime: string; // ISO string
-  global_radiation: number;
+  datetime?: string;
+  timestamp?: string;
+  global_radiation?: number;
+  radiation?: number;
+  global?: number;
+  [key: string]: any;
 }
 
-export interface DailySunshine {
-  date: string; // e.g. 2025-01-01
-  sunshineHours: number;
-  hourly: { [key: string]: number }; // "06:00": radiation value
-}
+export type DailySunshine = SunshineData;
+
 @Component({
     selector: 'app-data-score',
     imports: [CommonModule, HttpClientModule, SunShineComponent, ToggleSwitchModule, FormsModule],
@@ -42,7 +43,12 @@ last7Days: { day: string, date: string, value: number, percentage: number }[] = 
 
   updateData() {
     this.generateLast7Days();
-    this.printLast7Days()
+    this.sunShineData = this.last7Days.map(d => ({
+      day: d.day,
+      date: d.date,
+      sunshineHours: 0
+    }));
+    this.printLast7Days();
     this.calculateOverallScore();
   }
 
@@ -199,42 +205,37 @@ startDate.setHours(0, 0, 0, 0);
 
 
 
-calculateSunshine(data: RadiationEntry[], threshold = 120): DailySunshine[] {
-  const dailyMap: { [key: string]: DailySunshine } = {};
+  calculateSunshine(data: any[], threshold = 120): DailySunshine[] {
+    if (!data || !Array.isArray(data)) {
+      return this.last7Days.map(dayInfo => ({
+        day: dayInfo.day,
+        date: dayInfo.date,
+        sunshineHours: 0
+      }));
+    }
 
-  // Step 1: Find the last 4 unique dates (in descending order)
-  const allDates = [...new Set(data.map(entry => entry.datetime.split('T')[0]))].sort().reverse();
-  const last4Dates = new Set(allDates.slice(0, 4));
+    return this.last7Days.map(dayInfo => {
+      const recordsForDay = data.filter(entry => {
+        const rawDate = entry.datetime || entry.timestamp || '';
+        return rawDate.includes(dayInfo.date);
+      });
 
-  data.forEach(entry => {
-    const d = new Date(entry.datetime);
-    const dateStr = d.toISOString().split('T')[0]; // YYYY-MM-DD
-    const timeStr = d.toTimeString().slice(0, 5);   // HH:MM
+      let sunnyIntervals = 0;
+      recordsForDay.forEach(entry => {
+        const rad = Number(entry.global_radiation ?? entry.radiation ?? entry.global);
+        if (!isNaN(rad) && rad > threshold) {
+          sunnyIntervals++;
+        }
+      });
 
-    // Filter only last 4 days
-    if (!last4Dates.has(dateStr)) return;
+      // Data is recorded at 10-minute intervals (each record > 120 W/m² = 10/60 hour)
+      const sunshineHours = parseFloat(((sunnyIntervals * 10) / 60).toFixed(1));
 
-    // Initialize daily entry
-    if (!dailyMap[dateStr]) {
-      dailyMap[dateStr] = {
-        date: dateStr,
-        sunshineHours: 0,
-        hourly: {}
+      return {
+        day: dayInfo.day,
+        date: dayInfo.date,
+        sunshineHours
       };
-    }
-
-    // Count sunny interval
-    if (entry.global_radiation > threshold) {
-      dailyMap[dateStr].sunshineHours += 10 / 60; // 10 minutes = 1/6 hour
-    }
-
-    // Save specific time's radiation
-    if (['00:00', '06:00', '12:00', '18:00'].includes(timeStr)) {
-      dailyMap[dateStr].hourly[timeStr] = entry.global_radiation;
-    }
-  });
-
-  // Return in ascending date order
-  return Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
-}
+    });
+  }
 }

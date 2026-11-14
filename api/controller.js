@@ -38,12 +38,12 @@ const getAllSensorData = async (req, res) => {
     for (const tableName of tables) {
       try {
         const stationIdMatch = tableName.match(/^tb_buoy_(.*?)_measurements$/);
-        const stationId = stationIdMatch ? stationIdMatch[1] : null;
+        const stationId = stationIdMatch ? stationIdMatch[1].toUpperCase() : null;
 
         if (!stationId) continue;
 
         const result = await pool.query(
-          `SELECT *, '${stationId}' as station_id FROM ${tableName} ORDER BY id DESC LIMIT 1`,
+          `SELECT *, COALESCE(station_id, '${stationId}') as station_id FROM ${tableName} ORDER BY id DESC LIMIT 1`,
         );
 
         if (result.rows.length > 0) {
@@ -652,7 +652,7 @@ const updateSensorConfig = async (req, res) => {
     if (result.rows.length === 0) {
       const checkParam = await pool.query(
         "SELECT id FROM tb_sensor_config WHERE param_name = $1 LIMIT 1",
-        [param_name]
+        [param_name],
       );
       if (checkParam.rows.length > 0) {
         const updateByParam = `
@@ -1230,7 +1230,7 @@ async function processData(rows, startDate, endDate) {
               { value: "34", title: "Chlorophyll-a" },
               { value: "35", title: "Water Temperature (°C)" },
               { value: "36", title: "Phycoerythrin" },
-              { value: "37", title: "Fluorescein Dye" },
+              { value: "37", title: "Fluorescein" },
             ],
           },
         ],
@@ -1418,7 +1418,7 @@ async function processData(rows, startDate, endDate) {
             { value: "34", title: "Chlorophyll-a" },
             { value: "35", title: "Water Temperature (°C)" },
             { value: "36", title: "Phycoerythrin" },
-            { value: "37", title: "Fluorescein Dye" },
+            { value: "37", title: "Fluorescein" },
           ],
         },
       ],

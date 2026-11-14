@@ -341,6 +341,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       (data.ph > 8.5 || data.ph < 7.5)
     );
   }
+
   redTideRiskScore(data: BuoyData): string {
     let score = 0;
 
