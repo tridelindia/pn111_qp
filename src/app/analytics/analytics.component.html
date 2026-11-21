@@ -17,8 +17,8 @@
                     </p-dropdown>
                 </div>
             </div>
-            
-           
+
+
 
             <app-test-chart id="compare" [plotType]="selectedPlot" [stations]="stations"
                 [selectedStation]="selectedStation" *ngIf="!isLoad" [length]="selectedParams.length"
@@ -221,9 +221,9 @@
             </div>
             <div class="selectPlot">
                 <p class="tit">Select Station</p>
-                <p-multiselect [options]="stations" showHeader="false" [(ngModel)]="selectedStation" name="stationId" optionLabel="name"
-                    optionValue="stationId" placeholder="Select Stations" class="w-full md:w-56" required
-                    [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView"
+                <p-multiselect [options]="stations" showHeader="false" [(ngModel)]="selectedStation" name="stationId"
+                    optionLabel="name" optionValue="stationId" placeholder="Select Stations" class="w-full md:w-56"
+                    required [maxSelectedLabels]="5" [showToggleAll]="true" [showClear]="true" *ngIf="!isSingleView"
                     (ngModelChange)="changeMultiStation()">
                 </p-multiselect>
                 <p-dropdown *ngIf="isSingleView" class="pselect" [options]="stations" [(ngModel)]="singleStation"
@@ -380,7 +380,7 @@
                 </div>
 
             </div>
-            
+
             <div class="sensors" *ngIf="isSingleView">
                 <p>Select Sensor Group</p>
                 <div class="split_sensors">

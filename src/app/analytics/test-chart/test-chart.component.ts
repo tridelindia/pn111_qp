@@ -48,7 +48,7 @@ export class TestChartComponent implements OnInit, OnChanges {
   series: any[] = [];
   names: string[] = [];
 
-  constructor(private data: GlobalDataService) {}
+  constructor(private data: GlobalDataService) { }
 
   ngOnInit(): void {
     console.log('sensorrrrr config', this.data.SensorConfigs);
@@ -202,9 +202,9 @@ export class TestChartComponent implements OnInit, OnChanges {
         top: 30,
         data: [...legendNames, ...thresholdLegend],
       },
-      toolbox: {
-        feature: { saveAsImage: {} },
-      },
+      // toolbox: {
+      //   feature: { saveAsImage: {} },
+      // },
       grid: {
         left: '3%',
         right: '4%',

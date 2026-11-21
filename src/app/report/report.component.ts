@@ -196,6 +196,10 @@ export class ReportComponent implements OnInit {
   }
 
   fetchDataByDate2() {
+    if (this.selectedBuoy?.station_name) {
+      this.nameOfStation = this.selectedBuoy.station_name;
+    }
+
     if (!this.fromDate || !this.toDate || !this.selectedBuoy?.station_id) {
       console.warn('Missing required filters: date or buoy not selected');
       return;
@@ -393,6 +397,16 @@ export class ReportComponent implements OnInit {
         buoy.sensors.split(',').map((s: string) => s.trim()).includes(this.selectedOption)
       );
 
+    if (this.alpha && this.alpha.length > 0) {
+      const exists = this.alpha.some((b: any) => b.station_id === this.selectedBuoy?.station_id);
+      if (!exists) {
+        this.selectedBuoy = this.alpha[0];
+      }
+    }
+    if (this.selectedBuoy?.station_name) {
+      this.nameOfStation = this.selectedBuoy.station_name;
+    }
+
     const getColumnSetWithUnits = (columns: any[]) =>
       columns.map(col => ({
         ...col,
@@ -463,6 +477,11 @@ export class ReportComponent implements OnInit {
     const selectedOption = event.value;
 
     if (!selectedOption) return;
+
+    if (this.selectedBuoy?.station_name) {
+      this.nameOfStation = this.selectedBuoy.station_name;
+    }
+
     switch (selectedOption) {
       case 'csv':
         this.exportCSV(dt2);
@@ -483,13 +502,17 @@ export class ReportComponent implements OnInit {
     const filteredData = dt.filteredValue || dt.value;
 
     if (filteredData && filteredData.length > 0) {
+      if (this.selectedBuoy?.station_name) {
+        this.nameOfStation = this.selectedBuoy.station_name;
+      }
+      const fileName = this.nameOfStation || this.selectedBuoy?.station_name || 'Station';
       const csv = this.convertToCSV(filteredData);
 
       // Add UTF-8 BOM to prevent encoding issues
       const BOM = '\uFEFF';
       const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
 
-      FileSaver.saveAs(blob, `${this.nameOfStation}.csv`);
+      FileSaver.saveAs(blob, `${fileName}.csv`);
     } else {
       // Handle case where no data is available
       // console.warn('No data available for CSV export');
@@ -626,7 +649,10 @@ export class ReportComponent implements OnInit {
         type: 'array',
       });
 
-      const finalName = fileName || this.nameOfStation;
+      if (this.selectedBuoy?.station_name) {
+        this.nameOfStation = this.selectedBuoy.station_name;
+      }
+      const finalName = fileName || this.nameOfStation || this.selectedBuoy?.station_name || 'Station';
       this.saveAsExcelFile(excelBuffer, finalName);
     }
   }
@@ -642,6 +668,10 @@ export class ReportComponent implements OnInit {
     const filteredData: any[] = dt.value;
 
     if (filteredData && filteredData.length > 0) {
+      if (this.selectedBuoy?.station_name) {
+        this.nameOfStation = this.selectedBuoy.station_name;
+      }
+      const fileName = this.nameOfStation || this.selectedBuoy?.station_name || 'Station';
       const fixedHeaders = [
         'S No',
         'Station Id',
@@ -733,7 +763,7 @@ export class ReportComponent implements OnInit {
         }
       }
 
-      doc.save(`${this.nameOfStation}.pdf`);
+      doc.save(`${fileName}.pdf`);
     } else {
       console.warn('No data available for PDF export');
     }
@@ -790,8 +820,13 @@ export class ReportComponent implements OnInit {
 
           dt.value = formattedData;
 
+          if (this.selectedBuoy?.station_name) {
+            this.nameOfStation = this.selectedBuoy.station_name;
+          }
+          const baseName = this.nameOfStation || this.selectedBuoy?.station_name || 'Station';
+
           // Trigger export
-          this.exportExcel(dt, `${this.nameOfStation}_${exportType}`);
+          this.exportExcel(dt, `${baseName}_${exportType}`);
         },
 
         (error) => {
