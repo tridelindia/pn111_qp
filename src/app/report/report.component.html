@@ -1,7 +1,7 @@
 <div class="report-container">
     <div class="topcontent">
         <!-- <h1>Reports</h1> -->
-        <h1>{{ selectedBuoy.station_name }}</h1>
+        <h1>{{ selectedBuoy?.station_name }}</h1>
         <div class="mecc_box">
             <p-toggleButton [(ngModel)]="checked" onLabel="MoECC" offLabel="Report"></p-toggleButton>
         </div>
