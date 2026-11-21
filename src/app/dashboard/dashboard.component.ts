@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WebsocketService } from '../services/websocket.service';
+import { CameraSocketService } from '../services/camera-socket.service';
 // import { MapService } from '../map_service/map.service';
 import { RadarHomeComponent } from '../radar-home/radar-home.component';
 import { HomeV1ChartComponent } from '../home-v1-chart/home-v1-chart.component';
@@ -106,6 +107,7 @@ interface MicroFluSensorUnit {
 export class DashboardComponent implements OnInit, OnDestroy {
   @Input() sensorsss!: string[];
   private wsSub?: Subscription;
+  private cameraSub?: Subscription;
 
   constructor(
     private map: MapService,
@@ -113,7 +115,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public layout: LayoutComponent,
     private station: StationconfigService,
     private wsService: WebsocketService,
-    private globalData: GlobalDataService
+    private globalData: GlobalDataService,
+    private cameraSocket: CameraSocketService
   ) { }
   direction1: number = 110;
   direction_val: string = '';
@@ -197,12 +200,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.showMap = false;
     this.measureMode = false;
   }
-  listImage: string[] = ['../../assets/avatars/live4.jpeg', '../../assets/avatars/live5.png', '../../assets/avatars/live6.jpg', '../../assets/image/Aquadopp_Profiler.jpg']
-  changeimage() {
-    setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * this.listImage.length);
-      this.db_img = this.listImage[randomIndex];
-    }, 1000);
+  initCameraSocket(): void {
+    if (this.cameraSocket.latestImageUrl) {
+      this.db_img = this.cameraSocket.latestImageUrl;
+    }
+
+    this.cameraSub = this.cameraSocket.onNewImage().subscribe({
+      next: (data: any) => {
+        const url = this.cameraSocket.getImageUrl(data);
+        if (url) {
+          this.db_img = url;
+        }
+      },
+      error: (err: any) => console.error('[Dashboard] Camera socket error:', err)
+    });
+  }
+
+  onImageError(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    if (target && target.src !== 'assets/avatars/live4.jpeg') {
+      target.src = 'assets/avatars/live4.jpeg';
+    }
   }
   Bins: any[] = [];
   fromDate!: string;
@@ -223,7 +241,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.fromDate = startDate.toISOString();
     this.toDate = endDate.toISOString();
-    this.changeimage();
+    this.initCameraSocket();
     this.ststionID = this.layout.selectedStationId;
     this.StationName = this.layout.StationName;
     this.map.destroyMap();
@@ -284,6 +302,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.wsSub) {
       this.wsSub.unsubscribe();
     }
+    if (this.cameraSub) {
+      this.cameraSub.unsubscribe();
+    }
   }
 
 
@@ -331,34 +352,73 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Pass 1-hour AVERAGES in data, not single readings.
+  private hasNoData(d: BuoyData): boolean {
+    if (!d) return true;
+    const required = [
+      d.chlorophyll_a,
+      d.dissolved_oxygen,
+      d.turbidity,
+      d.water_temperature,
+      d.salinity,
+      d.ph
+    ];
+    return required.some(v => v === null || v === undefined || (v as any) === '' || isNaN(Number(v)));
+  }
+
+  private score(d: BuoyData): number {
+    let score = 0;
+
+    const chla = Number(d.chlorophyll_a);
+    const doVal = Number(d.dissolved_oxygen);
+    const phVal = Number(d.ph);
+    const turb = Number(d.turbidity);
+    const temp = Number(d.water_temperature);
+    const sal = Number(d.salinity);
+
+    // Chlorophyll-a (µg/L) – main indicator
+    if (chla > 20) score += 4;
+    else if (chla > 10) score += 3;
+    else if (chla > 5) score += 1;
+
+    // Phycoerythrin (µg/L) - optional sensor
+    if (d.phycoerythrin !== null && d.phycoerythrin !== undefined && (d.phycoerythrin as any) !== '') {
+      const pe = Number(d.phycoerythrin);
+      if (!isNaN(pe)) {
+        if (pe > 5) score += 2;
+        else if (pe > 2) score += 1;
+      }
+    }
+
+    // Dissolved oxygen (mg/L): bloom gives HIGH DO by day, LOW DO at night
+    if (doVal > 9 || doVal < 4) score += 2;
+
+    // pH rises when algae photosynthesise
+    if (phVal > 8.4) score += 1;
+
+    // Turbidity (NTU)
+    if (turb > 10) score += 1;
+
+    // Temperature / salinity: only count if inside the Gulf bloom range
+    const inBloomRange =
+      temp >= 22 && temp <= 34 &&
+      sal >= 35 && sal <= 46;
+    if (!inBloomRange) score -= 1;
+
+    return score;
+  }
+
   detectRedTide(data: BuoyData): boolean {
-    return (
-      data.chlorophyll_a > 10 &&
-      data.dissolved_oxygen < 4 &&
-      data.turbidity > 10 &&
-      data.water_temperature >= 22 && data.water_temperature <= 32 &&
-      data.salinity >= 25 && data.salinity <= 36 &&
-      (data.ph > 8.5 || data.ph < 7.5)
-    );
+    if (this.hasNoData(data)) return false;
+    return this.score(data) >= 7;
   }
 
   redTideRiskScore(data: BuoyData): string {
-    let score = 0;
-
-    if (data.chlorophyll_a > 10) score += 3;
-    if (data.dissolved_oxygen < 4) score += 2;
-    if (data.turbidity > 10) score += 2;
-    if (data.water_temperature >= 22 && data.water_temperature <= 32) score += 1;
-    if (data.salinity >= 25 && data.salinity <= 36) score += 1;
-    if (data.ph > 8.5 || data.ph < 7.5) score += 1;
-
-    if (score >= 7) {
-      return 'High Risk';
-    } else if (score >= 4) {
-      return 'Moderate Risk';
-    } else {
-      return 'Low Risk';
-    }
+    if (this.hasNoData(data)) return 'No Data';
+    const s = this.score(data);
+    if (s >= 7) return 'High Risk';
+    if (s >= 4) return 'Moderate Risk';
+    return 'Low Risk';
   }
   IsRedTide!: boolean;
   risk!: string;

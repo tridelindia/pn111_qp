@@ -357,5 +357,24 @@ p{
   height: 0;
   width: 0;
 }
- 
- 
+
+/* Global button cursor pointer */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"],
+.p-button,
+.btn,
+.p-dropdown,
+.p-multiselect,
+.p-toggleswitch,
+.p-tabview-nav-link,
+.p-selectbutton .p-button {
+  cursor: pointer !important;
+}
+
+button *,
+.p-button * {
+  cursor: pointer !important;
+}

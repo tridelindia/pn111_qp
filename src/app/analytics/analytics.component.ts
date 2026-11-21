@@ -70,8 +70,8 @@ export class AnalyticsComponent implements OnInit {
   selectedSensor: string = 'oceanography';
   listparams: param[] = [];
   stations: Station[] = [];
-  ssstations: any[] = []
-  selectedStation!: string[];
+  ssstations: any[] = [];
+  selectedStation: string[] = ['M10'];
   filteredparams: param[] = [];
   selectedParams: param[] = [];
   isSingleView: boolean = true;
@@ -92,7 +92,7 @@ export class AnalyticsComponent implements OnInit {
   selectedBin!: string;
   Bins: any[] = [];
 
-  singleStation!: string;
+  singleStation: string = 'M10';
   parametres: string[] = [];
   sensorData: any[] = [];
   buoyData: any[] = [];
@@ -659,25 +659,27 @@ onPickerTap(state: 'date' | 'week' | 'month' | 'year') {
 
         console.log("stationsssss==============", this.ssstations);
 
-        for (let index = 0; index < this.ssstations.length; index++) {
-          this.stations.push({
-            stationId: this.ssstations[index].station_id,
-            name: this.ssstations[index].station_name
-          })
+        this.stations = this.ssstations.map(item => ({
+          stationId: item.station_id,
+          name: item.station_name
+        }));
+        console.log("station", this.stations);
+
+        const targetStation = this.stations.find(s => s.name === 'M10' || s.stationId === 'M10')
+          || (this.layout?.StationName ? this.stations.find(s => s.name === this.layout.StationName) : null)
+          || this.stations[0];
+
+        if (targetStation) {
+          this.singleStation = targetStation.name;
+          this.selectedStation = [targetStation.stationId];
         }
-        console.log("station", this.stations)
-        // this.stations = st.filter(item=> item.status === 'active')
-        // this.selectedStation = this.stations;
 
-        this.singleStation = this.stations[0].name;
-        // console.log("==============================================")
-        // console.log("single station is", this.stations[0].name, this.singleStation)
+        const sstat = this.ssstations.filter(item => item.station_name === this.singleStation);
+        if (sstat && sstat.length > 0 && sstat[0].sensors) {
+          this.isMeteriology = sstat[0].sensors.includes('meteorology');
+        }
 
-        // console.log("selected station param====", this.selectedMultiStationParam)
-        // console.log("==============================================")
-        this.selectedStation = [this.stations[0].stationId]
-        // console.log("station",this.stations, this.selectedStation);
-        this.fetchSensors()
+        this.fetchSensors();
       },
       (error: any) => {
         console.log(error);
@@ -711,14 +713,18 @@ onPlotSelect(event: DropdownChangeEvent): void {
 
   singleStationchange() {
     const selectedStationn = this.stations.filter(item => item.name == this.singleStation);
-    const sstat = this.ssstations.filter(item => item.station_name === this.singleStation)
-    this.isMeteriology = sstat[0].sensors.includes('meteorology');
-    if (!this.isMeteriology) {
-      // this.selectedSensor = 'oceanography';
-      this.onSelectSensor('oceanography');
+    const sstat = this.ssstations.filter(item => item.station_name === this.singleStation);
+    if (sstat && sstat.length > 0 && sstat[0].sensors) {
+      this.isMeteriology = sstat[0].sensors.includes('meteorology');
+      if (!this.isMeteriology && this.selectedSensor === 'meteorology') {
+        this.onSelectSensor('oceanography');
+      }
     }
     console.log("changes station", this.ssstations, sstat, this.isMeteriology, this.selectedSensor);
-    this.selectedStation.push(selectedStationn[0].stationId);
+    if (selectedStationn && selectedStationn.length > 0) {
+      this.selectedStation = [selectedStationn[0].stationId];
+    }
+    this.fetchData();
   }
 
   fetchSensorData() {
@@ -791,8 +797,13 @@ onPlotSelect(event: DropdownChangeEvent): void {
     this.http.get('http://localhost:3000/api/getSensorConfig').subscribe(
       (response: any) => {
         //console.log(response);
-        this.listparams = response;
-        this.data.SensorConfigs = response
+        const rawList: any[] = response || [];
+        this.listparams = rawList.filter((item: any) =>
+          !item.param_name?.toLowerCase().includes('fourier') &&
+          item.param_name?.toLowerCase() !== 'bt' &&
+          !item.param_name?.toLowerCase().includes('bottom')
+        );
+        this.data.SensorConfigs = this.listparams as any;
         console.log("params", this.selectedSensor)
         this.filteredparams = this.listparams.filter(item => item.name === this.selectedSensor);
         console.log("filters", this.filteredparams);

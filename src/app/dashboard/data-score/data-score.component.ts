@@ -34,6 +34,8 @@ last7Days: { day: string, date: string, value: number, percentage: number }[] = 
   selectedSensor: string = "ocean";
   constructor(private http:HttpClient, private layout:LayoutComponent){}
   sunShineData!:DailySunshine[];
+  rawSensorData: any[] = [];
+  cachedSunshineData: DailySunshine[] = [];
   ngOnInit() {
     this.isMet = this.layout.sensors.includes('meteorology');
     console.log("bool", this.layout.sensors, this.isMet)
@@ -43,11 +45,15 @@ last7Days: { day: string, date: string, value: number, percentage: number }[] = 
 
   updateData() {
     this.generateLast7Days();
-    this.sunShineData = this.last7Days.map(d => ({
-      day: d.day,
-      date: d.date,
-      sunshineHours: 0
-    }));
+    if (this.cachedSunshineData && this.cachedSunshineData.length > 0) {
+      this.sunShineData = [...this.cachedSunshineData];
+    } else {
+      this.sunShineData = this.last7Days.map(d => ({
+        day: d.day,
+        date: d.date,
+        sunshineHours: 0
+      }));
+    }
     this.printLast7Days();
     this.calculateOverallScore();
   }
@@ -76,13 +82,11 @@ generateLast7Days() {
     this.overallScore = parseFloat((totalValue / 560).toFixed(2)); // Normalize to 0.00 - 1.00
   }
   onSensorChange(name:string) {
-    // const target = event.target as HTMLSelectElement;
     this.selectedSensor = name;
-    this.updateData(); // Refresh data when sensor changes
   }
   oceanographyParams = [
     'wave_heading', 'wave_height', 'tzc', 'tz', 'tm02', 'wave_direction', 'wave_direction_fw',
-    'mean_wave_direction', 'hmax', 'fourier_coefficient_a1', 'fourier_coefficient_b1', 'fourier_coefficient_a2', 'fourier_coefficient_b2',
+    'mean_wave_direction', 'hmax',
     'dominant_time_period_fw', 'havg', 'current_speed_bin_1', 'current_direction_bin_1'
   ];
 
@@ -138,10 +142,12 @@ startDate.setHours(0, 0, 0, 0);
 
   this.http.get<any[]>(apiUrl, { params }).subscribe(data => {
     console.log("API data received:", data);
+    this.rawSensorData = data || [];
     let data_values:any = []
-   const  sunshineData: DailySunshine[] = this.calculateSunshine(data);
-   this.sunShineData = sunshineData;
-   console.log("sunshineData",sunshineData)
+    const sunshineData: DailySunshine[] = this.calculateSunshine(this.rawSensorData);
+    this.cachedSunshineData = sunshineData;
+    this.sunShineData = [...sunshineData];
+    console.log("sunshineData",sunshineData)
     for (let index = 0; index < this.last7Days.length; index++) {
       const day = data.filter(item=>  item.datetime.includes(this.last7Days[index].date));
     console.log("day 1", this.last7Days[index], day);

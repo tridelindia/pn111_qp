@@ -64,7 +64,7 @@
       <div class="sensor_table_body">
         <table>
           <tbody>
-            <tr *ngFor="let item of tableData; let i = index">
+            <tr *ngFor="let item of tableData; let i = index" [hidden]="item?.param_name?.includes('fourier_coefficient') || item?.param_name === 'bt' || item?.param_name?.includes('bottom')">
               <!-- <td>{{ i + 1 }}</td> -->
               <!-- <td>{{ item.sensor }}</td> -->
               <td *ngIf="item.param_name !== 'wave_heading'">

@@ -38,7 +38,7 @@ from psycopg2 import sql
 
 # 1. Database Connection Credentials
 DB_CONFIG = {
-    'host': os.environ.get('DB_HOST', '192.168.0.9'),
+    'host': os.environ.get('DB_HOST', 'localhost'),
     'port': int(os.environ.get('DB_PORT', 5433)),
     'database': os.environ.get('DB_NAME', 'db_terra_qatar'),
     'user': os.environ.get('DB_USER', 'postgres'),
@@ -57,7 +57,7 @@ FTP_CONFIG = {
 
 # 3. Exact Clock Schedule (Minutes of Every Hour)
 # Runs ONLY when the PC system clock hits these minutes:
-SCHEDULED_MINUTES = [2, 12, 18, 22, 26, 30, 35, 42, 46, 50, 56]
+SCHEDULED_MINUTES = [2, 12, 22, 32, 42, 52]
 
 # Run immediately on startup ONLY if '--now' is passed in command line arguments,
 # otherwise strictly wait for the next scheduled minute according to the PC clock.

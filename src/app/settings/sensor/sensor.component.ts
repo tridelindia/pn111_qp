@@ -437,13 +437,22 @@ export class SensorComponent implements OnInit {
           this.paramNames = this.sampleData.map((name: any) => name.param_name);
           console.log('Extracted param_names:', this.paramNames);
 
-          this.paramNames2 = this.sampleData.map((item: any) => ({
-            label: this.getLabelPrefix(item.param_name),
-            value: item.param_name,
-          }));
+          this.paramNames2 = this.sampleData
+            .filter((item: any) =>
+              !item.param_name?.toLowerCase().includes('fourier') &&
+              item.param_name?.toLowerCase() !== 'bt' &&
+              !item.param_name?.toLowerCase().includes('bottom')
+            )
+            .map((item: any) => ({
+              label: this.getLabelPrefix(item.param_name),
+              value: item.param_name,
+            }));
 
           this.tableData = this.mainSensor.filter(
-            (item) => item.name === 'oceanography'
+            (item) => item.name === 'oceanography' &&
+              !item.param_name?.toLowerCase().includes('fourier') &&
+              item.param_name?.toLowerCase() !== 'bt' &&
+              !item.param_name?.toLowerCase().includes('bottom')
           );
           console.log(this.tableData);
 
@@ -477,7 +486,10 @@ export class SensorComponent implements OnInit {
           this.mainSensor = allConfigs;
           this.sampleData = allConfigs;
           this.tableData = this.mainSensor.filter(
-            (item) => item.name === 'oceanography'
+            (item) => item.name === 'oceanography' &&
+              !item.param_name?.toLowerCase().includes('fourier') &&
+              item.param_name?.toLowerCase() !== 'bt' &&
+              !item.param_name?.toLowerCase().includes('bottom')
           );
           if (this.tableData.length > 0 && !this.editData) {
             this.onEdit(this.tableData[0]);
@@ -613,7 +625,10 @@ export class SensorComponent implements OnInit {
     this.selectedSensor = name;
     if (name === 'ocean') {
       this.tableData = this.sampleData.filter(
-        (item) => item.name === 'oceanography'
+        (item) => item.name === 'oceanography' &&
+          !item.param_name?.toLowerCase().includes('fourier') &&
+          item.param_name?.toLowerCase() !== 'bt' &&
+          !item.param_name?.toLowerCase().includes('bottom')
       );
     } else if (name === 'met') {
       this.tableData = this.sampleData.filter(
@@ -621,11 +636,17 @@ export class SensorComponent implements OnInit {
       );
     } else if (name === 'wat') {
       this.tableData = this.sampleData.filter(
-        (item) => item.name === 'water_quality'
+        (item) => item.name === 'water_quality' &&
+          !item.param_name?.toLowerCase().includes('fourier') &&
+          item.param_name?.toLowerCase() !== 'bt' &&
+          !item.param_name?.toLowerCase().includes('bottom')
       );
     } else if (name === 'mic') {
       this.tableData = this.sampleData.filter(
-        (item) => item.name === 'microflu'
+        (item) => item.name === 'microflu' &&
+          !item.param_name?.toLowerCase().includes('fourier') &&
+          item.param_name?.toLowerCase() !== 'bt' &&
+          !item.param_name?.toLowerCase().includes('bottom')
       );
     }
   }
@@ -642,7 +663,11 @@ export class SensorComponent implements OnInit {
             item.param3,
             item.param4,
             item.param5,
-          ].filter((p) => !!p); // avoid nulls
+          ].filter((p) => !!p &&
+            !p.toLowerCase().includes('fourier') &&
+            p.toLowerCase() !== 'bt' &&
+            !p.toLowerCase().includes('bottom')
+          );
 
           return {
             id: item.id,

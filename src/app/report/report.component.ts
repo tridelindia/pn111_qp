@@ -356,10 +356,6 @@ export class ReportComponent implements OnInit {
     { field: 'wave_direction_fw', header: 'Wave Direction FW' },
     { field: 'mean_wave_direction', header: 'Mean Wave Direction' },
     { field: 'hmax', header: 'Max Wave Height' },
-    { field: 'fourier_coefficient_a1', header: 'Fourier Coefficient a1' },
-    { field: 'fourier_coefficient_b1', header: 'Fourier Coefficient b1' },
-    { field: 'fourier_coefficient_a2', header: 'Fourier Coefficient a2' },
-    { field: 'fourier_coefficient_b2', header: 'Fourier Coefficient b2' },
     { field: 'dominant_time_period_fw', header: 'Dominant Time Period FW' },
     { field: 'havg', header: 'Average Wave Height' },
   ];
@@ -376,7 +372,6 @@ export class ReportComponent implements OnInit {
     { field: 'fluorescein_dye', header: 'Fluorescein' },
     { field: 'pah', header: 'PAH' },
     { field: 'oil_in_water', header: 'Oil in Water' },
-    { field: 'bt', header: 'Bottom Temperature' },
   ];
 
   currentBins = Array.from({ length: 4 }, (_, i) => i + 1).flatMap(i => [

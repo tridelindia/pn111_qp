@@ -22,6 +22,7 @@ export interface SunshineData {
 })
 export class SunShineComponent implements OnInit, OnChanges {
   chartOption: any;
+  echartsInstance: any;
   @Input() sunshineData: SunshineData[] = [];
 
   ngOnInit(): void {
@@ -31,7 +32,21 @@ export class SunShineComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['sunshineData']) {
       this.buildChart();
+      setTimeout(() => {
+        if (this.echartsInstance) {
+          this.echartsInstance.resize();
+        }
+      }, 50);
     }
+  }
+
+  onChartInit(ec: any): void {
+    this.echartsInstance = ec;
+    setTimeout(() => {
+      if (this.echartsInstance) {
+        this.echartsInstance.resize();
+      }
+    }, 50);
   }
 
   private buildChart(): void {

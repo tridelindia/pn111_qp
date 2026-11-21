@@ -363,7 +363,7 @@ export class HomeComponent implements OnInit {
           for (let i = 1; i <= 5; i++) {
             const key = `param${i}`;
             const paramName = (config as any)[key];
-            if (paramName) {
+            if (paramName && !paramName.toLowerCase().includes('fourier') && paramName.toLowerCase() !== 'bt' && !paramName.toLowerCase().includes('bottom')) {
               dataaa.push({
                 name: paramName,
                 value: (liveMatch as any)[paramName] !== undefined ? String((liveMatch as any)[paramName]) : 'N/A',
@@ -631,10 +631,13 @@ export class HomeComponent implements OnInit {
                   let dataaa: { name: string; value: string }[] = [];
                   if (this.selectedParamData) {
                     for (let index = 0; index <= 4; index++) {
-                      dataaa.push({
-                        name: list_param[index],
-                        value: this.selectedParamData[list_param[index]],
-                      });
+                      const paramName = list_param[index];
+                      if (paramName && !paramName.toLowerCase().includes('fourier') && paramName.toLowerCase() !== 'bt' && !paramName.toLowerCase().includes('bottom')) {
+                        dataaa.push({
+                          name: paramName,
+                          value: this.selectedParamData[paramName],
+                        });
+                      }
                     }
                     console.log('Cicle final data', dataaa);
                     this.infoBuoyDataSet = dataaa;

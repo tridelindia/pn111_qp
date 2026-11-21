@@ -75,10 +75,6 @@ export class SensorStatsComponent implements OnChanges {
         name: 'Maximum Wave Height (Hmax)',
         tabId: '8',
       },
-      'oceanography.wave.9': { name: 'Fourier Coeff. A1', tabId: '9' },
-      'oceanography.wave.10': { name: 'Fourier Coeff. A2', tabId: '10' },
-      'oceanography.wave.11': { name: 'Fourier Coeff. B1', tabId: '11' },
-      'oceanography.wave.12': { name: 'Fourier Coeff. B2', tabId: '12' },
       'oceanography.wave.13': { name: 'Dominant Period (FW)', tabId: '13' },
       'oceanography.wave.14': {
         name: 'Average Wave Height (Havg)',
@@ -112,7 +108,6 @@ export class SensorStatsComponent implements OnChanges {
       'meteorology.atmospheric.25': { name: 'Global Radiation', tabId: '25' },
       'water_quality.chemical.26': { name: 'PAH', tabId: '26' },
       'water_quality.chemical.27': { name: 'Oil in Water', tabId: '27' },
-      'water_quality.chemical.28': { name: 'BT', tabId: '28' },
       'water_quality.physical.29': { name: 'Turbidity', tabId: '29' },
       'water_quality.physical.30': { name: 'Conductivity', tabId: '30' },
       'water_quality.physical.31': { name: 'Dissolved Oxygen', tabId: '31' },

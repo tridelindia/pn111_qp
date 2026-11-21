@@ -87,10 +87,6 @@ export class SensorTabComponent {
           { value: '6', title: 'Wave Direction (FW)' },
           { value: '7', title: 'Mean Wave Direction' },
           { value: '8', title: 'Maximum Wave Height (Hmax)' },
-          { value: '9', title: 'Fourier Coeff. A1' },
-          { value: '10', title: 'Fourier Coeff. A2' },
-          { value: '11', title: 'Fourier Coeff. B1' },
-          { value: '12', title: 'Fourier Coeff. B2' },
           { value: '13', title: 'Dominant Period (FW)' },
           { value: '14', title: 'Average Wave Height (Havg)' }
         ]
@@ -133,8 +129,7 @@ export class SensorTabComponent {
         title: 'Chemical Pollutants',
         subTabs: [
           { value: '26', title: 'PAH' },
-          { value: '27', title: 'Oil in Water' },
-          { value: '28', title: 'BT' }
+          { value: '27', title: 'Oil in Water' }
         ]
       },
       {
